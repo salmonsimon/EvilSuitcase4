@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 using StarterAssets;
+using UnityEngine.Animations.Rigging;
 
 public class ThirdPersonShooterController : MonoBehaviour
 {
@@ -13,6 +14,9 @@ public class ThirdPersonShooterController : MonoBehaviour
     [SerializeField] private LayerMask aimColliderLayerMask = new LayerMask();
     [SerializeField] private Transform debugTransform;
 
+    [Header("Rigging")]
+    [SerializeField] private Rig rig;
+
     [Header("Bullets")]
     [SerializeField] private Transform bulletProjectilePrefab;
     [SerializeField] private Transform bulletSpawnPosition;
@@ -20,13 +24,20 @@ public class ThirdPersonShooterController : MonoBehaviour
     private ThirdPersonController thirdPersonController;
     private StarterAssetsInputs starterAssetsInputs;
 
+    private Animator animator;
+
     private Vector3 mouseWorldPosition = Vector3.zero;
+
+    private float movementSpeed = 5f;
+    private float aimMovementSpeed = 3f;
 
 
     private void Awake()
     {
         thirdPersonController = GetComponent<ThirdPersonController>();
         starterAssetsInputs = GetComponent<StarterAssetsInputs>();
+
+        animator = GetComponent<Animator>();
     }
 
     private void Update()
@@ -43,8 +54,15 @@ public class ThirdPersonShooterController : MonoBehaviour
         if (starterAssetsInputs.aim)
         {
             aimVirtualCamera.gameObject.SetActive(true);
+
             thirdPersonController.SetSensitivity(aimSensitivity);
             thirdPersonController.SetRotateOnMove(false);
+            thirdPersonController.SetAbleToSprint(false);
+            thirdPersonController.MoveSpeed = aimMovementSpeed;
+
+            animator.SetLayerWeight(1, Mathf.Lerp(animator.GetLayerWeight(1), 1f, Time.deltaTime * 10f));
+
+            rig.weight = Mathf.Lerp(rig.weight, 1f, Time.deltaTime * 10f);
 
             Vector3 worldAimTarget = mouseWorldPosition;
             worldAimTarget.y = transform.position.y;
@@ -58,6 +76,12 @@ public class ThirdPersonShooterController : MonoBehaviour
             aimVirtualCamera.gameObject.SetActive(false);
             thirdPersonController.SetSensitivity(normalLookSensitivity);
             thirdPersonController.SetRotateOnMove(true);
+            thirdPersonController.SetAbleToSprint(true);
+            thirdPersonController.MoveSpeed = movementSpeed;
+
+            animator.SetLayerWeight(1, Mathf.Lerp(animator.GetLayerWeight(1), 0f, Time.deltaTime * 10f));
+
+            rig.weight = Mathf.Lerp(rig.weight, 0f, Time.deltaTime * 10f);
         }
 
 
