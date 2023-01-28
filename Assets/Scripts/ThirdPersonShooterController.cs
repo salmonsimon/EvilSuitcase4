@@ -1,0 +1,98 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using Cinemachine;
+using StarterAssets;
+using UnityEngine.Animations.Rigging;
+
+public class ThirdPersonShooterController : MonoBehaviour
+{
+    [Header("Camera")]
+    [SerializeField] private CinemachineVirtualCamera aimVirtualCamera;
+    [SerializeField] private float normalLookSensitivity = 2f;
+    [SerializeField] private float aimSensitivity = 1f;
+    [SerializeField] private LayerMask aimColliderLayerMask = new LayerMask();
+    [SerializeField] private Transform debugTransform;
+
+    [Header("Rigging")]
+    [SerializeField] private Rig rig;
+
+    [Header("Bullets")]
+    [SerializeField] private Transform bulletProjectilePrefab;
+    [SerializeField] private Transform bulletSpawnPosition;
+
+    private ThirdPersonController thirdPersonController;
+    private StarterAssetsInputs starterAssetsInputs;
+
+    private Animator animator;
+
+    private Vector3 mouseWorldPosition = Vector3.zero;
+
+    private float movementSpeed = 5f;
+    private float aimMovementSpeed = 3f;
+
+
+    private void Awake()
+    {
+        thirdPersonController = GetComponent<ThirdPersonController>();
+        starterAssetsInputs = GetComponent<StarterAssetsInputs>();
+
+        animator = GetComponent<Animator>();
+    }
+
+    private void Update()
+    {
+        Vector2 screenCenterPoint = new Vector2(Screen.width / 2f, Screen.height / 2f);
+        Ray ray = Camera.main.ScreenPointToRay(screenCenterPoint);
+
+        if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f, aimColliderLayerMask))
+        {
+            debugTransform.position = raycastHit.point;
+            mouseWorldPosition = raycastHit.point;
+        }
+
+        if (starterAssetsInputs.aim)
+        {
+            aimVirtualCamera.gameObject.SetActive(true);
+
+            thirdPersonController.SetSensitivity(aimSensitivity);
+            thirdPersonController.SetRotateOnMove(false);
+            thirdPersonController.SetAbleToSprint(false);
+            thirdPersonController.MoveSpeed = aimMovementSpeed;
+
+            animator.SetLayerWeight(1, Mathf.Lerp(animator.GetLayerWeight(1), 1f, Time.deltaTime * 10f));
+
+            rig.weight = Mathf.Lerp(rig.weight, 1f, Time.deltaTime * 10f);
+
+            Vector3 worldAimTarget = mouseWorldPosition;
+            worldAimTarget.y = transform.position.y;
+
+            Vector3 aimDirection = (worldAimTarget - transform.position).normalized;
+
+            transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 20f);
+        }
+        else 
+        {
+            aimVirtualCamera.gameObject.SetActive(false);
+            thirdPersonController.SetSensitivity(normalLookSensitivity);
+            thirdPersonController.SetRotateOnMove(true);
+            thirdPersonController.SetAbleToSprint(true);
+            thirdPersonController.MoveSpeed = movementSpeed;
+
+            animator.SetLayerWeight(1, Mathf.Lerp(animator.GetLayerWeight(1), 0f, Time.deltaTime * 10f));
+
+            rig.weight = Mathf.Lerp(rig.weight, 0f, Time.deltaTime * 10f);
+        }
+
+
+        // TODO: CHANGE THIS SO WE CAN USE MULTIPLE WEAPONS
+        // ALSO MAKE IT SO IT KEEPS SHOOTING WHEN THE SHOOT BUTTON IS PRESSED
+        if (starterAssetsInputs.shoot)
+        {
+            Vector3 aimDirection = (mouseWorldPosition - bulletSpawnPosition.position).normalized;
+
+            Instantiate(bulletProjectilePrefab, bulletSpawnPosition.position, Quaternion.LookRotation(aimDirection, Vector3.up));
+            starterAssetsInputs.shoot = false;
+        }
+    }
+}
