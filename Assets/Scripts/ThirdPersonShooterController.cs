@@ -18,8 +18,9 @@ public class ThirdPersonShooterController : MonoBehaviour
     [SerializeField] private List<Rig> idleRigs;
     [SerializeField] private List<Rig> aimRigs;
 
-    [Header("Equiped Weapon")]
-    [SerializeField] private GameObject equipedWeapon;
+    [Header("Weapon")]
+    [SerializeField] private Transform weaponContainer;
+    [SerializeField] private Weapon equippedWeapon;
 
     #region Obejct References
 
@@ -51,6 +52,8 @@ public class ThirdPersonShooterController : MonoBehaviour
         starterAssetsInputs = GetComponent<StarterAssetsInputs>();
 
         animator = GetComponent<Animator>();
+
+        ActivateWeapon(equippedWeapon, true);
     }
 
     private void Update()
@@ -77,9 +80,10 @@ public class ThirdPersonShooterController : MonoBehaviour
             thirdPersonController.MoveSpeed = movementSpeed;
         }
 
-        if (starterAssetsInputs.shoot && equipedWeapon != null)
+        if (starterAssetsInputs.shoot && equippedWeapon != null)
         {
-            //equipedWeapon.Attack();
+            equippedWeapon.Attack();
+            starterAssetsInputs.shoot = false;
         }
     }
 
@@ -111,5 +115,50 @@ public class ThirdPersonShooterController : MonoBehaviour
 
             transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 20f);
         }
+    }
+
+    private void ActivateWeapon(Weapon weapon, bool activate)
+    {
+        string weaponName = equippedWeapon.name;
+        string weaponType = equippedWeapon.GetType().Name;
+        string containerName = "";
+
+        switch (weaponType)
+        {
+            case Config.GUN_CLASS_NAME:
+                containerName = Config.GUN_CONTAINER_NAME;
+                break;
+
+            case Config.MELEE_WEAPON_CLASS_NAME:
+                containerName = Config.MELEE_WEAPON_CONTAINER_NAME;
+                break;
+        }
+
+        Transform weaponTransform = weaponContainer.Find(containerName + "/" + weaponName);
+        if (weaponTransform)
+            weaponTransform.gameObject.SetActive(activate);
+
+        foreach (Rig rig in idleRigs)
+        {
+            Transform weaponRig = rig.transform.Find(containerName + "/" + weaponName);
+            if (weaponRig)
+                weaponRig.gameObject.SetActive(activate);
+        }
+
+        foreach (Rig rig in aimRigs)
+        {
+            Transform weaponRig = rig.transform.Find(containerName + "/" + weaponName);
+            if (weaponRig)
+                weaponRig.gameObject.SetActive(activate);
+        }
+    }
+
+    public void EquipWeapon(Weapon newWeapon)
+    {
+        ActivateWeapon(equippedWeapon, false);
+
+        equippedWeapon = newWeapon;
+
+        ActivateWeapon(equippedWeapon, true);
     }
 }

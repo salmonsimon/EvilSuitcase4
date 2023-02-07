@@ -3,64 +3,82 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
-public class Gun : MonoBehaviour
+public class Gun : Weapon
 {
+    [SerializeField] private GunScriptableObject gunConfiguration;
+
     private float LastshootTime;
     private ParticleSystem ShootParticleSystem;
+    private Transform bulletTrailContainer;
     private ObjectPool<TrailRenderer> TrailPool;
 
-    /*
-    public void Spawn(Transform parent, MonoBehaviour activeMonoBehaviour)
+    private void Awake()
     {
+        ShootParticleSystem = GetComponentInChildren<ParticleSystem>();
+        bulletTrailContainer = GameObject.FindGameObjectWithTag(Config.PROYECTILE_CONTAINER_TAG).transform;
+
         LastshootTime = 0;
         TrailPool = new ObjectPool<TrailRenderer>(CreateTrail);
+    }
 
-        Model = Instantiate(ModelPrefab);
-        Model.transform.SetParent(parent, false);
-        Model.transform.localPosition = SpawnPoint;
-        Model.transform.localRotation = Quaternion.Euler(SpawnRotation);
-
-        ShootParticleSystem = Model.GetComponentInChildren<ParticleSystem>();
+    public override void Attack()
+    {
+        Shoot();
     }
 
     public void Shoot()
     {
-        if (Time.time > ShootConfig.FireRate + LastshootTime)
+        if (Time.time > gunConfiguration.ShootConfig.FireRate + LastshootTime)
         {
             LastshootTime = Time.time;
             //ShootParticleSystem.Play();
 
-            Vector3 shootDirection = ShootParticleSystem.transform.forward +
+            for(int i = 0; i < gunConfiguration.ShootConfig.PelletsPerBullet; i++)
+            {
+                Vector3 shootDirection = ShootParticleSystem.transform.forward +
                 new Vector3(
-                    Random.Range(-ShootConfig.Spread.x, ShootConfig.Spread.x),
-                    Random.Range(-ShootConfig.Spread.y, ShootConfig.Spread.y),
-                    Random.Range(-ShootConfig.Spread.z, ShootConfig.Spread.z)
+                    Random.Range(-gunConfiguration.ShootConfig.Spread.x, gunConfiguration.ShootConfig.Spread.x),
+                    Random.Range(-gunConfiguration.ShootConfig.Spread.y, gunConfiguration.ShootConfig.Spread.y),
+                    Random.Range(-gunConfiguration.ShootConfig.Spread.z, gunConfiguration.ShootConfig.Spread.z)
                     );
 
-            shootDirection.Normalize();
+                shootDirection.Normalize();
 
-            if (Physics.Raycast(ShootParticleSystem.transform.position, shootDirection,
-                                out RaycastHit hit, float.MaxValue, ShootConfig.HitMask))
-            {
-                ActiveMonoBehaviour.StartCoroutine(
-                    PlayTrail(
-                        ShootParticleSystem.transform.position,
-                        hit.point,
-                        hit
-                        )
-                    );
-            }
-            else
-            {
-                ActiveMonoBehaviour.StartCoroutine(
-                    PlayTrail(
-                        ShootParticleSystem.transform.position,
-                        ShootParticleSystem.transform.position + (shootDirection * TrailConfig.MaxDistance),
-                        new RaycastHit()
-                        )
-                    );
+                if (Physics.Raycast(ShootParticleSystem.transform.position, shootDirection,
+                                    out RaycastHit hit, float.MaxValue, gunConfiguration.ShootConfig.HitMask))
+                {
+                    StartCoroutine(PlayTrail(ShootParticleSystem.transform.position, hit.point, hit));
+                }
+                else
+                {
+                    StartCoroutine(
+                        PlayTrail(
+                                  ShootParticleSystem.transform.position,
+                                  ShootParticleSystem.transform.position + (shootDirection * gunConfiguration.TrailConfig.MaxDistance),
+                                  new RaycastHit()
+                                 )
+                        );
+                }
             }
         }
+    }
+
+    private TrailRenderer CreateTrail()
+    {
+        GameObject instance = new GameObject("Bullet Trail");
+        instance.transform.parent = bulletTrailContainer;
+
+        TrailRenderer trail = instance.AddComponent<TrailRenderer>();
+        trail.colorGradient = gunConfiguration.TrailConfig.Color;
+        trail.material = gunConfiguration.TrailConfig.Material;
+        trail.widthCurve = gunConfiguration.TrailConfig.WidthCurve;
+        trail.time = gunConfiguration.TrailConfig.Duration;
+        trail.minVertexDistance = gunConfiguration.TrailConfig.MinVertexDistance;
+
+        trail.emitting = false;
+        trail.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+
+        return trail;
     }
 
     private IEnumerator PlayTrail(Vector3 startPosition, Vector3 endPosition, RaycastHit hit)
@@ -81,21 +99,22 @@ public class Gun : MonoBehaviour
         {
             instance.transform.position = Vector3.Lerp(startPosition, endPosition, Mathf.Clamp01(1 - (remainingDistance / distance)));
 
-            remainingDistance -= TrailConfig.SimulationSpeed * Time.deltaTime;
+            remainingDistance -= gunConfiguration.TrailConfig.SimulationSpeed * Time.deltaTime;
 
             yield return null;
         }
 
         instance.transform.position = endPosition;
 
-        
+        /*
         if (hit.collider != null)
         {
             SurfaceManager.Instance.HandleImpact(hit.transform.gameObject, endPosition, hit.normal, ImpactType, 0);
         }
-        
+        */
 
-        yield return new WaitForSeconds(TrailConfig.Duration);
+
+        yield return new WaitForSeconds(gunConfiguration.TrailConfig.Duration);
 
         yield return null;
 
@@ -103,23 +122,4 @@ public class Gun : MonoBehaviour
         instance.gameObject.SetActive(false);
         TrailPool.Release(instance);
     }
-
-    private TrailRenderer CreateTrail()
-    {
-        GameObject instance = new GameObject("Bullet Trail");
-
-        TrailRenderer trail = instance.AddComponent<TrailRenderer>();
-        trail.colorGradient = TrailConfig.Color;
-        trail.material = trail.material;
-        trail.widthCurve = TrailConfig.WidthCurve;
-        trail.time = TrailConfig.Duration;
-        trail.minVertexDistance = TrailConfig.MinVertexDistance;
-
-        trail.emitting = false;
-        trail.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-
-        return trail;
-    }
-
-    */
 }
