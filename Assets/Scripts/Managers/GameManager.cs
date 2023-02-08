@@ -13,13 +13,15 @@ public class GameManager : MonoBehaviour
     #region GameObjects
 
     [SerializeField] private SurfaceManager surfaceManager;
-    //[SerializeField] private SFXManager sfxManager;
-    //[SerializeField] private MusicManager musicManager;
+    [SerializeField] private LevelLoader levelLoader;
+    [SerializeField] private CinemachineShake cinemachineShake;
+    [SerializeField] private SFXManager sfxManager;
+    [SerializeField] private MusicManager musicManager;
 
     #region UI
 
-    //[SerializeField] private MainMenuUI mainMenu;
-    //[SerializeField] private PauseUI pauseMenu;
+    [SerializeField] private MainMenuUI mainMenu;
+    [SerializeField] private PauseUI pauseMenu;
 
     #endregion
 
@@ -40,9 +42,12 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
             Destroy(surfaceManager.gameObject);
+            Destroy(cinemachineShake.gameObject);
+            Destroy(sfxManager.gameObject);
+            Destroy(musicManager.gameObject);
 
-            //Destroy(mainMenu.gameObject);
-            //Destroy(pauseMenu.gameObject);
+            Destroy(mainMenu.gameObject);
+            Destroy(pauseMenu.gameObject);
         }
         else
         {
@@ -61,6 +66,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        // TO DO: CHANGE TO NEW INPUT
         /*
         if (!pauseMenu.IsGamePaused && !isOnMainMenu && Input.GetKeyDown(KeyCode.Escape))
             pauseMenu.PauseGame();
@@ -119,7 +125,6 @@ public class GameManager : MonoBehaviour
 
     public void ToMainMenu()
     {
-        /*
         pauseMenu.ResumeGame();
 
         SetIsOnMainMenu(true);
@@ -127,7 +132,6 @@ public class GameManager : MonoBehaviour
         levelLoader.LoadLevel(Config.MAIN_MENU_SCENE_NAME, Config.CROSSFADE_TRANSITION);
 
         pauseMenu.gameObject.SetActive(false);
-        */
     }
 
     #region Getters and Setters
@@ -157,7 +161,16 @@ public class GameManager : MonoBehaviour
         return surfaceManager;
     }
 
-    /*
+    public LevelLoader GetLevelLoader()
+    {
+        return levelLoader;
+    }
+
+    public CinemachineShake GetCinemachineShake()
+    {
+        return cinemachineShake;
+    }
+
     public SFXManager GetSFXManager()
     {
         return sfxManager;
@@ -168,7 +181,15 @@ public class GameManager : MonoBehaviour
         return musicManager;
     }
 
-    */
+    public PauseUI GetPauseUI()
+    {
+        return pauseMenu;
+    }
+
+    public MainMenuUI GetMainMenuUI()
+    {
+        return mainMenu;
+    }
 
     #endregion
 }

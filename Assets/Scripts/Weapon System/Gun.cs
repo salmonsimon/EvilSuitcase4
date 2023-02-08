@@ -36,6 +36,7 @@ public class Gun : Weapon
         {
             LastshootTime = Time.time;
             ShootParticleSystem.Play();
+            GameManager.instance.GetCinemachineShake().ShakeCamera(gunConfiguration.ShootConfig.CameraShakeAmplitude, gunConfiguration.ShootConfig.CameraShakeDuration);
 
             for(int i = 0; i < gunConfiguration.ShootConfig.PelletsPerBullet; i++)
             {
