@@ -115,8 +115,6 @@ public class Gun : Weapon
         {
             GameManager.instance.GetSurfaceManager().HandleImpact(hit.transform.gameObject, endPosition, hit.normal, impactType, 0);
         }
-        
-
 
         yield return new WaitForSeconds(gunConfiguration.TrailConfig.Duration);
 

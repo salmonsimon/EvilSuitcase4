@@ -161,16 +161,11 @@ public class SurfaceManager : MonoBehaviour
             {
                 if (!ObjectPools.ContainsKey(spawnObjectEffect.Prefab))
                 {
-                    ObjectPools.Add(spawnObjectEffect.Prefab, new ObjectPool<GameObject>(() => Instantiate(spawnObjectEffect.Prefab)));
+                    ObjectPools.Add(spawnObjectEffect.Prefab, new ObjectPool<GameObject>(() => Instantiate(spawnObjectEffect.Prefab, effectContainer.transform)));
                 }
 
                 GameObject instance = ObjectPools[spawnObjectEffect.Prefab].Get();
-                //instance.transform.parent = effectContainer.transform;
 
-                if (instance.TryGetComponent(out PoolableObject poolable))
-                {
-                    poolable.Parent = ObjectPools[spawnObjectEffect.Prefab];
-                }
                 instance.SetActive(true);
                 instance.transform.position = HitPoint + HitNormal * 0.001f;
                 instance.transform.forward = HitNormal;
@@ -184,9 +179,13 @@ public class SurfaceManager : MonoBehaviour
                     );
 
                     instance.transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + offset);
-
-                    instance.GetComponent<ParticleSystem>().Emit(1);
                 }
+
+                ParticleSystem particleSystem = instance.GetComponent<ParticleSystem>();
+
+                particleSystem.Emit(1);
+
+                StartCoroutine(DisableEffect(ObjectPools[spawnObjectEffect.Prefab], instance, particleSystem.main.duration));
             }
         }
 
@@ -194,17 +193,19 @@ public class SurfaceManager : MonoBehaviour
         {
             if (!ObjectPools.ContainsKey(playAudioEffect.AudioSourcePrefab.gameObject))
             {
-                ObjectPools.Add(playAudioEffect.AudioSourcePrefab.gameObject, new ObjectPool<GameObject>(() => Instantiate(playAudioEffect.AudioSourcePrefab.gameObject)));
+                ObjectPools.Add(playAudioEffect.AudioSourcePrefab.gameObject, new ObjectPool<GameObject>(() => Instantiate(playAudioEffect.AudioSourcePrefab.gameObject, effectContainer.transform)));
             }
 
             AudioClip clip = playAudioEffect.AudioClips[Random.Range(0, playAudioEffect.AudioClips.Count)];
+
             GameObject instance = ObjectPools[playAudioEffect.AudioSourcePrefab.gameObject].Get();
-            //instance.transform.parent = effectContainer.transform;
+
             instance.SetActive(true);
             AudioSource audioSource = instance.GetComponent<AudioSource>();
 
             audioSource.transform.position = HitPoint;
             audioSource.PlayOneShot(clip, SoundOffset * Random.Range(playAudioEffect.VolumeRange.x, playAudioEffect.VolumeRange.y));
+
             StartCoroutine(DisableAudioSource(ObjectPools[playAudioEffect.AudioSourcePrefab.gameObject], audioSource, clip.length));
         }
     }
@@ -215,6 +216,16 @@ public class SurfaceManager : MonoBehaviour
 
         AudioSource.gameObject.SetActive(false);
         Pool.Release(AudioSource.gameObject);
+    }
+
+    private IEnumerator DisableEffect(ObjectPool<GameObject> pool, GameObject instance, float time)
+    {
+        yield return new WaitForSeconds(time);
+
+        yield return null;
+
+        instance.gameObject.SetActive(false);
+        pool.Release(instance);
     }
 
     private class TextureAlpha
