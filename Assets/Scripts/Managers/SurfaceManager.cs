@@ -202,7 +202,8 @@ public class SurfaceManager : MonoBehaviour
 
             instance.SetActive(true);
             AudioSource audioSource = instance.GetComponent<AudioSource>();
-
+            
+            audioSource.volume = GameManager.instance.GetSFXManager().GetSFXVolume();
             audioSource.transform.position = HitPoint;
             audioSource.PlayOneShot(clip, SoundOffset * Random.Range(playAudioEffect.VolumeRange.x, playAudioEffect.VolumeRange.y));
 
