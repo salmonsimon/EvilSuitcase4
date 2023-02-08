@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private SurfaceManager surfaceManager;
     [SerializeField] private LevelLoader levelLoader;
+    [SerializeField] private CinemachineShake cinemachineShake;
     [SerializeField] private SFXManager sfxManager;
     [SerializeField] private MusicManager musicManager;
 
@@ -41,6 +42,7 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
             Destroy(surfaceManager.gameObject);
+            Destroy(cinemachineShake.gameObject);
             Destroy(sfxManager.gameObject);
             Destroy(musicManager.gameObject);
 
@@ -162,6 +164,11 @@ public class GameManager : MonoBehaviour
     public LevelLoader GetLevelLoader()
     {
         return levelLoader;
+    }
+
+    public CinemachineShake GetCinemachineShake()
+    {
+        return cinemachineShake;
     }
 
     public SFXManager GetSFXManager()

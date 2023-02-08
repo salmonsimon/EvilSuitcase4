@@ -7,4 +7,7 @@ public class ShootConfigurationScriptableObject : ScriptableObject
     public int PelletsPerBullet = 1;
     public Vector3 Spread = new Vector3(0.1f, 0.1f, 0.1f);
     public float FireRate = .25f;
+
+    public float CameraShakeAmplitude = 1.0f;
+    public float CameraShakeDuration = .1f;
 }
