@@ -6,6 +6,7 @@ using UnityEngine.Pool;
 public class Gun : Weapon
 {
     [SerializeField] private GunScriptableObject gunConfiguration;
+    [SerializeField] private ImpactType impactType;
 
     private float LastshootTime;
     private ParticleSystem ShootParticleSystem;
@@ -109,12 +110,12 @@ public class Gun : Weapon
 
         instance.transform.position = endPosition;
 
-        /*
+        
         if (hit.collider != null)
         {
-            SurfaceManager.Instance.HandleImpact(hit.transform.gameObject, endPosition, hit.normal, ImpactType, 0);
+            GameManager.instance.GetSurfaceManager().HandleImpact(hit.transform.gameObject, endPosition, hit.normal, impactType, 0);
         }
-        */
+        
 
 
         yield return new WaitForSeconds(gunConfiguration.TrailConfig.Duration);
