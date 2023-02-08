@@ -12,10 +12,13 @@ public class Gun : Weapon
     private Transform bulletTrailContainer;
     private ObjectPool<TrailRenderer> TrailPool;
 
+    private Transform crossHairTarget;
+
     private void Awake()
     {
         ShootParticleSystem = GetComponentInChildren<ParticleSystem>();
         bulletTrailContainer = GameObject.FindGameObjectWithTag(Config.PROYECTILE_CONTAINER_TAG).transform;
+        crossHairTarget = GameObject.FindGameObjectWithTag(Config.CROSSHAIR_TAG).transform;
 
         LastshootTime = 0;
         TrailPool = new ObjectPool<TrailRenderer>(CreateTrail);
@@ -31,11 +34,11 @@ public class Gun : Weapon
         if (Time.time > gunConfiguration.ShootConfig.FireRate + LastshootTime)
         {
             LastshootTime = Time.time;
-            //ShootParticleSystem.Play();
+            ShootParticleSystem.Play();
 
             for(int i = 0; i < gunConfiguration.ShootConfig.PelletsPerBullet; i++)
             {
-                Vector3 shootDirection = ShootParticleSystem.transform.forward +
+                Vector3 shootDirection = crossHairTarget.position - ShootParticleSystem.transform.position +
                 new Vector3(
                     Random.Range(-gunConfiguration.ShootConfig.Spread.x, gunConfiguration.ShootConfig.Spread.x),
                     Random.Range(-gunConfiguration.ShootConfig.Spread.y, gunConfiguration.ShootConfig.Spread.y),
