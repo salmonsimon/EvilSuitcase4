@@ -9,4 +9,5 @@ public class GunScriptableObject : ScriptableObject
 
     public ShootConfigurationScriptableObject ShootConfig;
     public TrailConfigurationScriptableObject TrailConfig;
+    public DamageConfigurationScriptableObject DamageConfig;
 }

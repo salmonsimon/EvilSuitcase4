@@ -115,6 +115,9 @@ public class Gun : Weapon
         if (hit.collider != null)
         {
             GameManager.instance.GetSurfaceManager().HandleImpact(hit.transform.gameObject, endPosition, hit.normal, impactType, 0);
+
+            if (hit.collider.TryGetComponent(out Damageable damageable))
+                damageable.ReceiveDamage(gunConfiguration.DamageConfig.GetDamage(distance));
         }
 
         yield return new WaitForSeconds(gunConfiguration.TrailConfig.Duration);
