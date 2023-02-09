@@ -8,7 +8,7 @@ public class SurfaceManager : MonoBehaviour
     [SerializeField] private List<SurfaceType> Surfaces = new List<SurfaceType>();
     [SerializeField] private Surface DefaultSurface;
 
-    [SerializeField] private Dictionary<GameObject, ObjectPool<GameObject>> ObjectPools = new();
+    private Dictionary<string, ObjectPool<GameObject>> ObjectPools = new();
     private GameObject effectContainer;
 
     private void Awake()
@@ -30,7 +30,7 @@ public class SurfaceManager : MonoBehaviour
                     {
                         if (typeEffect.ImpactType == Impact)
                         {
-                            PlayEffects(HitPoint, HitNormal, typeEffect.SurfaceEffect, activeTexture.Alpha);
+                            PlayEffects(HitObject, HitPoint, HitNormal, typeEffect.SurfaceEffect, activeTexture.Alpha);
                         }
                     }
                 }
@@ -40,7 +40,7 @@ public class SurfaceManager : MonoBehaviour
                     {
                         if (typeEffect.ImpactType == Impact)
                         {
-                            PlayEffects(HitPoint, HitNormal, typeEffect.SurfaceEffect, 1);
+                            PlayEffects(HitObject, HitPoint, HitNormal, typeEffect.SurfaceEffect, 1);
                         }
                     }
                 }
@@ -57,7 +57,7 @@ public class SurfaceManager : MonoBehaviour
                 {
                     if (typeEffect.ImpactType == Impact)
                     {
-                        PlayEffects(HitPoint, HitNormal, typeEffect.SurfaceEffect, 1);
+                        PlayEffects(HitObject, HitPoint, HitNormal, typeEffect.SurfaceEffect, 1);
                     }
                 }
             }
@@ -67,7 +67,7 @@ public class SurfaceManager : MonoBehaviour
                 {
                     if (typeEffect.ImpactType == Impact)
                     {
-                        PlayEffects(HitPoint, HitNormal, typeEffect.SurfaceEffect, 1);
+                        PlayEffects(HitObject, HitPoint, HitNormal, typeEffect.SurfaceEffect, 1);
                     }
                 }
             }
@@ -78,6 +78,7 @@ public class SurfaceManager : MonoBehaviour
     {
         Vector3 terrainPosition = HitPoint - Terrain.transform.position;
         Vector3 splatMapPosition = new Vector3(
+
             terrainPosition.x / Terrain.terrainData.size.x,
             0,
             terrainPosition.z / Terrain.terrainData.size.z
@@ -153,18 +154,19 @@ public class SurfaceManager : MonoBehaviour
         return Materials[0].mainTexture;
     }
 
-    private void PlayEffects(Vector3 HitPoint, Vector3 HitNormal, SurfaceEffect SurfaceEffect, float SoundOffset)
+    private void PlayEffects(GameObject HitObject, Vector3 HitPoint, Vector3 HitNormal, SurfaceEffect SurfaceEffect, float SoundOffset)
     {
         foreach (SpawnObjectEffect spawnObjectEffect in SurfaceEffect.SpawnObjectEffects)
         {
             if (spawnObjectEffect.Probability > Random.value)
             {
-                if (!ObjectPools.ContainsKey(spawnObjectEffect.Prefab))
+                if (!ObjectPools.ContainsKey(spawnObjectEffect.Prefab.name))
                 {
-                    ObjectPools.Add(spawnObjectEffect.Prefab, new ObjectPool<GameObject>(() => Instantiate(spawnObjectEffect.Prefab, effectContainer.transform)));
+                    ObjectPools.Add(spawnObjectEffect.Prefab.name, new ObjectPool<GameObject>(() => Instantiate(spawnObjectEffect.Prefab)));
                 }
 
-                GameObject instance = ObjectPools[spawnObjectEffect.Prefab].Get();
+                GameObject instance = ObjectPools[spawnObjectEffect.Prefab.name].Get();
+                instance.transform.parent = HitObject.transform;
 
                 instance.SetActive(true);
                 instance.transform.position = HitPoint + HitNormal * 0.001f;
@@ -185,20 +187,25 @@ public class SurfaceManager : MonoBehaviour
 
                 particleSystem.Emit(1);
 
-                StartCoroutine(DisableEffect(ObjectPools[spawnObjectEffect.Prefab], instance, particleSystem.main.duration));
+                IEnumerator disableCoroutine = DisableEffect(ObjectPools[spawnObjectEffect.Prefab.name], instance, particleSystem.main.duration);
+
+                CoroutineAttachment coroutineAttachment = instance.AddComponent<CoroutineAttachment>();
+                coroutineAttachment.attachedCoroutine = disableCoroutine;
+                coroutineAttachment.StartCoroutine();
+
             }
         }
 
         foreach (PlayAudioEffect playAudioEffect in SurfaceEffect.PlayAudioEffects)
         {
-            if (!ObjectPools.ContainsKey(playAudioEffect.AudioSourcePrefab.gameObject))
+            if (!ObjectPools.ContainsKey(playAudioEffect.AudioSourcePrefab.gameObject.name))
             {
-                ObjectPools.Add(playAudioEffect.AudioSourcePrefab.gameObject, new ObjectPool<GameObject>(() => Instantiate(playAudioEffect.AudioSourcePrefab.gameObject, effectContainer.transform)));
+                ObjectPools.Add(playAudioEffect.AudioSourcePrefab.gameObject.name, new ObjectPool<GameObject>(() => Instantiate(playAudioEffect.AudioSourcePrefab.gameObject, effectContainer.transform)));
             }
 
             AudioClip clip = playAudioEffect.AudioClips[Random.Range(0, playAudioEffect.AudioClips.Count)];
 
-            GameObject instance = ObjectPools[playAudioEffect.AudioSourcePrefab.gameObject].Get();
+            GameObject instance = ObjectPools[playAudioEffect.AudioSourcePrefab.gameObject.name].Get();
 
             instance.SetActive(true);
             AudioSource audioSource = instance.GetComponent<AudioSource>();
@@ -207,7 +214,7 @@ public class SurfaceManager : MonoBehaviour
             audioSource.transform.position = HitPoint;
             audioSource.PlayOneShot(clip, SoundOffset * Random.Range(playAudioEffect.VolumeRange.x, playAudioEffect.VolumeRange.y));
 
-            StartCoroutine(DisableAudioSource(ObjectPools[playAudioEffect.AudioSourcePrefab.gameObject], audioSource, clip.length));
+            StartCoroutine(DisableAudioSource(ObjectPools[playAudioEffect.AudioSourcePrefab.gameObject.name], audioSource, clip.length));
         }
     }
 
@@ -225,8 +232,30 @@ public class SurfaceManager : MonoBehaviour
 
         yield return null;
 
+        if (instance.gameObject.activeSelf)
+        {
+            instance.transform.parent = effectContainer.transform;
+            instance.gameObject.SetActive(false);
+            pool.Release(instance);
+
+            Destroy(instance.GetComponent<CoroutineAttachment>());
+        }
+    }
+
+    public void DisableEffect(GameObject instance)
+    {
+        if (!instance.activeSelf)
+            return;
+
+        string poolName = instance.name.Replace("(Clone)", "");
+
+        instance.transform.parent = effectContainer.transform;
         instance.gameObject.SetActive(false);
-        pool.Release(instance);
+        ObjectPools[poolName].Release(instance);
+
+        CoroutineAttachment coroutineAttachment = instance.GetComponent<CoroutineAttachment>();
+        coroutineAttachment.StopCoroutine();
+        Destroy(coroutineAttachment);
     }
 
     private class TextureAlpha
