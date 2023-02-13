@@ -26,6 +26,7 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     private ThirdPersonController thirdPersonController;
     private StarterAssetsInputs starterAssetsInputs;
+    private PlayerGunAnimations playerGunAnimations;
 
     private Animator animator;
 
@@ -36,6 +37,10 @@ public class ThirdPersonShooterController : MonoBehaviour
     private Vector3 aimDirection;
     private bool aiming = false;
 
+    private bool isReloading = false;
+    private AnimationClip reloadAnimationClip = null;
+    private Coroutine reloadCoroutine = null;
+
     #endregion
 
     #region Parameters
@@ -45,20 +50,19 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     #endregion
 
-
     private void Awake()
     {
         thirdPersonController = GetComponent<ThirdPersonController>();
         starterAssetsInputs = GetComponent<StarterAssetsInputs>();
+        playerGunAnimations = GetComponent<PlayerGunAnimations>();
 
         animator = GetComponent<Animator>();
-
-        ActivateWeapon(equippedWeapon, true);
+        EquipWeapon(equippedWeapon);
     }
 
     private void Update()
     {
-        if (starterAssetsInputs.aim)
+        if (starterAssetsInputs.aim && !isReloading)
         {
             aiming = true;
 
@@ -80,10 +84,25 @@ public class ThirdPersonShooterController : MonoBehaviour
             thirdPersonController.MoveSpeed = movementSpeed;
         }
 
-        if (starterAssetsInputs.shoot && equippedWeapon != null)
+        if (!isReloading && 
+            starterAssetsInputs.reload &&
+            equippedWeapon != null && 
+            equippedWeapon.GetType() == typeof(Gun))
+        {
+            if (equippedWeapon.GetComponent<Gun>().CanReload())
+            {
+                PlayReloadAnimation();
+                return;
+            }
+        }
+
+        if (!isReloading && starterAssetsInputs.shoot && equippedWeapon != null)
         {
             equippedWeapon.Attack();
-            starterAssetsInputs.shoot = false;
+
+            if (equippedWeapon.GetType() == typeof(Gun) && 
+                equippedWeapon.GetComponent<Gun>().CurrentClipAmmo == 0)
+                starterAssetsInputs.shoot = false;
         }
     }
 
@@ -155,10 +174,49 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     public void EquipWeapon(Weapon newWeapon)
     {
-        ActivateWeapon(equippedWeapon, false);
+        if (equippedWeapon != null)
+            ActivateWeapon(equippedWeapon, false);
 
         equippedWeapon = newWeapon;
 
         ActivateWeapon(equippedWeapon, true);
+
+        if (equippedWeapon.GetType() == typeof(Gun))
+        {
+            Gun equippedGun = equippedWeapon.GetComponent<Gun>();
+
+            reloadAnimationClip = equippedGun.ReloadAnimationClip;
+
+            playerGunAnimations.Setup(equippedGun);
+            GameManager.instance.GetAmmoDisplayUI().Setup(equippedGun.GunConfiguration.AmmoConfig.BulletSprite, equippedGun.CurrentClipAmmo, equippedGun.CurrentStockedAmmo);
+        }
+    }
+
+    public void PlayReloadAnimation()
+    {
+        isReloading = true;
+        starterAssetsInputs.shoot = false;
+
+        reloadCoroutine = StartCoroutine(PlayClip(Animator.StringToHash(reloadAnimationClip.name), 0f));
+    }
+
+    public void FinishedReloading()
+    {
+        isReloading = false;
+        equippedWeapon.GetComponent<Gun>().Reload();
+    }
+
+    protected IEnumerator PlayClip(int clipHash, float startTime)
+    {
+        yield return new WaitForSeconds(startTime);
+
+        animator.Play(clipHash);
+
+        /*
+        if (isAlive)
+        {
+            animator.Play(clipHash);
+        }
+        */
     }
 }

@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &881499413818219611
 Transform:
   m_ObjectHideFlags: 0
@@ -25,14 +25,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 615083509099333221}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: -0.4169836, z: -0.05379751}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0.055027243, y: -0.10977649, z: 0.063327685, w: 0.99040943}
+  m_LocalPosition: {x: 1.7679027, y: 0.9874856, z: 1.4365516}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2272936584038596363}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: -0, z: 0}
+  m_LocalEulerAnglesHint: {x: 7.059659, y: -12.244607, z: 6.5589404}
 --- !u!33 &3146841195945934439
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -177,6 +177,8 @@ GameObject:
   - component: {fileID: 2272936584038596363}
   - component: {fileID: 7120210221428049213}
   - component: {fileID: 3597417411925047748}
+  - component: {fileID: 3863009587743405341}
+  - component: {fileID: 666256678078451309}
   m_Layer: 0
   m_Name: AK-47
   m_TagString: Untagged
@@ -252,6 +254,35 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!111 &3863009587743405341
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3012994046685269272}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: a7b7d40040a60914b94269999ea9abeb, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: a7b7d40040a60914b94269999ea9abeb, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
+--- !u!114 &666256678078451309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3012994046685269272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc6152a479b88aa4eaddcbbf24155ec9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletShell: {fileID: 615083509099333221}
 --- !u!1 &5646990973258297039
 GameObject:
   m_ObjectHideFlags: 0
@@ -792,6 +823,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gunConfiguration: {fileID: 11400000, guid: addb4062aacc4ee45aeb2881f5fc2f05, type: 2}
   impactType: {fileID: 11400000, guid: 4a8931dfd9cfcb94dae2060677c798da, type: 2}
+  magazine: {fileID: 1110103690579164734}
+  reloadAnimationClip: {fileID: 7400000, guid: efc332ec4a6cfff4b9c4a7ae33b730d9, type: 2}
 --- !u!1001 &6507464826908258554
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -12,6 +12,7 @@ public static class Config
     public const string PROYECTILE_CONTAINER_TAG = "ProyectileContainer";
     public const string EFFECT_CONTAINER_TAG = "EffectContainer";
     public const string CROSSHAIR_TAG = "CrossHair";
+    public const string PLAYER_TAG = "Player";
 
     #endregion
 
