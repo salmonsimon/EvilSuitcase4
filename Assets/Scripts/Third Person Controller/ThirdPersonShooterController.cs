@@ -186,7 +186,9 @@ public class ThirdPersonShooterController : MonoBehaviour
             Gun equippedGun = equippedWeapon.GetComponent<Gun>();
 
             reloadAnimationClip = equippedGun.ReloadAnimationClip;
+
             playerGunAnimations.Setup(equippedGun);
+            GameManager.instance.GetAmmoDisplayUI().Setup(equippedGun.GunConfiguration.AmmoConfig.BulletSprite, equippedGun.CurrentClipAmmo, equippedGun.CurrentStockedAmmo);
         }
     }
 

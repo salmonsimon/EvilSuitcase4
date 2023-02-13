@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private MainMenuUI mainMenu;
     [SerializeField] private PauseUI pauseMenu;
+    [SerializeField] private AmmoDisplayUI ammoDisplayUI;
 
     #endregion
 
@@ -48,6 +49,7 @@ public class GameManager : MonoBehaviour
 
             Destroy(mainMenu.gameObject);
             Destroy(pauseMenu.gameObject);
+            Destroy(ammoDisplayUI.gameObject);
         }
         else
         {
@@ -189,6 +191,11 @@ public class GameManager : MonoBehaviour
     public MainMenuUI GetMainMenuUI()
     {
         return mainMenu;
+    }
+
+    public AmmoDisplayUI GetAmmoDisplayUI()
+    {
+        return ammoDisplayUI;
     }
 
     #endregion

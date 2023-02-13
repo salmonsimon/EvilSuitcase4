@@ -9,6 +9,8 @@ public class Gun : Weapon
 
     [Header("Gun Configuration")]
     [SerializeField] private GunScriptableObject gunConfiguration;
+    public GunScriptableObject GunConfiguration { get { return gunConfiguration; } }
+
     [SerializeField] private ImpactType impactType;
 
     #endregion
@@ -39,6 +41,7 @@ public class Gun : Weapon
     public int CurrentClipAmmo { get { return currentClipAmmo; } }
 
     private int currentStockedAmmo;
+    public int CurrentStockedAmmo { get { return currentStockedAmmo; } }
 
     #endregion
 
@@ -51,6 +54,8 @@ public class Gun : Weapon
     private Transform crossHairTarget;
 
     private ThirdPersonShooterController playerThirdPersonShooterController;
+
+    private AmmoDisplayUI ammoDisplayUI;
     
     #endregion
 
@@ -68,6 +73,8 @@ public class Gun : Weapon
         currentStockedAmmo = gunConfiguration.AmmoConfig.ClipSize * 5;
 
         playerThirdPersonShooterController = GameObject.FindGameObjectWithTag(Config.PLAYER_TAG).GetComponent<ThirdPersonShooterController>();
+
+        ammoDisplayUI = GameManager.instance.GetAmmoDisplayUI();
     }
 
     public override void Attack()
@@ -91,7 +98,7 @@ public class Gun : Weapon
             ShootParticleSystem.Play();
             gunAnimations.PlayShootAnimation(gunConfiguration.AmmoConfig.ShootAnimationDelay);
             GameManager.instance.GetCinemachineShake().ShakeCamera(gunConfiguration.ShootConfig.CameraShakeAmplitude, gunConfiguration.ShootConfig.CameraShakeDuration);
-            currentClipAmmo--;
+            SubstractClipAmmo();
 
             for(int i = 0; i < gunConfiguration.ShootConfig.PelletsPerBullet; i++)
             {
@@ -192,10 +199,23 @@ public class Gun : Weapon
 
         currentClipAmmo += reloadAmount;
         currentStockedAmmo -= reloadAmount;
+
+        UpdateAmmoDisplayCounters();
     }
 
     public bool CanReload()
     {
         return (currentClipAmmo < gunConfiguration.AmmoConfig.ClipSize) && (currentStockedAmmo > 0);
+    }
+
+    private void SubstractClipAmmo()
+    {
+        currentClipAmmo--;
+        UpdateAmmoDisplayCounters();
+    }
+
+    private void UpdateAmmoDisplayCounters()
+    {
+        ammoDisplayUI.UpdateCounters(CurrentClipAmmo, CurrentStockedAmmo);
     }
 }

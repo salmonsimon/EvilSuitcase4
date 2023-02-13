@@ -78,6 +78,8 @@ public class PlayerGunAnimations : MonoBehaviour
     public void MachinegunDropMagazine() 
     {
         GameObject droppedMagazine = Instantiate(animationMagazine, animationMagazine.transform.position, animationMagazine.transform.rotation);
+        droppedMagazine.transform.parent = droppedMagazineContainer.transform;
+
         droppedMagazine.AddComponent<Rigidbody>();
         droppedMagazine.GetComponent<Rigidbody>().collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
         droppedMagazine.AddComponent<BoxCollider>();
