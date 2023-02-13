@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 6265830676343160610}
   - component: {fileID: 416647450890470363}
   - component: {fileID: 6809237702407960719}
+  - component: {fileID: 8486625274552601103}
   m_Layer: 0
   m_Name: Handgun
   m_TagString: Untagged
@@ -177,16 +178,28 @@ Animation:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2158610338981099271}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
-  m_Animation: {fileID: -3704289112126983070, guid: 8d9660edbaa9273488c845c704bfb01e,
-    type: 3}
+  m_Animation: {fileID: 7400000, guid: 2a689707b77528d4aaf2b1bfa8df07d9, type: 2}
   m_Animations:
-  - {fileID: -3704289112126983070, guid: 8d9660edbaa9273488c845c704bfb01e, type: 3}
+  - {fileID: 7400000, guid: 2a689707b77528d4aaf2b1bfa8df07d9, type: 2}
   m_WrapMode: 0
-  m_PlayAutomatically: 1
+  m_PlayAutomatically: 0
   m_AnimatePhysics: 0
   m_CullingType: 0
+--- !u!114 &8486625274552601103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2158610338981099271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc6152a479b88aa4eaddcbbf24155ec9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletShell: {fileID: 5268063325160286675}
 --- !u!1 &5268063325160286675
 GameObject:
   m_ObjectHideFlags: 0
@@ -204,7 +217,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3971430049287932653
 Transform:
   m_ObjectHideFlags: 0
@@ -212,14 +225,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5268063325160286675}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0.42114788, z: -5.7373652}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0.0040647127, y: 0.14969316, z: -0.004422209, w: 0.9887143}
+  m_LocalPosition: {x: 2.4732523, y: 2.1383762, z: -3.9702008}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3147934167680075028}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0.5363896, y: 17.216583, z: -0.43132746}
 --- !u!33 &836522779199105886
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -862,6 +875,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gunConfiguration: {fileID: 11400000, guid: 6ab3fb35dce4c4645848a01a9d941a75, type: 2}
   impactType: {fileID: 11400000, guid: 4a8931dfd9cfcb94dae2060677c798da, type: 2}
+  magazine: {fileID: 2146904259634683510}
+  reloadAnimationClip: {fileID: 7400000, guid: 79c07f51cca22b449ad6e570ec814de6, type: 2}
 --- !u!1001 &2561238631588639659
 PrefabInstance:
   m_ObjectHideFlags: 0

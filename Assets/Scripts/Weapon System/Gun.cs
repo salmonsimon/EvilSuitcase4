@@ -5,29 +5,82 @@ using UnityEngine.Pool;
 
 public class Gun : Weapon
 {
+    #region Configuration
+
+    [Header("Gun Configuration")]
     [SerializeField] private GunScriptableObject gunConfiguration;
     [SerializeField] private ImpactType impactType;
 
+    #endregion
+
+    #region Weapon Prefabs
+
+    [Header("Weapon Prefabs")]
+    [SerializeField] private GameObject magazine;
+    public GameObject Magazine { get { return magazine; } }
+
+    #endregion
+
+    #region Animation
+
+    [Header("Animation")]
+    [SerializeField] private AnimationClip reloadAnimationClip;
+    public AnimationClip ReloadAnimationClip { get { return reloadAnimationClip; } }
+
+    private GunAnimations gunAnimations;
+
+    #endregion
+
+    #region Logic Variables
+
     private float LastshootTime;
+
+    private int currentClipAmmo;
+    public int CurrentClipAmmo { get { return currentClipAmmo; } }
+
+    private int currentStockedAmmo;
+
+    #endregion
+
+    #region GameObject References
+
     private ParticleSystem ShootParticleSystem;
     private Transform bulletTrailContainer;
     private ObjectPool<TrailRenderer> TrailPool;
 
     private Transform crossHairTarget;
 
+    private ThirdPersonShooterController playerThirdPersonShooterController;
+    
+    #endregion
+
     private void Awake()
     {
         ShootParticleSystem = GetComponentInChildren<ParticleSystem>();
         bulletTrailContainer = GameObject.FindGameObjectWithTag(Config.PROYECTILE_CONTAINER_TAG).transform;
         crossHairTarget = GameObject.FindGameObjectWithTag(Config.CROSSHAIR_TAG).transform;
+        gunAnimations = GetComponentInChildren<GunAnimations>();
 
         LastshootTime = 0;
         TrailPool = new ObjectPool<TrailRenderer>(CreateTrail);
+
+        currentClipAmmo = gunConfiguration.AmmoConfig.ClipSize;
+        currentStockedAmmo = gunConfiguration.AmmoConfig.ClipSize * 5;
+
+        playerThirdPersonShooterController = GameObject.FindGameObjectWithTag(Config.PLAYER_TAG).GetComponent<ThirdPersonShooterController>();
     }
 
     public override void Attack()
     {
-        Shoot();
+        if (currentClipAmmo > 0)
+        {
+            Shoot();
+        }
+        else
+        {
+            if (CanReload())
+                playerThirdPersonShooterController.PlayReloadAnimation();
+        }
     }
 
     public void Shoot()
@@ -36,7 +89,9 @@ public class Gun : Weapon
         {
             LastshootTime = Time.time;
             ShootParticleSystem.Play();
+            gunAnimations.PlayShootAnimation(gunConfiguration.AmmoConfig.ShootAnimationDelay);
             GameManager.instance.GetCinemachineShake().ShakeCamera(gunConfiguration.ShootConfig.CameraShakeAmplitude, gunConfiguration.ShootConfig.CameraShakeDuration);
+            currentClipAmmo--;
 
             for(int i = 0; i < gunConfiguration.ShootConfig.PelletsPerBullet; i++)
             {
@@ -127,5 +182,20 @@ public class Gun : Weapon
         instance.emitting = false;
         instance.gameObject.SetActive(false);
         TrailPool.Release(instance);
+    }
+
+    public void Reload()
+    {
+        int maxReloadAmount = Mathf.Min(gunConfiguration.AmmoConfig.ClipSize, currentStockedAmmo);
+        int bulletsToFillClip = gunConfiguration.AmmoConfig.ClipSize - currentClipAmmo;
+        int reloadAmount = Mathf.Min(maxReloadAmount, bulletsToFillClip);
+
+        currentClipAmmo += reloadAmount;
+        currentStockedAmmo -= reloadAmount;
+    }
+
+    public bool CanReload()
+    {
+        return (currentClipAmmo < gunConfiguration.AmmoConfig.ClipSize) && (currentStockedAmmo > 0);
     }
 }
