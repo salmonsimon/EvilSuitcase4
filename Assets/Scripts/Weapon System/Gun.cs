@@ -87,6 +87,8 @@ public class Gun : Weapon
         {
             if (CanReload())
                 playerThirdPersonShooterController.PlayReloadAnimation();
+            else
+                gunConfiguration.AudioConfig.PlayEmptyClip();
         }
     }
 
@@ -95,9 +97,12 @@ public class Gun : Weapon
         if (Time.time > gunConfiguration.ShootConfig.FireRate + LastshootTime)
         {
             LastshootTime = Time.time;
+
             ShootParticleSystem.Play();
+            gunConfiguration.AudioConfig.PlayShootingClip();
             gunAnimations.PlayShootAnimation(gunConfiguration.AmmoConfig.ShootAnimationDelay);
             GameManager.instance.GetCinemachineShake().ShakeCamera(gunConfiguration.ShootConfig.CameraShakeAmplitude, gunConfiguration.ShootConfig.CameraShakeDuration);
+
             SubstractClipAmmo();
 
             for(int i = 0; i < gunConfiguration.ShootConfig.PelletsPerBullet; i++)

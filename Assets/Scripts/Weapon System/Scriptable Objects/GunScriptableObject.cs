@@ -11,4 +11,5 @@ public class GunScriptableObject : ScriptableObject
     public TrailConfigurationScriptableObject TrailConfig;
     public DamageConfigurationScriptableObject DamageConfig;
     public AmmoConfigurationScriptableObject AmmoConfig;
+    public AudioConfigurationScriptableObject AudioConfig;
 }
