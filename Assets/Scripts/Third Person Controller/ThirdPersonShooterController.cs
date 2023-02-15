@@ -76,6 +76,7 @@ public class ThirdPersonShooterController : MonoBehaviour
         else 
         {
             aiming = false;
+            starterAssetsInputs.shoot = false;
 
             aimVirtualCamera.gameObject.SetActive(false);
             thirdPersonController.SetSensitivity(normalLookSensitivity);
