@@ -1,0 +1,78 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Pool;
+
+public class GunProjectile : Gun
+{
+    [Header("Projectile Configuration")]
+    [SerializeField] private Projectile projectilePrefab;
+    [SerializeField] private float projectileLaunchForce = 1000f;
+
+    private bool poolableProjectiles = false;
+    private ObjectPool<Projectile> projectilePool;
+
+    private Transform projectileContainer;
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        projectileContainer = GameObject.FindGameObjectWithTag(Config.PROYECTILE_CONTAINER_TAG).transform;
+
+        poolableProjectiles = projectilePrefab.PoolableProjectile;
+
+        if (poolableProjectiles)
+            projectilePool = new ObjectPool<Projectile>(CreateBullet);
+    }
+
+    public override void Shoot()
+    {
+        if (Time.time > gunConfiguration.ShootConfig.FireRate + LastshootTime)
+        {
+            LastshootTime = Time.time;
+
+            ShootParticleSystem.Play();
+            gunConfiguration.AudioConfig.PlayShootingClip();
+            gunAnimations.PlayShootAnimation(gunConfiguration.AmmoConfig.ShootAnimationDelay);
+            GameManager.instance.GetCinemachineShake().ShakeCamera(gunConfiguration.ShootConfig.CameraShakeAmplitude, gunConfiguration.ShootConfig.CameraShakeDuration);
+
+            SubstractClipAmmo();
+
+            Vector3 shootDirection = crossHairTarget.position - ShootParticleSystem.transform.position +
+                new Vector3(
+                    Random.Range(-gunConfiguration.ShootConfig.Spread.x, gunConfiguration.ShootConfig.Spread.x),
+                    Random.Range(-gunConfiguration.ShootConfig.Spread.y, gunConfiguration.ShootConfig.Spread.y),
+                    Random.Range(-gunConfiguration.ShootConfig.Spread.z, gunConfiguration.ShootConfig.Spread.z)
+                    );
+
+            shootDirection.Normalize();
+
+            ShootProjectile(shootDirection);
+        }
+    }
+
+    private void ShootProjectile(Vector3 shootDirection)
+    {
+        if (poolableProjectiles)
+        {
+            Projectile projectile = projectilePool.Get();
+            projectile.gameObject.SetActive(true);
+
+            projectile.transform.position = ShootParticleSystem.transform.position;
+            projectile.LaunchProjectile(shootDirection * projectileLaunchForce);
+        }
+    }
+
+    private Projectile CreateBullet()
+    {
+        Projectile newProjectile = Instantiate(projectilePrefab, projectileContainer, false);
+
+        newProjectile.DamageConfig = GunConfiguration.DamageConfig;
+
+        if (poolableProjectiles)
+            newProjectile.ProjectilePool = projectilePool;
+
+        return newProjectile;
+    }
+}

@@ -4,6 +4,8 @@ using UnityEngine;
 using Cinemachine;
 using StarterAssets;
 using UnityEngine.Animations.Rigging;
+using static Utils;
+using System;
 
 public class ThirdPersonShooterController : MonoBehaviour
 {
@@ -88,7 +90,9 @@ public class ThirdPersonShooterController : MonoBehaviour
         if (!isReloading && 
             starterAssetsInputs.reload &&
             equippedWeapon != null && 
-            equippedWeapon.GetType() == typeof(Gun))
+            //equippedWeapon.GetType().IsAssignableFrom(typeof(Gun))
+            IsSubclassOfRawGeneric(equippedWeapon.GetType(), typeof(Gun))
+            )
         {
             if (equippedWeapon.GetComponent<Gun>().CanReload())
             {
@@ -101,7 +105,8 @@ public class ThirdPersonShooterController : MonoBehaviour
         {
             equippedWeapon.Attack();
 
-            if (equippedWeapon.GetType() == typeof(Gun) && 
+            if (//equippedWeapon.GetType().IsAssignableFrom(typeof(Gun)) && 
+                IsSubclassOfRawGeneric(equippedWeapon.GetType(), typeof(Gun)) &&
                 equippedWeapon.GetComponent<Gun>().CurrentClipAmmo == 0)
                 starterAssetsInputs.shoot = false;
         }
@@ -140,19 +145,12 @@ public class ThirdPersonShooterController : MonoBehaviour
     private void ActivateWeapon(Weapon weapon, bool activate)
     {
         string weaponName = equippedWeapon.name;
-        string weaponType = equippedWeapon.GetType().Name;
         string containerName = "";
 
-        switch (weaponType)
-        {
-            case Config.GUN_CLASS_NAME:
-                containerName = Config.GUN_CONTAINER_NAME;
-                break;
-
-            case Config.MELEE_WEAPON_CLASS_NAME:
-                containerName = Config.MELEE_WEAPON_CONTAINER_NAME;
-                break;
-        }
+        if (IsSubclassOfRawGeneric(equippedWeapon.GetType(), typeof(Gun)))
+            containerName = Config.GUN_CONTAINER_NAME;
+        else
+            containerName = Config.MELEE_WEAPON_CONTAINER_NAME;
 
         Transform weaponTransform = weaponContainer.Find(containerName + "/" + weaponName);
         if (weaponTransform)
@@ -182,7 +180,8 @@ public class ThirdPersonShooterController : MonoBehaviour
 
         ActivateWeapon(equippedWeapon, true);
 
-        if (equippedWeapon.GetType() == typeof(Gun))
+        //if (equippedWeapon.GetType().IsAssignableFrom(typeof(Gun)))
+        if (IsSubclassOfRawGeneric(equippedWeapon.GetType(), typeof(Gun)))
         {
             Gun equippedGun = equippedWeapon.GetComponent<Gun>();
 
