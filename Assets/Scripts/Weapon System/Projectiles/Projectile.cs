@@ -26,6 +26,8 @@ public class Projectile : MonoBehaviour
     private ObjectPool<Projectile> projectilePool;
     public ObjectPool<Projectile> ProjectilePool { get { return projectilePool; } set { projectilePool = value; } }
 
+    [SerializeField] protected AudioClip hitAudioClip;
+
     #endregion
 
     #region Logic Variables
@@ -54,6 +56,9 @@ public class Projectile : MonoBehaviour
         {
             Disable();
         }
+
+        if (rigidBody.velocity.magnitude > 0)
+            transform.rotation.SetLookRotation(rigidBody.velocity);
     }
 
     public virtual void LaunchProjectile(Vector3 launchForce)
@@ -82,13 +87,20 @@ public class Projectile : MonoBehaviour
 
     protected virtual void OnDisable()
     {
-        rigidBody.velocity = Vector3.zero;
-        rigidBody.angularVelocity = Vector3.zero;
+        if (rigidBody)
+        {
+            rigidBody.velocity = Vector3.zero;
+            rigidBody.angularVelocity = Vector3.zero;
+        }
     }
 
     protected virtual void OnCollisionEnter(Collision collision)
     {
+        GameManager.instance.GetSFXManager().PlaySound(hitAudioClip);
+        
         if (collision.collider.TryGetComponent(out Damageable damageable))
-            damageable.Damage(damageConfig.GetDamage(distanceTraveled));
+            damageable.ReceiveDamage(damageConfig.GetDamage(distanceTraveled));
+
+        Disable();
     }
 }

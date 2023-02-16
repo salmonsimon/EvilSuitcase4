@@ -16,8 +16,8 @@ public class Gun : Weapon
     #region Weapon Prefabs
 
     [Header("Weapon Prefabs")]
-    [SerializeField] private GameObject magazine;
-    public GameObject Magazine { get { return magazine; } }
+    [SerializeField] private GameObject animationObject;
+    public GameObject AnimationObject { get { return animationObject; } }
 
     #endregion
 
@@ -27,7 +27,7 @@ public class Gun : Weapon
     [SerializeField] protected AnimationClip reloadAnimationClip;
     public AnimationClip ReloadAnimationClip { get { return reloadAnimationClip; } }
 
-    protected GunAnimations gunAnimations;
+    protected WeaponAnimations weaponAnimations;
 
     #endregion
 
@@ -59,9 +59,9 @@ public class Gun : Weapon
     {
         ShootParticleSystem = GetComponentInChildren<ParticleSystem>();
         crossHairTarget = GameObject.FindGameObjectWithTag(Config.CROSSHAIR_TAG).transform;
-        gunAnimations = GetComponentInChildren<GunAnimations>();
+        weaponAnimations = GetComponentInChildren<WeaponAnimations>();
 
-        LastshootTime = 0;
+        LastshootTime = -gunConfiguration.ShootConfig.FireRate;
 
         currentClipAmmo = gunConfiguration.AmmoConfig.ClipSize;
         currentStockedAmmo = gunConfiguration.AmmoConfig.ClipSize * 5;

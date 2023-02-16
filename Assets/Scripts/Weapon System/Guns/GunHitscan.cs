@@ -35,7 +35,7 @@ public class GunHitscan : Gun
 
             ShootParticleSystem.Play();
             gunConfiguration.AudioConfig.PlayShootingClip();
-            gunAnimations.PlayShootAnimation(gunConfiguration.AmmoConfig.ShootAnimationDelay);
+            weaponAnimations.PlayShootAnimation(gunConfiguration.AmmoConfig.ShootAnimationDelay);
             GameManager.instance.GetCinemachineShake().ShakeCamera(gunConfiguration.ShootConfig.CameraShakeAmplitude, gunConfiguration.ShootConfig.CameraShakeDuration);
 
             SubstractClipAmmo();
