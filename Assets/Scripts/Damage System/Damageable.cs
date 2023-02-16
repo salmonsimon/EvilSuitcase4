@@ -23,7 +23,7 @@ public class Damageable : MonoBehaviour
         currentHitPoints = hitPoints;
     }
 
-    public void Damage(int damage)
+    private void Damage(int damage)
     {
         int damageTaken = Mathf.Clamp(damage, 0, currentHitPoints);
         currentHitPoints -= damageTaken;
