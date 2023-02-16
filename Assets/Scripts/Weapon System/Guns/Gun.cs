@@ -27,7 +27,7 @@ public class Gun : Weapon
     [SerializeField] protected AnimationClip reloadAnimationClip;
     public AnimationClip ReloadAnimationClip { get { return reloadAnimationClip; } }
 
-    protected WeaponAnimations weaponAnimations;
+    protected GunAnimations weaponAnimations;
 
     #endregion
 
@@ -59,7 +59,7 @@ public class Gun : Weapon
     {
         ShootParticleSystem = GetComponentInChildren<ParticleSystem>();
         crossHairTarget = GameObject.FindGameObjectWithTag(Config.CROSSHAIR_TAG).transform;
-        weaponAnimations = GetComponentInChildren<WeaponAnimations>();
+        weaponAnimations = GetComponentInChildren<GunAnimations>();
 
         LastshootTime = -gunConfiguration.ShootConfig.FireRate;
 

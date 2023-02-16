@@ -2,30 +2,36 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GunAnimations : WeaponAnimations
+public class GunAnimations : MonoBehaviour
 {
-    private GameObject bulletContainer;
+    private Animation anim;
 
-    [SerializeField] GameObject bulletShell;
-
-    protected override void Awake()
+    protected virtual void Awake()
     {
-        base.Awake();
-
-        bulletContainer = GameObject.FindGameObjectWithTag(Config.PROYECTILE_CONTAINER_TAG);
+        anim = GetComponent<Animation>();
     }
 
-    public void DropBullet()
+    public void PlayShootAnimation(float delay)
     {
-        GameObject droppedBullet = Instantiate(bulletShell, bulletContainer.transform, true);
-        droppedBullet.transform.position = bulletShell.transform.position;
-        droppedBullet.transform.rotation = bulletShell.transform.rotation;
-        droppedBullet.SetActive(true);
+        StartCoroutine(PlayShootAnimationCoroutine(delay));
+    }
 
-        Rigidbody rigidBody = droppedBullet.AddComponent<Rigidbody>();
-        rigidBody.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
-        rigidBody.AddForce(Vector3.right * 100f);
+    private IEnumerator PlayShootAnimationCoroutine(float delay)
+    {
+        yield return new WaitForSeconds(delay);
 
-        droppedBullet.AddComponent<BoxCollider>();
+        anim.Play("Shoot");
+    }
+
+    public void PlayReloadAnimation(float delay)
+    {
+        StartCoroutine(PlayReloadAnimationCoroutine(delay));
+    }
+
+    private IEnumerator PlayReloadAnimationCoroutine(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        anim.Play("Reload");
     }
 }

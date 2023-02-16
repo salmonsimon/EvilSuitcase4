@@ -103,7 +103,7 @@ public class PlayerGunAnimations : MonoBehaviour
 
     public void CrossbowReloadAnimation()
     {
-        equippedWeapon.GetComponentInChildren<WeaponAnimations>().PlayReloadAnimation(0f);
+        equippedWeapon.GetComponentInChildren<GunAnimations>().PlayReloadAnimation(0f);
     }
 
     #endregion
