@@ -34,7 +34,10 @@ public class GunProjectile : Gun
 
             ShootParticleSystem.Play();
             gunConfiguration.AudioConfig.PlayShootingClip();
-            weaponAnimations.PlayShootAnimation(gunConfiguration.AmmoConfig.ShootAnimationDelay);
+
+            if(weaponAnimations)
+                weaponAnimations.PlayShootAnimation(gunConfiguration.AmmoConfig.ShootAnimationDelay);
+
             GameManager.instance.GetCinemachineShake().ShakeCamera(gunConfiguration.ShootConfig.CameraShakeAmplitude, gunConfiguration.ShootConfig.CameraShakeDuration);
 
             SubstractClipAmmo();
@@ -66,8 +69,6 @@ public class GunProjectile : Gun
         {
             Projectile newProjectile = Instantiate(projectilePrefab, projectileContainer, false);
 
-            newProjectile.DamageConfig = GunConfiguration.DamageConfig;
-
             newProjectile.transform.position = ShootParticleSystem.transform.position;
             newProjectile.LaunchProjectile(shootDirection * projectileLaunchForce);
         }
@@ -76,8 +77,6 @@ public class GunProjectile : Gun
     private Projectile CreateBullet()
     {
         Projectile newProjectile = Instantiate(projectilePrefab, projectileContainer, false);
-
-        newProjectile.DamageConfig = GunConfiguration.DamageConfig;
 
         if (poolableProjectiles)
             newProjectile.ProjectilePool = projectilePool;

@@ -7,23 +7,20 @@ public class Projectile : MonoBehaviour
 {
     #region GameObject References
 
-    private Rigidbody rigidBody;
-    private BoxCollider boxCollider;
+    protected Rigidbody rigidBody;
+    protected BoxCollider boxCollider;
 
     #endregion
 
     #region Projectile Configuration
 
     [Header("Projectile Configuration")]
-    [SerializeField] private float maxDistance;
+    [SerializeField] protected float maxDistance;
 
-    [SerializeField] private DamageConfigurationScriptableObject damageConfig;
-    public DamageConfigurationScriptableObject DamageConfig { get { return damageConfig; } set { damageConfig = value; } }
-
-    [SerializeField] private bool poolableProjectile = false;
+    [SerializeField] protected bool poolableProjectile = false;
     public bool PoolableProjectile { get { return poolableProjectile; } }
 
-    private ObjectPool<Projectile> projectilePool;
+    protected ObjectPool<Projectile> projectilePool;
     public ObjectPool<Projectile> ProjectilePool { get { return projectilePool; } set { projectilePool = value; } }
 
     [SerializeField] protected AudioClip hitAudioClip;
@@ -32,10 +29,10 @@ public class Projectile : MonoBehaviour
 
     #region Logic Variables
 
-    private bool isDisabled = false;
+    protected bool isDisabled = false;
 
-    private Vector3 startPosition;
-    private float distanceTraveled;
+    protected Vector3 startPosition;
+    protected float distanceTraveled;
 
     #endregion
 
@@ -97,10 +94,5 @@ public class Projectile : MonoBehaviour
     protected virtual void OnCollisionEnter(Collision collision)
     {
         GameManager.instance.GetSFXManager().PlaySound(hitAudioClip);
-        
-        if (collision.collider.TryGetComponent(out Damageable damageable))
-            damageable.ReceiveDamage(damageConfig.GetDamage(distanceTraveled));
-
-        Disable();
     }
 }
