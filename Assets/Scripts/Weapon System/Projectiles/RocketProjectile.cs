@@ -5,6 +5,7 @@ using UnityEngine;
 public class RocketProjectile : Projectile
 {
     [SerializeField] private GameObject model;
+    [SerializeField] private ParticleSystem rocketTrailParticleSystem;
     [SerializeField] private float constantSpeed = 100f;
     [SerializeField] private float disableTime = 2f;
 
@@ -15,8 +16,11 @@ public class RocketProjectile : Projectile
         base.Awake();
 
         explosionObject = GetComponentInChildren<Explosion>(true);
+    }
 
-        
+    private void OnEnable()
+    {
+        rocketTrailParticleSystem.Play();
     }
 
     protected override void OnDisable()
