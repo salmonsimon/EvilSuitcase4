@@ -678,18 +678,6 @@ MonoBehaviour:
     m_HintWeight: 1
     m_MaintainTargetPositionOffset: 0
     m_MaintainTargetRotationOffset: 0
---- !u!114 &137357770 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 137357770, guid: 0a3c71a36a569aa47b2d41c6abc45a87,
-    type: 3}
-  m_PrefabInstance: {fileID: 4822392976593160128}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49065cbdd96b8e143abc53cb06520e54, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &157034716
 GameObject:
   m_ObjectHideFlags: 0
@@ -4509,7 +4497,7 @@ MonoBehaviour:
   - {fileID: 1380344978}
   - {fileID: 939435704}
   weaponContainer: {fileID: 1145774874}
-  equippedWeapon: {fileID: 137357770}
+  equippedWeapon: {fileID: 8068545928531174384}
 --- !u!114 &1420134935
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9611,6 +9599,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Machinegun
       objectReference: {fileID: 0}
+    - target: {fileID: 8461209780056842588, guid: 4b0f9a4d1f6c2e3409135bb464b9de8c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b0f9a4d1f6c2e3409135bb464b9de8c, type: 3}
 --- !u!1 &5653482253305133390
@@ -10197,6 +10190,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pistol
       objectReference: {fileID: 0}
+    - target: {fileID: 7784071749478631146, guid: 3b5f8815b6f1fe94ba4aedc2db382428,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3b5f8815b6f1fe94ba4aedc2db382428, type: 3}
 --- !u!1 &7367493596454629597
@@ -10429,6 +10427,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 7252889304531625246}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8068545928531174384 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8068545928531174386, guid: 3b5f8815b6f1fe94ba4aedc2db382428,
+    type: 3}
+  m_PrefabInstance: {fileID: 7252889304531625246}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a38a7246cc0eeb7449973794ac8bf676, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8187455077832222864
 GameObject:
   m_ObjectHideFlags: 0
@@ -10815,6 +10825,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Crossbow
+      objectReference: {fileID: 0}
+    - target: {fileID: 8618696680296310446, guid: 4a36f3a1e6f34494f8059f8dd3df1777,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4a36f3a1e6f34494f8059f8dd3df1777, type: 3}
