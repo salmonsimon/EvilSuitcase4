@@ -99,6 +99,43 @@ public class PlayerGunAnimations : MonoBehaviour
 
     #endregion
 
+    #region Uzi
+
+    public void UziDetachMagazine()
+    {
+        if (animationObject)
+            animationObject.SetActive(true);
+        else
+            animationObject = Instantiate(equippedWeapon.AnimationObject, leftHand, true);
+
+        equippedWeapon.AnimationObject.gameObject.SetActive(false);
+    }
+
+    public void UziDropMagazine()
+    {
+        GameObject droppedMagazine = Instantiate(animationObject, animationObject.transform.position, animationObject.transform.rotation);
+        droppedMagazine.transform.parent = droppedObjectContainer.transform;
+
+        droppedMagazine.AddComponent<Rigidbody>();
+        droppedMagazine.GetComponent<Rigidbody>().collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+        droppedMagazine.AddComponent<BoxCollider>();
+
+        animationObject.SetActive(false);
+    }
+
+    public void UziRefillMagazine()
+    {
+        animationObject.SetActive(true);
+    }
+
+    public void UziAttachMagazine()
+    {
+        equippedWeapon.AnimationObject.SetActive(true);
+        animationObject.SetActive(false);
+    }
+
+    #endregion
+
     #region Crossbow
 
     public void CrossbowReloadAnimation()
