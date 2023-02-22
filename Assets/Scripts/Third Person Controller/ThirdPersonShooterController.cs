@@ -43,7 +43,6 @@ public class ThirdPersonShooterController : MonoBehaviour
     private AnimationClip reloadAnimationClip = null;
     private Coroutine reloadCoroutine = null;
 
-    private bool isUsingShotgun = false;
     private Coroutine shotgunShootCoroutine = null;
 
     #endregion
