@@ -43,6 +43,8 @@ public class ThirdPersonShooterController : MonoBehaviour
     private AnimationClip reloadAnimationClip = null;
     private Coroutine reloadCoroutine = null;
 
+    private Coroutine shotgunShootCoroutine = null;
+
     #endregion
 
     #region Parameters
@@ -204,6 +206,13 @@ public class ThirdPersonShooterController : MonoBehaviour
     {
         isReloading = false;
         equippedWeapon.GetComponent<Gun>().Reload();
+    }
+
+    public void PlayShotgunShootAnimation(float delay)
+    {
+        starterAssetsInputs.shoot = false;
+
+        shotgunShootCoroutine = StartCoroutine(PlayClip(Animator.StringToHash("Shotgun Shoot"), delay));
     }
 
     protected IEnumerator PlayClip(int clipHash, float startTime)
