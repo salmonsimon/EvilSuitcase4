@@ -10186,6 +10186,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 465722750}
     m_Modifications:
+    - target: {fileID: 918915469, guid: 5828d664f3efb25469f799cb7c4e8ba5, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2.13
+      objectReference: {fileID: 0}
+    - target: {fileID: 918915469, guid: 5828d664f3efb25469f799cb7c4e8ba5, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.87
+      objectReference: {fileID: 0}
+    - target: {fileID: 918915469, guid: 5828d664f3efb25469f799cb7c4e8ba5, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 2.18
+      objectReference: {fileID: 0}
     - target: {fileID: 3262170919958989708, guid: 5828d664f3efb25469f799cb7c4e8ba5,
         type: 3}
       propertyPath: m_RootOrder
@@ -11886,7 +11898,11 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_WarningMessage: 
+  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
+    are already bound by a Humanoid avatar. These transforms can only be changed
+    by Humanoid clips.\n\tTransform 'Chest'\n\tTransform 'Spine'\n\tTransform 'UpperChest'\n\tTransform
+    'Hips'\n\tTransform 'Neck'\n\tTransform 'Chest'\n\tTransform 'Spine'\n\tTransform
+    'UpperChest'\n\tTransform 'Hips'\n\tTransform 'Neck'\n\tand more ..."
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0

@@ -36,6 +36,10 @@ public class GunHitscan : Gun
             ShootParticleSystem.Play();
             gunConfiguration.AudioConfig.PlayShootingClip();
             weaponAnimations.PlayShootAnimation(gunConfiguration.AmmoConfig.ShootAnimationDelay);
+
+            if (string.Equals(GunConfiguration.GunName, "Shotgun"))
+                playerThirdPersonShooterController.PlayShotgunShootAnimation(gunConfiguration.AmmoConfig.ShootAnimationDelay);
+
             GameManager.instance.GetCinemachineShake().ShakeCamera(gunConfiguration.ShootConfig.CameraShakeAmplitude, gunConfiguration.ShootConfig.CameraShakeDuration);
 
             SubstractClipAmmo();
