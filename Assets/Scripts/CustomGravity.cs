@@ -3,27 +3,21 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class CustomGravity : MonoBehaviour
 {
-    // Gravity Scale editable on the inspector
-    // providing a gravity scale per object
-
-    [SerializeField] private float gravityScale = 1.0f;
-
-    // Global Gravity doesn't appear in the inspector. Modify it here in the code
-    // (or via scripting) to define a different default gravity for all objects.
+    [SerializeField] private float gravityMultiplier = 1.0f;
 
     private float globalGravity = Physics.gravity.y;
 
-    Rigidbody m_rb;
+    Rigidbody rigidBody;
 
     void OnEnable()
     {
-        m_rb = GetComponent<Rigidbody>();
-        m_rb.useGravity = false;
+        rigidBody = GetComponent<Rigidbody>();
+        rigidBody.useGravity = false;
     }
 
     void FixedUpdate()
     {
-        Vector3 gravity = globalGravity * gravityScale * Vector3.up;
-        m_rb.AddForce(gravity, ForceMode.Acceleration);
+        Vector3 gravity = globalGravity * gravityMultiplier * Vector3.up;
+        rigidBody.AddForce(gravity, ForceMode.Acceleration);
     }
 }

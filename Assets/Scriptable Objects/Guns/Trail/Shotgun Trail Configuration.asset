@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1680db34164c97c46a1ecb344f11359c, type: 3}
   m_Name: Shotgun Trail Configuration
   m_EditorClassIdentifier: 
-  Material: {fileID: 2100000, guid: 0840c51f2a620ec44b9ff97e0781cfe4, type: 2}
-  WidthCurve:
+  material: {fileID: 2100000, guid: 0840c51f2a620ec44b9ff97e0781cfe4, type: 2}
+  widthCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0.05
+      value: 0.1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -37,9 +37,9 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  Duration: 0.1
-  MinVertexDistance: 0.1
-  Color:
+  duration: 0.1
+  minVertexDistance: 0.1
+  color:
     serializedVersion: 2
     key0: {r: 1, g: 1, b: 1, a: 1}
     key1: {r: 1, g: 1, b: 1, a: 0}
@@ -68,5 +68,5 @@ MonoBehaviour:
     m_Mode: 0
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
-  MaxDistance: 25
-  SimulationSpeed: 200
+  maxDistance: 25
+  simulationSpeed: 200

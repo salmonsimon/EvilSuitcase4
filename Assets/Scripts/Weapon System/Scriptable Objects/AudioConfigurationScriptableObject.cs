@@ -4,11 +4,15 @@ using UnityEngine;
 public class AudioConfigurationScriptableObject : ScriptableObject
 {
     [Range(0, 1f)]
-    public float Volume = 1f;
+    [SerializeField] private float volume = 1f;
+    public float Volume { get { return volume; } }
 
     [Header("Audio Clips")]
-    public AudioClip[] FireClips;
-    public AudioClip EmptyClip;
+    [SerializeField] private AudioClip[] fireClips;
+    public AudioClip[] FireClips { get { return fireClips; } }
+
+    [SerializeField] private AudioClip emptyClip;
+    public AudioClip EmptyClip { get { return emptyClip; } }
 
     public void PlayShootingClip()
     {

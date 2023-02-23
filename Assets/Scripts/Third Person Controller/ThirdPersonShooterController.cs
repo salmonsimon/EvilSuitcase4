@@ -92,9 +92,8 @@ public class ThirdPersonShooterController : MonoBehaviour
         if (!isReloading && 
             starterAssetsInputs.reload &&
             equippedWeapon != null && 
-            //equippedWeapon.GetType().IsAssignableFrom(typeof(Gun))
             IsSubclassOfRawGeneric(equippedWeapon.GetType(), typeof(Gun))
-            )
+           )
         {
             if (equippedWeapon.GetComponent<Gun>().CanReload())
             {
@@ -107,8 +106,7 @@ public class ThirdPersonShooterController : MonoBehaviour
         {
             equippedWeapon.Attack();
 
-            if (//equippedWeapon.GetType().IsAssignableFrom(typeof(Gun)) && 
-                IsSubclassOfRawGeneric(equippedWeapon.GetType(), typeof(Gun)) &&
+            if (IsSubclassOfRawGeneric(equippedWeapon.GetType(), typeof(Gun)) &&
                 equippedWeapon.GetComponent<Gun>().CurrentClipAmmo == 0)
                 starterAssetsInputs.shoot = false;
         }
@@ -182,7 +180,6 @@ public class ThirdPersonShooterController : MonoBehaviour
 
         ActivateWeapon(equippedWeapon, true);
 
-        //if (equippedWeapon.GetType().IsAssignableFrom(typeof(Gun)))
         if (IsSubclassOfRawGeneric(equippedWeapon.GetType(), typeof(Gun)))
         {
             Gun equippedGun = equippedWeapon.GetComponent<Gun>();
