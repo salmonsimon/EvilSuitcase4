@@ -6,7 +6,7 @@ public class RocketProjectile : Projectile
 {
     [SerializeField] private GameObject model;
     [SerializeField] private ParticleSystem rocketTrailParticleSystem;
-    [SerializeField] private float constantSpeed = 100f;
+    [SerializeField] private float constantSpeed = 25f;
     [SerializeField] private float disableTime = 2f;
 
     private Explosion explosionObject;
