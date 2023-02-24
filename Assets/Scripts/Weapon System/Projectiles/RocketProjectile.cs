@@ -9,17 +9,22 @@ public class RocketProjectile : Projectile
     [SerializeField] private float constantSpeed = 25f;
     [SerializeField] private float disableTime = 2f;
 
+    private AudioSource audioSource;
     private Explosion explosionObject;
 
     protected override void Awake()
     {
         base.Awake();
 
+        audioSource = GetComponentInChildren<AudioSource>();
+        audioSource.volume = GameManager.instance.GetSFXManager().GetSFXVolume();
+
         explosionObject = GetComponentInChildren<Explosion>(true);
     }
 
     private void OnEnable()
     {
+        audioSource.Play();
         rocketTrailParticleSystem.Play();
     }
 
@@ -66,6 +71,8 @@ public class RocketProjectile : Projectile
         model.SetActive(false);
         rigidBody.constraints = RigidbodyConstraints.FreezeAll;
         boxCollider.enabled = false;
+
+        audioSource.Stop();
 
         explosionObject.gameObject.SetActive(true);
 
