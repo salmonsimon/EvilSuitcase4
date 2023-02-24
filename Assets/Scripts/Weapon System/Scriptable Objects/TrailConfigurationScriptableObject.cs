@@ -33,5 +33,8 @@ public class TrailConfigurationScriptableObject : ScriptableObject
     [SerializeField] private float simulationSpeed = 100f;
     public float SimulationSpeed { get { return simulationSpeed; } }
 
+    [SerializeField] private float hitForce = 200f;
+    public float HitForce { get { return hitForce; } }
+
     #endregion
 }

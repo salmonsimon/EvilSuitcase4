@@ -123,7 +123,12 @@ public class GunHitscan : Gun
             GameManager.instance.GetSurfaceManager().HandleImpact(hit.transform.gameObject, endPosition, hit.normal, impactType, 0);
 
             if (hit.collider.TryGetComponent(out Damageable damageable))
+            {
                 damageable.ReceiveDamage(gunConfiguration.DamageConfig.GetDamage(distance));
+
+                if (damageable.TryGetComponent(out Rigidbody rigidbody))
+                    rigidbody.AddForce(-hit.normal.normalized * GunConfiguration.TrailConfig.HitForce);
+            }
         }
 
         yield return new WaitForSeconds(gunConfiguration.TrailConfig.Duration);
