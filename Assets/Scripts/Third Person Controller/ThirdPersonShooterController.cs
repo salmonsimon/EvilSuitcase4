@@ -43,6 +43,7 @@ public class ThirdPersonShooterController : MonoBehaviour
     private AnimationClip reloadAnimationClip = null;
     private Coroutine reloadCoroutine = null;
 
+    private bool isAbleToReload = true;
     private Coroutine shotgunShootCoroutine = null;
 
     #endregion
@@ -90,6 +91,7 @@ public class ThirdPersonShooterController : MonoBehaviour
         }
 
         if (!isReloading && 
+            isAbleToReload &&
             starterAssetsInputs.reload &&
             equippedWeapon != null && 
             IsSubclassOfRawGeneric(equippedWeapon.GetType(), typeof(Gun))
@@ -208,8 +210,14 @@ public class ThirdPersonShooterController : MonoBehaviour
     public void PlayShotgunShootAnimation(float delay)
     {
         starterAssetsInputs.shoot = false;
+        isAbleToReload = false;
 
         shotgunShootCoroutine = StartCoroutine(PlayClip(Animator.StringToHash("Shotgun Shoot"), delay));
+    }
+
+    public void FinishedShootingAnimation() 
+    {
+        isAbleToReload = true;
     }
 
     protected IEnumerator PlayClip(int clipHash, float startTime)
