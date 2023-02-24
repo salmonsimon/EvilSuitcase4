@@ -39,7 +39,7 @@ public class PlayerGunAnimations : MonoBehaviour
     public void PistolDropMagazine()
     {
         GameObject droppedMagazine = Instantiate(equippedWeapon.AnimationObject, equippedWeapon.AnimationObject.transform.position, equippedWeapon.AnimationObject.transform.rotation);
-        droppedMagazine.transform.localScale = equippedWeapon.AnimationObject.transform.lossyScale * 1.5f;
+        //droppedMagazine.transform.localScale = equippedWeapon.AnimationObject.transform.lossyScale * 1.5f;
         droppedMagazine.transform.parent = droppedObjectContainer.transform;
 
         droppedMagazine.AddComponent<Rigidbody>();
