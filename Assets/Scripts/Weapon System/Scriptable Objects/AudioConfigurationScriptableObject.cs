@@ -21,7 +21,7 @@ public class AudioConfigurationScriptableObject : ScriptableObject
 
         AudioClip fireClipToPlay = FireClips[Random.Range(0, FireClips.Length)];
 
-        GameManager.instance.GetSFXManager().PlaySound(fireClipToPlay);
+        GameManager.instance.GetSFXManager().PlaySound(fireClipToPlay, volume);
     }
 
     public void PlayEmptyClip()
@@ -29,6 +29,6 @@ public class AudioConfigurationScriptableObject : ScriptableObject
         if (!EmptyClip)
             return;
 
-        GameManager.instance.GetSFXManager().PlaySound(EmptyClip);
+        GameManager.instance.GetSFXManager().PlaySound(EmptyClip, volume);
     }
 }
