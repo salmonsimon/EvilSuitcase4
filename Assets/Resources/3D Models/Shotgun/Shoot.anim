@@ -197,10 +197,17 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0
-    functionName: PlayAudioClip
+    functionName: PlayRandomPumpReloadAudioClip
     data: 
     objectReferenceParameter: {fileID: 8300000, guid: b0994fce2ed4ced46bd42eac51278f3b,
       type: 3}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.2
+    functionName: PlayRandomBulletReloadAudioClip
+    data: 
+    objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0

@@ -46,11 +46,13 @@ public class GunHitscan : Gun
 
             for (int i = 0; i < gunConfiguration.ShootConfig.PelletsPerBullet; i++)
             {
+                float crosshairDistance = Vector3.Distance(crossHairTarget.position, ShootParticleSystem.transform.position);
+
                 Vector3 shootDirection = crossHairTarget.position - ShootParticleSystem.transform.position +
                 new Vector3(
-                    Random.Range(-gunConfiguration.ShootConfig.Spread.x, gunConfiguration.ShootConfig.Spread.x),
-                    Random.Range(-gunConfiguration.ShootConfig.Spread.y, gunConfiguration.ShootConfig.Spread.y),
-                    Random.Range(-gunConfiguration.ShootConfig.Spread.z, gunConfiguration.ShootConfig.Spread.z)
+                    Random.Range(-gunConfiguration.ShootConfig.Spread.x, gunConfiguration.ShootConfig.Spread.x) * crosshairDistance,
+                    Random.Range(-gunConfiguration.ShootConfig.Spread.y, gunConfiguration.ShootConfig.Spread.y) * crosshairDistance,
+                    Random.Range(-gunConfiguration.ShootConfig.Spread.z, gunConfiguration.ShootConfig.Spread.z) * crosshairDistance
                     );
 
                 shootDirection.Normalize();
@@ -124,10 +126,12 @@ public class GunHitscan : Gun
 
             if (hit.collider.TryGetComponent(out Damageable damageable))
             {
-                damageable.ReceiveDamage(gunConfiguration.DamageConfig.GetDamage(distance));
+                damageable.ReceiveDamage(gunConfiguration.DamageConfig.GetDamage(distance));              
+            }
 
-                if (damageable.TryGetComponent(out Rigidbody rigidbody))
-                    rigidbody.AddForce(-hit.normal.normalized * GunConfiguration.TrailConfig.HitForce);
+            if (hit.collider.TryGetComponent(out Rigidbody rigidbody))
+            {
+                rigidbody.AddForce(-hit.normal.normalized * GunConfiguration.TrailConfig.HitForce);
             }
         }
 
