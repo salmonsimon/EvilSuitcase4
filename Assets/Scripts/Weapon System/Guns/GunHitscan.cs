@@ -48,12 +48,7 @@ public class GunHitscan : Gun
             {
                 float crosshairDistance = Vector3.Distance(crossHairTarget.position, ShootParticleSystem.transform.position);
 
-                Vector3 shootDirection = crossHairTarget.position - ShootParticleSystem.transform.position +
-                new Vector3(
-                    Random.Range(-gunConfiguration.ShootConfig.Spread.x, gunConfiguration.ShootConfig.Spread.x) * crosshairDistance,
-                    Random.Range(-gunConfiguration.ShootConfig.Spread.y, gunConfiguration.ShootConfig.Spread.y) * crosshairDistance,
-                    Random.Range(-gunConfiguration.ShootConfig.Spread.z, gunConfiguration.ShootConfig.Spread.z) * crosshairDistance
-                    );
+                Vector3 shootDirection = crossHairTarget.position - ShootParticleSystem.transform.position + CalculateSpread(crosshairDistance);
 
                 shootDirection.Normalize();
 
@@ -72,6 +67,8 @@ public class GunHitscan : Gun
                                  )
                         );
                 }
+
+                Recoil();
             }
         }
     }

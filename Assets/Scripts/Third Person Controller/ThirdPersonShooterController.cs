@@ -11,6 +11,8 @@ public class ThirdPersonShooterController : MonoBehaviour
 {
     [Header("Camera")]
     [SerializeField] private CinemachineVirtualCamera aimVirtualCamera;
+    public CinemachineVirtualCamera AimVirtualCamera { get { return aimVirtualCamera; } }
+
     [SerializeField] private float normalLookSensitivity = 2f;
     [SerializeField] private float aimSensitivity = 1f;
 
@@ -27,6 +29,8 @@ public class ThirdPersonShooterController : MonoBehaviour
     #region Obejct References
 
     private ThirdPersonController thirdPersonController;
+    public ThirdPersonController ThirdPersonController { get { return thirdPersonController; } }
+
     private StarterAssetsInputs starterAssetsInputs;
     private PlayerGunAnimations playerGunAnimations;
 
@@ -190,6 +194,8 @@ public class ThirdPersonShooterController : MonoBehaviour
 
             playerGunAnimations.Setup(equippedGun);
             GameManager.instance.GetAmmoDisplayUI().Setup(equippedGun.GunConfiguration.AmmoConfig.BulletSprite, equippedGun.CurrentClipAmmo, equippedGun.CurrentStockedAmmo);
+
+            equippedGun.SetStarterAssetsInputs(starterAssetsInputs);
         }
     }
 

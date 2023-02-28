@@ -37,6 +37,9 @@ public static class Config
     public const float CAMERASHAKE_HIT_AMPLITUDE = 3f;
     public const float CAMERASHAKE_HIT_DURATION = .1f;
 
+    public const float CAMERASHAKE_EXPLOSION_AMPLITUDE = 10f;
+    public const float CAMERASHAKE_EXPLOSION_DURATION = .5f;
+
     #endregion
 
     #region Time Delays

@@ -26,6 +26,9 @@ public class GunScriptableObject : ScriptableObject
     [SerializeField] private ShootConfigurationScriptableObject shootConfig;
     public ShootConfigurationScriptableObject ShootConfig { get { return shootConfig; } }
 
+    [SerializeField] private RecoilConfigurationScriptableObject recoilConfig;
+    public RecoilConfigurationScriptableObject RecoilConfig { get { return recoilConfig; } }
+
     [HideInInspector, SerializeField] private TrailConfigurationScriptableObject trailConfig;
     public TrailConfigurationScriptableObject TrailConfig { get { return trailConfig; } }
 
