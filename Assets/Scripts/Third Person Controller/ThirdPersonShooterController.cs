@@ -11,6 +11,8 @@ public class ThirdPersonShooterController : MonoBehaviour
 {
     [Header("Camera")]
     [SerializeField] private CinemachineVirtualCamera aimVirtualCamera;
+    public CinemachineVirtualCamera AimVirtualCamera { get { return aimVirtualCamera; } }
+
     [SerializeField] private float normalLookSensitivity = 2f;
     [SerializeField] private float aimSensitivity = 1f;
 
@@ -27,6 +29,8 @@ public class ThirdPersonShooterController : MonoBehaviour
     #region Obejct References
 
     private ThirdPersonController thirdPersonController;
+    public ThirdPersonController ThirdPersonController { get { return thirdPersonController; } }
+
     private StarterAssetsInputs starterAssetsInputs;
     private PlayerGunAnimations playerGunAnimations;
 
@@ -43,6 +47,7 @@ public class ThirdPersonShooterController : MonoBehaviour
     private AnimationClip reloadAnimationClip = null;
     private Coroutine reloadCoroutine = null;
 
+    private bool isAbleToReload = true;
     private Coroutine shotgunShootCoroutine = null;
 
     #endregion
@@ -90,6 +95,7 @@ public class ThirdPersonShooterController : MonoBehaviour
         }
 
         if (!isReloading && 
+            isAbleToReload &&
             starterAssetsInputs.reload &&
             equippedWeapon != null && 
             IsSubclassOfRawGeneric(equippedWeapon.GetType(), typeof(Gun))
@@ -188,6 +194,8 @@ public class ThirdPersonShooterController : MonoBehaviour
 
             playerGunAnimations.Setup(equippedGun);
             GameManager.instance.GetAmmoDisplayUI().Setup(equippedGun.GunConfiguration.AmmoConfig.BulletSprite, equippedGun.CurrentClipAmmo, equippedGun.CurrentStockedAmmo);
+
+            equippedGun.SetStarterAssetsInputs(starterAssetsInputs);
         }
     }
 
@@ -208,8 +216,14 @@ public class ThirdPersonShooterController : MonoBehaviour
     public void PlayShotgunShootAnimation(float delay)
     {
         starterAssetsInputs.shoot = false;
+        isAbleToReload = false;
 
         shotgunShootCoroutine = StartCoroutine(PlayClip(Animator.StringToHash("Shotgun Shoot"), delay));
+    }
+
+    public void FinishedShootingAnimation() 
+    {
+        isAbleToReload = true;
     }
 
     protected IEnumerator PlayClip(int clipHash, float startTime)

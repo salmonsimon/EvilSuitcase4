@@ -32,6 +32,8 @@ public class Explosion : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        GameManager.instance.GetCinemachineShake().ShakeCamera(Config.CAMERASHAKE_EXPLOSION_AMPLITUDE, Config.CAMERASHAKE_EXPLOSION_DURATION);
+
         if (collision.collider.TryGetComponent(out Damageable damageable))
         {
             damageable.ReceiveDamage(damageConfiguration.GetDamage(0));

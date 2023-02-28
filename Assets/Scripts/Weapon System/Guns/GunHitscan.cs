@@ -46,12 +46,9 @@ public class GunHitscan : Gun
 
             for (int i = 0; i < gunConfiguration.ShootConfig.PelletsPerBullet; i++)
             {
-                Vector3 shootDirection = crossHairTarget.position - ShootParticleSystem.transform.position +
-                new Vector3(
-                    Random.Range(-gunConfiguration.ShootConfig.Spread.x, gunConfiguration.ShootConfig.Spread.x),
-                    Random.Range(-gunConfiguration.ShootConfig.Spread.y, gunConfiguration.ShootConfig.Spread.y),
-                    Random.Range(-gunConfiguration.ShootConfig.Spread.z, gunConfiguration.ShootConfig.Spread.z)
-                    );
+                float crosshairDistance = Vector3.Distance(crossHairTarget.position, ShootParticleSystem.transform.position);
+
+                Vector3 shootDirection = crossHairTarget.position - ShootParticleSystem.transform.position + CalculateSpread(crosshairDistance);
 
                 shootDirection.Normalize();
 
@@ -70,6 +67,8 @@ public class GunHitscan : Gun
                                  )
                         );
                 }
+
+                Recoil();
             }
         }
     }
@@ -123,7 +122,14 @@ public class GunHitscan : Gun
             GameManager.instance.GetSurfaceManager().HandleImpact(hit.transform.gameObject, endPosition, hit.normal, impactType, 0);
 
             if (hit.collider.TryGetComponent(out Damageable damageable))
-                damageable.ReceiveDamage(gunConfiguration.DamageConfig.GetDamage(distance));
+            {
+                damageable.ReceiveDamage(gunConfiguration.DamageConfig.GetDamage(distance));              
+            }
+
+            if (hit.collider.TryGetComponent(out Rigidbody rigidbody))
+            {
+                rigidbody.AddForce(-hit.normal.normalized * GunConfiguration.TrailConfig.HitForce);
+            }
         }
 
         yield return new WaitForSeconds(gunConfiguration.TrailConfig.Duration);

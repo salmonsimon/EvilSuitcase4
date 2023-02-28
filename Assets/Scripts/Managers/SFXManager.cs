@@ -55,6 +55,11 @@ public class SFXManager : MonoBehaviour
         audioSource.PlayOneShot(audioClip);
     }
 
+    public void PlaySound(AudioClip audioClip, float volume)
+    {
+        audioSource.PlayOneShot(audioClip, volume*sfxVolume);
+    }
+
     public void PlayRandomAudioClip(List<AudioClip> audioClips)
     {
         int randomClip = Random.Range(0, audioClips.Count);

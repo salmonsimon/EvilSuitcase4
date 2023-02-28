@@ -498,7 +498,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gunConfiguration: {fileID: 11400000, guid: 55b595b8ea08ef247a1f8cb03d7e1e9a, type: 2}
   animationObject: {fileID: 0}
-  reloadAnimationClip: {fileID: 7400000, guid: ac4aa3c68560839479a36e1a97929816, type: 2}
+  reloadAnimationClip: {fileID: 7400000, guid: c0a071801bf4e8f479d6c0966f34183b, type: 2}
   impactType: {fileID: 11400000, guid: 4a8931dfd9cfcb94dae2060677c798da, type: 2}
 --- !u!114 &652267281
 MonoBehaviour:
@@ -723,18 +723,6 @@ Animation:
   m_PlayAutomatically: 0
   m_AnimatePhysics: 0
   m_CullingType: 0
---- !u!114 &3262170920563421381
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2391760720727150959}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7dd73da6394bfae44b4b3d890283ae99, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &3262170920563421382
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -748,6 +736,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletShell: {fileID: 4436526394244511497}
+--- !u!114 &255359640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2391760720727150959}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76544abc6a6e5df4483aae3fc200c64e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pumpReloadAudioClips:
+  - {fileID: 8300000, guid: 4b3064e7f97f97c4087832099bf78639, type: 3}
+  - {fileID: 8300000, guid: c75e2113d29a0234dbc90ebcf94926e3, type: 3}
+  - {fileID: 8300000, guid: 14363297f5c4c9e4087dc35da87e1795, type: 3}
+  - {fileID: 8300000, guid: 98843edf7e8b14d42aa064f452357d30, type: 3}
+  - {fileID: 8300000, guid: 2dcea8c0c722d764d90ac31bf6a13c00, type: 3}
+  bulletReloadAudioClips:
+  - {fileID: 8300000, guid: c555ce7f790252e4287649fb109e1dc2, type: 3}
+  - {fileID: 8300000, guid: d34f1c32cd8894c419a8b4bf14ce7025, type: 3}
+  - {fileID: 8300000, guid: 6c446df81ff07f14d968a466cefa70a9, type: 3}
+  - {fileID: 8300000, guid: abb028d5f1aef6b46bd16561c6c97588, type: 3}
+  - {fileID: 8300000, guid: cfb30fc754ec1f34e96ce24baa7b152a, type: 3}
 --- !u!4 &3061019586370259925 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 522244055880858399, guid: d23a8096a28feda43abefd7286bc584b,

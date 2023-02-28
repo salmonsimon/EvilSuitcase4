@@ -1,7 +1,9 @@
+using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
+using static UnityEngine.InputSystem.LowLevel.InputStateHistory;
 
 public class Gun : Weapon
 {
@@ -33,6 +35,10 @@ public class Gun : Weapon
 
     #region Logic Variables
 
+    [SerializeField] protected float continuousShootingTime = 0f;
+    [SerializeField] protected Vector2 currentRecoilRotation = Vector2.zero;
+    [SerializeField] protected Vector2 targetRecoilRotation = Vector2.zero;
+
     protected float LastshootTime;
 
     protected int currentClipAmmo;
@@ -52,6 +58,8 @@ public class Gun : Weapon
     protected ThirdPersonShooterController playerThirdPersonShooterController;
 
     protected AmmoDisplayUI ammoDisplayUI;
+
+    protected StarterAssetsInputs starterAssetInputs;
     
     #endregion
 
@@ -69,6 +77,16 @@ public class Gun : Weapon
         playerThirdPersonShooterController = GameObject.FindGameObjectWithTag(Config.PLAYER_TAG).GetComponent<ThirdPersonShooterController>();
 
         ammoDisplayUI = GameManager.instance.GetAmmoDisplayUI();
+    }
+
+    private void Update()
+    {
+        if (starterAssetInputs.shoot)
+            continuousShootingTime += Time.deltaTime;
+        else
+            continuousShootingTime = 0;
+
+        UpdateCameraRecoilRotation();
     }
 
     public override void Attack()
@@ -117,5 +135,41 @@ public class Gun : Weapon
     protected virtual void UpdateAmmoDisplayCounters()
     {
         ammoDisplayUI.UpdateCounters(CurrentClipAmmo, CurrentStockedAmmo);
+    }
+
+    protected Vector3 CalculateSpread(float crosshairDistance)
+    {
+        return new Vector3(
+                    Random.Range(-GunConfiguration.ShootConfig.Spread.x, GunConfiguration.ShootConfig.Spread.x) * crosshairDistance,
+                    Random.Range(-GunConfiguration.ShootConfig.Spread.y, GunConfiguration.ShootConfig.Spread.y) * crosshairDistance,
+                    Random.Range(-GunConfiguration.ShootConfig.Spread.z, GunConfiguration.ShootConfig.Spread.z) * crosshairDistance
+                    );
+    }
+
+    protected void Recoil()
+    {
+        Vector2 recoil = Vector3.Lerp(
+            Vector2.zero,
+            new Vector2(
+                Random.Range(-GunConfiguration.RecoilConfig.RecoilPattern.x, GunConfiguration.RecoilConfig.RecoilPattern.x),
+                Random.Range(0, GunConfiguration.RecoilConfig.RecoilPattern.y)
+                ),
+            Mathf.Clamp01(continuousShootingTime / GunConfiguration.RecoilConfig.MaxRecoilTime)
+        );
+
+        targetRecoilRotation += recoil;
+    }
+
+    protected void UpdateCameraRecoilRotation()
+    {
+        targetRecoilRotation = Vector2.Lerp(targetRecoilRotation, Vector3.zero, GunConfiguration.RecoilConfig.RecoilRecoverySpeed * Time.deltaTime);
+        currentRecoilRotation = Vector2.Lerp(currentRecoilRotation, targetRecoilRotation, GunConfiguration.RecoilConfig.RecoilSnappiness * Time.deltaTime);
+
+        playerThirdPersonShooterController.ThirdPersonController.recoil = currentRecoilRotation;
+    }
+
+    public void SetStarterAssetsInputs(StarterAssetsInputs starterAssetsInputs)
+    {
+        this.starterAssetInputs = starterAssetsInputs;
     }
 }

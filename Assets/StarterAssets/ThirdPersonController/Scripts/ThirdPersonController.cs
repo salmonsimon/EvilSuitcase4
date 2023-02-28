@@ -79,6 +79,8 @@ namespace StarterAssets
         [Tooltip("For locking the camera position on all axis")]
         public bool LockCameraPosition = false;
 
+        public Vector2 recoil = Vector2.zero;
+
         // cinemachine
         private float _cinemachineTargetYaw;
         private float _cinemachineTargetPitch;
@@ -205,6 +207,12 @@ namespace StarterAssets
 
                 _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier * LookSensitivity;
                 _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier * LookSensitivity;
+            }
+            
+            if(_input.shoot)
+            {
+                _cinemachineTargetYaw += recoil.x * Time.deltaTime;
+                _cinemachineTargetPitch += -recoil.y * Time.deltaTime;
             }
 
             // clamp our rotations so our values are limited 360 degrees
