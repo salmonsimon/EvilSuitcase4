@@ -108,3 +108,275 @@ direction TD
 ```
 
 ## Weapon System
+
+Weapon system created using S.O.L.I.D principles for modularity and better code. Scriptable Object based weapons, thus creating new weapons is easier. 
+
+This weapon system is supposed to have the classes ***Gun*** and ***MeleeWeapon*** as a base. So far ***GunHitscan*** and ***GunProjectile*** classes based on the ***Gun*** class have already been created, but ***MeleeWeapon*** weapons are also on the roadmap.
+
+All animations for holding and aiming guns are _Procedural Animations_ which run on top of the base animations from the third person controller. Also, for reloading animations, new animations were created using the ***Animation Rigging*** system.
+
+### Hitscan Guns
+
+Hitscan guns don't actually shoot bullets, but instead cast a ray which will cause damage to _Damageable_ classes on hit. For these type of guns we will define a _Trail Renderer_, as well as its _Damage Configuration_.
+
+So far the weapons implemented are:
+- ***Pistol***
+- ***Machinegun***
+- ***Shotgun***
+- ***Uzi***
+
+### Projectile Guns
+
+Projectile guns use physic based projectiles instead of raycasts. These projectiles will vary depending on the weapon used, so far we have the following weapons:
+- ***Crossbow:*** uses _DartProjectile_ as a projectile
+- ***RocketLauncher:*** uses _RocketProjectile_ as a projectile
+
+In the case of the _Crossbow_, the damage is done when the dart projectile hits an object (only if this object is of type _Damageable_). Also, after hitting its target, the dart shot will remain attached to the collided game object.
+
+For the _RocketLauncher_, a misile of the class _RocketProjectile_ is shot, which will explode by colliding to an object or after traveling certain defined distance.
+
+### Weapon System Class Diagrams
+
+```mermaid
+---
+title: Weapon System - Main
+---
+classDiagram
+direction TD
+    class Weapon{
+        +Attack()
+    }
+    
+    class MeleeWeapon {
+        <<WIP>>
+    }
+    
+    class Gun {
+        #GunScriptableObject GunConfiguration
+        +GameObject animationObject
+        +AnimationClip ReloadAnimationClip
+        -GunAnimations weaponAnimations
+        
+        #float continuousShootingTime
+        #Vector2 currentRecoilRotation
+        #Vector2 targetRecoilRotation
+        
+        #float LastshootTime
+        +int CurrentClipAmmo
+        +int CurrentStockedAmmo
+        
+        +Shoot()
+        +Reload()
+        +CanReload()
+        #SubstractClipAmmo()
+        #UpdateAmmoDisplayCounters()
+        #CalculateSpread(float crosshairDistance): Vector3
+        #Recoil()
+        #UpdateCameraRecoilRotation()
+    }
+    
+    class GunScriptableObject {
+        <<ScriptableObject>>
+        +string GunName
+        +bool IsHitscan
+        
+        +ShootConfigurationScriptableObject ShootConfig
+        +RecoilConfigurationScriptableObject RecoilConfig
+        +AmmoConfigurationScriptableObject AmmoConfig
+        +AudioConfigurationScriptableObject AudioConfig
+        +TrailConfigurationScriptableObject TrailConfig
+        +DamageConfigurationScriptableObject DamageConfig
+    }
+    
+    class GunAnimations {
+        -Animation anim
+        PlayShootAnimation(float delay)
+        PlayReloadAnimation(float delay)
+    }
+    
+    class GunHitscan {
+        -ImpactType impactType
+        -Transform bulletTrailContainer
+        -ObjectPool~TrailRenderer~ TrailPool
+
+        +CreateTrail()
+        +PlayTrail()
+    }
+    
+    class GunProjectile {
+        -Projectile projectilePrefab
+        -float projectileLaunchForce
+        -bool poolableProjectiles
+        -ObjectPool~Projectile~ projectilePool
+        -Transform projectileContainer
+
+        +ShootProjectile(Vector3 shootDirection)
+        -CreateBullet(): Projectile
+    }
+    
+    Weapon --|> MeleeWeapon : Inheritance
+    Weapon --|> Gun : Inheritance
+    Gun "1" --o "1" GunScriptableObject : Addition
+    Gun "1" --o "1" GunAnimations : Addition
+    Gun --|> GunHitscan : Inheritance
+    Gun --|> GunProjectile : Inheritance
+```
+
+```mermaid
+---
+title: Weapon System - Gun Scriptable Objects
+---
+classDiagram
+direction TD
+    class GunScriptableObject {
+        <<ScriptableObject>>
+        +string GunName
+        +bool IsHitscan
+        
+        +ShootConfigurationScriptableObject ShootConfig
+        +RecoilConfigurationScriptableObject RecoilConfig
+        +AmmoConfigurationScriptableObject AmmoConfig
+        +AudioConfigurationScriptableObject AudioConfig
+        +TrailConfigurationScriptableObject TrailConfig
+        +DamageConfigurationScriptableObject DamageConfig
+    }
+    
+    class ShootConfigurationScriptableObject {
+        <<ScriptableObject>>
+        +LayerMask HitMask
+        +int PelletsPerBullet
+        +Vector3 Spread
+        +float FireRate
+        +float CameraShakeAmplitude
+        +float CameraShakeDuration
+    }
+    
+    class RecoilConfigurationScriptableObject {
+        <<ScriptableObject>>
+        +Vector2 RecoilPattern
+        +float RecoilSnappiness
+        +float RecoilRecoverySpeed
+        +float MaxRecoilTime
+    }
+    
+    class AmmoConfigurationScriptableObject {
+        <<ScriptableObject>>
+        +Sprite BulletSprite
+        +int ClipSize
+        +float ShootAnimationDelay
+    }
+    
+    class AudioConfigurationScriptableObject {
+        <<ScriptableObject>>
+        +float Volume
+        +AudioClip[] FireClips
+        +AudioClip EmptyClip
+        
+        +PlayShootingClip()
+        +PlayEmptyClip()
+    }
+    
+    class TrailConfigurationScriptableObject {
+        <<ScriptableObject>>
+        +Material Material
+        +AnimationCurve WidthCurve
+        +float Duration
+        +float MinVertexDistance
+        +Gradient Color
+        +float MaxDistance
+        +float SimulationSpeed
+        +float HitForce
+    }
+    
+    class DamageConfigurationScriptableObject {
+        <<ScriptableObject>>
+        +MinMaxCurve DamageCurve
+        +GetDamage(float distance): int
+    }
+
+    GunScriptableObject "1" --o "1" ShootConfigurationScriptableObject : Addition
+    GunScriptableObject "1" --o "1" RecoilConfigurationScriptableObject : Addition
+    GunScriptableObject "1" --o "1" AmmoConfigurationScriptableObject : Addition
+    GunScriptableObject "1" --o "1" AudioConfigurationScriptableObject : Addition
+    GunScriptableObject "1" --o "1" TrailConfigurationScriptableObject : (if IsHitscan) Addition
+    GunScriptableObject "1" --o "1" DamageConfigurationScriptableObject : (if IsHitscan) Addition
+```
+
+```mermaid
+---
+title: Weapon System - Projectiles
+---
+classDiagram
+direction TD
+
+    class Projectile {
+        #Rigidbody rigidBody
+        #BoxCollider boxCollider
+        #float maxDistance
+        +bool PoolableProjectile
+        +ObjectPool~Projectile~ ProjectilePool
+        #AudioClip hitAudioClip
+        #bool isDisabled
+        #Vector3 startPosition
+        #float distanceTraveled
+        
+        +LaunchProjectile(Vector3 launchForce)
+        #Disable()
+    }
+    
+    class DartProjectile {
+        +DamageConfigurationScriptableObject DamageConfig
+        #OnCollisionEnter(Collision collision)
+    }
+    
+    class RocketProjectile {
+        -GameObject model
+        -ParticleSystem rocketTrailParticleSystem
+        -float constantSpeed
+        -float disableTime
+        -AudioSource audioSource
+        -Explosion explosionObject
+        
+        -Explode()
+    }
+    
+    class Explosion {
+        -DamageConfigurationScriptableObject damageConfiguration
+        -float explosionForce
+        -SphereCollider explosionCollider
+        -ParticleSystem explosionParticleSystem
+        
+        -OnEnable()
+        -OnDisable()
+        -OnTriggerEnter(Collider other)
+    }
+    
+    class DamageConfigurationScriptableObject {
+        <<ScriptableObject>>
+        +MinMaxCurve DamageCurve
+        +GetDamage(float distance): int
+    }
+    
+    Projectile --|> DartProjectile : Inheritance
+    Projectile --|> RocketProjectile : Inheritance
+    DartProjectile "1" --o "1" DamageConfigurationScriptableObject : Addition
+    Explosion "1" --o "1" DamageConfigurationScriptableObject : Addition
+    RocketProjectile "1" --o "1" Explosion : Addition
+```
+
+### CrossHair
+
+A ***CrossHair*** class was also created for better aiming and as a target for our _Procedural Animations_. The position of this CrossHair will be the point in which a ray casted from the center of our camera collides with an object, if no collision is detected the position of the CrossHair will be a hundred meters forward from the camera in the ray direction.
+
+The position is updated on the _Update()_ method.
+
+```mermaid
+---
+title: CrossHair Class
+---
+classDiagram
+    class CrossHair{
+        +Ray crossHairRay
+        +RaycastHit crossHairRaycastHit
+    }
+```
