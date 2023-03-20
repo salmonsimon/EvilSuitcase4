@@ -9,7 +9,77 @@ The roadmap will be split into what has already been done and what is to be deve
 
 ### Done
 
+```mermaid 
+  journey
+    title Done
+    
+    section Reusable Code
+      Music/SFX Managers: 7: Done
+      Level Loader: 7: Done
+      Camera Shake: 7: Done
+      Game Manager: 7: Done
+      Progress Saving: 7: Done, WIP
+      Main/Pause Menu: 4: Done, WIP
+      
+    section Third Person Shooter Controller
+      Starter Assets Third Person Controller: 7: Done
+      Prototype Third Person Shooter Controller: 7: Done
+      
+    section Damage System
+        Damageable Class: 7: Done
+    
+    section Impact System / Surface Manager
+        Implementation: 7: Done
+        Create Scriptable Objects: 5: Done, WIP
+        
+    section Weapon System
+        Implementation: 7: Done
+        Create Scriptable Objects: 7: Done
+        Weapon Hold and Aim Rigging: 6: Done
+        CrossHair: 7: Done
+        Hitscan Guns: 7: Done
+        Projectile Guns: 7: Done
+        Melee Weapons: 1: Pending
+```
+
 ### To Do
+
+```mermaid 
+  journey
+    title Done
+    
+    section Zombies
+      Download Models: 1: Pending
+      Import Animations: 1: Pending
+      Chasing AI: 1: Pending
+      Finite State Machine: 1: Pending
+    
+    section Zombie Spawner
+        One Point Spawner: 1: Pending
+        Multiple Point Spawner: 1: Pending
+        Testing: 1: Pending
+        
+    section Tetris Inventory + Menu Updates
+        TBD: 1: Pending
+    
+    section Wave Manager
+        Wave Cleared Rewards: 1: Pending
+        Random Item Blocker: 1: Pending
+        Polish UI: 1: Pending
+        
+    section First Map
+        TBD: 1: Pending
+        
+    section Game UI
+        TBD: 1: Pending
+        
+    section Melee Weapons
+        TBD: 1: Pending
+        
+    section Demo Polish
+        TBD: 1: Pending
+    
+```
 
 ## Third Person Shooter Controller
 
