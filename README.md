@@ -284,12 +284,12 @@ direction TD
         -CreateBullet(): Projectile
     }
     
-    Weapon --|> MeleeWeapon : Inheritance
-    Weapon --|> Gun : Inheritance
+    MeleeWeapon  --|> Weapon : Inheritance
+    Gun --|> Weapon : Inheritance
     Gun "1" --o "1" GunScriptableObject : Addition
     Gun "1" --o "1" GunAnimations : Addition
-    Gun --|> GunHitscan : Inheritance
-    Gun --|> GunProjectile : Inheritance
+    GunHitscan --|> Gun  : Inheritance
+    GunProjectile --|> Gun : Inheritance
 ```
 
 ```mermaid
@@ -427,8 +427,8 @@ direction TD
         +GetDamage(float distance): int
     }
     
-    Projectile --|> DartProjectile : Inheritance
-    Projectile --|> RocketProjectile : Inheritance
+    DartProjectile  --|> Projectile : Inheritance
+    RocketProjectile --|> Projectile : Inheritance
     DartProjectile "1" --o "1" DamageConfigurationScriptableObject : Addition
     Explosion "1" --o "1" DamageConfigurationScriptableObject : Addition
     RocketProjectile "1" --o "1" Explosion : Addition
