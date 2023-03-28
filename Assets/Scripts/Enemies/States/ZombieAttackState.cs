@@ -6,18 +6,23 @@ public class ZombieAttackState : ZombieBaseState
 
     public override void CheckSwitchStates()
     {
-        throw new System.NotImplementedException();
+        if (!context.AttackCollider.IsColliding)
+            context.ChangeState(factory.Chase());
     }
 
     public override void EnterState()
     {
-        // start attacking
+        context.Animator.SetTrigger("Attack");
+        context.Animator.SetBool("IsAttacking", true);
+    }
+
+    public override void ExitState()
+    {
+        context.Animator.SetBool("IsAttacking", false);
     }
 
     public override void UpdateState()
     {
-        // update time until next attack
-
-        // check if player left attack collider to get back to chase state
+        CheckSwitchStates();
     }
 }

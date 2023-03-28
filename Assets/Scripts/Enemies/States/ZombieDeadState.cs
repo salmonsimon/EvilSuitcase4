@@ -14,6 +14,11 @@ public class ZombieDeadState : ZombieBaseState
         // Add dead animation and disable unneeded stuff
     }
 
+    public override void ExitState()
+    {
+        throw new System.NotImplementedException();
+    }
+
     public override void UpdateState()
     {
         // don't do anything);
