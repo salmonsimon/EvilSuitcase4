@@ -6,21 +6,21 @@ public class ZombieDeadState : ZombieBaseState
 
     public override void CheckSwitchStates()
     {
-        throw new System.NotImplementedException();
+
     }
 
     public override void EnterState()
     {
-        // Add dead animation and disable unneeded stuff
+        context.Animator.SetTrigger("Death");
     }
 
     public override void ExitState()
     {
-        throw new System.NotImplementedException();
+
     }
 
     public override void UpdateState()
     {
-        // don't do anything);
+
     }
 }

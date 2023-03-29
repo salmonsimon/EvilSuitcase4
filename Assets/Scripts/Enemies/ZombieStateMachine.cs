@@ -11,10 +11,10 @@ public class ZombieStateMachine : MonoBehaviour
     private NavMeshAgent agent;
     private Transform player;
     private Animator animator;
+    private Damageable damageable;
 
     [SerializeField] private AttackCollider attackCollider;
-
-    // Add here all necessary data, components and gameobjects
+    [SerializeField] private float surroundRadius;
 
     private void Awake()
     {
@@ -27,6 +27,8 @@ public class ZombieStateMachine : MonoBehaviour
         animator = GetComponent<Animator>();
         animator.applyRootMotion = true;
 
+        damageable = GetComponent<Damageable>();
+
         player = GameObject.FindGameObjectWithTag(Config.PLAYER_TAG).transform;
     }
 
@@ -34,6 +36,8 @@ public class ZombieStateMachine : MonoBehaviour
     {
         currentState = stateFactory.Chase();
         currentState.EnterState();
+
+        damageable.OnAliveStatusChange += OnAliveStatusChange;
     }
 
     private void OnAnimatorMove()
@@ -59,6 +63,14 @@ public class ZombieStateMachine : MonoBehaviour
         currentState.EnterState();
     }
 
+    private void OnAliveStatusChange()
+    { 
+        if (damageable.IsAlive)
+            ChangeState(stateFactory.Chase());
+        else
+            ChangeState(stateFactory.Dead());
+    }
+
     #region Getters and Setters
 
     public ZombieBaseState CurrentState { get { return currentState; } set { currentState = value; } }
@@ -70,6 +82,8 @@ public class ZombieStateMachine : MonoBehaviour
     public Transform Player { get { return player; } }
 
     public AttackCollider AttackCollider { get { return attackCollider; } }
+
+    public float SurroundRadius { get { return surroundRadius; } }
 
     #endregion
 }

@@ -30,7 +30,17 @@ public class ZombieChaseState : ZombieBaseState
     {
         Vector3 playerPosition = context.Player.position;
 
-        context.Agent.SetDestination(playerPosition - (playerPosition - context.Agent.transform.position).normalized * .5f);
+        float randomDeviation = Random.Range(0, 1);
+
+        Vector3 randomSurroundPosition = new Vector3
+            (
+                playerPosition.x + (context.SurroundRadius * Mathf.Cos(2 * Mathf.PI * randomDeviation)),
+                playerPosition.y,
+                playerPosition.z + (context.SurroundRadius * Mathf.Sin(2 * Mathf.PI * randomDeviation))
+            );
+
+        //context.Agent.SetDestination(playerPosition - (playerPosition - context.Agent.transform.position).normalized * .5f);
+        context.Agent.SetDestination(randomSurroundPosition);
 
         UpdatePosition();
 

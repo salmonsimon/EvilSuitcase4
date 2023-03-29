@@ -23,6 +23,10 @@ public class ZombieAttackState : ZombieBaseState
 
     public override void UpdateState()
     {
+        Vector3 playerPosition = context.Player.position;
+
+        context.Agent.SetDestination(playerPosition - (playerPosition - context.Agent.transform.position).normalized * .5f);
+
         CheckSwitchStates();
     }
 }

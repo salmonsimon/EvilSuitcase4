@@ -92,7 +92,7 @@ public class Damageable : MonoBehaviour
         }
 
         // TO DO: DELETE THIS LATER, THIS IS FOR TESTING
-        StartCoroutine(WaitAndDestroy());
+        //StartCoroutine(WaitAndDestroy());
     }
 
     private IEnumerator WaitAndDestroy(float delay = 0f)
