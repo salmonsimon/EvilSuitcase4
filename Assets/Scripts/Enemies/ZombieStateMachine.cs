@@ -11,7 +11,7 @@ public class ZombieStateMachine : MonoBehaviour
     private NavMeshAgent agent;
     private Transform player;
     private Animator animator;
-    private Damageable damageable;
+    private HealthManager damageable;
 
     [SerializeField] private AttackCollider attackCollider;
     [SerializeField] private float surroundRadius;
@@ -27,7 +27,7 @@ public class ZombieStateMachine : MonoBehaviour
         animator = GetComponent<Animator>();
         animator.applyRootMotion = true;
 
-        damageable = GetComponent<Damageable>();
+        damageable = GetComponent<HealthManager>();
 
         player = GameObject.FindGameObjectWithTag(Config.PLAYER_TAG).transform;
     }
