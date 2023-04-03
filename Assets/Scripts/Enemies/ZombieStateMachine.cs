@@ -13,7 +13,9 @@ public class ZombieStateMachine : MonoBehaviour
     private Animator animator;
     private HealthManager damageable;
 
-    [SerializeField] private AttackCollider attackCollider;
+    [SerializeField] private AttackCollider reachAttackCollider;
+    [SerializeField] private AttackCollider closeAttackCollider;
+    [SerializeField] private AttackCollider followAttackCollider;
     [SerializeField] private float surroundRadius;
 
     private void Awake()
@@ -81,7 +83,11 @@ public class ZombieStateMachine : MonoBehaviour
 
     public Transform Player { get { return player; } }
 
-    public AttackCollider AttackCollider { get { return attackCollider; } }
+    public AttackCollider ReachAttackCollider { get { return reachAttackCollider; } }
+
+    public AttackCollider CloseAttackCollider { get { return closeAttackCollider; } }
+
+    public AttackCollider FollowAttackCollider { get { return followAttackCollider; } }
 
     public float SurroundRadius { get { return surroundRadius; } }
 

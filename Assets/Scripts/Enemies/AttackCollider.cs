@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AttackCollider : MonoBehaviour
 {
-    private bool isColliding = false;
+    [SerializeField] private bool isColliding = false;
     public bool IsColliding { get { return isColliding; } }
 
     private void OnTriggerEnter(Collider other)

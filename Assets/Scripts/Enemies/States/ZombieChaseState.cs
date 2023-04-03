@@ -3,14 +3,15 @@ using UnityEngine.AI;
 
 public class ZombieChaseState : ZombieBaseState
 {
-    private Vector2 velocity;
-    private Vector2 smoothDeltaPosition;
+    
+
+    float randomDeviation;
 
     public ZombieChaseState(ZombieStateMachine zombieStateMachine, ZombieStateFactory zombieStateFactory) : base(zombieStateMachine, zombieStateFactory) { }
 
     public override void CheckSwitchStates()
     {
-        if (context.AttackCollider.IsColliding)
+        if (context.ReachAttackCollider.IsColliding)
             context.ChangeState(factory.Attack());
 
     }
@@ -19,6 +20,8 @@ public class ZombieChaseState : ZombieBaseState
     {
         context.Animator.SetTrigger("Chase");
         context.Animator.SetBool("IsChasing", true);
+
+        randomDeviation = Random.Range(0, 1);
     }
 
     public override void ExitState()
@@ -29,8 +32,6 @@ public class ZombieChaseState : ZombieBaseState
     public override void UpdateState()
     {
         Vector3 playerPosition = context.Player.position;
-
-        float randomDeviation = Random.Range(0, 1);
 
         Vector3 randomSurroundPosition = new Vector3
             (
@@ -45,31 +46,5 @@ public class ZombieChaseState : ZombieBaseState
         UpdatePosition();
 
         CheckSwitchStates();
-    }
-
-    private void UpdatePosition()
-    {
-        Vector3 worldDeltaPosition = context.Agent.nextPosition - context.transform.position;
-        worldDeltaPosition.y = 0;
-
-        float dx = Vector3.Dot(context.transform.right, worldDeltaPosition);
-        float dy = Vector3.Dot(context.transform.forward, worldDeltaPosition);
-        Vector2 deltaPosition = new Vector2(dx, dy);
-
-        float smooth = Mathf.Min(1, Time.deltaTime / .1f);
-        smoothDeltaPosition = Vector2.Lerp(smoothDeltaPosition, deltaPosition, smooth);
-
-        velocity = smoothDeltaPosition / Time.deltaTime;
-
-        if (context.Agent.remainingDistance <= context.Agent.stoppingDistance)
-        {
-            velocity = Vector2.Lerp(Vector2.zero, velocity, context.Agent.remainingDistance / context.Agent.stoppingDistance);
-        }
-
-        float deltaMagnitude = worldDeltaPosition.magnitude;
-        if (deltaMagnitude > context.Agent.radius / 2f)
-        {
-            context.transform.position = Vector3.Lerp(context.Animator.rootPosition, context.Agent.nextPosition, smooth);
-        }
     }
 }

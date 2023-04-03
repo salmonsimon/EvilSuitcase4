@@ -6,7 +6,7 @@ public class ZombieAttackState : ZombieBaseState
 
     public override void CheckSwitchStates()
     {
-        if (!context.AttackCollider.IsColliding)
+        if (!context.FollowAttackCollider.IsColliding)
             context.ChangeState(factory.Chase());
     }
 
@@ -25,7 +25,16 @@ public class ZombieAttackState : ZombieBaseState
     {
         Vector3 playerPosition = context.Player.position;
 
-        context.Agent.SetDestination(playerPosition - (playerPosition - context.Agent.transform.position).normalized * .5f);
+        context.Agent.SetDestination(playerPosition);
+
+        if(context.CloseAttackCollider.IsColliding)
+            context.Animator.SetBool("OnReach", true);
+        else
+            context.Animator.SetBool("OnReach", false);
+
+
+
+        UpdatePosition();
 
         CheckSwitchStates();
     }
