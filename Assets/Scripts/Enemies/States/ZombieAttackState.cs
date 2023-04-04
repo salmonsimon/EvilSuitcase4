@@ -9,7 +9,6 @@ public class ZombieAttackState : ZombieBaseState
         if (!context.FollowAttackCollider.IsColliding)
         {
             context.ChangeState(factory.Chase());
-            Debug.Log("Into chase state");
         }
     }
 
