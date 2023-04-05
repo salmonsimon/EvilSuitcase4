@@ -38,7 +38,6 @@ public class HumanoidHurtGeometry : Damageable
                 break;
         }
 
-        Debug.Log("Damage Received: " + (int)(damage * damageMultiplier));
         healthManager.ReceiveDamage((int)(damage * damageMultiplier));
     }
 }

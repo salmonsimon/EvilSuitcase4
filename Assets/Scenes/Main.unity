@@ -9337,7 +9337,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1557292852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9358,10 +9358,13 @@ MonoBehaviour:
   - {fileID: 587372650}
   - {fileID: 1745332990}
   maxDelayUntilNextSpawn: 2
+  enemiesToSpawn: 15
   enemyPrefabs:
   - {fileID: 3270939067551101889, guid: 529667edcf286a3408b5bfcccd8c4d9a, type: 3}
   - {fileID: 3167685083925557853, guid: 74b85f04c350ac34c93ecb661805b847, type: 3}
-  enemiesToSpawn: 0a00000005000000
+  enemySpawnProbabilities:
+  - 0.2
+  - 0.35
 --- !u!4 &1557292853
 Transform:
   m_ObjectHideFlags: 0
