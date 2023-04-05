@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Pool;
@@ -14,8 +16,9 @@ public class EnemySpawner : MonoBehaviour
     private Dictionary<int, ObjectPool<GameObject>> ObjectPools = new();
     private Transform poolContainer;
 
+    [SerializeField] private int enemiesToSpawn;
     [SerializeField] private List<GameObject> enemyPrefabs;
-    [SerializeField] private List<int> enemiesToSpawn;
+    [SerializeField] private List<float> enemySpawnProbabilities;
 
     // we will pass into this one only the pool dictionary and the numer of enemies to spawn
     // the pools themselves will be stored on the wave manager script
@@ -36,39 +39,37 @@ public class EnemySpawner : MonoBehaviour
     private IEnumerator SpawnEnemiesCoroutine()
     {
         int i = 0;
-        int j = 0;
 
-        while (i < enemiesToSpawn.Count)
+        while (i < enemiesToSpawn)
         {
-            while (j < enemiesToSpawn[i])
+            float randomProbability = Random.Range(0f, 1f);
+
+            NormalizeSpawnProbabilities(enemySpawnProbabilities);
+            int enemyIndexToSpawn = GetEnemyIndexToSpawn(randomProbability, enemySpawnProbabilities);
+
+            Vector3 randomSpawnPosition = GetRandomSpawnPosition().position;
+
+            if (!ObjectPools.ContainsKey(enemyIndexToSpawn))
             {
-                Vector3 randomSpawnPosition = GetRandomSpawnPosition().position;
-
-                if (!ObjectPools.ContainsKey(i))
-                {
-                    ObjectPools.Add(i, new ObjectPool<GameObject>(() => Instantiate(enemyPrefabs[i], poolContainer)));
-                }
-
-                GameObject spawnedEnemy = ObjectPools[i].Get();
-
-                NavMeshHit Hit;
-                if (NavMesh.SamplePosition(randomSpawnPosition, out Hit, 2f, -1))
-                {
-
-                    spawnedEnemy.GetComponent<ZombieStateMachine>().Agent.Warp(Hit.position);
-                    spawnedEnemy.GetComponent<ZombieStateMachine>().Agent.enabled = true;
-                }
-                else
-                {
-                    Debug.LogError($"Unable to place NavMeshAgent on NavMesh. Tried to use {randomSpawnPosition}");
-                }
-
-                yield return new WaitForSeconds(Random.Range(0f, maxDelayUntilNextSpawn));
-
-                j++;
+                ObjectPools.Add(enemyIndexToSpawn, new ObjectPool<GameObject>(() => Instantiate(enemyPrefabs[enemyIndexToSpawn], poolContainer)));
             }
 
-            j = 0;
+            GameObject spawnedEnemy = ObjectPools[enemyIndexToSpawn].Get();
+
+            NavMeshHit Hit;
+            if (NavMesh.SamplePosition(randomSpawnPosition, out Hit, 2f, -1))
+            {
+
+                spawnedEnemy.GetComponent<ZombieStateMachine>().Agent.Warp(Hit.position);
+                spawnedEnemy.GetComponent<ZombieStateMachine>().Agent.enabled = true;
+            }
+            else
+            {
+                Debug.LogError($"Unable to place NavMeshAgent on NavMesh. Tried to use {randomSpawnPosition}");
+            }
+
+            yield return new WaitForSeconds(Random.Range(0f, maxDelayUntilNextSpawn));
+
             i++;
         }
     }
@@ -76,5 +77,33 @@ public class EnemySpawner : MonoBehaviour
     private Transform GetRandomSpawnPosition()
     {
         return spawnPositions[Random.Range(0, spawnPositions.Count)];
+    }
+
+    private int GetEnemyIndexToSpawn(float randomProbability, List<float> enemySpawnProbabilities)
+    {
+        int indexToSpawn = 0;
+
+        for (int i = 0; i < enemySpawnProbabilities.Count; i++)
+        {
+            if (randomProbability < enemySpawnProbabilities[i])
+            {
+                indexToSpawn = i;
+                return indexToSpawn;
+            }
+
+            randomProbability -= enemySpawnProbabilities[i];
+        }
+
+        return indexToSpawn;
+    }
+
+    private void NormalizeSpawnProbabilities(List<float> enemySpawnProbabilities)
+    {
+        float totalProbability = enemySpawnProbabilities.Sum();
+
+        for (int i = 0; i < enemySpawnProbabilities.Count; i++)
+        {
+            enemySpawnProbabilities[i] /= totalProbability;
+        }
     }
 }
