@@ -34,7 +34,7 @@ public class GunHitscan : Gun
             LastshootTime = Time.time;
 
             ShootParticleSystem.Play();
-            gunConfiguration.AudioConfig.PlayShootingClip();
+            sfx.PlayAudioClip(gunConfiguration.AudioConfig.GetRandomShootingClip());
             weaponAnimations.PlayShootAnimation(gunConfiguration.AmmoConfig.ShootAnimationDelay);
 
             if (string.Equals(GunConfiguration.GunName, "Shotgun"))

@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Guns/Audio Configuration", fileName = "AudioConfiguration", order = 7)]
@@ -14,21 +15,13 @@ public class AudioConfigurationScriptableObject : ScriptableObject
     [SerializeField] private AudioClip emptyClip;
     public AudioClip EmptyClip { get { return emptyClip; } }
 
-    public void PlayShootingClip()
+    public AudioClip GetRandomShootingClip()
     {
         if (FireClips.Length == 0)
-            return;
+            return null;
 
         AudioClip fireClipToPlay = FireClips[Random.Range(0, FireClips.Length)];
 
-        GameManager.instance.GetSFXManager().PlaySound(fireClipToPlay, volume);
-    }
-
-    public void PlayEmptyClip()
-    {
-        if (!EmptyClip)
-            return;
-
-        GameManager.instance.GetSFXManager().PlaySound(EmptyClip, volume);
+        return fireClipToPlay;
     }
 }

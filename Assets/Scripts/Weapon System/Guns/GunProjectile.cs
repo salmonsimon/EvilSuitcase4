@@ -33,7 +33,7 @@ public class GunProjectile : Gun
             LastshootTime = Time.time;
 
             ShootParticleSystem.Play();
-            gunConfiguration.AudioConfig.PlayShootingClip();
+            sfx.PlayAudioClip(gunConfiguration.AudioConfig.GetRandomShootingClip());
 
             if(weaponAnimations)
                 weaponAnimations.PlayShootAnimation(gunConfiguration.AmmoConfig.ShootAnimationDelay);

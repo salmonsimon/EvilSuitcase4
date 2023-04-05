@@ -75,6 +75,7 @@ public class RocketProjectile : Projectile
         audioSource.Stop();
 
         explosionObject.gameObject.SetActive(true);
+        sfx.PlayAudioClip(hitAudioClip);
 
         StartCoroutine(WaitToDisable(disableTime));
     }

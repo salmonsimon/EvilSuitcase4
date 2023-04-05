@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
+[RequireComponent(typeof(SFX))]
 public class Projectile : MonoBehaviour
 {
     #region GameObject References
 
     protected Rigidbody rigidBody;
     protected BoxCollider boxCollider;
+    protected SFX sfx;
 
     #endregion
 
@@ -40,6 +42,7 @@ public class Projectile : MonoBehaviour
     {
         rigidBody = GetComponent<Rigidbody>();
         boxCollider = GetComponent<BoxCollider>();
+        sfx = GetComponent<SFX>();
     }
 
     protected virtual void Update()
@@ -93,6 +96,6 @@ public class Projectile : MonoBehaviour
 
     protected virtual void OnCollisionEnter(Collision collision)
     {
-        GameManager.instance.GetSFXManager().PlaySound(hitAudioClip);
+        sfx.PlayAudioClip(hitAudioClip);
     }
 }

@@ -7,7 +7,9 @@ public class ZombieAttackState : ZombieBaseState
     public override void CheckSwitchStates()
     {
         if (!context.FollowAttackCollider.IsColliding)
+        {
             context.ChangeState(factory.Chase());
+        }
     }
 
     public override void EnterState()
@@ -31,8 +33,6 @@ public class ZombieAttackState : ZombieBaseState
             context.Animator.SetBool("OnReach", true);
         else
             context.Animator.SetBool("OnReach", false);
-
-
 
         UpdatePosition();
 
