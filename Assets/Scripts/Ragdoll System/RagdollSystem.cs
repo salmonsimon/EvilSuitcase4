@@ -18,9 +18,9 @@ public class RagdollSystem : MonoBehaviour
         SetRagdoll(true, true);
     }
 
-    public void SetRagdoll(bool isActive, bool gravity)
+    public void SetRagdoll(bool isAnimated, bool gravity)
     {
-        animator.enabled = isActive;
+        animator.enabled = isAnimated;
 
         foreach (MuscleComponent muscleComponent in MuscleComponents)
         {
@@ -28,14 +28,17 @@ public class RagdollSystem : MonoBehaviour
 
             if (muscleComponent.Transform == transform)
             {
-                muscleComponent.Collider.isTrigger = !isActive;
-                muscleComponent.Rigidbody.isKinematic = !isActive;
+                muscleComponent.Collider.isTrigger = !isAnimated;
+                muscleComponent.Rigidbody.isKinematic = !isAnimated;
 
                 continue;
             }
 
-            muscleComponent.Collider.isTrigger = isActive;
-            muscleComponent.Rigidbody.isKinematic = isActive;
+            muscleComponent.Collider.isTrigger = isAnimated;
+            muscleComponent.Rigidbody.isKinematic = isAnimated;
         }
+
+        if (!isAnimated)
+            GetComponent<ZombieSFX>().PlayRandomHurtAudioClip();
     }
 }
