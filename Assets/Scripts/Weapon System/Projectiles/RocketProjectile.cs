@@ -66,6 +66,13 @@ public class RocketProjectile : Projectile
         Explode();
     }
 
+    protected override void OnTriggerEnter(Collider other)
+    {
+        base.OnTriggerEnter(other);
+
+        Explode();
+    }
+
     private void Explode()
     {
         model.SetActive(false);

@@ -6,8 +6,30 @@ using UnityEngine;
 public class HumanoidHurtGeometry : Damageable
 {
     [SerializeField] private HumanoidBodyPart bodyPart;
+    public HumanoidBodyPart BodyPart { get { return bodyPart; } }
 
-    public override void ReceiveDamage(int damage)
+    [SerializeField] private bool hasRagdoll = true;
+
+    private RagdollSystem ragdollSystem;
+    public RagdollSystem RagdollSystem { get { return ragdollSystem; } }
+
+    private MuscleComponent muscleComponent;
+
+    protected override void Awake()
+    {
+        healthManager = GetComponentInParent<HealthManager>();
+    }
+
+    private void Start()
+    {
+        if (hasRagdoll)
+        {
+            ragdollSystem = GetComponentInParent<RagdollSystem>();
+            muscleComponent = GetComponent<MuscleComponent>();
+        }
+    }
+
+    public override void ReceiveDamage(int damage, Vector3 force)
     {
         float damageMultiplier = 1f;
 
@@ -39,5 +61,8 @@ public class HumanoidHurtGeometry : Damageable
         }
 
         healthManager.ReceiveDamage((int)(damage * damageMultiplier));
+
+        if (hasRagdoll && healthManager.IsAlive)
+            ragdollSystem.ApplyForce(muscleComponent, force);
     }
 }

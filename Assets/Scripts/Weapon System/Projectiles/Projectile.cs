@@ -82,6 +82,12 @@ public class Projectile : MonoBehaviour
             isDisabled = true;
             Destroy(boxCollider);
             Destroy(rigidBody);
+
+            if (rigidBody)
+            {
+                rigidBody.velocity = Vector3.zero;
+                rigidBody.angularVelocity = Vector3.zero;
+            }
         }
     }
 
@@ -95,6 +101,11 @@ public class Projectile : MonoBehaviour
     }
 
     protected virtual void OnCollisionEnter(Collision collision)
+    {
+        sfx.PlayAudioClip(hitAudioClip);
+    }
+
+    protected virtual void OnTriggerEnter(Collider other)
     {
         sfx.PlayAudioClip(hitAudioClip);
     }

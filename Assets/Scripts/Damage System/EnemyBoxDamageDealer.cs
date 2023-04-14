@@ -18,7 +18,7 @@ public class EnemyBoxDamageDealer : MonoBehaviour
     {
         if (other.TryGetComponent(out Damageable damageable))
         {
-            damageable.ReceiveDamage(GetDamage());
+            damageable.ReceiveDamage(GetDamage(), Vector3.zero);
 
             boxCollider.enabled = false;
         }

@@ -51,6 +51,7 @@ public class ZombieStateMachine : MonoBehaviour
         hipsBone = animator.GetBoneTransform(HumanBodyBones.Hips);
 
         bones = hipsBone.GetComponentsInChildren<Transform>();
+
         standUpFromBellyBoneTransforms = new BoneTransform[bones.Length];
         standUpFromBackBoneTransforms = new BoneTransform[bones.Length];
         ragdollBoneTransforms = new BoneTransform[bones.Length];
