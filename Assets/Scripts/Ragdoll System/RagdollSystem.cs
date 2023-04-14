@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using static Utils;
 
 public class RagdollSystem : MonoBehaviour
 {
@@ -10,15 +11,24 @@ public class RagdollSystem : MonoBehaviour
     public List<MuscleComponent> GroundedMuscleComponents = new List<MuscleComponent>();
 
     private Animator animator;
+    private ZombieStateMachine stateMachine;
 
     private bool onHitRecovery = false;
     private float timeToRecover = 1f;
     private float elapsedRecoverTime = 0f;
     private float hitRecoverMultiplier = 2f;
 
+    [SerializeField] private float MaxHitForce = 500f;
+    [SerializeField] private float accumulatedHitForce = 0;
+    private float accumulatedHitForceRecoveryMultiplier = 25f;
+
+    public delegate void OnRagdollActivateDelegate();
+    public event OnRagdollActivateDelegate OnRagdollActivate;
+
     private void Awake()
     {
         animator = GetComponent<Animator>();
+        stateMachine = GetComponent<ZombieStateMachine>();
 
         foreach (Rigidbody rigidBody in GetComponentsInChildren<Rigidbody>())
         {
@@ -59,14 +69,30 @@ public class RagdollSystem : MonoBehaviour
             if (elapsedRecoverTime >= timeToRecover)
                 onHitRecovery = false;
         }
+
+        if (accumulatedHitForce > 0)
+            accumulatedHitForce -= Time.deltaTime * accumulatedHitForceRecoveryMultiplier;
     }
 
     public void ApplyForce(MuscleComponent muscleComponent, Vector3 force)
     {
         StopAllCoroutines();
-        ResetRagdoll();
 
-        StartCoroutine(ApplyForceCoroutine(muscleComponent, force));
+        if (!stateMachine.CurrentState.ToSafeString().Equals("ZombieRagdollState"))
+        {
+            accumulatedHitForce += force.magnitude;
+            if (accumulatedHitForce > MaxHitForce)
+            {
+                accumulatedHitForce = 0;
+                OnRagdollActivate();
+                muscleComponent.Rigidbody.AddForce(force, ForceMode.Impulse);
+                return;
+            }
+
+            StartCoroutine(ApplyForceCoroutine(muscleComponent, force));
+        }
+        else
+            muscleComponent.Rigidbody.AddForce(force, ForceMode.Impulse);
     }
 
     public IEnumerator ApplyForceCoroutine(MuscleComponent muscleComponent, Vector3 force)

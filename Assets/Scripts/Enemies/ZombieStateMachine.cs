@@ -73,6 +73,7 @@ public class ZombieStateMachine : MonoBehaviour
         currentState.EnterState();
 
         healthManager.OnAliveStatusChange += OnAliveStatusChange;
+        ragdollSystem.OnRagdollActivate += ActivateRagdoll;
     }
 
     private void OnAnimatorMove()
@@ -88,11 +89,11 @@ public class ZombieStateMachine : MonoBehaviour
     private void Update()
     {
         currentState.UpdateState();
+    }
 
-        if (UnityEngine.Input.GetKeyDown(KeyCode.T))
-        {
-            ChangeState(stateFactory.Ragdoll());
-        }
+    private void ActivateRagdoll()
+    {
+        ChangeState(stateFactory.Ragdoll());
     }
 
     public void ChangeState(ZombieBaseState newState)

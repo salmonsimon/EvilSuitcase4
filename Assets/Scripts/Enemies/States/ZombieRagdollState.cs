@@ -21,8 +21,6 @@ public class ZombieRagdollState : ZombieBaseState
 
     public override void EnterState()
     {
-        Debug.Log("Entering ragdoll state");
-
         context.Agent.enabled = false;
 
         context.RagdollSystem.SetRagdoll(false, true);
@@ -33,7 +31,7 @@ public class ZombieRagdollState : ZombieBaseState
 
     public override void ExitState()
     {
-        Debug.Log("Exiting ragdoll state");
+
     }
 
     public override void UpdateState()

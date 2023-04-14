@@ -20,8 +20,6 @@ public class ZombieResettingBonesState : ZombieBaseState
 
     public override void EnterState()
     {
-        Debug.Log("Entering resetting bones state");
-
         isFacingDown = context.FellCheck.transform.forward.y < 0;
 
         AlignRotationToHips();
@@ -35,7 +33,7 @@ public class ZombieResettingBonesState : ZombieBaseState
 
     public override void ExitState()
     {
-        Debug.Log("Exiting resetting bones state");
+
     }
 
     public override void UpdateState()

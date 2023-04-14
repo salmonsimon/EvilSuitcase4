@@ -22,8 +22,6 @@ public class ZombieStandingState : ZombieBaseState
 
     public override void EnterState()
     {
-        Debug.Log("Entering standing state");
-
         finishedStanding = false;
 
         isFacingDown = context.FellCheck.transform.forward.y < 0;
@@ -40,8 +38,6 @@ public class ZombieStandingState : ZombieBaseState
 
     public override void ExitState()
     {
-        Debug.Log("Exiting standing state");
-
         context.Agent.enabled = true;
     }
 

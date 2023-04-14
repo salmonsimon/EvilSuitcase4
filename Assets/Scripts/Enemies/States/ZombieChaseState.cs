@@ -40,7 +40,6 @@ public class ZombieChaseState : ZombieBaseState
                 playerPosition.z + (context.SurroundRadius * Mathf.Sin(2 * Mathf.PI * randomDeviation))
             );
 
-        //context.Agent.SetDestination(playerPosition - (playerPosition - context.Agent.transform.position).normalized * .5f);
         context.Agent.SetDestination(randomSurroundPosition);
 
         UpdatePosition();

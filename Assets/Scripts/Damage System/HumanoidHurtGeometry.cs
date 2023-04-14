@@ -63,6 +63,11 @@ public class HumanoidHurtGeometry : Damageable
         healthManager.ReceiveDamage((int)(damage * damageMultiplier));
 
         if (hasRagdoll && healthManager.IsAlive)
+        {
+            if (bodyPart == HumanoidBodyPart.Head)
+                force *= 1.5f;
+
             ragdollSystem.ApplyForce(muscleComponent, force);
+        }
     }
 }
