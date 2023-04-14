@@ -11,7 +11,7 @@ public class ZombieDeadState : ZombieBaseState
 
     public override void EnterState()
     {
-        context.Animator.SetTrigger("Death");
+        context.RagdollSystem.SetRagdoll(false, true);
     }
 
     public override void ExitState()

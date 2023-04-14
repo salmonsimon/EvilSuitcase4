@@ -123,12 +123,9 @@ public class GunHitscan : Gun
 
             if (hit.collider.TryGetComponent(out Damageable damageable))
             {
-                damageable.ReceiveDamage(gunConfiguration.DamageConfig.GetDamage(distance));              
-            }
+                Vector3 hitForce = -hit.normal.normalized * GunConfiguration.TrailConfig.HitForce;
 
-            if (hit.collider.TryGetComponent(out Rigidbody rigidbody))
-            {
-                rigidbody.AddForce(-hit.normal.normalized * GunConfiguration.TrailConfig.HitForce);
+                damageable.ReceiveDamage(gunConfiguration.DamageConfig.GetDamage(distance), hitForce);
             }
         }
 
