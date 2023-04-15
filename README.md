@@ -40,24 +40,25 @@ The roadmap will be split into what has already been done and what is to be deve
         Hitscan Guns: 7: Done
         Projectile Guns: 7: Done
         Melee Weapons: 1: Pending
+        
+    section First Zombies
+      Download Models: 7: Done
+      Import Animations: 7: Done
+      Chasing AI: 7: Done
+      Finite State Machine: 7: Done
+      Ragdoll System: 7: Done
+    
+    section Zombie Spawner
+        One Point Spawner: 7: Done
+        Multiple Point Spawner: 7: Done
+        Testing: 7: Done
 ```
 
 ### To Do
 
 ```mermaid 
   journey
-    title Done
-    
-    section Zombies
-      Download Models: 1: Pending
-      Import Animations: 1: Pending
-      Chasing AI: 1: Pending
-      Finite State Machine: 1: Pending
-    
-    section Zombie Spawner
-        One Point Spawner: 1: Pending
-        Multiple Point Spawner: 1: Pending
-        Testing: 1: Pending
+    title To Do
         
     section Tetris Inventory + Menu Updates
         TBD: 1: Pending
@@ -450,3 +451,19 @@ classDiagram
         +RaycastHit crossHairRaycastHit
     }
 ```
+
+## Enemies
+
+For our enemies we picked zombies of different types, which will behave slightly different from other variations to add more dynamism. All zombies will use the Finite State Machine pattern and will vary their states depending on the type of zombie. 
+
+Also, for a more realistic approach to hit reaction and death we will use Unity's Ragdolls to add physics based reactions to our hits. Each hit will trigger the ragdoll and add force to the hit body part, then by disabling the ragdoll and saving the local position and rotation of the different muscles we can simulate the hit as if it was a ragdoll without losing the animations. On top of that, we added a limit force that our enemies will resist, and if that limit is surpassed they'll enter the ragdoll mode and fall (_ZombieRagdollState_) and then stand up and go back to chasing or attacking depending on its distance to the player.
+
+For locomotion we will be using a _NavMeshAgent_ for our enemies so they avoid obstacles, but for more realistic movement we will be using root motion.
+
+### First Zombie (Walking and Runnning versions)
+
+Our first zombie uses a Finite State Machine with the following states: _ZombieChaseState_, _ZombieAttackState_, _ZombieRagdollState_, _ZombieResettingBonesState_, _ZombieStandingState_ and _ZombieDeadState_. As in a Finite State Machine, enemies can only be in one state at a time and in this machine the base states are the _Chase_ and _Attack_ states, which change depending on the distance to the player. 
+
+The _Ragdoll_, _ResettingBones_ and _Standing_ states are all ragdoll based states, being the falling, getting in position and standing state respectively.
+
+As mentioned above, on top of the Finite State Machine we have a _Ragdoll System_ which will be used for hit reaction, which enables the ragdoll for a frame to check the new position of their hit body parts and then interpolates those positions with the animated positions to give a realistic feel when hit. The state of the machine will only change to ragdoll mode if certain threshold is surpassed, otherwise this system will only work on top of the FSM.
