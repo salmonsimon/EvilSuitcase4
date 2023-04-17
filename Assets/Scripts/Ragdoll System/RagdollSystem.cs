@@ -97,6 +97,11 @@ public class RagdollSystem : MonoBehaviour
 
     public IEnumerator ApplyForceCoroutine(MuscleComponent muscleComponent, Vector3 force)
     {
+        yield return null;
+
+        if (!stateMachine.HealthManager.IsAlive)
+            yield break;
+
         SetRagdoll(false, false);
 
         foreach (MuscleComponent groundedMuscleComponent in GroundedMuscleComponents)

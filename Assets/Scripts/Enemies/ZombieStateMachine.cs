@@ -167,6 +167,8 @@ public class ZombieStateMachine : MonoBehaviour
     public BoneTransform[] StandUpFromBackBoneTransforms { get { return standUpFromBackBoneTransforms; } }
     public BoneTransform[] RagdollBoneTransforms { get { return ragdollBoneTransforms; } }
 
+    public HealthManager HealthManager { get { return healthManager; } }
+
 
     #endregion
 }
