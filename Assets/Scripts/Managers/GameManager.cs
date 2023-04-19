@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private MainMenuUI mainMenu;
     [SerializeField] private PauseUI pauseMenu;
     [SerializeField] private AmmoDisplayUI ammoDisplayUI;
+    [SerializeField] private InventoryDragDropSystem inventoryDragDropSystem;
 
     #endregion
 
@@ -50,6 +51,7 @@ public class GameManager : MonoBehaviour
             Destroy(mainMenu.gameObject);
             Destroy(pauseMenu.gameObject);
             Destroy(ammoDisplayUI.gameObject);
+            Destroy(inventoryDragDropSystem.gameObject);
         }
         else
         {
@@ -196,6 +198,11 @@ public class GameManager : MonoBehaviour
     public AmmoDisplayUI GetAmmoDisplayUI()
     {
         return ammoDisplayUI;
+    }
+
+    public InventoryDragDropSystem GetInventoryDragDropSystem()
+    {
+        return inventoryDragDropSystem;
     }
 
     #endregion
