@@ -6163,27 +6163,27 @@ MonoBehaviour:
   m_MoveRepeatDelay: 0.5
   m_MoveRepeatRate: 0.1
   m_XRTrackingOrigin: {fileID: 0}
-  m_ActionsAsset: {fileID: -944628639613478452, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_ActionsAsset: {fileID: -944628639613478452, guid: 4419d82f33d36e848b3ed5af4c8da37e,
     type: 3}
-  m_PointAction: {fileID: -1654692200621890270, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_PointAction: {fileID: 1054132383583890850, guid: 4419d82f33d36e848b3ed5af4c8da37e,
     type: 3}
-  m_MoveAction: {fileID: -8784545083839296357, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_MoveAction: {fileID: 3710738434707379630, guid: 4419d82f33d36e848b3ed5af4c8da37e,
     type: 3}
-  m_SubmitAction: {fileID: 392368643174621059, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_SubmitAction: {fileID: -8757431967997580620, guid: 4419d82f33d36e848b3ed5af4c8da37e,
     type: 3}
-  m_CancelAction: {fileID: 7727032971491509709, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_CancelAction: {fileID: -1967631576421560919, guid: 4419d82f33d36e848b3ed5af4c8da37e,
     type: 3}
-  m_LeftClickAction: {fileID: 3001919216989983466, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_LeftClickAction: {fileID: -7020954322586243025, guid: 4419d82f33d36e848b3ed5af4c8da37e,
     type: 3}
-  m_MiddleClickAction: {fileID: -2185481485913320682, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_MiddleClickAction: {fileID: 3279352641294131588, guid: 4419d82f33d36e848b3ed5af4c8da37e,
     type: 3}
-  m_RightClickAction: {fileID: -4090225696740746782, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_RightClickAction: {fileID: 3837173908680883260, guid: 4419d82f33d36e848b3ed5af4c8da37e,
     type: 3}
-  m_ScrollWheelAction: {fileID: 6240969308177333660, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_ScrollWheelAction: {fileID: -2697966229742280686, guid: 4419d82f33d36e848b3ed5af4c8da37e,
     type: 3}
-  m_TrackedDevicePositionAction: {fileID: 6564999863303420839, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_TrackedDevicePositionAction: {fileID: 4754684134866288074, guid: 4419d82f33d36e848b3ed5af4c8da37e,
     type: 3}
-  m_TrackedDeviceOrientationAction: {fileID: 7970375526676320489, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_TrackedDeviceOrientationAction: {fileID: -6296509408122582556, guid: 4419d82f33d36e848b3ed5af4c8da37e,
     type: 3}
   m_DeselectOnBackgroundClick: 1
   m_PointerBehavior: 0
@@ -8482,6 +8482,7 @@ MonoBehaviour:
   mainMenu: {fileID: 1677845623}
   pauseMenu: {fileID: 1972029741}
   ammoDisplayUI: {fileID: 2067428103}
+  inventoryDragDropSystem: {fileID: 0}
   isOnMainMenu: 0
 --- !u!4 &1404867715
 Transform:
@@ -9249,7 +9250,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1557292852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16377,7 +16378,7 @@ MonoBehaviour:
   GroundedRadius: 0.28
   GroundLayers:
     serializedVersion: 2
-    m_Bits: 513
+    m_Bits: 1
   CinemachineCameraTarget: {fileID: 8338988565414295943}
   TopClamp: 25
   BottomClamp: -15
@@ -16406,7 +16407,7 @@ GameObject:
   - component: {fileID: 6982812147607158814}
   - component: {fileID: 6982812147607158815}
   - component: {fileID: 6982812147607158816}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}

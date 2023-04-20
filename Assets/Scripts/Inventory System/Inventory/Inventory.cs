@@ -146,6 +146,7 @@ public class Inventory : MonoBehaviour
             }
 
             OnItemPlaced?.Invoke(this, placedObject);
+            placedObject.RotateInfoPanels();
 
             // Object Placed!
             return true;

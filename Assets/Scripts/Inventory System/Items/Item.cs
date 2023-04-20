@@ -1,12 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class Item : MonoBehaviour
+public class Item : MonoBehaviour, IPointerClickHandler
 {
-    [SerializeField] private ItemSO itemSO;
-    private Vector2Int origin;
-    private ItemSO.Direction direction;
+    [SerializeField] protected ItemSO itemSO;
+    protected ItemSO.Direction direction;
+    protected Vector2Int origin;
+
+    protected float width;
+    protected float height;
+
+
+    protected virtual void Awake()
+    {
+        RectTransform rectTransform = GetComponent<RectTransform>();
+
+        width = rectTransform.sizeDelta.x * (itemSO.width - 1);
+        height = rectTransform.sizeDelta.y * (itemSO.height - 1);
+
+        Debug.Log("Width: " + width);
+        Debug.Log("Height" + height);
+    }
 
     public static Item Create(Vector3 worldPosition, Vector2Int origin, ItemSO.Direction direction, ItemSO placedItemSO)
     {
@@ -67,5 +84,22 @@ public class Item : MonoBehaviour
     public ItemSO GetItemSO()
     {
         return itemSO;
+    }
+
+    public virtual void OnPointerClick(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Right)
+            Debug.Log("Pressed right button on " + gameObject.name + " gameobject");
+    }
+
+    public virtual void Discard()
+    {
+        Debug.Log("Discarded Item: " + gameObject.name);
+        Destroy(gameObject);
+    }
+
+    public virtual void RotateInfoPanels()
+    {
+
     }
 }

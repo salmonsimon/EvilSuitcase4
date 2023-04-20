@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class InventoryDragDropSystem : MonoBehaviour
 {
@@ -13,6 +14,11 @@ public class InventoryDragDropSystem : MonoBehaviour
     private Vector2Int mouseDragGridPositionOffset;
     private Vector2 mouseDragAnchoredPositionOffset;
     private ItemSO.Direction direction;
+
+#if ENABLE_INPUT_SYSTEM
+    [SerializeField] private PlayerInput playerInput;
+    [SerializeField] private InputsUI input;
+#endif
 
     private void Awake()
     {
@@ -27,15 +33,17 @@ public class InventoryDragDropSystem : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R))
+        //if (Input.GetKeyDown(KeyCode.R))
+        if (input.rotate && draggingItem != null)
         {
             direction = ItemSO.GetNextDirection(direction);
+            input.rotate = false;
         }
 
         if (draggingItem != null)
         {
             // Calculate target position to move the dragged item
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(draggingInventory.GetItemContainer(), Input.mousePosition, null, out Vector2 targetPosition);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(draggingInventory.GetItemContainer(), input.point, null, out Vector2 targetPosition);
             targetPosition += new Vector2(-mouseDragAnchoredPositionOffset.x, -mouseDragAnchoredPositionOffset.y);
 
             // Apply rotation offset to target position
@@ -59,9 +67,9 @@ public class InventoryDragDropSystem : MonoBehaviour
         draggingInventory = inventory;
         draggingItem = item;
 
-        Cursor.visible = false;
+        Cursor.visible = true;
 
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(inventory.GetItemContainer(), Input.mousePosition, null, out Vector2 anchoredPosition);
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(inventory.GetItemContainer(), input.point, null, out Vector2 anchoredPosition);
         Vector2Int mouseGridPosition = inventory.GetGridPosition(anchoredPosition);
 
         // Calculate Grid Position offset from the placedObject origin to the mouseGridPosition
@@ -93,7 +101,7 @@ public class InventoryDragDropSystem : MonoBehaviour
         // Find out which InventoryTetris is under the mouse position
         foreach (Inventory inventory in inventoryList)
         {
-            Vector3 screenPoint = Input.mousePosition;
+            Vector3 screenPoint = input.point;
             RectTransformUtility.ScreenPointToLocalPointInRectangle(inventory.GetItemContainer(), screenPoint, null, out Vector2 anchoredPosition);
             Vector2Int itemOrigin = inventory.GetGridPosition(anchoredPosition);
             itemOrigin = itemOrigin - mouseDragGridPositionOffset;
@@ -108,7 +116,7 @@ public class InventoryDragDropSystem : MonoBehaviour
         // Check if it's on top of a InventoryTetris
         if (toInventory != null)
         {
-            Vector3 screenPoint = Input.mousePosition;
+            Vector3 screenPoint = input.point;
             RectTransformUtility.ScreenPointToLocalPointInRectangle(toInventory.GetItemContainer(), screenPoint, null, out Vector2 anchoredPosition);
             Vector2Int itemOrigin = toInventory.GetGridPosition(anchoredPosition);
             itemOrigin = itemOrigin - mouseDragGridPositionOffset;

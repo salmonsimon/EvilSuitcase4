@@ -1,7 +1,12 @@
+using StarterAssets;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
+using UnityEngine.Windows;
+#endif
 
 public class InventoryManualPlacement : MonoBehaviour
 {
@@ -18,6 +23,23 @@ public class InventoryManualPlacement : MonoBehaviour
     private Inventory inventoryTetris;
     private RectTransform canvasRectTransform;
     private RectTransform itemContainer;
+
+#if ENABLE_INPUT_SYSTEM
+    [SerializeField] private PlayerInput playerInput;
+    [SerializeField] private InputsUI input;
+#endif
+
+    private bool IsCurrentDeviceMouse
+    {
+        get
+        {
+#if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
+            return playerInput.currentControlScheme == "KeyboardMouse";
+#else
+				return false;
+#endif
+        }
+    }
 
     private void Awake()
     {
@@ -43,9 +65,10 @@ public class InventoryManualPlacement : MonoBehaviour
     private void Update()
     {
         // Try to place
-        if (Input.GetMouseButtonDown(0) && placedObjectTypeSO != null)
+        //if (Input.GetMouseButtonDown(0) && placedObjectTypeSO != null)
+        if (input.click && placedObjectTypeSO != null)
         {
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(itemContainer, Input.mousePosition, null, out Vector2 anchoredPosition);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(itemContainer, input.point, null, out Vector2 anchoredPosition);
 
             Vector2Int placedObjectOrigin = inventoryTetris.GetGridPosition(anchoredPosition);
 
@@ -63,23 +86,25 @@ public class InventoryManualPlacement : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.R))
+        //if (Input.GetKeyDown(KeyCode.R))
+        if (input.rotate && placedObjectTypeSO != null)
         {
             dir = ItemSO.GetNextDirection(dir);
+            input.rotate = false;
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha1)) { placedObjectTypeSO = placedObjectTypeSOList[0]; RefreshSelectedObjectType(); }
-        if (Input.GetKeyDown(KeyCode.Alpha2)) { placedObjectTypeSO = placedObjectTypeSOList[1]; RefreshSelectedObjectType(); }
-        if (Input.GetKeyDown(KeyCode.Alpha3)) { placedObjectTypeSO = placedObjectTypeSOList[2]; RefreshSelectedObjectType(); }
-        if (Input.GetKeyDown(KeyCode.Alpha4)) { placedObjectTypeSO = placedObjectTypeSOList[3]; RefreshSelectedObjectType(); }
-        if (Input.GetKeyDown(KeyCode.Alpha5)) { placedObjectTypeSO = placedObjectTypeSOList[4]; RefreshSelectedObjectType(); }
-        if (Input.GetKeyDown(KeyCode.Alpha6)) { placedObjectTypeSO = placedObjectTypeSOList[5]; RefreshSelectedObjectType(); }
-        if (Input.GetKeyDown(KeyCode.Alpha7)) { placedObjectTypeSO = placedObjectTypeSOList[6]; RefreshSelectedObjectType(); }
+        if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha1)) { placedObjectTypeSO = placedObjectTypeSOList[0]; RefreshSelectedObjectType(); }
+        if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha2)) { placedObjectTypeSO = placedObjectTypeSOList[1]; RefreshSelectedObjectType(); }
+        if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha3)) { placedObjectTypeSO = placedObjectTypeSOList[2]; RefreshSelectedObjectType(); }
+        if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha4)) { placedObjectTypeSO = placedObjectTypeSOList[3]; RefreshSelectedObjectType(); }
+        if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha5)) { placedObjectTypeSO = placedObjectTypeSOList[4]; RefreshSelectedObjectType(); }
+        if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha6)) { placedObjectTypeSO = placedObjectTypeSOList[5]; RefreshSelectedObjectType(); }
+        if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha7)) { placedObjectTypeSO = placedObjectTypeSOList[6]; RefreshSelectedObjectType(); }
 
         //if (Input.GetKeyDown(KeyCode.Alpha8)) { placedObjectTypeSO = placedObjectTypeSOList[7]; RefreshSelectedObjectType(); }
         
 
-        if (Input.GetKeyDown(KeyCode.Alpha0)) { DeselectObjectType(); }
+        if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha0)) { DeselectObjectType(); }
     }
 
     private void DeselectObjectType()
@@ -95,7 +120,7 @@ public class InventoryManualPlacement : MonoBehaviour
 
     public Vector2 GetCanvasSnappedPosition()
     {
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(itemContainer, Input.mousePosition, null, out Vector2 anchoredPosition);
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(itemContainer, input.point, null, out Vector2 anchoredPosition);
         inventoryTetris.GetGrid().GetXY(anchoredPosition, out int x, out int y);
 
         if (placedObjectTypeSO != null)
