@@ -62,37 +62,37 @@ public class GunItem : Item
         switch (direction)
         {
             case ItemSO.Direction.Down:
-                ammoTextPanel.anchoredPosition = new Vector2(width - 20, 0);
+                ammoTextPanel.anchoredPosition = new Vector2(((width - 1)*cellWidth) - 20, 0);
                 ammoTextPanel.rotation = Quaternion.Euler(0, 0, 0);
 
-                buttonsPanel.anchoredPosition = new Vector2(width + 20, height - 20);
+                buttonsPanel.anchoredPosition = new Vector2(((width - 1) * cellWidth) + 20, ((height - 1) * cellHeight) - 20);
                 buttonsPanel.rotation = Quaternion.Euler(0, 0, 0);
 
                 break;
 
             case ItemSO.Direction.Left:
-                ammoTextPanel.anchoredPosition = new Vector2(width, (height * 2) - 20);
+                ammoTextPanel.anchoredPosition = new Vector2(((width - 1) * cellWidth), (((height - 1) * cellHeight) * 2) - 20);
                 ammoTextPanel.rotation = Quaternion.Euler(0, 0, 0);
 
-                buttonsPanel.anchoredPosition = new Vector2(20 - height, height + 20);
+                buttonsPanel.anchoredPosition = new Vector2(20 - ((height - 1) * cellHeight), ((height - 1) * cellHeight) + 20);
                 buttonsPanel.rotation = Quaternion.Euler(0, 0, 0);
 
                 break;
 
             case ItemSO.Direction.Up:
-                ammoTextPanel.anchoredPosition = new Vector2(20 - height, (height * 2));
+                ammoTextPanel.anchoredPosition = new Vector2(20 - ((height - 1) * cellHeight), (((height - 1) * cellHeight) * 2));
                 ammoTextPanel.rotation = Quaternion.Euler(0, 0, 0);
 
-                buttonsPanel.anchoredPosition = new Vector2(-(height + 20), 20 - height);
+                buttonsPanel.anchoredPosition = new Vector2(-(((height - 1) * cellHeight) + 20), 20 - ((height - 1) * cellHeight));
                 buttonsPanel.rotation = Quaternion.Euler(0, 0, 0);
 
                 break;
 
             case ItemSO.Direction.Right:
-                ammoTextPanel.anchoredPosition = new Vector2(-height, height - 30);
+                ammoTextPanel.anchoredPosition = new Vector2(-((height - 1) * cellHeight), ((height - 1) * cellHeight) - 30);
                 ammoTextPanel.rotation = Quaternion.Euler(0, 0, 0);
 
-                buttonsPanel.anchoredPosition = new Vector2(width - 20, -(height + 20));
+                buttonsPanel.anchoredPosition = new Vector2(((width - 1) * cellWidth) - 20, -(((height - 1) * cellHeight) + 20));
                 buttonsPanel.rotation = Quaternion.Euler(0, 0, 0);
 
                 break;

@@ -12,14 +12,19 @@ public class Item : MonoBehaviour, IPointerClickHandler
 
     protected float width;
     protected float height;
+    protected float cellWidth;
+    protected float cellHeight;
 
 
     protected virtual void Awake()
     {
         RectTransform rectTransform = GetComponent<RectTransform>();
 
-        width = rectTransform.sizeDelta.x * (itemSO.width - 1);
-        height = rectTransform.sizeDelta.y * (itemSO.height - 1);
+        cellWidth = rectTransform.sizeDelta.x;
+        cellHeight = rectTransform.sizeDelta.y;
+
+        width = itemSO.width;
+        height = itemSO.height;
 
         Debug.Log("Width: " + width);
         Debug.Log("Height" + height);
