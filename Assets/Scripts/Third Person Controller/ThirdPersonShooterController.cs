@@ -71,6 +71,13 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     private void Update()
     {
+        if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha1)) { FindAndEquipWeapon("Pistol", false); return; }
+        if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha2)) { FindAndEquipWeapon("Machinegun", false); return; }
+        if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha3)) { FindAndEquipWeapon("Shotgun", false); return; }
+        if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha4)) { FindAndEquipWeapon("Uzi", false); return; }
+        if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha5)) { FindAndEquipWeapon("RocketLauncher", false); return; }
+        if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha6)) { FindAndEquipWeapon("Crossbow", false); return; }
+
         if (starterAssetsInputs.aim && !isReloading)
         {
             aiming = true;
@@ -166,14 +173,63 @@ public class ThirdPersonShooterController : MonoBehaviour
         {
             Transform weaponRig = rig.transform.Find(containerName + "/" + weaponName);
             if (weaponRig)
-                weaponRig.gameObject.SetActive(activate);
+            {
+                if (weaponRig.TryGetComponent(out MultiPositionConstraint multiPositionConstraint))
+                    multiPositionConstraint.weight = activate ? 1 : 0;
+
+                if (weaponRig.TryGetComponent(out MultiParentConstraint multiParentConstraint))
+                    multiParentConstraint.weight = activate ? 1 : 0;
+
+                if (weaponRig.TryGetComponent(out MultiRotationConstraint multiRotationConstraint))
+                    multiRotationConstraint.weight = activate ? 1 : 0;
+
+                foreach (Transform child in weaponRig)
+                {
+                    if (child.TryGetComponent(out TwoBoneIKConstraint twoBoneIKConstraint))
+                        twoBoneIKConstraint.weight = activate ? 1 : 0;
+                }
+            }
         }
 
         foreach (Rig rig in aimRigs)
         {
+            if (rig.name == "Aim - Body Inclination IK")
+            {
+                Transform defaultRig = rig.transform.Find("Default");
+
+                foreach (Transform child in defaultRig)
+                    if (child.TryGetComponent(out MultiAimConstraint multiAimConstraint))
+                        multiAimConstraint.weight = activate ? 1 : 0;
+
+                continue;
+            }
+
             Transform weaponRig = rig.transform.Find(containerName + "/" + weaponName);
             if (weaponRig)
-                weaponRig.gameObject.SetActive(activate);
+            {
+                if (weaponRig.TryGetComponent(out MultiPositionConstraint multiPositionConstraint))
+                    multiPositionConstraint.weight = activate ? 1 : 0;
+
+                if (weaponRig.TryGetComponent(out MultiAimConstraint multiAimConstraint))
+                    multiAimConstraint.weight = activate ? 1 : 0;
+
+                if (weaponRig.TryGetComponent(out MultiParentConstraint multiParentConstraint))
+                    multiParentConstraint.weight = activate ? 1 : 0;
+
+                foreach (Transform child in weaponRig)
+                {
+                    if (child.TryGetComponent(out MultiRotationConstraint multiRotationConstraint))
+                    {
+                        if (child.name == "Spine Rotation")
+                            multiRotationConstraint.weight = activate ? 1 : 0;
+                        else
+                            multiRotationConstraint.weight = activate ? .3f : 0;
+                    }
+
+                    if (child.TryGetComponent(out TwoBoneIKConstraint twoBoneIKConstraint))
+                        twoBoneIKConstraint.weight = activate ? 1 : 0;
+                }
+            }
         }
     }
 
@@ -197,6 +253,21 @@ public class ThirdPersonShooterController : MonoBehaviour
 
             equippedGun.SetStarterAssetsInputs(starterAssetsInputs);
         }
+    }
+
+    public void FindAndEquipWeapon(string weaponName, bool isMelee)
+    {
+        string containerName = "";
+
+        if (isMelee)
+            containerName = Config.MELEE_WEAPON_CONTAINER_NAME;
+        else
+            containerName = Config.GUN_CONTAINER_NAME;
+
+        Transform weaponTransform = weaponContainer.Find(containerName + "/" + weaponName);
+
+        if (weaponTransform && weaponTransform.TryGetComponent(out Weapon weaponToEquip))
+            EquipWeapon(weaponToEquip);
     }
 
     public void PlayReloadAnimation()

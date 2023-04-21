@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private CinemachineShake cinemachineShake;
     [SerializeField] private SFXManager sfxManager;
     [SerializeField] private MusicManager musicManager;
+    [SerializeField] private GameObject player;
 
     #region UI
 
@@ -47,6 +48,7 @@ public class GameManager : MonoBehaviour
             Destroy(cinemachineShake.gameObject);
             Destroy(sfxManager.gameObject);
             Destroy(musicManager.gameObject);
+            Destroy(player.gameObject);
 
             Destroy(mainMenu.gameObject);
             Destroy(pauseMenu.gameObject);
@@ -70,7 +72,6 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        // TO DO: CHANGE TO NEW INPUT
         /*
         if (!pauseMenu.IsGamePaused && !isOnMainMenu && Input.GetKeyDown(KeyCode.Escape))
             pauseMenu.PauseGame();
@@ -203,6 +204,11 @@ public class GameManager : MonoBehaviour
     public InventoryDragDropSystem GetInventoryDragDropSystem()
     {
         return inventoryDragDropSystem;
+    }
+
+    public GameObject GetPlayer()
+    {
+        return player;
     }
 
     #endregion

@@ -25,9 +25,6 @@ public class Item : MonoBehaviour, IPointerClickHandler
 
         width = itemSO.width;
         height = itemSO.height;
-
-        Debug.Log("Width: " + width);
-        Debug.Log("Height" + height);
     }
 
     public static Item Create(Vector3 worldPosition, Vector2Int origin, ItemSO.Direction direction, ItemSO placedItemSO)
