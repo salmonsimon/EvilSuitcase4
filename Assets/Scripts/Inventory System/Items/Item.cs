@@ -80,7 +80,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
 
     public override string ToString()
     {
-        return itemSO.nameString;
+        return itemSO.itemName;
     }
 
     public ItemSO GetItemSO()

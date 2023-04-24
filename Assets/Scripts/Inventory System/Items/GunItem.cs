@@ -98,4 +98,9 @@ public class GunItem : Item
                 break;
         }
     }
+
+    public void EquipGun()
+    {
+        GameManager.instance.GetPlayer().GetComponent<ThirdPersonShooterController>().FindAndEquipWeapon(itemSO.itemName, false);
+    }
 }

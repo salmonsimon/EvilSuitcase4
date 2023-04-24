@@ -14,7 +14,7 @@ public class ItemSO : ScriptableObject
         Right,
     }
 
-    public string nameString;
+    public string itemName;
     public Transform prefab;
     public Transform visual;
     public Transform gridVisual;
