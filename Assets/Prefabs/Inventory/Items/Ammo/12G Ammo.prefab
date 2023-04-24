@@ -108,7 +108,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 98751107499317059}
+  - {fileID: 6282530632775409077}
   - {fileID: 8360874951315391533}
   - {fileID: 6271126123577872341}
   m_Father: {fileID: 0}
@@ -144,10 +144,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemSO: {fileID: 11400000, guid: 91a6bde54240d2046a90e217f752bb8f, type: 2}
+  ammoType: 2
+  currentAmmo: 8
+  maxAmmo: 24
   ammoTextPanel: {fileID: 8360874951315391533}
   buttonsPanel: {fileID: 6271126123577872341}
-  currentAmmo: 14
-  maxAmmo: 24
   discardButton: {fileID: 1711446001636692722}
 --- !u!114 &3722098267041639942
 MonoBehaviour:
@@ -674,7 +675,7 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
---- !u!1001 &7731445714508956409
+--- !u!1001 &4405999429018912783
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -793,9 +794,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c14c8fd898e68b24b91f882c42ec2f4d, type: 3}
---- !u!224 &98751107499317059 stripped
+--- !u!224 &6282530632775409077 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7644096696475555258, guid: c14c8fd898e68b24b91f882c42ec2f4d,
     type: 3}
-  m_PrefabInstance: {fileID: 7731445714508956409}
+  m_PrefabInstance: {fileID: 4405999429018912783}
   m_PrefabAsset: {fileID: 0}

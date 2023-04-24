@@ -8,6 +8,8 @@ public class ItemGhost : MonoBehaviour
     private Transform visual;
     private ItemSO placedObjectTypeSO;
 
+    private InventoryManualPlacement inventoryManualPlacement;
+
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
@@ -15,22 +17,25 @@ public class ItemGhost : MonoBehaviour
 
     private void Start()
     {
-        RefreshVisual();
+        inventoryManualPlacement = GetComponentInParent<InventoryManualPlacement>(true);
+        inventoryManualPlacement.OnSelectedChanged += Instance_OnSelectedChanged;
 
-        InventoryManualPlacement.Instance.OnSelectedChanged += Instance_OnSelectedChanged;
+        RefreshVisual();
     }
 
     private void Instance_OnSelectedChanged(object sender, System.EventArgs e)
     {
         RefreshVisual();
+
+        Debug.Log("On Selected Change");
     }
 
     private void LateUpdate()
     {
-        Vector2 targetPosition = InventoryManualPlacement.Instance.GetCanvasSnappedPosition();
+        Vector2 targetPosition = inventoryManualPlacement.GetCanvasSnappedPosition();
 
-        rectTransform.anchoredPosition = Vector2.Lerp(rectTransform.anchoredPosition, targetPosition, Time.deltaTime * 15f);
-        transform.rotation = Quaternion.Lerp(transform.rotation, InventoryManualPlacement.Instance.GetPlacedObjectRotation(), Time.deltaTime * 15f);
+        rectTransform.anchoredPosition = Vector2.Lerp(rectTransform.anchoredPosition, targetPosition, Time.fixedDeltaTime * 15f);
+        transform.rotation = Quaternion.Lerp(transform.rotation, inventoryManualPlacement.GetPlacedObjectRotation(), Time.fixedDeltaTime * 15f);
     }
 
     private void RefreshVisual()
@@ -41,7 +46,7 @@ public class ItemGhost : MonoBehaviour
             visual = null;
         }
 
-        ItemSO placedObjectTypeSO = InventoryManualPlacement.Instance.GetPlacedObjectTypeSO();
+        ItemSO placedObjectTypeSO = inventoryManualPlacement.GetPlacedObjectTypeSO();
 
         if (placedObjectTypeSO != null)
         {

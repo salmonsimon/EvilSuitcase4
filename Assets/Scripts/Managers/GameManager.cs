@@ -12,18 +12,19 @@ public class GameManager : MonoBehaviour
 
     #region GameObjects
 
+    [SerializeField] private GameObject player;
     [SerializeField] private SurfaceManager surfaceManager;
     [SerializeField] private LevelLoader levelLoader;
     [SerializeField] private CinemachineShake cinemachineShake;
     [SerializeField] private SFXManager sfxManager;
     [SerializeField] private MusicManager musicManager;
-    [SerializeField] private GameObject player;
+    [SerializeField] private InventoryManager inventoryManager;
 
     #region UI
 
     [SerializeField] private MainMenuUI mainMenu;
-    [SerializeField] private PauseUI pauseMenu;
     [SerializeField] private AmmoDisplayUI ammoDisplayUI;
+    [SerializeField] private InventoryUI inventoryUI;
     [SerializeField] private InventoryDragDropSystem inventoryDragDropSystem;
 
     #endregion
@@ -44,15 +45,16 @@ public class GameManager : MonoBehaviour
         if (GameManager.instance != null)
         {
             Destroy(gameObject);
+            Destroy(player.gameObject);
             Destroy(surfaceManager.gameObject);
             Destroy(cinemachineShake.gameObject);
             Destroy(sfxManager.gameObject);
             Destroy(musicManager.gameObject);
-            Destroy(player.gameObject);
+            Destroy(inventoryManager.gameObject);
 
             Destroy(mainMenu.gameObject);
-            Destroy(pauseMenu.gameObject);
             Destroy(ammoDisplayUI.gameObject);
+            Destroy(inventoryUI.gameObject);
             Destroy(inventoryDragDropSystem.gameObject);
         }
         else
@@ -72,12 +74,10 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        /*
-        if (!pauseMenu.IsGamePaused && !isOnMainMenu && Input.GetKeyDown(KeyCode.Escape))
-            pauseMenu.PauseGame();
-        else if (pauseMenu.IsGamePaused && !isOnMainMenu && Input.GetKeyDown(KeyCode.Escape))
-            pauseMenu.ResumeGame();
-        */
+        if (!inventoryUI.IsGamePaused && !isOnMainMenu && Input.GetKeyDown(KeyCode.Escape))
+            inventoryUI.PauseGame();
+        else if (inventoryUI.IsGamePaused && !isOnMainMenu && Input.GetKeyDown(KeyCode.Escape))
+            inventoryUI.ResumeGame();
     }
 
     public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -130,13 +130,13 @@ public class GameManager : MonoBehaviour
 
     public void ToMainMenu()
     {
-        pauseMenu.ResumeGame();
+        inventoryUI.ResumeGame();
 
         SetIsOnMainMenu(true);
 
         levelLoader.LoadLevel(Config.MAIN_MENU_SCENE_NAME, Config.CROSSFADE_TRANSITION);
 
-        pauseMenu.gameObject.SetActive(false);
+        inventoryUI.gameObject.SetActive(false);
     }
 
     #region Getters and Setters
@@ -186,11 +186,6 @@ public class GameManager : MonoBehaviour
         return musicManager;
     }
 
-    public PauseUI GetPauseUI()
-    {
-        return pauseMenu;
-    }
-
     public MainMenuUI GetMainMenuUI()
     {
         return mainMenu;
@@ -211,5 +206,14 @@ public class GameManager : MonoBehaviour
         return player;
     }
 
+    public InventoryManager GetInventoryManager()
+    {
+        return inventoryManager;
+    }
+
+    public InventoryUI GetInventoryUI()
+    {
+        return inventoryUI;
+    }
     #endregion
 }

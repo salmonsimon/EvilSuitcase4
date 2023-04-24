@@ -1,3 +1,4 @@
+using Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,6 +7,9 @@ using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour
 {
+    [Header("Inventory Configuration")]
+    [SerializeField] private bool mainInventory = true;
+
     [Header("Grid Configuration")]
     [SerializeField] private int gridWidth = 10;
     [SerializeField] private int gridHeight = 10;
@@ -97,10 +101,10 @@ public class Inventory : MonoBehaviour
     }
 
 
-    public bool TryPlaceItem(ItemSO itemTetrisSO, Vector2Int placedObjectOrigin, ItemSO.Direction direction)
+    public bool TryPlaceItem(ItemSO itemTetrisSO, Vector2Int placedObjectOrigin, Item.Direction direction)
     {
         // Test Can Build
-        List<Vector2Int> gridPositionList = itemTetrisSO.GetGridPositionList(placedObjectOrigin, direction);
+        List<Vector2Int> gridPositionList = Item.GetGridPositionList(placedObjectOrigin, direction, itemTetrisSO.width, itemTetrisSO.height);
         bool canPlace = true;
         foreach (Vector2Int gridPosition in gridPositionList)
         {
@@ -132,11 +136,11 @@ public class Inventory : MonoBehaviour
 
         if (canPlace)
         {
-            Vector2Int rotationOffset = itemTetrisSO.GetRotationOffset(direction);
+            Vector2Int rotationOffset = Item.GetRotationOffset(direction, itemTetrisSO.width, itemTetrisSO.height);
             Vector3 placedObjectWorldPosition = grid.GetWorldPosition(placedObjectOrigin.x, placedObjectOrigin.y) + new Vector3(rotationOffset.x, rotationOffset.y) * grid.GetCellSize();
 
             Item placedObject = Item.CreateCanvas(itemContainer, placedObjectWorldPosition, placedObjectOrigin, direction, itemTetrisSO);
-            placedObject.transform.rotation = Quaternion.Euler(0, 0, -itemTetrisSO.GetRotationAngle(direction));
+            placedObject.transform.rotation = Quaternion.Euler(0, 0, -Item.GetRotationAngle(direction));
 
             placedObject.GetComponent<ItemDragDrop>().Setup(this);
 
@@ -147,6 +151,9 @@ public class Inventory : MonoBehaviour
 
             OnItemPlaced?.Invoke(this, placedObject);
             placedObject.RotateInfoPanels();
+
+            if (mainInventory)
+                placedObject.AddToMainInventory();
 
             // Object Placed!
             return true;
@@ -197,5 +204,68 @@ public class Inventory : MonoBehaviour
         background.GetComponent<GridLayoutGroup>().cellSize = new Vector2(GetGrid().GetCellSize(), GetGrid().GetCellSize());
 
         background.GetComponent<RectTransform>().sizeDelta = new Vector2(GetGrid().GetWidth(), GetGrid().GetHeight()) * GetGrid().GetCellSize();
+    }
+
+    [Serializable]
+    public struct AddItem
+    {
+        public string itemSOName;
+        public ItemSO.ItemType itemType;
+        public Vector2Int gridPosition;
+        public Item.Direction direction;
+    }
+
+    [Serializable]
+    public struct ListAddItem
+    {
+        public List<AddItem> addItemList;
+    }
+
+    public string Save()
+    {
+        List<Item> itemList = new List<Item>();
+        for (int x = 0; x < grid.GetWidth(); x++)
+        {
+            for (int y = 0; y < grid.GetHeight(); y++)
+            {
+                if (grid.GetGridObject(x, y).HasItem())
+                {
+                    itemList.Remove(grid.GetGridObject(x, y).GetItem());
+                    itemList.Add(grid.GetGridObject(x, y).GetItem());
+                }
+            }
+        }
+
+        List<AddItem> addItemList = new List<AddItem>();
+        foreach (Item item in itemList)
+        {
+            addItemList.Add(new AddItem
+            {
+                direction = item.GetDirection(),
+                gridPosition = item.GetGridPosition(),
+                itemSOName = (item.GetItemSO() as ItemSO).name,
+                itemType = item.GetItemType()
+            });
+
+        }
+
+        return JsonUtility.ToJson(new ListAddItem { addItemList = addItemList });
+    }
+
+    public void Load(string loadString)
+    {
+        ListAddItem listAddItem = JsonUtility.FromJson<ListAddItem>(loadString);
+
+        foreach (AddItem addItem in listAddItem.addItemList)
+        {
+            TryPlaceItem(GetItemSOFromName(addItem.itemSOName, addItem.itemType), addItem.gridPosition, addItem.direction);
+        }
+    }
+
+    public ItemSO GetItemSOFromName(string itemSOName, ItemSO.ItemType itemType)
+    {
+        ItemSO itemSO = Resources.Load("Scriptable Objects/Items/" + itemType.ToString() + "/" + itemSOName) as ItemSO;
+
+        return itemSO;
     }
 }

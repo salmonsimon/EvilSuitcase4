@@ -10,23 +10,21 @@ using UnityEngine.Windows;
 
 public class InventoryManualPlacement : MonoBehaviour
 {
-    public static InventoryManualPlacement Instance { get; private set; }
-
     public event EventHandler OnSelectedChanged;
     public event EventHandler OnObjectPlaced;
 
     [SerializeField] private Canvas canvas = null;
     [SerializeField] private List<ItemSO> placedObjectTypeSOList = null;
 
-    private ItemSO placedObjectTypeSO;
-    private ItemSO.Direction dir;
+    [SerializeField] private ItemSO placedObjectTypeSO;
+    private Item.Direction dir;
     private Inventory inventoryTetris;
     private RectTransform canvasRectTransform;
     private RectTransform itemContainer;
 
 #if ENABLE_INPUT_SYSTEM
-    [SerializeField] private PlayerInput playerInput;
-    [SerializeField] private InputsUI input;
+    private PlayerInput playerInput;
+    private InputsUI input;
 #endif
 
     private bool IsCurrentDeviceMouse
@@ -43,8 +41,6 @@ public class InventoryManualPlacement : MonoBehaviour
 
     private void Awake()
     {
-        Instance = this;
-
         inventoryTetris = GetComponent<Inventory>();
 
         placedObjectTypeSO = null;
@@ -60,6 +56,9 @@ public class InventoryManualPlacement : MonoBehaviour
         }
 
         itemContainer = transform.Find("ItemContainer").GetComponent<RectTransform>();
+
+        playerInput = GameManager.instance.GetPlayer().GetComponent<PlayerInput>();
+        input = GameManager.instance.GetPlayer().GetComponent<InputsUI>();
     }
 
     private void Update()
@@ -89,7 +88,7 @@ public class InventoryManualPlacement : MonoBehaviour
         //if (Input.GetKeyDown(KeyCode.R))
         if (input.rotate && placedObjectTypeSO != null)
         {
-            dir = ItemSO.GetNextDirection(dir);
+            dir = Item.GetNextDirection(dir);
             input.rotate = false;
         }
 
@@ -101,7 +100,7 @@ public class InventoryManualPlacement : MonoBehaviour
         if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha6)) { placedObjectTypeSO = placedObjectTypeSOList[5]; RefreshSelectedObjectType(); }
         if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha7)) { placedObjectTypeSO = placedObjectTypeSOList[6]; RefreshSelectedObjectType(); }
 
-        //if (Input.GetKeyDown(KeyCode.Alpha8)) { placedObjectTypeSO = placedObjectTypeSOList[7]; RefreshSelectedObjectType(); }
+        if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha8)) { placedObjectTypeSO = placedObjectTypeSOList[7]; RefreshSelectedObjectType(); }
         
 
         if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha0)) { DeselectObjectType(); }
@@ -125,7 +124,7 @@ public class InventoryManualPlacement : MonoBehaviour
 
         if (placedObjectTypeSO != null)
         {
-            Vector2Int rotationOffset = placedObjectTypeSO.GetRotationOffset(dir);
+            Vector2Int rotationOffset = Item.GetRotationOffset(dir, placedObjectTypeSO.width, placedObjectTypeSO.height);
             Vector2 placedObjectCanvas = inventoryTetris.GetGrid().GetWorldPosition(x, y) + new Vector3(rotationOffset.x, rotationOffset.y) * inventoryTetris.GetGrid().GetCellSize();
             return placedObjectCanvas;
         }
@@ -139,7 +138,7 @@ public class InventoryManualPlacement : MonoBehaviour
     {
         if (placedObjectTypeSO != null)
         {
-            return Quaternion.Euler(0, 0, -placedObjectTypeSO.GetRotationAngle(dir));
+            return Quaternion.Euler(0, 0, -Item.GetRotationAngle(dir));
         }
         else
         {

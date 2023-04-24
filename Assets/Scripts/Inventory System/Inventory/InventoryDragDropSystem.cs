@@ -13,11 +13,11 @@ public class InventoryDragDropSystem : MonoBehaviour
     private Item draggingItem;
     private Vector2Int mouseDragGridPositionOffset;
     private Vector2 mouseDragAnchoredPositionOffset;
-    private ItemSO.Direction direction;
+    private Item.Direction direction;
 
 #if ENABLE_INPUT_SYSTEM
-    [SerializeField] private PlayerInput playerInput;
-    [SerializeField] private InputsUI input;
+    private PlayerInput playerInput;
+    private InputsUI input;
 #endif
 
     private void Awake()
@@ -29,6 +29,9 @@ public class InventoryDragDropSystem : MonoBehaviour
     {
         foreach (Inventory inventoryTetris in inventoryList)
             inventoryTetris.OnItemPlaced += (object sender, Item placedObject) => {};
+
+        playerInput = GameManager.instance.GetPlayer().GetComponent<PlayerInput>();
+        input = GameManager.instance.GetPlayer().GetComponent<InputsUI>();
     }
 
     private void Update()
@@ -36,7 +39,7 @@ public class InventoryDragDropSystem : MonoBehaviour
         //if (Input.GetKeyDown(KeyCode.R))
         if (input.rotate && draggingItem != null)
         {
-            direction = ItemSO.GetNextDirection(direction);
+            direction = Item.GetNextDirection(direction);
             input.rotate = false;
         }
 
@@ -47,7 +50,7 @@ public class InventoryDragDropSystem : MonoBehaviour
             targetPosition += new Vector2(-mouseDragAnchoredPositionOffset.x, -mouseDragAnchoredPositionOffset.y);
 
             // Apply rotation offset to target position
-            Vector2Int rotationOffset = draggingItem.GetItemSO().GetRotationOffset(direction);
+            Vector2Int rotationOffset = Item.GetRotationOffset(direction, draggingItem.GetItemSO().width, draggingItem.GetItemSO().height);
             targetPosition += new Vector2(rotationOffset.x, rotationOffset.y) * draggingInventory.GetGrid().GetCellSize();
 
             // Snap position
@@ -57,7 +60,7 @@ public class InventoryDragDropSystem : MonoBehaviour
 
             // Move and rotate dragged object
             draggingItem.GetComponent<RectTransform>().anchoredPosition = Vector2.Lerp(draggingItem.GetComponent<RectTransform>().anchoredPosition, targetPosition, Time.deltaTime * 20f);
-            draggingItem.transform.rotation = Quaternion.Lerp(draggingItem.transform.rotation, Quaternion.Euler(0, 0, -draggingItem.GetItemSO().GetRotationAngle(direction)), Time.deltaTime * 15f);
+            draggingItem.transform.rotation = Quaternion.Lerp(draggingItem.transform.rotation, Quaternion.Euler(0, 0, -Item.GetRotationAngle(direction)), Time.deltaTime * 15f);
         }
     }
 
@@ -82,7 +85,7 @@ public class InventoryDragDropSystem : MonoBehaviour
         direction = item.GetDirection();
 
         // Apply rotation offset to drag anchored position offset
-        Vector2Int rotationOffset = draggingItem.GetItemSO().GetRotationOffset(direction);
+        Vector2Int rotationOffset = Item.GetRotationOffset(direction, item.GetItemSO().width, item.GetItemSO().height);
         mouseDragAnchoredPositionOffset += new Vector2(rotationOffset.x, rotationOffset.y) * draggingInventory.GetGrid().GetCellSize();
     }
 

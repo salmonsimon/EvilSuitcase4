@@ -6,6 +6,9 @@ using UnityEngine.EventSystems;
 
 public class GunItem : Item
 {
+    [SerializeField] private AmmoType ammoType;
+    public AmmoType AmmoType { get { return ammoType; } }
+
     [SerializeField] private int currentAmmo;
     public int CurrentAmmo
     {
@@ -24,6 +27,8 @@ public class GunItem : Item
     }
 
     [SerializeField] private int maxAmmo;
+
+    private int weaponShortcut = -1;
 
 
     private TextMeshProUGUI ammoText;
@@ -61,7 +66,7 @@ public class GunItem : Item
     {
         switch (direction)
         {
-            case ItemSO.Direction.Down:
+            case Item.Direction.Down:
                 ammoTextPanel.anchoredPosition = new Vector2(((width - 1)*cellWidth) - 20, 0);
                 ammoTextPanel.rotation = Quaternion.Euler(0, 0, 0);
 
@@ -70,7 +75,7 @@ public class GunItem : Item
 
                 break;
 
-            case ItemSO.Direction.Left:
+            case Item.Direction.Left:
                 ammoTextPanel.anchoredPosition = new Vector2(((width - 1) * cellWidth), (((height - 1) * cellHeight) * 2) - 20);
                 ammoTextPanel.rotation = Quaternion.Euler(0, 0, 0);
 
@@ -79,7 +84,7 @@ public class GunItem : Item
 
                 break;
 
-            case ItemSO.Direction.Up:
+            case Item.Direction.Up:
                 ammoTextPanel.anchoredPosition = new Vector2(20 - ((height - 1) * cellHeight), (((height - 1) * cellHeight) * 2));
                 ammoTextPanel.rotation = Quaternion.Euler(0, 0, 0);
 
@@ -88,7 +93,7 @@ public class GunItem : Item
 
                 break;
 
-            case ItemSO.Direction.Right:
+            case Item.Direction.Right:
                 ammoTextPanel.anchoredPosition = new Vector2(-((height - 1) * cellHeight), ((height - 1) * cellHeight) - 30);
                 ammoTextPanel.rotation = Quaternion.Euler(0, 0, 0);
 
@@ -99,8 +104,33 @@ public class GunItem : Item
         }
     }
 
+    public override void Discard()
+    {
+        DiscardCurrentWeaponShortcut();
+        Destroy(gameObject);
+    }
+
     public void EquipGun()
     {
         GameManager.instance.GetPlayer().GetComponent<ThirdPersonShooterController>().FindAndEquipWeapon(itemSO.itemName, false);
+    }
+
+    public void OpenFastSwapConfigPanel()
+    {
+        GameManager.instance.GetInventoryUI().SetFastSwapCandidate(this);
+        GameManager.instance.GetInventoryUI().OpenAndLoadFastSwapConfigPanel();
+    }
+
+    public void SetWeaponShortcut(int newWeaponShortcut)
+    {
+        DiscardCurrentWeaponShortcut();
+
+        weaponShortcut = newWeaponShortcut;
+    }
+
+    private void DiscardCurrentWeaponShortcut()
+    {
+        if (weaponShortcut >= 0)
+            GameManager.instance.GetInventoryManager().FastSwapWeaponArray[weaponShortcut] = null;
     }
 }

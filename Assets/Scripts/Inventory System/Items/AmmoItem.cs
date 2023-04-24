@@ -7,6 +7,9 @@ using UnityEngine.UI;
 
 public class AmmoItem : Item
 {
+    [SerializeField] private AmmoType ammoType;
+    public AmmoType AmmoType { get { return ammoType; } }
+
     [SerializeField] private int currentAmmo;
     public int CurrentAmmo
     {
@@ -46,6 +49,24 @@ public class AmmoItem : Item
         UpdateAmmoText();
     }
 
+    public override void AddToMainInventory()
+    {
+        InventoryManager inventoryManager = GameManager.instance.GetInventoryManager();
+
+        if (!inventoryManager.AmmoDictionary.ContainsKey(ammoType))
+            inventoryManager.AmmoDictionary.Add(ammoType, currentAmmo);
+        else
+            inventoryManager.AmmoDictionary[ammoType] += currentAmmo;
+    }
+
+    public override void Discard()
+    {
+        InventoryManager inventoryManager = GameManager.instance.GetInventoryManager();
+        inventoryManager.AmmoDictionary[ammoType] -= currentAmmo;
+
+        Destroy(gameObject);
+    }
+
     public override void OnPointerClick(PointerEventData eventData)
     {
         if (eventData.button == PointerEventData.InputButton.Right)
@@ -64,7 +85,7 @@ public class AmmoItem : Item
     {
         switch (direction)
         {
-            case ItemSO.Direction.Down:
+            case Item.Direction.Down:
                 ammoTextPanel.anchoredPosition = new Vector2(((width - 1) * cellWidth) - 20, 0);
                 ammoTextPanel.rotation = Quaternion.Euler(0, 0, 0);
 
@@ -73,29 +94,29 @@ public class AmmoItem : Item
 
                 break;
 
-            case ItemSO.Direction.Left:
-                ammoTextPanel.anchoredPosition = new Vector2(((width - 1) * cellWidth), ((height - 1) * cellHeight) + 30);
+            case Item.Direction.Left:
+                ammoTextPanel.anchoredPosition = new Vector2(((width - 1) * cellWidth), 30);
                 ammoTextPanel.rotation = Quaternion.Euler(0, 0, 0);
 
-                buttonsPanel.anchoredPosition = new Vector2(20 - ((height - 1) * cellHeight), ((height - 1) * cellHeight) + 20);
+                buttonsPanel.anchoredPosition = new Vector2(-30, ((height - 1) * cellHeight) + 20);
                 buttonsPanel.rotation = Quaternion.Euler(0, 0, 0);
 
                 break;
 
-            case ItemSO.Direction.Up:
-                ammoTextPanel.anchoredPosition = new Vector2(20 - ((height - 1) * cellHeight), ((width - 1) * cellWidth));
+            case Item.Direction.Up:
+                ammoTextPanel.anchoredPosition = new Vector2(-30, 50);
                 ammoTextPanel.rotation = Quaternion.Euler(0, 0, 0);
 
-                buttonsPanel.anchoredPosition = new Vector2(-(((height - 1) * cellHeight) + 20), 20 - ((height - 1) * cellHeight));
+                buttonsPanel.anchoredPosition = new Vector2(-70, -30);
                 buttonsPanel.rotation = Quaternion.Euler(0, 0, 0);
 
                 break;
 
-            case ItemSO.Direction.Right:
-                ammoTextPanel.anchoredPosition = new Vector2(-((height - 1) * cellHeight), ((height - 1) * cellHeight) - 30);
+            case Item.Direction.Right:
+                ammoTextPanel.anchoredPosition = new Vector2(-50, 20);
                 ammoTextPanel.rotation = Quaternion.Euler(0, 0, 0);
 
-                buttonsPanel.anchoredPosition = new Vector2(((width - 1) * cellWidth) - 20, -(((height - 1) * cellHeight) + 20));
+                buttonsPanel.anchoredPosition = new Vector2(30, -70);
                 buttonsPanel.rotation = Quaternion.Euler(0, 0, 0);
 
                 break;

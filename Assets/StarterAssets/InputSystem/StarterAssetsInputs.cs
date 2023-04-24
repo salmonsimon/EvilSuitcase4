@@ -102,10 +102,10 @@ namespace StarterAssets
 
         private void OnApplicationFocus(bool hasFocus)
 		{
-			SetCursorState(cursorLocked);
+			SetCursorLockState(cursorLocked);
 		}
 
-		private void SetCursorState(bool newState)
+		public void SetCursorLockState(bool newState)
 		{
 			Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
 		}

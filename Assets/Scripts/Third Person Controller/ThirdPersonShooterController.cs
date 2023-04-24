@@ -71,12 +71,14 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     private void Update()
     {
+        /*
         if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha1)) { FindAndEquipWeapon("Pistol", false); return; }
         if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha2)) { FindAndEquipWeapon("Machinegun", false); return; }
         if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha3)) { FindAndEquipWeapon("Shotgun", false); return; }
         if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha4)) { FindAndEquipWeapon("Uzi", false); return; }
         if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha5)) { FindAndEquipWeapon("RocketLauncher", false); return; }
         if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha6)) { FindAndEquipWeapon("Crossbow", false); return; }
+        */
 
         if (starterAssetsInputs.aim && !isReloading)
         {
