@@ -26,8 +26,6 @@ public class ItemGhost : MonoBehaviour
     private void Instance_OnSelectedChanged(object sender, System.EventArgs e)
     {
         RefreshVisual();
-
-        Debug.Log("On Selected Change");
     }
 
     private void LateUpdate()

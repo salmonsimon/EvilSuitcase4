@@ -18,7 +18,7 @@ public class InventoryUI : MonoBehaviour
     [SerializeField] private GameObject rewardsInventoryPanel;
 
     [Header("Variables")]
-    [SerializeField] private GunItem fastSwapCandidate;
+    [SerializeField] private EquipableItem fastSwapCandidate;
 
     private bool isGamePaused = false;
     public bool IsGamePaused { get { return isGamePaused; } }
@@ -44,7 +44,7 @@ public class InventoryUI : MonoBehaviour
 
             if (fastSwapItem == null) continue;
 
-            Instantiate(fastSwapItem.GetItemSO().visual, weaponSpriteContainer);
+            Instantiate(fastSwapItem.GetItemSO().fastSwapVisual, weaponSpriteContainer);
             weaponSpriteContainer.gameObject.SetActive(true);
 
             if (IsSubclassOfRawGeneric(fastSwapItem.GetType(), typeof(GunItem)))
@@ -88,7 +88,7 @@ public class InventoryUI : MonoBehaviour
 
             if (fastSwapItem == null) continue;
 
-            Instantiate(fastSwapItem.GetItemSO().visual, weaponSpriteContainer);
+            Instantiate(fastSwapItem.GetItemSO().fastSwapVisual, weaponSpriteContainer);
             weaponSpriteContainer.gameObject.SetActive(true);
 
             if (IsSubclassOfRawGeneric(fastSwapItem.GetType(), typeof(GunItem)))
@@ -111,7 +111,7 @@ public class InventoryUI : MonoBehaviour
         fastSwapGameplayPanel.SetActive(true);
     }
 
-    public void SetFastSwapCandidate(GunItem fastSwapCandidate)
+    public void SetFastSwapCandidate(EquipableItem fastSwapCandidate)
     {
         this.fastSwapCandidate = fastSwapCandidate;
     }
@@ -121,7 +121,11 @@ public class InventoryUI : MonoBehaviour
         if (fastSwapCandidate)
         {
             fastSwapCandidate.SetWeaponShortcut(fastSwapIndex);
-            GameManager.instance.GetInventoryManager().FastSwapWeaponArray[fastSwapIndex] = fastSwapCandidate;
+
+            EquipableItem[] newArray = GameManager.instance.GetInventoryManager().FastSwapWeaponArray;
+            newArray[fastSwapIndex] = fastSwapCandidate;
+            GameManager.instance.GetInventoryManager().FastSwapWeaponArray = newArray;
+
             fastSwapCandidate = null;
         }
     }
@@ -151,6 +155,7 @@ public class InventoryUI : MonoBehaviour
 
         pauseInventoryPanel.SetActive(false);
         settingsPanel.SetActive(false);
+        fastSwapConfigPanel.SetActive(false);
     }
 
     public void SetGamePaused(bool value)

@@ -18,6 +18,7 @@ public class ItemSO : ScriptableObject
     public ItemType itemType;
     public Transform prefab;
     public Transform visual;
+    public Transform fastSwapVisual;
     public Transform gridVisual;
     public int width;
     public int height;

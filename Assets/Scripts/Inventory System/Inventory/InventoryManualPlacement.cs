@@ -16,7 +16,7 @@ public class InventoryManualPlacement : MonoBehaviour
     [SerializeField] private Canvas canvas = null;
     [SerializeField] private List<ItemSO> placedObjectTypeSOList = null;
 
-    [SerializeField] private ItemSO placedObjectTypeSO;
+    private ItemSO placedObjectTypeSO;
     private Item.Direction dir;
     private Inventory inventoryTetris;
     private RectTransform canvasRectTransform;

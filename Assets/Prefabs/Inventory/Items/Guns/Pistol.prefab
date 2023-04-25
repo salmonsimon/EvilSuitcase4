@@ -147,8 +147,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemSO: {fileID: 11400000, guid: a2a05750484fb874db07415e175db471, type: 2}
   ammoType: 0
-  currentAmmo: 10
-  maxAmmo: 30
+  currentAmmo: 7
+  maxAmmo: 10
   ammoTextPanel: {fileID: 3813125641048920490}
   buttonsPanel: {fileID: 5444167486032889461}
 --- !u!114 &3722098267041639942
@@ -635,8 +635,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 4220394600422452821}
-        m_TargetAssemblyTypeName: GunItem, Assembly-CSharp
-        m_MethodName: EquipGun
+        m_TargetAssemblyTypeName: EquipableItem, Assembly-CSharp
+        m_MethodName: Equip
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

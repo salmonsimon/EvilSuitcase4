@@ -59,8 +59,8 @@ public class InventoryDragDropSystem : MonoBehaviour
             targetPosition *= 10f;
 
             // Move and rotate dragged object
-            draggingItem.GetComponent<RectTransform>().anchoredPosition = Vector2.Lerp(draggingItem.GetComponent<RectTransform>().anchoredPosition, targetPosition, Time.deltaTime * 20f);
-            draggingItem.transform.rotation = Quaternion.Lerp(draggingItem.transform.rotation, Quaternion.Euler(0, 0, -Item.GetRotationAngle(direction)), Time.deltaTime * 15f);
+            draggingItem.GetComponent<RectTransform>().anchoredPosition = Vector2.Lerp(draggingItem.GetComponent<RectTransform>().anchoredPosition, targetPosition, Time.fixedDeltaTime * 15f);
+            draggingItem.transform.rotation = Quaternion.Lerp(draggingItem.transform.rotation, Quaternion.Euler(0, 0, -Item.GetRotationAngle(direction)), Time.fixedDeltaTime * 15f);
         }
     }
 

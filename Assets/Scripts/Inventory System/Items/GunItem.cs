@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class GunItem : Item
+public class GunItem : EquipableItem
 {
     [SerializeField] private AmmoType ammoType;
     public AmmoType AmmoType { get { return ammoType; } }
@@ -27,9 +27,6 @@ public class GunItem : Item
     }
 
     [SerializeField] private int maxAmmo;
-
-    private int weaponShortcut = -1;
-
 
     private TextMeshProUGUI ammoText;
 
@@ -102,35 +99,5 @@ public class GunItem : Item
 
                 break;
         }
-    }
-
-    public override void Discard()
-    {
-        DiscardCurrentWeaponShortcut();
-        Destroy(gameObject);
-    }
-
-    public void EquipGun()
-    {
-        GameManager.instance.GetPlayer().GetComponent<ThirdPersonShooterController>().FindAndEquipWeapon(itemSO.itemName, false);
-    }
-
-    public void OpenFastSwapConfigPanel()
-    {
-        GameManager.instance.GetInventoryUI().SetFastSwapCandidate(this);
-        GameManager.instance.GetInventoryUI().OpenAndLoadFastSwapConfigPanel();
-    }
-
-    public void SetWeaponShortcut(int newWeaponShortcut)
-    {
-        DiscardCurrentWeaponShortcut();
-
-        weaponShortcut = newWeaponShortcut;
-    }
-
-    private void DiscardCurrentWeaponShortcut()
-    {
-        if (weaponShortcut >= 0)
-            GameManager.instance.GetInventoryManager().FastSwapWeaponArray[weaponShortcut] = null;
     }
 }

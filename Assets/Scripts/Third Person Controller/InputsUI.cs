@@ -12,6 +12,7 @@ public class InputsUI : MonoBehaviour
     public bool click;
     public bool rightClick;
     public bool rotate;
+    public bool pause;
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
     public void OnPoint(InputValue value)
@@ -32,6 +33,11 @@ public class InputsUI : MonoBehaviour
     public void OnRotate(InputValue value)
     {
         RotateInput(value.isPressed);
+    }
+
+    public void OnPause(InputValue value)
+    {
+        PauseInput(value.isPressed);
     }
 
 #endif
@@ -55,5 +61,10 @@ public class InputsUI : MonoBehaviour
     public void RotateInput(bool newRotateInput)
     {
         rotate = newRotateInput;
+    }
+
+    public void PauseInput(bool newPauseState)
+    {
+        pause = newPauseState;
     }
 }
