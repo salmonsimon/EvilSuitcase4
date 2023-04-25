@@ -23,6 +23,8 @@ public class InventoryUI : MonoBehaviour
     private bool isGamePaused = false;
     public bool IsGamePaused { get { return isGamePaused; } }
 
+    private float fastSwapGameplayPanelShowDuration = 2f;
+
     public void OpenAndLoadFastSwapConfigPanel()
     {
         Item[] fastSwapItems = GameManager.instance.GetInventoryManager().FastSwapWeaponArray;
@@ -67,7 +69,7 @@ public class InventoryUI : MonoBehaviour
         fastSwapConfigPanel.SetActive(true);
     }
 
-    public void OpenAndLoadFastSwapGameplayPanel()
+    public void OpenAndLoadFastSwapGameplayPanel(int equippedWeaponIndex)
     {
         Item[] fastSwapItems = GameManager.instance.GetInventoryManager().FastSwapWeaponArray;
         Dictionary<AmmoType, int> ammoDictionary = GameManager.instance.GetInventoryManager().AmmoDictionary;
@@ -86,9 +88,27 @@ public class InventoryUI : MonoBehaviour
             TextMeshProUGUI TMPRO = itemPanel.GetComponentInChildren<TextMeshProUGUI>(true);
             TMPRO.gameObject.SetActive(false);
 
+            if (itemIndex == equippedWeaponIndex)
+            {
+                Image panel = itemPanel.GetComponentInChildren<Image>();
+                Color equippedWeaponColor = Color.white;
+                equippedWeaponColor.a = .8f;
+
+                panel.color = equippedWeaponColor;
+            }
+            else
+            {
+                Image panel = itemPanel.GetComponentInChildren<Image>();
+                Color nonEquippedWeaponColor = Color.black;
+                nonEquippedWeaponColor.a = .3f;
+
+                panel.color = nonEquippedWeaponColor;
+            }
+
             if (fastSwapItem == null) continue;
 
             Instantiate(fastSwapItem.GetItemSO().fastSwapVisual, weaponSpriteContainer);
+
             weaponSpriteContainer.gameObject.SetActive(true);
 
             if (IsSubclassOfRawGeneric(fastSwapItem.GetType(), typeof(GunItem)))
@@ -107,8 +127,6 @@ public class InventoryUI : MonoBehaviour
             }
             */
         }
-
-        fastSwapGameplayPanel.SetActive(true);
     }
 
     public void SetFastSwapCandidate(EquipableItem fastSwapCandidate)
@@ -171,5 +189,33 @@ public class InventoryUI : MonoBehaviour
     public void ToMainMenu()
     {
         GameManager.instance.ToMainMenu();
+    }
+
+    public void ShowFastSwapGameplayPanel(int equippedWeaponIndex)
+    {
+        StopAllCoroutines();
+        StartCoroutine(ShowFastSwapGameplayPanelCoroutine(equippedWeaponIndex, fastSwapGameplayPanelShowDuration));
+    }
+
+    private IEnumerator ShowFastSwapGameplayPanelCoroutine(int equippedWeaponIndex, float duration)
+    {
+        OpenAndLoadFastSwapGameplayPanel(equippedWeaponIndex);
+
+        Animator animator = fastSwapGameplayPanel.GetComponent<Animator>();
+
+        animator.enabled = false;
+        animator.enabled = true;
+
+        if (!animator.GetCurrentAnimatorStateInfo(0).IsName("CrossfadeStart"))
+        {
+            animator.SetTrigger(Config.CROSSFADE_START_TRIGGER);
+            yield return new WaitForSeconds(Config.START_TRANSITION_DURATION);
+        }
+
+        yield return new WaitForSeconds(duration);
+
+        animator.SetTrigger(Config.CROSSFADE_END_TRIGGER);
+
+        yield return new WaitForSeconds(Config.END_TRANSITION_DURATION);
     }
 }
