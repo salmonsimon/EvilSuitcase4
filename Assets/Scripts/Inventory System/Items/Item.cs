@@ -23,6 +23,9 @@ public class Item : MonoBehaviour, IPointerClickHandler
     protected float cellWidth;
     protected float cellHeight;
 
+    private Inventory holdingInventory;
+    public Inventory HoldingInventory { get { return holdingInventory; } set { holdingInventory = value; } }
+
 
     protected virtual void Awake()
     {
@@ -202,5 +205,9 @@ public class Item : MonoBehaviour, IPointerClickHandler
         visualTransform.SetAsFirstSibling();
     }
 
-
+    public void DiscardButton()
+    {
+        holdingInventory.DiscardCandidate = this;
+        HoldingInventory.OpenDiscardConfirmationPanel();
+    }
 }

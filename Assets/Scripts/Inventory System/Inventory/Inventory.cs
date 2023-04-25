@@ -2,6 +2,7 @@ using Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,7 @@ public class Inventory : MonoBehaviour
 {
     [Header("Inventory Configuration")]
     [SerializeField] private bool mainInventory = true;
+    [SerializeField] private GameObject discardConfirmationPanel;
 
     [Header("Grid Configuration")]
     [SerializeField] private int gridWidth = 10;
@@ -24,7 +26,15 @@ public class Inventory : MonoBehaviour
     public event EventHandler<Item> OnItemPlaced;
 
     private Grid<GridObject> grid;
-    
+
+    private Item discardCandidate;
+    public Item DiscardCandidate { get { return discardCandidate; } set { discardCandidate = value; } }
+
+    private void OnDisable()
+    {
+        discardConfirmationPanel.SetActive(false);
+        DiscardCandidate = null;
+    }
 
     private void Awake()
     {
@@ -150,6 +160,7 @@ public class Inventory : MonoBehaviour
             }
 
             OnItemPlaced?.Invoke(this, placedObject);
+            placedObject.HoldingInventory = this;
             placedObject.RotateInfoPanels();
 
             if (mainInventory)
@@ -267,5 +278,25 @@ public class Inventory : MonoBehaviour
         ItemSO itemSO = Resources.Load("Scriptable Objects/Items/" + itemType.ToString() + "/" + itemSOName) as ItemSO;
 
         return itemSO;
+    }
+
+    public void OpenDiscardConfirmationPanel()
+    {
+        TextMeshProUGUI TMPRO = discardConfirmationPanel.GetComponentInChildren<TextMeshProUGUI>();
+        TMPRO.text = TMPRO.text.Split(":")[0] + ": " + DiscardCandidate.GetItemSO().itemName;
+
+        discardConfirmationPanel.SetActive(true);
+    }
+
+    public void DiscardConfirmationButton()
+    {
+        if (DiscardCandidate)
+            DiscardCandidate.Discard();
+    }
+
+    public void CancelDiscardButton()
+    {
+        if (DiscardCandidate)
+            DiscardCandidate = null;
     }
 }

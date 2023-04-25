@@ -144,10 +144,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemSO: {fileID: 11400000, guid: 26ab243b174ae9741a221bfc192c1242, type: 2}
-  ammoTextPanel: {fileID: 8360874951315391533}
-  buttonsPanel: {fileID: 6271126123577872341}
+  ammoType: 0
   currentAmmo: 30
   maxAmmo: 50
+  ammoTextPanel: {fileID: 8360874951315391533}
+  buttonsPanel: {fileID: 6271126123577872341}
   discardButton: {fileID: 1711446001636692722}
 --- !u!114 &3722098267041639942
 MonoBehaviour:
@@ -635,7 +636,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 6530900219213045720}
         m_TargetAssemblyTypeName: Item, Assembly-CSharp
-        m_MethodName: Discard
+        m_MethodName: DiscardButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
