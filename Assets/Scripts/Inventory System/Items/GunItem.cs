@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class GunItem : EquipableItem
+public class GunItem : EquipableItem, IPointerDownHandler
 {
     [SerializeField] private AmmoType ammoType;
     public AmmoType AmmoType { get { return ammoType; } }
@@ -31,7 +31,7 @@ public class GunItem : EquipableItem
     private TextMeshProUGUI ammoText;
 
     [SerializeField] protected RectTransform ammoTextPanel;
-    [SerializeField] protected RectTransform buttonsPanel;
+    //[SerializeField] protected RectTransform buttonsPanel;
 
 
     public delegate void OnAmmoAmountChangeDelegate();
@@ -46,13 +46,16 @@ public class GunItem : EquipableItem
         UpdateAmmoText();
     }
 
+    /*
     public override void OnPointerClick(PointerEventData eventData)
     {
         if (eventData.button == PointerEventData.InputButton.Right)
         {
             buttonsPanel.gameObject.SetActive(true);
+            HoldingInventory.OpenItemButtons.Add(buttonsPanel.gameObject);
         }
     }
+    */
 
     private void UpdateAmmoText()
     {

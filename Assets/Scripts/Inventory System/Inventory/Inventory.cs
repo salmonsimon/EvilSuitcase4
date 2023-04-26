@@ -4,10 +4,11 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
 
-public class Inventory : MonoBehaviour
+public class Inventory : MonoBehaviour, IPointerDownHandler
 {
     [Header("Inventory Configuration")]
     [SerializeField] private bool mainInventory = true;
@@ -31,10 +32,15 @@ public class Inventory : MonoBehaviour
     private Item discardCandidate;
     public Item DiscardCandidate { get { return discardCandidate; } set { discardCandidate = value; } }
 
+    [SerializeField] private GameObject openItemButtonPanel;
+    public GameObject OpenItemButtonPanel { get { return openItemButtonPanel; } }
+
     private void OnDisable()
     {
         discardConfirmationPanel.SetActive(false);
         DiscardCandidate = null;
+
+        SetNewOpenButton(null);
     }
 
     private void Awake()
@@ -301,5 +307,22 @@ public class Inventory : MonoBehaviour
     {
         if (DiscardCandidate)
             DiscardCandidate = null;
+    }
+
+    public void SetNewOpenButton(GameObject newOpenButton)
+    {
+        if (OpenItemButtonPanel)
+            openItemButtonPanel.SetActive(false);
+
+        openItemButtonPanel = newOpenButton;
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        if (OpenItemButtonPanel)
+        {
+            openItemButtonPanel.SetActive(false);
+            openItemButtonPanel = null;
+        }
     }
 }

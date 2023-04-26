@@ -6,7 +6,7 @@ using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(GraphicRaycaster),  typeof(Canvas))]
-public class Item : MonoBehaviour, IPointerClickHandler
+public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
 {
     public enum Direction
     {
@@ -28,6 +28,7 @@ public class Item : MonoBehaviour, IPointerClickHandler
     private Inventory holdingInventory;
     public Inventory HoldingInventory { get { return holdingInventory; } set { holdingInventory = value; } }
 
+    [SerializeField] protected RectTransform buttonsPanel;
 
     protected virtual void Awake()
     {
@@ -92,12 +93,6 @@ public class Item : MonoBehaviour, IPointerClickHandler
     public ItemSO.ItemType GetItemType()
     {
         return itemSO.itemType;
-    }
-
-    public virtual void OnPointerClick(PointerEventData eventData)
-    {
-        if (eventData.button == PointerEventData.InputButton.Right)
-            Debug.Log("Pressed right button on " + gameObject.name + " gameobject");
     }
 
     public virtual void Discard()
@@ -211,5 +206,24 @@ public class Item : MonoBehaviour, IPointerClickHandler
     {
         holdingInventory.DiscardCandidate = this;
         HoldingInventory.OpenDiscardConfirmationPanel();
+    }
+
+    public virtual void OnPointerClick(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            buttonsPanel.gameObject.SetActive(true);
+            HoldingInventory.SetNewOpenButton(buttonsPanel.gameObject);
+        }
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        GameObject openButtonPanel = HoldingInventory.OpenItemButtonPanel;
+
+        if (openButtonPanel != buttonsPanel.gameObject)
+        {
+            HoldingInventory.SetNewOpenButton(null);
+        }
     }
 }

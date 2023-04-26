@@ -33,7 +33,7 @@ public class AmmoItem : Item
     private TextMeshProUGUI ammoText;
 
     [SerializeField] protected RectTransform ammoTextPanel;
-    [SerializeField] protected RectTransform buttonsPanel;
+    //[SerializeField] protected RectTransform buttonsPanel;
     [SerializeField] private Button discardButton;
 
 
