@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour
@@ -162,6 +163,8 @@ public class Inventory : MonoBehaviour
             OnItemPlaced?.Invoke(this, placedObject);
             placedObject.HoldingInventory = this;
             placedObject.RotateInfoPanels();
+            placedObject.GetComponent<Canvas>().overrideSorting = true;
+            placedObject.GetComponent<Canvas>().sortingOrder = 1000 - (20 * gridPositionList[0].y) - gridPositionList[0].x;
 
             if (mainInventory)
                 placedObject.AddToMainInventory();

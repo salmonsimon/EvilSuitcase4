@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(GraphicRaycaster),  typeof(Canvas))]
 public class Item : MonoBehaviour, IPointerClickHandler
 {
     public enum Direction
