@@ -46,17 +46,6 @@ public class GunItem : EquipableItem, IPointerDownHandler
         UpdateAmmoText();
     }
 
-    /*
-    public override void OnPointerClick(PointerEventData eventData)
-    {
-        if (eventData.button == PointerEventData.InputButton.Right)
-        {
-            buttonsPanel.gameObject.SetActive(true);
-            HoldingInventory.OpenItemButtons.Add(buttonsPanel.gameObject);
-        }
-    }
-    */
-
     private void UpdateAmmoText()
     {
         ammoText.text = currentAmmo.ToString();

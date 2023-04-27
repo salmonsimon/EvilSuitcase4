@@ -8591,6 +8591,8 @@ MonoBehaviour:
   - {fileID: 939435704}
   weaponContainer: {fileID: 1145774874}
   equippedWeapon: {fileID: 8068545928531174386}
+  equippedWeaponItem: {fileID: 4220394600422452821, guid: 8c4ed81e33b10c6428bdff342e8c47a9,
+    type: 3}
 --- !u!114 &1420134935
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11208,6 +11210,50 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 7759673827757796358}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1873281962 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3389977745040194054, guid: f3890981ae87f1d439ff5e165c1b3b9a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1048676499195080071}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1873281965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1873281962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+--- !u!223 &1873281966
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1873281962}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 1
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 10000
+  m_TargetDisplay: 0
 --- !u!1001 &1874265823
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13979,6 +14025,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 152545ca03808f34f852b13a7648f9fa,
         type: 2}
+    - target: {fileID: 1048676498903858876, guid: f3890981ae87f1d439ff5e165c1b3b9a,
+        type: 3}
+      propertyPath: placedObjectTypeSOList.Array.data[5]
+      value: 
+      objectReference: {fileID: 11400000, guid: 027cb4a9d34d0d34ab75ff8e44900034,
+        type: 2}
     - target: {fileID: 3389977744897820826, guid: f3890981ae87f1d439ff5e165c1b3b9a,
         type: 3}
       propertyPath: m_Pivot.x
@@ -14313,6 +14365,61 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1366940458081160734, guid: 5444c1fceaedb6440bbb11246ccb00f7,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1366940458081160734, guid: 5444c1fceaedb6440bbb11246ccb00f7,
+        type: 3}
+      propertyPath: AmmoItemListDictionary._serializedList.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1366940458081160734, guid: 5444c1fceaedb6440bbb11246ccb00f7,
+        type: 3}
+      propertyPath: AmmoItemStackDictionary._serializedList.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1366940458081160734, guid: 5444c1fceaedb6440bbb11246ccb00f7,
+        type: 3}
+      propertyPath: AmmoItemListDictionary._serializedList.Array.data[1].Key
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1366940458081160734, guid: 5444c1fceaedb6440bbb11246ccb00f7,
+        type: 3}
+      propertyPath: AmmoItemListDictionary._serializedList.Array.data[2].Key
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1366940458081160734, guid: 5444c1fceaedb6440bbb11246ccb00f7,
+        type: 3}
+      propertyPath: AmmoItemListDictionary._serializedList.Array.data[3].Key
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1366940458081160734, guid: 5444c1fceaedb6440bbb11246ccb00f7,
+        type: 3}
+      propertyPath: AmmoItemListDictionary._serializedList.Array.data[4].Key
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1366940458081160734, guid: 5444c1fceaedb6440bbb11246ccb00f7,
+        type: 3}
+      propertyPath: AmmoItemStackDictionary._serializedList.Array.data[1].Key
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1366940458081160734, guid: 5444c1fceaedb6440bbb11246ccb00f7,
+        type: 3}
+      propertyPath: AmmoItemStackDictionary._serializedList.Array.data[2].Key
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1366940458081160734, guid: 5444c1fceaedb6440bbb11246ccb00f7,
+        type: 3}
+      propertyPath: AmmoItemStackDictionary._serializedList.Array.data[3].Key
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1366940458081160734, guid: 5444c1fceaedb6440bbb11246ccb00f7,
+        type: 3}
+      propertyPath: AmmoItemStackDictionary._serializedList.Array.data[4].Key
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5444c1fceaedb6440bbb11246ccb00f7, type: 3}

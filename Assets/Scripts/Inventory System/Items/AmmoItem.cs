@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -28,14 +29,12 @@ public class AmmoItem : Item
     }
 
     [SerializeField] private int maxAmmo;
+    public int MaxAmmo { get { return maxAmmo; } }
 
 
     private TextMeshProUGUI ammoText;
 
     [SerializeField] protected RectTransform ammoTextPanel;
-    //[SerializeField] protected RectTransform buttonsPanel;
-    [SerializeField] private Button discardButton;
-
 
     public delegate void OnAmmoAmountChangeDelegate();
     public event OnAmmoAmountChangeDelegate OnAmmoAmountChange;
@@ -44,9 +43,17 @@ public class AmmoItem : Item
     {
         base.Awake();
 
-        discardButton.gameObject.SetActive(false);
+        buttonsPanel.gameObject.SetActive(false);
         ammoText = ammoTextPanel.GetComponentInChildren<TextMeshProUGUI>();
         UpdateAmmoText();
+    }
+
+    public override void RemoveFromMainInventory()
+    {
+        InventoryManager inventoryManager = GameManager.instance.GetInventoryManager();
+
+        inventoryManager.AmmoItemListDictionary[ammoType].Remove(this);
+        inventoryManager.AmmoDictionary[ammoType] -= currentAmmo;
     }
 
     public override void AddToMainInventory()
@@ -54,9 +61,51 @@ public class AmmoItem : Item
         InventoryManager inventoryManager = GameManager.instance.GetInventoryManager();
 
         if (!inventoryManager.AmmoDictionary.ContainsKey(ammoType))
+        {
             inventoryManager.AmmoDictionary.Add(ammoType, currentAmmo);
+
+            List<AmmoItem> newAmmoItemList = new List<AmmoItem>();
+            newAmmoItemList.Add(this);
+
+            inventoryManager.AmmoItemListDictionary.Add(ammoType, newAmmoItemList);
+        }
         else
+        {
             inventoryManager.AmmoDictionary[ammoType] += currentAmmo;
+
+            if (inventoryManager.AmmoItemListDictionary[ammoType].Any())
+            {
+                List<AmmoItem> inventoryAmmoItemList = inventoryManager.AmmoItemListDictionary[ammoType];
+                AmmoItem lastAmmoItemInInventoryList = inventoryAmmoItemList[inventoryAmmoItemList.Count - 1];
+
+                if (CurrentAmmo == MaxAmmo)
+                {
+                    inventoryAmmoItemList[inventoryAmmoItemList.Count - 1] = this;
+                    inventoryAmmoItemList.Add(lastAmmoItemInInventoryList);
+
+                    return;
+                }
+
+                int maxFillAmount = Mathf.Min(lastAmmoItemInInventoryList.MaxAmmo, CurrentAmmo);
+                int bulletsToFillAmmoItem = lastAmmoItemInInventoryList.MaxAmmo - lastAmmoItemInInventoryList.CurrentAmmo;
+                int fillAmount = Mathf.Min(maxFillAmount, bulletsToFillAmmoItem);
+
+                lastAmmoItemInInventoryList.CurrentAmmo += fillAmount;
+
+                inventoryAmmoItemList[inventoryAmmoItemList.Count - 1] = lastAmmoItemInInventoryList;
+
+                CurrentAmmo -= fillAmount;
+
+                if (CurrentAmmo > 0)
+                    inventoryAmmoItemList.Add(this);
+                else
+                    this.Discard();
+            }
+            else
+            {
+                inventoryManager.AmmoItemListDictionary[ammoType].Add(this);
+            }
+        }
     }
 
     public override void Discard()
@@ -65,15 +114,6 @@ public class AmmoItem : Item
         inventoryManager.AmmoDictionary[ammoType] -= currentAmmo;
 
         Destroy(gameObject);
-    }
-
-    public override void OnPointerClick(PointerEventData eventData)
-    {
-        if (eventData.button == PointerEventData.InputButton.Right)
-        {
-            discardButton.gameObject.SetActive(true);
-            discardButton.Select();
-        }
     }
 
     private void UpdateAmmoText()

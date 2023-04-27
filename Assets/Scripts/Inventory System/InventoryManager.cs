@@ -6,35 +6,33 @@ using StarterAssets;
 
 public class InventoryManager : MonoBehaviour
 {
-    #region Data
-
     [SerializeField] private int inventoryWidth;
     public int InventoryWidth { get { return inventoryWidth; }}
 
     [SerializeField] private int inventoryHeight;
     public int InventoryHeight { get { return inventoryHeight;} }
 
-    [SerializedDictionary("Ammo Type", "currentAmmo")]
+    [SerializedDictionary("Ammo Type", "Current Stocked Ammo")]
     public SerializedDictionary<AmmoType, int> AmmoDictionary;
+
+    [SerializedDictionary("Ammo Type", "Ammo Item Stack")]
+    public SerializedDictionary<AmmoType, List<AmmoItem>> AmmoItemListDictionary;
 
     [SerializeField] private List<Item> blockedItems = new List<Item>();
     public List<Item> BlockedItems { get { return blockedItems; }}
 
+    [SerializeField] private string savedInventory;
+    public string SavedInventory { get { return savedInventory; } }
+
     [SerializeField] private EquipableItem[] fastSwapWeaponArray = new EquipableItem[8];
     public EquipableItem[] FastSwapWeaponArray { get { return fastSwapWeaponArray; } set { fastSwapWeaponArray = value; OnFastSwapConfigurationChange(); } }
 
-    [SerializeField] private string savedInventory;
-    public string SavedInventory { get { return savedInventory; }}
-
-    #endregion
-
-    #region Internal Variables
+    [SerializeField] private EquipableItem equippedItem;
+    public EquipableItem EquippedItem { get { return equippedItem; } set { equippedItem = value; } }
 
     [SerializeField] private int fastSwapIndex = 0;
     [SerializeField] private List<int> fastSwapIndexes;
     [SerializeField] private int currentEquippedWeaponShortcutIndex = -1;
-
-    #endregion
 
     #region References
 

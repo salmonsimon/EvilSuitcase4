@@ -14,12 +14,11 @@ public class InventoryManualPlacement : MonoBehaviour
     public event EventHandler OnObjectPlaced;
 
     [SerializeField] private Canvas canvas = null;
-    [SerializeField] private List<ItemSO> placedObjectTypeSOList = null;
+    [SerializeField] private List<Item> testingItemPrefabs = null;
 
-    private ItemSO placedObjectTypeSO;
+    private Item selectedTestingItemPrefab;
     private Item.Direction dir;
     private Inventory inventoryTetris;
-    private RectTransform canvasRectTransform;
     private RectTransform itemContainer;
 
 #if ENABLE_INPUT_SYSTEM
@@ -43,16 +42,11 @@ public class InventoryManualPlacement : MonoBehaviour
     {
         inventoryTetris = GetComponent<Inventory>();
 
-        placedObjectTypeSO = null;
+        selectedTestingItemPrefab = null;
 
         if (canvas == null)
         {
             canvas = GetComponentInParent<Canvas>();
-        }
-
-        if (canvas != null)
-        {
-            canvasRectTransform = canvas.GetComponent<RectTransform>();
         }
 
         itemContainer = transform.Find("ItemContainer").GetComponent<RectTransform>();
@@ -63,15 +57,17 @@ public class InventoryManualPlacement : MonoBehaviour
 
     private void Update()
     {
-        // Try to place
-        //if (Input.GetMouseButtonDown(0) && placedObjectTypeSO != null)
-        if (input.click && placedObjectTypeSO != null)
+        if (input.click && selectedTestingItemPrefab != null)
         {
+            input.click = false;
+
             RectTransformUtility.ScreenPointToLocalPointInRectangle(itemContainer, input.point, null, out Vector2 anchoredPosition);
 
             Vector2Int placedObjectOrigin = inventoryTetris.GetGridPosition(anchoredPosition);
 
-            bool tryPlaceItem = inventoryTetris.TryPlaceItem(placedObjectTypeSO as ItemSO, placedObjectOrigin, dir);
+            Item newItem = Instantiate(selectedTestingItemPrefab);
+
+            bool tryPlaceItem = inventoryTetris.TryPlaceItem(newItem, placedObjectOrigin, dir);
 
             if (tryPlaceItem)
             {
@@ -85,22 +81,20 @@ public class InventoryManualPlacement : MonoBehaviour
             }
         }
 
-        //if (Input.GetKeyDown(KeyCode.R))
-        if (input.rotate && placedObjectTypeSO != null)
+        if (input.rotate && selectedTestingItemPrefab != null)
         {
             dir = Item.GetNextDirection(dir);
             input.rotate = false;
         }
 
-        if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha1)) { placedObjectTypeSO = placedObjectTypeSOList[0]; RefreshSelectedObjectType(); }
-        if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha2)) { placedObjectTypeSO = placedObjectTypeSOList[1]; RefreshSelectedObjectType(); }
-        if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha3)) { placedObjectTypeSO = placedObjectTypeSOList[2]; RefreshSelectedObjectType(); }
-        if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha4)) { placedObjectTypeSO = placedObjectTypeSOList[3]; RefreshSelectedObjectType(); }
-        if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha5)) { placedObjectTypeSO = placedObjectTypeSOList[4]; RefreshSelectedObjectType(); }
-        if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha6)) { placedObjectTypeSO = placedObjectTypeSOList[5]; RefreshSelectedObjectType(); }
-        if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha7)) { placedObjectTypeSO = placedObjectTypeSOList[6]; RefreshSelectedObjectType(); }
-
-        if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha8)) { placedObjectTypeSO = placedObjectTypeSOList[7]; RefreshSelectedObjectType(); }
+        if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha1)) { selectedTestingItemPrefab = testingItemPrefabs[0]; RefreshSelectedObjectType(); }
+        if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha2)) { selectedTestingItemPrefab = testingItemPrefabs[1]; RefreshSelectedObjectType(); }
+        if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha3)) { selectedTestingItemPrefab = testingItemPrefabs[2]; RefreshSelectedObjectType(); }
+        if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha4)) { selectedTestingItemPrefab = testingItemPrefabs[3]; RefreshSelectedObjectType(); }
+        if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha5)) { selectedTestingItemPrefab = testingItemPrefabs[4]; RefreshSelectedObjectType(); }
+        if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha6)) { selectedTestingItemPrefab = testingItemPrefabs[5]; RefreshSelectedObjectType(); }
+        if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha7)) { selectedTestingItemPrefab = testingItemPrefabs[6]; RefreshSelectedObjectType(); }
+        if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha8)) { selectedTestingItemPrefab = testingItemPrefabs[7]; RefreshSelectedObjectType(); }
         
 
         if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha0)) { DeselectObjectType(); }
@@ -108,7 +102,7 @@ public class InventoryManualPlacement : MonoBehaviour
 
     private void DeselectObjectType()
     {
-        placedObjectTypeSO = null; 
+        selectedTestingItemPrefab = null; 
         RefreshSelectedObjectType();
     }
 
@@ -122,9 +116,9 @@ public class InventoryManualPlacement : MonoBehaviour
         RectTransformUtility.ScreenPointToLocalPointInRectangle(itemContainer, input.point, null, out Vector2 anchoredPosition);
         inventoryTetris.GetGrid().GetXY(anchoredPosition, out int x, out int y);
 
-        if (placedObjectTypeSO != null)
+        if (selectedTestingItemPrefab != null)
         {
-            Vector2Int rotationOffset = Item.GetRotationOffset(dir, placedObjectTypeSO.width, placedObjectTypeSO.height);
+            Vector2Int rotationOffset = Item.GetRotationOffset(dir, selectedTestingItemPrefab.GetItemSO().width, selectedTestingItemPrefab.GetItemSO().height);
             Vector2 placedObjectCanvas = inventoryTetris.GetGrid().GetWorldPosition(x, y) + new Vector3(rotationOffset.x, rotationOffset.y) * inventoryTetris.GetGrid().GetCellSize();
             return placedObjectCanvas;
         }
@@ -136,7 +130,7 @@ public class InventoryManualPlacement : MonoBehaviour
 
     public Quaternion GetPlacedObjectRotation()
     {
-        if (placedObjectTypeSO != null)
+        if (selectedTestingItemPrefab != null)
         {
             return Quaternion.Euler(0, 0, -Item.GetRotationAngle(dir));
         }
@@ -146,8 +140,8 @@ public class InventoryManualPlacement : MonoBehaviour
         }
     }
 
-    public ItemSO GetPlacedObjectTypeSO()
+    public Item GetSelectedTestingItemPrefab()
     {
-        return placedObjectTypeSO;
+        return selectedTestingItemPrefab;
     }
 }

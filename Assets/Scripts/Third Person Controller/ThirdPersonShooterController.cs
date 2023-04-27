@@ -25,6 +25,7 @@ public class ThirdPersonShooterController : MonoBehaviour
     [Header("Weapon")]
     [SerializeField] private Transform weaponContainer;
     [SerializeField] private Weapon equippedWeapon;
+    [SerializeField] private EquipableItem equippedWeaponItem;
 
     #region Obejct References
 
@@ -66,20 +67,11 @@ public class ThirdPersonShooterController : MonoBehaviour
         playerGunAnimations = GetComponent<PlayerGunAnimations>();
 
         animator = GetComponent<Animator>();
-        EquipWeapon(equippedWeapon);
+        EquipWeapon(equippedWeapon, equippedWeaponItem);
     }
 
     private void Update()
     {
-        /*
-        if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha1)) { FindAndEquipWeapon("Pistol", false); return; }
-        if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha2)) { FindAndEquipWeapon("Machinegun", false); return; }
-        if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha3)) { FindAndEquipWeapon("Shotgun", false); return; }
-        if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha4)) { FindAndEquipWeapon("Uzi", false); return; }
-        if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha5)) { FindAndEquipWeapon("RocketLauncher", false); return; }
-        if (UnityEngine.Input.GetKeyDown(KeyCode.Alpha6)) { FindAndEquipWeapon("Crossbow", false); return; }
-        */
-
         if (starterAssetsInputs.aim && !isReloading)
         {
             aiming = true;
@@ -155,6 +147,53 @@ public class ThirdPersonShooterController : MonoBehaviour
 
             transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 20f);
         }
+    }
+
+    public void FindAndEquipWeapon(EquipableItem equipableItem)
+    {
+        string containerName = "";
+
+        if (equipableItem.GetItemSO().itemType == ItemSO.ItemType.Melee)
+            containerName = Config.MELEE_WEAPON_CONTAINER_NAME;
+        else if (equipableItem.GetItemSO().itemType == ItemSO.ItemType.Gun)
+            containerName = Config.GUN_CONTAINER_NAME;
+
+        Transform weaponTransform = weaponContainer.Find(containerName + "/" + equipableItem.GetItemSO().itemName);
+
+        if (weaponTransform && weaponTransform.TryGetComponent(out Weapon weaponToEquip))
+            EquipWeapon(weaponToEquip, equipableItem);
+    }
+
+    public void EquipWeapon(Weapon newWeapon, EquipableItem newWeaponItem)
+    {
+        ActivateNewWeapon(newWeapon);
+
+        if (IsSubclassOfRawGeneric(equippedWeapon.GetType(), typeof(Gun)))
+            GunWeaponSetup((GunItem)newWeaponItem);
+    }
+
+    private void ActivateNewWeapon(Weapon newWeapon)
+    {
+        if (equippedWeapon != null)
+            ActivateWeapon(equippedWeapon, false);
+
+        equippedWeapon = newWeapon;
+
+        ActivateWeapon(equippedWeapon, true);
+    }
+
+    private void GunWeaponSetup(GunItem newGunItem)
+    {
+        Gun equippedGun = equippedWeapon.GetComponent<Gun>();
+        equippedGun.CurrentClipAmmo = newGunItem.CurrentAmmo;
+        equippedGun.CurrentStockedAmmo = GameManager.instance.GetInventoryManager().AmmoDictionary[newGunItem.AmmoType];
+
+        this.reloadAnimationClip = equippedGun.ReloadAnimationClip;
+
+        playerGunAnimations.Setup(equippedGun);
+        GameManager.instance.GetAmmoDisplayUI().Setup(equippedGun.GunConfiguration.AmmoConfig.BulletSprite, equippedGun.CurrentClipAmmo, equippedGun.CurrentStockedAmmo);
+
+        equippedGun.SetStarterAssetsInputs(starterAssetsInputs);
     }
 
     private void ActivateWeapon(Weapon weapon, bool activate)
@@ -233,43 +272,6 @@ public class ThirdPersonShooterController : MonoBehaviour
                 }
             }
         }
-    }
-
-    public void EquipWeapon(Weapon newWeapon)
-    {
-        if (equippedWeapon != null)
-            ActivateWeapon(equippedWeapon, false);
-
-        equippedWeapon = newWeapon;
-
-        ActivateWeapon(equippedWeapon, true);
-
-        if (IsSubclassOfRawGeneric(equippedWeapon.GetType(), typeof(Gun)))
-        {
-            Gun equippedGun = equippedWeapon.GetComponent<Gun>();
-
-            reloadAnimationClip = equippedGun.ReloadAnimationClip;
-
-            playerGunAnimations.Setup(equippedGun);
-            GameManager.instance.GetAmmoDisplayUI().Setup(equippedGun.GunConfiguration.AmmoConfig.BulletSprite, equippedGun.CurrentClipAmmo, equippedGun.CurrentStockedAmmo);
-
-            equippedGun.SetStarterAssetsInputs(starterAssetsInputs);
-        }
-    }
-
-    public void FindAndEquipWeapon(string weaponName, bool isMelee)
-    {
-        string containerName = "";
-
-        if (isMelee)
-            containerName = Config.MELEE_WEAPON_CONTAINER_NAME;
-        else
-            containerName = Config.GUN_CONTAINER_NAME;
-
-        Transform weaponTransform = weaponContainer.Find(containerName + "/" + weaponName);
-
-        if (weaponTransform && weaponTransform.TryGetComponent(out Weapon weaponToEquip))
-            EquipWeapon(weaponToEquip);
     }
 
     public void PlayReloadAnimation()

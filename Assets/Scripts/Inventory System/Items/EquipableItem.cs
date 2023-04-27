@@ -15,10 +15,8 @@ public class EquipableItem : Item
 
     public void Equip()
     {
-        if (IsSubclassOfRawGeneric(this.GetType(), typeof(GunItem)))
-            GameManager.instance.GetPlayer().GetComponent<ThirdPersonShooterController>().FindAndEquipWeapon(itemSO.itemName, false);
-        else
-            GameManager.instance.GetPlayer().GetComponent<ThirdPersonShooterController>().FindAndEquipWeapon(itemSO.itemName, true);
+        GameManager.instance.GetInventoryManager().EquippedItem = this;
+        GameManager.instance.GetPlayer().GetComponent<ThirdPersonShooterController>().FindAndEquipWeapon(this);
     }
 
     public void OpenFastSwapConfigPanel()

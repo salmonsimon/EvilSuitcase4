@@ -41,11 +41,11 @@ public class Gun : Weapon
 
     protected float LastshootTime;
 
-    protected int currentClipAmmo;
-    public int CurrentClipAmmo { get { return currentClipAmmo; } }
+    [SerializeField] protected int currentClipAmmo;
+    public int CurrentClipAmmo { get { return currentClipAmmo; } set { currentClipAmmo = value; } }
 
-    protected int currentStockedAmmo;
-    public int CurrentStockedAmmo { get { return currentStockedAmmo; } }
+    [SerializeField] protected int currentStockedAmmo;
+    public int CurrentStockedAmmo { get { return currentStockedAmmo; } set { currentStockedAmmo = value; } }
 
     #endregion
 
@@ -70,9 +70,6 @@ public class Gun : Weapon
         weaponAnimations = GetComponentInChildren<GunAnimations>();
 
         LastshootTime = -gunConfiguration.ShootConfig.FireRate;
-
-        currentClipAmmo = gunConfiguration.AmmoConfig.ClipSize;
-        currentStockedAmmo = gunConfiguration.AmmoConfig.ClipSize * 5;
 
         playerThirdPersonShooterController = GameObject.FindGameObjectWithTag(Config.PLAYER_TAG).GetComponent<ThirdPersonShooterController>();
 

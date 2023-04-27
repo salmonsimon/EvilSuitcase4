@@ -7,11 +7,14 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
+using static Utils;
 
 public class Inventory : MonoBehaviour, IPointerDownHandler
 {
     [Header("Inventory Configuration")]
     [SerializeField] private bool mainInventory = true;
+    public bool MainInventory { get { return mainInventory; } }
+
     [SerializeField] private GameObject discardConfirmationPanel;
 
     [Header("Grid Configuration")]
@@ -49,7 +52,7 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
 
         backgroundPreview.gameObject.SetActive(false);
 
-        CreateBackground();
+        CreateInventoryBackground();
     }
 
     public class GridObject
@@ -117,8 +120,64 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
         return grid.IsValidGridPosition(gridPosition);
     }
 
+    public bool TryPlaceItem(Item item, Vector2Int placedObjectOrigin, Item.Direction direction)
+    {
+        int width = item.GetItemSO().width;
+        int height = item.GetItemSO().height;
 
-    public bool TryPlaceItem(ItemSO itemTetrisSO, Vector2Int placedObjectOrigin, Item.Direction direction)
+        List<Vector2Int> gridPositionList = Item.GetGridPositionList(placedObjectOrigin, direction, width, height);
+
+        bool canPlace = true;
+
+        foreach (Vector2Int gridPosition in gridPositionList)
+        {
+            bool isValidPosition = grid.IsValidGridPosition(gridPosition);
+
+            if (!isValidPosition)
+            {
+                canPlace = false;
+                break;
+            }
+
+            if (!grid.GetGridObject(gridPosition.x, gridPosition.y).CanBuild())
+            {
+                canPlace = false;
+                break;
+            }
+        }
+
+        if (canPlace)
+        {
+            Vector2Int rotationOffset = Item.GetRotationOffset(direction, width, height);
+            Vector3 placedObjectWorldPosition = grid.GetWorldPosition(placedObjectOrigin.x, placedObjectOrigin.y) + new Vector3(rotationOffset.x, rotationOffset.y) * grid.GetCellSize();
+
+            item.ItemSetup(itemContainer, placedObjectWorldPosition, placedObjectOrigin, direction);
+
+            item.transform.rotation = Quaternion.Euler(0, 0, -Item.GetRotationAngle(direction));
+
+            item.GetComponent<ItemDragDrop>().Setup(this);
+
+            foreach (Vector2Int gridPosition in gridPositionList)
+            {
+                grid.GetGridObject(gridPosition.x, gridPosition.y).SetItem(item);
+            }
+
+            OnItemPlaced?.Invoke(this, item);
+            item.HoldingInventory = this;
+            item.RotateInfoPanels();
+            item.GetComponent<Canvas>().overrideSorting = true;
+            item.GetComponent<Canvas>().sortingOrder = 1000 - (20 * gridPositionList[0].y) - gridPositionList[0].x;
+
+            if (mainInventory)
+                item.AddToMainInventory();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool TryPlaceItem2(ItemSO itemTetrisSO, Vector2Int placedObjectOrigin, Item.Direction direction)
     {
         // Test Can Build
         List<Vector2Int> gridPositionList = Item.GetGridPositionList(placedObjectOrigin, direction, itemTetrisSO.width, itemTetrisSO.height);
@@ -191,9 +250,6 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
 
         if (placedItem != null)
         {
-            // Demolish
-            placedItem.DestroySelf();
-
             List<Vector2Int> gridPositionList = placedItem.GetGridPositionList();
             foreach (Vector2Int gridPosition in gridPositionList)
             {
@@ -207,7 +263,7 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
         return itemContainer;
     }
 
-    private void CreateBackground()
+    private void CreateInventoryBackground()
     {
         Transform template = backgroundSlotTemplate;
         template.gameObject.SetActive(false);
@@ -225,6 +281,10 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
 
         background.GetComponent<RectTransform>().sizeDelta = new Vector2(GetGrid().GetWidth(), GetGrid().GetHeight()) * GetGrid().GetCellSize();
     }
+
+    #region Saving / Loading
+
+    /*
 
     [Serializable]
     public struct AddItem
@@ -272,6 +332,13 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
         return JsonUtility.ToJson(new ListAddItem { addItemList = addItemList });
     }
 
+    public ItemSO GetItemSOFromName(string itemSOName, ItemSO.ItemType itemType)
+    {
+        ItemSO itemSO = Resources.Load("Scriptable Objects/Items/" + itemType.ToString() + "/" + itemSOName) as ItemSO;
+
+        return itemSO;
+    }
+
     public void Load(string loadString)
     {
         ListAddItem listAddItem = JsonUtility.FromJson<ListAddItem>(loadString);
@@ -281,13 +348,11 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
             TryPlaceItem(GetItemSOFromName(addItem.itemSOName, addItem.itemType), addItem.gridPosition, addItem.direction);
         }
     }
+    */
 
-    public ItemSO GetItemSOFromName(string itemSOName, ItemSO.ItemType itemType)
-    {
-        ItemSO itemSO = Resources.Load("Scriptable Objects/Items/" + itemType.ToString() + "/" + itemSOName) as ItemSO;
+    #endregion
 
-        return itemSO;
-    }
+    #region Discard Item
 
     public void OpenDiscardConfirmationPanel()
     {
@@ -309,6 +374,9 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
             DiscardCandidate = null;
     }
 
+    #endregion
+
+    #region Open Item Buttons Management
     public void SetNewOpenButton(GameObject newOpenButton)
     {
         if (OpenItemButtonPanel)
@@ -325,4 +393,6 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
             openItemButtonPanel = null;
         }
     }
+
+    #endregion
 }

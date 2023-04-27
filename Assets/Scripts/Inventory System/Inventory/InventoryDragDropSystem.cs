@@ -99,6 +99,9 @@ public class InventoryDragDropSystem : MonoBehaviour
         // Remove item from its current inventory
         fromInventory.RemoveItemAt(item.GetGridPosition());
 
+        if (fromInventory.MainInventory)
+            item.RemoveFromMainInventory();
+
         Inventory toInventory = null;
 
         // Find out which InventoryTetris is under the mouse position
@@ -124,7 +127,7 @@ public class InventoryDragDropSystem : MonoBehaviour
             Vector2Int itemOrigin = toInventory.GetGridPosition(anchoredPosition);
             itemOrigin = itemOrigin - mouseDragGridPositionOffset;
 
-            bool tryPlaceItem = toInventory.TryPlaceItem(item.GetItemSO() as ItemSO, itemOrigin, direction);
+            bool tryPlaceItem = toInventory.TryPlaceItem(item, itemOrigin, direction);
 
             if (tryPlaceItem)
             {
@@ -137,7 +140,7 @@ public class InventoryDragDropSystem : MonoBehaviour
                 //FunctionTimer.Create(() => { TooltipCanvas.HideTooltip_Static(); }, 2f, "HideTooltip", true, true);
 
                 // Drop on original position
-                fromInventory.TryPlaceItem(item.GetItemSO() as ItemSO, item.GetGridPosition(), item.GetDirection());
+                fromInventory.TryPlaceItem(item, item.GetGridPosition(), item.GetDirection());
             }
         }
         else
@@ -149,7 +152,7 @@ public class InventoryDragDropSystem : MonoBehaviour
             //FunctionTimer.Create(() => { TooltipCanvas.HideTooltip_Static(); }, 2f, "HideTooltip", true, true);
 
             // Drop on original position
-            fromInventory.TryPlaceItem(item.GetItemSO() as ItemSO, item.GetGridPosition(), item.GetDirection());
+            fromInventory.TryPlaceItem(item, item.GetGridPosition(), item.GetDirection());
         }
     }
 }

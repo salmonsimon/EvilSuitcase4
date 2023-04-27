@@ -55,6 +55,17 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
         return placedItem;
     }
 
+    public void ItemSetup(Transform parent, Vector2 anchoredPosition, Vector2Int origin, Direction direction)
+    {
+        transform.SetParent(parent);
+        transform.rotation = Quaternion.Euler(0, GetRotationAngle(direction), 0);
+
+        GetComponent<RectTransform>().anchoredPosition = anchoredPosition;
+
+        this.origin = origin;
+        this.direction = direction;
+    }
+
     public Vector2Int GetGridPosition()
     {
         return origin;
@@ -101,6 +112,11 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
     }
 
     public virtual void AddToMainInventory()
+    {
+
+    }
+
+    public virtual void RemoveFromMainInventory()
     {
 
     }

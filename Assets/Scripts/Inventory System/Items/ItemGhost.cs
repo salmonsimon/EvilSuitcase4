@@ -44,7 +44,11 @@ public class ItemGhost : MonoBehaviour
             visual = null;
         }
 
-        ItemSO placedObjectTypeSO = inventoryManualPlacement.GetPlacedObjectTypeSO();
+        Item placedObject = inventoryManualPlacement.GetSelectedTestingItemPrefab();
+        ItemSO placedObjectTypeSO = null;
+
+        if (placedObject != null)
+            placedObjectTypeSO = placedObject.GetItemSO();
 
         if (placedObjectTypeSO != null)
         {
