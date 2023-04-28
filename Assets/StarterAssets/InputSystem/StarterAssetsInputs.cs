@@ -15,6 +15,7 @@ namespace StarterAssets
 		public bool aim;
         public bool shoot;
 		public bool reload;
+		public bool pause;
 
         [Header("Movement Settings")]
 		public bool analogMovement;
@@ -23,8 +24,12 @@ namespace StarterAssets
 		public bool cursorLocked = true;
 		public bool cursorInputForLook = true;
 
+		[Header("Keyboard/Mouse Only Input Values")]
+		public int weaponShortcut = -1;
+        public Vector2 scrollWheel;
+
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
-		public void OnMove(InputValue value)
+        public void OnMove(InputValue value)
 		{
 			MoveInput(value.Get<Vector2>());
 		}
@@ -62,10 +67,60 @@ namespace StarterAssets
 		{
 			ReloadInput(value.isPressed);
 		}
+
+        public void OnPause(InputValue value)
+        {
+			PauseInput(value.isPressed);
+        }
+
+		public void OnShortcut1(InputValue value)
+		{
+			ShortcutInput(value.isPressed, 0);
+		}
+
+        public void OnShortcut2(InputValue value)
+        {
+            ShortcutInput(value.isPressed, 1);
+        }
+
+        public void OnShortcut3(InputValue value)
+        {
+            ShortcutInput(value.isPressed, 2);
+        }
+
+        public void OnShortcut4(InputValue value)
+        {
+            ShortcutInput(value.isPressed, 3);
+        }
+
+        public void OnShortcut5(InputValue value)
+        {
+            ShortcutInput(value.isPressed, 4);
+        }
+
+        public void OnShortcut6(InputValue value)
+        {
+            ShortcutInput(value.isPressed, 5);
+        }
+
+        public void OnShortcut7(InputValue value)
+        {
+            ShortcutInput(value.isPressed, 6);
+        }
+
+        public void OnShortcut8(InputValue value)
+        {
+            ShortcutInput(value.isPressed, 7);
+        }
+
+		public void OnScrollWheel(InputValue value)
+		{
+            ScrollWheelInput(value.Get<Vector2>());
+        }
 #endif
 
 
-		public void MoveInput(Vector2 newMoveDirection)
+        public void MoveInput(Vector2 newMoveDirection)
 		{
 			move = newMoveDirection;
 		} 
@@ -95,17 +150,33 @@ namespace StarterAssets
             aim = newAimState;
         }
 
-		public void ReloadInput(bool newReloadState)
+        public void ReloadInput(bool newReloadState)
+        {
+            reload = newReloadState;
+        }
+
+        public void PauseInput(bool newPauseState)
+        {
+            pause = newPauseState;
+        }
+
+		public void ShortcutInput(bool newShortcutInput, int shortcutIndex)
 		{
-			reload = newReloadState;
+			if (newShortcutInput && weaponShortcut != shortcutIndex)
+				weaponShortcut = shortcutIndex;
 		}
+
+        public void ScrollWheelInput(Vector2 newScrollWheelInput)
+        {
+            scrollWheel = newScrollWheelInput;
+        }
 
         private void OnApplicationFocus(bool hasFocus)
 		{
-			SetCursorState(cursorLocked);
+			SetCursorLockState(cursorLocked);
 		}
 
-		private void SetCursorState(bool newState)
+		public void SetCursorLockState(bool newState)
 		{
 			Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
 		}

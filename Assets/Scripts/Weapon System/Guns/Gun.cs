@@ -13,6 +13,9 @@ public class Gun : Weapon
     [SerializeField] protected GunScriptableObject gunConfiguration;
     public GunScriptableObject GunConfiguration { get { return gunConfiguration; } }
 
+    [SerializeField] protected AmmoType ammoType;
+    public AmmoType AmmoType { get { return ammoType; } }
+
     #endregion
 
     #region Weapon Prefabs
@@ -41,11 +44,10 @@ public class Gun : Weapon
 
     protected float LastshootTime;
 
-    protected int currentClipAmmo;
-    public int CurrentClipAmmo { get { return currentClipAmmo; } }
+    [SerializeField] protected int currentClipAmmo;
+    public int CurrentClipAmmo { get { return currentClipAmmo; } set { currentClipAmmo = value; } }
 
-    protected int currentStockedAmmo;
-    public int CurrentStockedAmmo { get { return currentStockedAmmo; } }
+    public int CurrentStockedAmmo { get { return GameManager.instance.GetInventoryManager().StockedAmmoDictionary[ammoType]; }}
 
     #endregion
 
@@ -70,9 +72,6 @@ public class Gun : Weapon
         weaponAnimations = GetComponentInChildren<GunAnimations>();
 
         LastshootTime = -gunConfiguration.ShootConfig.FireRate;
-
-        currentClipAmmo = gunConfiguration.AmmoConfig.ClipSize;
-        currentStockedAmmo = gunConfiguration.AmmoConfig.ClipSize * 5;
 
         playerThirdPersonShooterController = GameObject.FindGameObjectWithTag(Config.PLAYER_TAG).GetComponent<ThirdPersonShooterController>();
 
@@ -111,24 +110,51 @@ public class Gun : Weapon
 
     public void Reload()
     {
-        int maxReloadAmount = Mathf.Min(gunConfiguration.AmmoConfig.ClipSize, currentStockedAmmo);
+        int maxReloadAmount = Mathf.Min(gunConfiguration.AmmoConfig.ClipSize, CurrentStockedAmmo);
         int bulletsToFillClip = gunConfiguration.AmmoConfig.ClipSize - currentClipAmmo;
         int reloadAmount = Mathf.Min(maxReloadAmount, bulletsToFillClip);
 
         currentClipAmmo += reloadAmount;
-        currentStockedAmmo -= reloadAmount;
+        GameManager.instance.GetInventoryManager().EquippedItem.GetComponent<GunItem>().CurrentAmmo+= reloadAmount;
+
+        InventoryManager inventoryManager = GameManager.instance.GetInventoryManager();
+
+        List<AmmoItem> inventoryAmmoItemList = inventoryManager.AmmoItemListDictionary[ammoType];
+
+        while (reloadAmount > 0)
+        {
+            AmmoItem lastAmmoItemInInventoryList = inventoryAmmoItemList[inventoryAmmoItemList.Count - 1];
+
+            if (reloadAmount >= lastAmmoItemInInventoryList.CurrentAmmo)
+            {
+                reloadAmount -= lastAmmoItemInInventoryList.CurrentAmmo;
+
+                inventoryAmmoItemList.Remove(lastAmmoItemInInventoryList);
+                lastAmmoItemInInventoryList.Discard();
+            }
+            else
+            {
+                inventoryManager.StockedAmmoDictionary[ammoType] -= reloadAmount;
+
+                lastAmmoItemInInventoryList.CurrentAmmo -= reloadAmount;
+
+                reloadAmount = 0;
+            }
+        }
 
         UpdateAmmoDisplayCounters();
     }
 
     public bool CanReload()
     {
-        return (currentClipAmmo < gunConfiguration.AmmoConfig.ClipSize) && (currentStockedAmmo > 0);
+        return (currentClipAmmo < gunConfiguration.AmmoConfig.ClipSize) && (CurrentStockedAmmo > 0);
     }
 
     protected virtual void SubstractClipAmmo()
     {
         currentClipAmmo--;
+        GameManager.instance.GetInventoryManager().EquippedItem.GetComponent<GunItem>().CurrentAmmo--;
+
         UpdateAmmoDisplayCounters();
     }
 

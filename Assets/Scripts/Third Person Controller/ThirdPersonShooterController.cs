@@ -24,7 +24,7 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     [Header("Weapon")]
     [SerializeField] private Transform weaponContainer;
-    [SerializeField] private Weapon equippedWeapon;
+    private Weapon equippedWeapon;
 
     #region Obejct References
 
@@ -66,7 +66,7 @@ public class ThirdPersonShooterController : MonoBehaviour
         playerGunAnimations = GetComponent<PlayerGunAnimations>();
 
         animator = GetComponent<Animator>();
-        EquipWeapon(equippedWeapon);
+        //EquipWeapon(equippedWeapon, equippedWeaponItem);
     }
 
     private void Update()
@@ -148,6 +148,52 @@ public class ThirdPersonShooterController : MonoBehaviour
         }
     }
 
+    public void FindAndEquipWeapon(EquipableItem equipableItem)
+    {
+        string containerName = "";
+
+        if (equipableItem.GetItemSO().itemType == ItemSO.ItemType.Melee)
+            containerName = Config.MELEE_WEAPON_CONTAINER_NAME;
+        else if (equipableItem.GetItemSO().itemType == ItemSO.ItemType.Gun)
+            containerName = Config.GUN_CONTAINER_NAME;
+
+        Transform weaponTransform = weaponContainer.Find(containerName + "/" + equipableItem.GetItemSO().itemName);
+
+        if (weaponTransform && weaponTransform.TryGetComponent(out Weapon weaponToEquip))
+            EquipWeapon(weaponToEquip, equipableItem);
+    }
+
+    public void EquipWeapon(Weapon newWeapon, EquipableItem newWeaponItem)
+    {
+        ActivateNewWeapon(newWeapon);
+
+        if (IsSubclassOfRawGeneric(equippedWeapon.GetType(), typeof(Gun)))
+            GunWeaponSetup((GunItem)newWeaponItem);
+    }
+
+    private void ActivateNewWeapon(Weapon newWeapon)
+    {
+        if (equippedWeapon != null)
+            ActivateWeapon(equippedWeapon, false);
+
+        equippedWeapon = newWeapon;
+
+        ActivateWeapon(equippedWeapon, true);
+    }
+
+    private void GunWeaponSetup(GunItem newGunItem)
+    {
+        Gun equippedGun = equippedWeapon.GetComponent<Gun>();
+        equippedGun.CurrentClipAmmo = newGunItem.CurrentAmmo;
+
+        reloadAnimationClip = equippedGun.ReloadAnimationClip;
+
+        playerGunAnimations.Setup(equippedGun);
+        GameManager.instance.GetAmmoDisplayUI().Setup(equippedGun.GunConfiguration.AmmoConfig.BulletSprite, equippedGun.CurrentClipAmmo);
+
+        equippedGun.SetStarterAssetsInputs(starterAssetsInputs);
+    }
+
     private void ActivateWeapon(Weapon weapon, bool activate)
     {
         string weaponName = equippedWeapon.name;
@@ -166,36 +212,63 @@ public class ThirdPersonShooterController : MonoBehaviour
         {
             Transform weaponRig = rig.transform.Find(containerName + "/" + weaponName);
             if (weaponRig)
-                weaponRig.gameObject.SetActive(activate);
+            {
+                if (weaponRig.TryGetComponent(out MultiPositionConstraint multiPositionConstraint))
+                    multiPositionConstraint.weight = activate ? 1 : 0;
+
+                if (weaponRig.TryGetComponent(out MultiParentConstraint multiParentConstraint))
+                    multiParentConstraint.weight = activate ? 1 : 0;
+
+                if (weaponRig.TryGetComponent(out MultiRotationConstraint multiRotationConstraint))
+                    multiRotationConstraint.weight = activate ? 1 : 0;
+
+                foreach (Transform child in weaponRig)
+                {
+                    if (child.TryGetComponent(out TwoBoneIKConstraint twoBoneIKConstraint))
+                        twoBoneIKConstraint.weight = activate ? 1 : 0;
+                }
+            }
         }
 
         foreach (Rig rig in aimRigs)
         {
+            if (rig.name == "Aim - Body Inclination IK")
+            {
+                Transform defaultRig = rig.transform.Find("Default");
+
+                foreach (Transform child in defaultRig)
+                    if (child.TryGetComponent(out MultiAimConstraint multiAimConstraint))
+                        multiAimConstraint.weight = activate ? 1 : 0;
+
+                continue;
+            }
+
             Transform weaponRig = rig.transform.Find(containerName + "/" + weaponName);
             if (weaponRig)
-                weaponRig.gameObject.SetActive(activate);
-        }
-    }
+            {
+                if (weaponRig.TryGetComponent(out MultiPositionConstraint multiPositionConstraint))
+                    multiPositionConstraint.weight = activate ? 1 : 0;
 
-    public void EquipWeapon(Weapon newWeapon)
-    {
-        if (equippedWeapon != null)
-            ActivateWeapon(equippedWeapon, false);
+                if (weaponRig.TryGetComponent(out MultiAimConstraint multiAimConstraint))
+                    multiAimConstraint.weight = activate ? 1 : 0;
 
-        equippedWeapon = newWeapon;
+                if (weaponRig.TryGetComponent(out MultiParentConstraint multiParentConstraint))
+                    multiParentConstraint.weight = activate ? 1 : 0;
 
-        ActivateWeapon(equippedWeapon, true);
+                foreach (Transform child in weaponRig)
+                {
+                    if (child.TryGetComponent(out MultiRotationConstraint multiRotationConstraint))
+                    {
+                        if (child.name == "Spine Rotation")
+                            multiRotationConstraint.weight = activate ? 1 : 0;
+                        else
+                            multiRotationConstraint.weight = activate ? .3f : 0;
+                    }
 
-        if (IsSubclassOfRawGeneric(equippedWeapon.GetType(), typeof(Gun)))
-        {
-            Gun equippedGun = equippedWeapon.GetComponent<Gun>();
-
-            reloadAnimationClip = equippedGun.ReloadAnimationClip;
-
-            playerGunAnimations.Setup(equippedGun);
-            GameManager.instance.GetAmmoDisplayUI().Setup(equippedGun.GunConfiguration.AmmoConfig.BulletSprite, equippedGun.CurrentClipAmmo, equippedGun.CurrentStockedAmmo);
-
-            equippedGun.SetStarterAssetsInputs(starterAssetsInputs);
+                    if (child.TryGetComponent(out TwoBoneIKConstraint twoBoneIKConstraint))
+                        twoBoneIKConstraint.weight = activate ? 1 : 0;
+                }
+            }
         }
     }
 
