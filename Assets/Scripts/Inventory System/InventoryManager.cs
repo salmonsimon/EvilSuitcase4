@@ -13,7 +13,7 @@ public class InventoryManager : MonoBehaviour
     public int InventoryHeight { get { return inventoryHeight;} }
 
     [SerializedDictionary("Ammo Type", "Current Stocked Ammo")]
-    public SerializedDictionary<AmmoType, int> AmmoDictionary;
+    public SerializedDictionary<AmmoType, int> StockedAmmoDictionary;
 
     [SerializedDictionary("Ammo Type", "Ammo Item Stack")]
     public SerializedDictionary<AmmoType, List<AmmoItem>> AmmoItemListDictionary;
@@ -31,6 +31,8 @@ public class InventoryManager : MonoBehaviour
     public EquipableItem EquippedItem { get { return equippedItem; } set { equippedItem = value; } }
 
     [SerializeField] private int fastSwapIndex = 0;
+    public int FastSwapIndex { get { return fastSwapIndex; } }
+
     [SerializeField] private List<int> fastSwapIndexes;
     [SerializeField] private int currentEquippedWeaponShortcutIndex = -1;
 
@@ -40,6 +42,14 @@ public class InventoryManager : MonoBehaviour
     private InputsUI UIInput;
 
     #endregion
+
+    public delegate void OnStockedAmmoChangeDelegate();
+    public event OnStockedAmmoChangeDelegate OnStockedAmmoChange;
+
+    public void StockedAmmoChange()
+    {
+        OnStockedAmmoChange();
+    }
 
     private void Start()
     {

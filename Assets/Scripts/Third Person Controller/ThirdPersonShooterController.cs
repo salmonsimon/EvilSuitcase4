@@ -67,7 +67,7 @@ public class ThirdPersonShooterController : MonoBehaviour
         playerGunAnimations = GetComponent<PlayerGunAnimations>();
 
         animator = GetComponent<Animator>();
-        EquipWeapon(equippedWeapon, equippedWeaponItem);
+        //EquipWeapon(equippedWeapon, equippedWeaponItem);
     }
 
     private void Update()
@@ -186,12 +186,11 @@ public class ThirdPersonShooterController : MonoBehaviour
     {
         Gun equippedGun = equippedWeapon.GetComponent<Gun>();
         equippedGun.CurrentClipAmmo = newGunItem.CurrentAmmo;
-        equippedGun.CurrentStockedAmmo = GameManager.instance.GetInventoryManager().AmmoDictionary[newGunItem.AmmoType];
 
-        this.reloadAnimationClip = equippedGun.ReloadAnimationClip;
+        reloadAnimationClip = equippedGun.ReloadAnimationClip;
 
         playerGunAnimations.Setup(equippedGun);
-        GameManager.instance.GetAmmoDisplayUI().Setup(equippedGun.GunConfiguration.AmmoConfig.BulletSprite, equippedGun.CurrentClipAmmo, equippedGun.CurrentStockedAmmo);
+        GameManager.instance.GetAmmoDisplayUI().Setup(equippedGun.GunConfiguration.AmmoConfig.BulletSprite, equippedGun.CurrentClipAmmo);
 
         equippedGun.SetStarterAssetsInputs(starterAssetsInputs);
     }

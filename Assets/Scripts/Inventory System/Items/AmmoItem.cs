@@ -53,16 +53,18 @@ public class AmmoItem : Item
         InventoryManager inventoryManager = GameManager.instance.GetInventoryManager();
 
         inventoryManager.AmmoItemListDictionary[ammoType].Remove(this);
-        inventoryManager.AmmoDictionary[ammoType] -= currentAmmo;
+
+        inventoryManager.StockedAmmoDictionary[ammoType] -= currentAmmo;
+        inventoryManager.StockedAmmoChange();
     }
 
     public override void AddToMainInventory()
     {
         InventoryManager inventoryManager = GameManager.instance.GetInventoryManager();
 
-        if (!inventoryManager.AmmoDictionary.ContainsKey(ammoType))
+        if (!inventoryManager.StockedAmmoDictionary.ContainsKey(ammoType))
         {
-            inventoryManager.AmmoDictionary.Add(ammoType, currentAmmo);
+            inventoryManager.StockedAmmoDictionary.Add(ammoType, currentAmmo);
 
             List<AmmoItem> newAmmoItemList = new List<AmmoItem>();
             newAmmoItemList.Add(this);
@@ -71,7 +73,7 @@ public class AmmoItem : Item
         }
         else
         {
-            inventoryManager.AmmoDictionary[ammoType] += currentAmmo;
+            inventoryManager.StockedAmmoDictionary[ammoType] += currentAmmo;
 
             if (inventoryManager.AmmoItemListDictionary[ammoType].Any())
             {
@@ -106,12 +108,16 @@ public class AmmoItem : Item
                 inventoryManager.AmmoItemListDictionary[ammoType].Add(this);
             }
         }
+
+        inventoryManager.StockedAmmoChange();
     }
 
     public override void Discard()
     {
         InventoryManager inventoryManager = GameManager.instance.GetInventoryManager();
-        inventoryManager.AmmoDictionary[ammoType] -= currentAmmo;
+
+        inventoryManager.StockedAmmoDictionary[ammoType] -= currentAmmo;
+        inventoryManager.StockedAmmoChange();
 
         Destroy(gameObject);
     }

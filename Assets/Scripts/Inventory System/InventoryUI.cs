@@ -28,7 +28,7 @@ public class InventoryUI : MonoBehaviour
     public void OpenAndLoadFastSwapConfigPanel()
     {
         Item[] fastSwapItems = GameManager.instance.GetInventoryManager().FastSwapWeaponArray;
-        Dictionary<AmmoType, int> ammoDictionary = GameManager.instance.GetInventoryManager().AmmoDictionary;
+        Dictionary<AmmoType, int> ammoDictionary = GameManager.instance.GetInventoryManager().StockedAmmoDictionary;
 
         for (int itemIndex = 0; itemIndex < fastSwapItems.Length; itemIndex++)
         {
@@ -69,10 +69,10 @@ public class InventoryUI : MonoBehaviour
         fastSwapConfigPanel.SetActive(true);
     }
 
-    public void OpenAndLoadFastSwapGameplayPanel(int equippedWeaponIndex)
+    public void LoadFastSwapGameplayPanel(int equippedWeaponIndex)
     {
         Item[] fastSwapItems = GameManager.instance.GetInventoryManager().FastSwapWeaponArray;
-        Dictionary<AmmoType, int> ammoDictionary = GameManager.instance.GetInventoryManager().AmmoDictionary;
+        Dictionary<AmmoType, int> ammoDictionary = GameManager.instance.GetInventoryManager().StockedAmmoDictionary;
 
         for (int itemIndex = 0; itemIndex < fastSwapItems.Length; itemIndex++)
         {
@@ -199,7 +199,7 @@ public class InventoryUI : MonoBehaviour
 
     private IEnumerator ShowFastSwapGameplayPanelCoroutine(int equippedWeaponIndex, float duration)
     {
-        OpenAndLoadFastSwapGameplayPanel(equippedWeaponIndex);
+        LoadFastSwapGameplayPanel(equippedWeaponIndex);
 
         Animator animator = fastSwapGameplayPanel.GetComponent<Animator>();
 

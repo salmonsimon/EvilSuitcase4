@@ -31,8 +31,6 @@ public class GunItem : EquipableItem, IPointerDownHandler
     private TextMeshProUGUI ammoText;
 
     [SerializeField] protected RectTransform ammoTextPanel;
-    //[SerializeField] protected RectTransform buttonsPanel;
-
 
     public delegate void OnAmmoAmountChangeDelegate();
     public event OnAmmoAmountChangeDelegate OnAmmoAmountChange;
