@@ -24,8 +24,7 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     [Header("Weapon")]
     [SerializeField] private Transform weaponContainer;
-    [SerializeField] private Weapon equippedWeapon;
-    [SerializeField] private EquipableItem equippedWeaponItem;
+    private Weapon equippedWeapon;
 
     #region Obejct References
 

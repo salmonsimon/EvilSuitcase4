@@ -78,6 +78,8 @@ public class InventoryManualPlacement : MonoBehaviour
                 // Cannot build here
                 //TooltipCanvas.ShowTooltip_Static("Cannot Build Here!");
                 //FunctionTimer.Create(() => { TooltipCanvas.HideTooltip_Static(); }, 2f, "HideTooltip", true, true);
+
+                Destroy(newItem.gameObject);
             }
         }
 

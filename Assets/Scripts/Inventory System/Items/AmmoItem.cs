@@ -141,7 +141,7 @@ public class AmmoItem : Item
                 break;
 
             case Item.Direction.Left:
-                ammoTextPanel.anchoredPosition = new Vector2(((width - 1) * cellWidth), 30);
+                ammoTextPanel.anchoredPosition = new Vector2(((width - 1) * cellWidth), ((height - 1) * cellHeight) + 30);
                 ammoTextPanel.rotation = Quaternion.Euler(0, 0, 0);
 
                 buttonsPanel.anchoredPosition = new Vector2(-30, ((height - 1) * cellHeight) + 20);
@@ -150,7 +150,7 @@ public class AmmoItem : Item
                 break;
 
             case Item.Direction.Up:
-                ammoTextPanel.anchoredPosition = new Vector2(-30, 50);
+                ammoTextPanel.anchoredPosition = new Vector2(-30, ((height - 1) * cellHeight) + 50);
                 ammoTextPanel.rotation = Quaternion.Euler(0, 0, 0);
 
                 buttonsPanel.anchoredPosition = new Vector2(-70, -30);
@@ -162,7 +162,7 @@ public class AmmoItem : Item
                 ammoTextPanel.anchoredPosition = new Vector2(-50, 20);
                 ammoTextPanel.rotation = Quaternion.Euler(0, 0, 0);
 
-                buttonsPanel.anchoredPosition = new Vector2(30, -70);
+                buttonsPanel.anchoredPosition = new Vector2(((width - 1) * cellWidth) - 20, -70);
                 buttonsPanel.rotation = Quaternion.Euler(0, 0, 0);
 
                 break;

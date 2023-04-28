@@ -63,28 +63,28 @@ public class GunItem : EquipableItem, IPointerDownHandler
                 break;
 
             case Item.Direction.Left:
-                ammoTextPanel.anchoredPosition = new Vector2(((width - 1) * cellWidth), (((height - 1) * cellHeight) * 2) - 20);
+                ammoTextPanel.anchoredPosition = new Vector2(((width - 1) * cellWidth), ((height - 1) * cellHeight) + 30);
                 ammoTextPanel.rotation = Quaternion.Euler(0, 0, 0);
 
-                buttonsPanel.anchoredPosition = new Vector2(20 - ((height - 1) * cellHeight), ((height - 1) * cellHeight) + 20);
+                buttonsPanel.anchoredPosition = new Vector2(-30, ((height - 1) * cellHeight) + 20);
                 buttonsPanel.rotation = Quaternion.Euler(0, 0, 0);
 
                 break;
 
             case Item.Direction.Up:
-                ammoTextPanel.anchoredPosition = new Vector2(20 - ((height - 1) * cellHeight), (((height - 1) * cellHeight) * 2));
+                ammoTextPanel.anchoredPosition = new Vector2(-30, ((height - 1) * cellHeight) + 50);
                 ammoTextPanel.rotation = Quaternion.Euler(0, 0, 0);
 
-                buttonsPanel.anchoredPosition = new Vector2(-(((height - 1) * cellHeight) + 20), 20 - ((height - 1) * cellHeight));
+                buttonsPanel.anchoredPosition = new Vector2(-70, -30);
                 buttonsPanel.rotation = Quaternion.Euler(0, 0, 0);
 
                 break;
 
             case Item.Direction.Right:
-                ammoTextPanel.anchoredPosition = new Vector2(-((height - 1) * cellHeight), ((height - 1) * cellHeight) - 30);
+                ammoTextPanel.anchoredPosition = new Vector2(-50, 20);
                 ammoTextPanel.rotation = Quaternion.Euler(0, 0, 0);
 
-                buttonsPanel.anchoredPosition = new Vector2(((width - 1) * cellWidth) - 20, -(((height - 1) * cellHeight) + 20));
+                buttonsPanel.anchoredPosition = new Vector2(((width - 1) * cellWidth) - 20, -70);
                 buttonsPanel.rotation = Quaternion.Euler(0, 0, 0);
 
                 break;
