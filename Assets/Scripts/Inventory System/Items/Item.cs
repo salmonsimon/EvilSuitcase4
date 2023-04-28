@@ -228,8 +228,8 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
     {
         if (eventData.button == PointerEventData.InputButton.Right)
         {
-            buttonsPanel.gameObject.SetActive(true);
             HoldingInventory.SetNewOpenButton(buttonsPanel.gameObject);
+            buttonsPanel.gameObject.SetActive(true);
         }
     }
 
