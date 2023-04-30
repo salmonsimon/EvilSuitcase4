@@ -8,8 +8,15 @@ using UnityEngine.UI;
 
 public class AmmoItem : Item
 {
+    #region Parameters
+
+    [Header("Ammo Related Information")]
     [SerializeField] private AmmoType ammoType;
     public AmmoType AmmoType { get { return ammoType; } }
+
+    #endregion
+
+    #region Variables
 
     [SerializeField] private int currentAmmo;
     public int CurrentAmmo
@@ -21,9 +28,6 @@ public class AmmoItem : Item
             {
                 currentAmmo = value;
                 UpdateAmmoText();
-
-                if (OnAmmoAmountChange != null) 
-                    OnAmmoAmountChange();
             }
         }
     }
@@ -31,13 +35,16 @@ public class AmmoItem : Item
     [SerializeField] private int maxAmmo;
     public int MaxAmmo { get { return maxAmmo; } }
 
-
     private TextMeshProUGUI ammoText;
+
+    #endregion
+
+    #region Object References
 
     [SerializeField] protected RectTransform ammoTextPanel;
 
-    public delegate void OnAmmoAmountChangeDelegate();
-    public event OnAmmoAmountChangeDelegate OnAmmoAmountChange;
+    #endregion
+
 
     protected override void Awake()
     {
@@ -47,6 +54,17 @@ public class AmmoItem : Item
         ammoText = ammoTextPanel.GetComponentInChildren<TextMeshProUGUI>();
         UpdateAmmoText();
     }
+
+    #region Getters and Setters
+
+    private void UpdateAmmoText()
+    {
+        ammoText.text = currentAmmo.ToString();
+    }
+
+    #endregion
+
+    #region Item Main Functionalities
 
     public override void RemoveFromMainInventory()
     {
@@ -122,11 +140,6 @@ public class AmmoItem : Item
         Destroy(gameObject);
     }
 
-    private void UpdateAmmoText()
-    {
-        ammoText.text = currentAmmo.ToString();
-    }
-
     public override void RotateInfoPanels()
     {
         switch (direction)
@@ -168,4 +181,6 @@ public class AmmoItem : Item
                 break;
         }
     }
+
+    #endregion
 }

@@ -1,8 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(GraphicRaycaster),  typeof(Canvas))]
@@ -16,19 +14,33 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
         Right,
     }
 
-    [SerializeField] protected ItemSO itemSO;
-    protected Direction direction;
-    protected Vector2Int origin;
+    #region Object References
+
+    [Header("Main Object References")]
+    [SerializeField] protected ItemScriptableObject itemSO;
+    [SerializeField] protected RectTransform buttonsPanel;
+
+    #endregion
+
+    #region Parameters
 
     protected float width;
     protected float height;
     protected float cellWidth;
     protected float cellHeight;
 
+    #endregion
+
+    #region Variables
+
+    protected Direction direction;
+    protected Vector2Int origin;
+
     private Inventory holdingInventory;
     public Inventory HoldingInventory { get { return holdingInventory; } set { holdingInventory = value; } }
 
-    [SerializeField] protected RectTransform buttonsPanel;
+    #endregion
+
 
     protected virtual void Awake()
     {
@@ -37,22 +49,8 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
         cellWidth = rectTransform.sizeDelta.x;
         cellHeight = rectTransform.sizeDelta.y;
 
-        width = itemSO.width;
-        height = itemSO.height;
-    }
-
-    public static Item CreateCanvas(Transform parent, Vector2 anchoredPosition, Vector2Int origin, Direction direction, ItemSO placedItemSO)
-    {
-        Transform placedObjectTransform = Instantiate(placedItemSO.prefab, parent);
-        placedObjectTransform.rotation = Quaternion.Euler(0, GetRotationAngle(direction), 0);
-        placedObjectTransform.GetComponent<RectTransform>().anchoredPosition = anchoredPosition;
-
-        Item placedItem = placedObjectTransform.GetComponent<Item>();
-        placedItem.itemSO = placedItemSO;
-        placedItem.origin = origin;
-        placedItem.direction = direction;
-
-        return placedItem;
+        width = itemSO.Width;
+        height = itemSO.Height;
     }
 
     public void ItemSetup(Transform parent, Vector2 anchoredPosition, Vector2Int origin, Direction direction)
@@ -66,6 +64,33 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
         this.direction = direction;
     }
 
+    public void CreateVisualBackgroundGrid(Transform visualParentTransform, ItemScriptableObject itemTetrisSO, float cellSize)
+    {
+        Transform visualTransform = Instantiate(itemTetrisSO.GridVisual, visualParentTransform);
+
+        Transform template = visualTransform.Find("Template");
+        template.gameObject.SetActive(false);
+
+        for (int x = 0; x < itemTetrisSO.Width; x++)
+        {
+            for (int y = 0; y < itemTetrisSO.Height; y++)
+            {
+                Transform backgroundSingleTransform = Instantiate(template, visualTransform);
+                backgroundSingleTransform.gameObject.SetActive(true);
+            }
+        }
+
+        visualTransform.GetComponent<GridLayoutGroup>().cellSize = Vector2.one * cellSize;
+
+        visualTransform.GetComponent<RectTransform>().sizeDelta = new Vector2(itemTetrisSO.Width, itemTetrisSO.Height) * cellSize;
+
+        visualTransform.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+
+        visualTransform.SetAsFirstSibling();
+    }
+
+    #region Getters and Setters
+
     public Vector2Int GetGridPosition()
     {
         return origin;
@@ -78,7 +103,7 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
 
     public List<Vector2Int> GetGridPositionList()
     {
-        return GetGridPositionList(origin, direction, itemSO.width, itemSO.height);
+        return GetGridPositionList(origin, direction, itemSO.Width, itemSO.Height);
     }
 
     public Direction GetDirection()
@@ -86,44 +111,14 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
         return direction;
     }
 
-    public virtual void DestroySelf()
-    {
-        Destroy(gameObject);
-    }
-
-    public override string ToString()
-    {
-        return itemSO.itemName;
-    }
-
-    public ItemSO GetItemSO()
+    public ItemScriptableObject GetItemSO()
     {
         return itemSO;
     }
 
-    public ItemSO.ItemType GetItemType()
+    public ItemType GetItemType()
     {
-        return itemSO.itemType;
-    }
-
-    public virtual void Discard()
-    {
-        Destroy(gameObject);
-    }
-
-    public virtual void AddToMainInventory()
-    {
-
-    }
-
-    public virtual void RemoveFromMainInventory()
-    {
-
-    }
-
-    public virtual void RotateInfoPanels()
-    {
-
+        return itemSO.ItemType;
     }
 
     public static Direction GetNextDirection(Direction direction)
@@ -192,30 +187,23 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
         return gridPositionList;
     }
 
-    public void CreateVisualGrid(Transform visualParentTransform, ItemSO itemTetrisSO, float cellSize)
+    #endregion
+
+    #region Item Main Functionalities
+
+    public virtual void AddToMainInventory()
     {
-        Transform visualTransform = Instantiate(itemTetrisSO.gridVisual, visualParentTransform);
 
-        // Create background
-        Transform template = visualTransform.Find("Template");
-        template.gameObject.SetActive(false);
+    }
 
-        for (int x = 0; x < itemTetrisSO.width; x++)
-        {
-            for (int y = 0; y < itemTetrisSO.height; y++)
-            {
-                Transform backgroundSingleTransform = Instantiate(template, visualTransform);
-                backgroundSingleTransform.gameObject.SetActive(true);
-            }
-        }
+    public virtual void RemoveFromMainInventory()
+    {
 
-        visualTransform.GetComponent<GridLayoutGroup>().cellSize = Vector2.one * cellSize;
+    }
 
-        visualTransform.GetComponent<RectTransform>().sizeDelta = new Vector2(itemTetrisSO.width, itemTetrisSO.height) * cellSize;
+    public virtual void RotateInfoPanels()
+    {
 
-        visualTransform.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
-
-        visualTransform.SetAsFirstSibling();
     }
 
     public void DiscardButton()
@@ -223,6 +211,15 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
         holdingInventory.DiscardCandidate = this;
         HoldingInventory.OpenDiscardConfirmationPanel();
     }
+
+    public virtual void Discard()
+    {
+        Destroy(gameObject);
+    }
+
+    #endregion
+
+    #region Mouse/Keyboard Input Scheme
 
     public virtual void OnPointerClick(PointerEventData eventData)
     {
@@ -242,4 +239,6 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
             HoldingInventory.SetNewOpenButton(null);
         }
     }
+
+    #endregion
 }

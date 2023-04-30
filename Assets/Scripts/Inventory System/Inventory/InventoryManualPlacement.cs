@@ -1,24 +1,19 @@
-using StarterAssets;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.UI;
-using UnityEngine.Windows;
 #endif
 
 public class InventoryManualPlacement : MonoBehaviour
 {
-    public event EventHandler OnSelectedChanged;
-    public event EventHandler OnObjectPlaced;
+    #region Object References
 
     [SerializeField] private Canvas canvas = null;
     [SerializeField] private List<Item> testingItemPrefabs = null;
 
-    private Item selectedTestingItemPrefab;
-    private Item.Direction dir;
-    private Inventory inventoryTetris;
+    private Inventory inventory;
     private RectTransform itemContainer;
 
 #if ENABLE_INPUT_SYSTEM
@@ -26,28 +21,30 @@ public class InventoryManualPlacement : MonoBehaviour
     private InputsUI input;
 #endif
 
-    private bool IsCurrentDeviceMouse
-    {
-        get
-        {
-#if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
-            return playerInput.currentControlScheme == "KeyboardMouse";
-#else
-				return false;
-#endif
-        }
-    }
+    #endregion
+
+    #region Variables
+
+    private Item selectedTestingItemPrefab;
+    private Item.Direction dir;
+
+    #endregion
+
+    #region Events
+
+    public event EventHandler OnSelectedChanged;
+    public event EventHandler OnObjectPlaced;
+
+    #endregion
 
     private void Awake()
     {
-        inventoryTetris = GetComponent<Inventory>();
+        inventory = GetComponent<Inventory>();
 
         selectedTestingItemPrefab = null;
 
         if (canvas == null)
-        {
             canvas = GetComponentInParent<Canvas>();
-        }
 
         itemContainer = transform.Find("ItemContainer").GetComponent<RectTransform>();
 
@@ -63,11 +60,11 @@ public class InventoryManualPlacement : MonoBehaviour
 
             RectTransformUtility.ScreenPointToLocalPointInRectangle(itemContainer, input.point, null, out Vector2 anchoredPosition);
 
-            Vector2Int placedObjectOrigin = inventoryTetris.GetGridPosition(anchoredPosition);
+            Vector2Int placedObjectOrigin = inventory.GetGridPosition(anchoredPosition);
 
             Item newItem = Instantiate(selectedTestingItemPrefab);
 
-            bool tryPlaceItem = inventoryTetris.TryPlaceItem(newItem, placedObjectOrigin, dir);
+            bool tryPlaceItem = inventory.TryPlaceItem(newItem, placedObjectOrigin, dir);
 
             if (tryPlaceItem)
             {
@@ -75,10 +72,6 @@ public class InventoryManualPlacement : MonoBehaviour
             }
             else
             {
-                // Cannot build here
-                //TooltipCanvas.ShowTooltip_Static("Cannot Build Here!");
-                //FunctionTimer.Create(() => { TooltipCanvas.HideTooltip_Static(); }, 2f, "HideTooltip", true, true);
-
                 Destroy(newItem.gameObject);
             }
         }
@@ -113,15 +106,17 @@ public class InventoryManualPlacement : MonoBehaviour
         OnSelectedChanged?.Invoke(this, EventArgs.Empty);
     }
 
+    #region Getters and Setters
+
     public Vector2 GetCanvasSnappedPosition()
     {
         RectTransformUtility.ScreenPointToLocalPointInRectangle(itemContainer, input.point, null, out Vector2 anchoredPosition);
-        inventoryTetris.GetGrid().GetXY(anchoredPosition, out int x, out int y);
+        inventory.GetGrid().GetXY(anchoredPosition, out int x, out int y);
 
         if (selectedTestingItemPrefab != null)
         {
-            Vector2Int rotationOffset = Item.GetRotationOffset(dir, selectedTestingItemPrefab.GetItemSO().width, selectedTestingItemPrefab.GetItemSO().height);
-            Vector2 placedObjectCanvas = inventoryTetris.GetGrid().GetWorldPosition(x, y) + new Vector3(rotationOffset.x, rotationOffset.y) * inventoryTetris.GetGrid().GetCellSize();
+            Vector2Int rotationOffset = Item.GetRotationOffset(dir, selectedTestingItemPrefab.GetItemSO().Width, selectedTestingItemPrefab.GetItemSO().Height);
+            Vector2 placedObjectCanvas = inventory.GetGrid().GetWorldPosition(x, y) + new Vector3(rotationOffset.x, rotationOffset.y) * inventory.GetGrid().GetCellSize();
             return placedObjectCanvas;
         }
         else
@@ -146,4 +141,6 @@ public class InventoryManualPlacement : MonoBehaviour
     {
         return selectedTestingItemPrefab;
     }
+
+    #endregion
 }

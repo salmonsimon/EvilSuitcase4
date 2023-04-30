@@ -10,6 +10,8 @@ using static Utils;
 
 public class InventoryUI : MonoBehaviour
 {
+    #region Object References
+
     [Header("Panel References")]
     [SerializeField] private GameObject pauseInventoryPanel;
     [SerializeField] private GameObject settingsPanel;
@@ -17,13 +19,23 @@ public class InventoryUI : MonoBehaviour
     [SerializeField] private GameObject fastSwapGameplayPanel;
     [SerializeField] private GameObject rewardsInventoryPanel;
 
+    #endregion
+
+    #region Variables
+
     [Header("Variables")]
-    [SerializeField] private EquipableItem fastSwapCandidate;
+    private EquipableItem fastSwapCandidate;
 
     private bool isGamePaused = false;
     public bool IsGamePaused { get { return isGamePaused; } }
 
-    private float fastSwapGameplayPanelShowDuration = 2f;
+    #endregion
+
+    #region Parameters
+
+    private float fastSwapGameplayPanelShowDuration = Config.FAST_SWAP_GAMEPLAY_PANEL_SHOW_DURATION;
+
+    #endregion
 
     public void OpenAndLoadFastSwapConfigPanel()
     {
@@ -46,7 +58,7 @@ public class InventoryUI : MonoBehaviour
 
             if (fastSwapItem == null) continue;
 
-            Instantiate(fastSwapItem.GetItemSO().fastSwapVisual, weaponSpriteContainer);
+            Instantiate(fastSwapItem.GetItemSO().ItemFastSwapVisual, weaponSpriteContainer);
             weaponSpriteContainer.gameObject.SetActive(true);
 
             if (IsSubclassOfRawGeneric(fastSwapItem.GetType(), typeof(GunItem)))
@@ -107,7 +119,7 @@ public class InventoryUI : MonoBehaviour
 
             if (fastSwapItem == null) continue;
 
-            Instantiate(fastSwapItem.GetItemSO().fastSwapVisual, weaponSpriteContainer);
+            Instantiate(fastSwapItem.GetItemSO().ItemFastSwapVisual, weaponSpriteContainer);
 
             weaponSpriteContainer.gameObject.SetActive(true);
 
@@ -129,6 +141,40 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
+    #region UI Animations
+
+    public void ShowFastSwapGameplayPanel(int equippedWeaponIndex)
+    {
+        StopAllCoroutines();
+        StartCoroutine(ShowFastSwapGameplayPanelCoroutine(equippedWeaponIndex, fastSwapGameplayPanelShowDuration));
+    }
+
+    private IEnumerator ShowFastSwapGameplayPanelCoroutine(int equippedWeaponIndex, float duration)
+    {
+        LoadFastSwapGameplayPanel(equippedWeaponIndex);
+
+        Animator animator = fastSwapGameplayPanel.GetComponent<Animator>();
+
+        animator.enabled = false;
+        animator.enabled = true;
+
+        if (!animator.GetCurrentAnimatorStateInfo(0).IsName("CrossfadeStart"))
+        {
+            animator.SetTrigger(Config.CROSSFADE_START_TRIGGER);
+            yield return new WaitForSeconds(Config.START_TRANSITION_DURATION);
+        }
+
+        yield return new WaitForSeconds(duration);
+
+        animator.SetTrigger(Config.CROSSFADE_END_TRIGGER);
+
+        yield return new WaitForSeconds(Config.END_TRANSITION_DURATION);
+    }
+
+    #endregion
+
+    #region Getters and Setters
+
     public void SetFastSwapCandidate(EquipableItem fastSwapCandidate)
     {
         this.fastSwapCandidate = fastSwapCandidate;
@@ -147,6 +193,10 @@ public class InventoryUI : MonoBehaviour
             fastSwapCandidate = null;
         }
     }
+
+    #endregion
+
+    #region Pause Menu Related Methods
 
     public void PauseGame()
     {
@@ -191,31 +241,5 @@ public class InventoryUI : MonoBehaviour
         GameManager.instance.ToMainMenu();
     }
 
-    public void ShowFastSwapGameplayPanel(int equippedWeaponIndex)
-    {
-        StopAllCoroutines();
-        StartCoroutine(ShowFastSwapGameplayPanelCoroutine(equippedWeaponIndex, fastSwapGameplayPanelShowDuration));
-    }
-
-    private IEnumerator ShowFastSwapGameplayPanelCoroutine(int equippedWeaponIndex, float duration)
-    {
-        LoadFastSwapGameplayPanel(equippedWeaponIndex);
-
-        Animator animator = fastSwapGameplayPanel.GetComponent<Animator>();
-
-        animator.enabled = false;
-        animator.enabled = true;
-
-        if (!animator.GetCurrentAnimatorStateInfo(0).IsName("CrossfadeStart"))
-        {
-            animator.SetTrigger(Config.CROSSFADE_START_TRIGGER);
-            yield return new WaitForSeconds(Config.START_TRANSITION_DURATION);
-        }
-
-        yield return new WaitForSeconds(duration);
-
-        animator.SetTrigger(Config.CROSSFADE_END_TRIGGER);
-
-        yield return new WaitForSeconds(Config.END_TRANSITION_DURATION);
-    }
+    #endregion
 }

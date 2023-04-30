@@ -1,10 +1,20 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Grid<TGridObject>
 {
+    #region Grid Information
+
+    private int width;
+    private int height;
+    private float cellSize;
+    private Vector3 originPosition;
+    private TGridObject[,] gridArray;
+
+    #endregion
+
+    #region Events
+
     public event EventHandler<OnGridObjectChangedEventArgs> OnGridObjectChanged;
     public class OnGridObjectChangedEventArgs : EventArgs
     {
@@ -12,11 +22,7 @@ public class Grid<TGridObject>
         public int y;
     }
 
-    private int width;
-    private int height;
-    private float cellSize;
-    private Vector3 originPosition;
-    private TGridObject[,] gridArray;
+    #endregion
 
     public Grid(int width, int height, float cellSize, Vector3 originPosition, Func<Grid<TGridObject>, int, int, TGridObject> createGridObject)
     {
@@ -35,6 +41,8 @@ public class Grid<TGridObject>
             }
         }
     }
+
+    #region Getters and Setters
 
     public int GetWidth()
     {
@@ -69,11 +77,6 @@ public class Grid<TGridObject>
             gridArray[x, y] = value;
             TriggerGridObjectChanged(x, y);
         }
-    }
-
-    public void TriggerGridObjectChanged(int x, int y)
-    {
-        OnGridObjectChanged?.Invoke(this, new OnGridObjectChangedEventArgs { x = x, y = y });
     }
 
     public void SetGridObject(Vector3 worldPosition, TGridObject value)
@@ -114,5 +117,12 @@ public class Grid<TGridObject>
         {
             return false;
         }
+    }
+
+    #endregion
+
+    public void TriggerGridObjectChanged(int x, int y)
+    {
+        OnGridObjectChanged?.Invoke(this, new OnGridObjectChangedEventArgs { x = x, y = y });
     }
 }
