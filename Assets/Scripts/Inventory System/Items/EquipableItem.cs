@@ -1,16 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using static Utils;
-
 public class EquipableItem : Item
 {
+    #region Variables
+
     protected int weaponShortcut = -1;
+
+    #endregion
 
     public override void Discard()
     {
         DiscardCurrentWeaponShortcut();
         Destroy(gameObject);
+    }
+
+    private void DiscardCurrentWeaponShortcut()
+    {
+        if (weaponShortcut >= 0)
+        {
+            EquipableItem[] newArray = GameManager.instance.GetInventoryManager().FastSwapWeaponArray;
+            newArray[weaponShortcut] = null;
+            GameManager.instance.GetInventoryManager().FastSwapWeaponArray = newArray;
+        }
     }
 
     public void Equip()
@@ -30,15 +39,5 @@ public class EquipableItem : Item
         DiscardCurrentWeaponShortcut();
 
         weaponShortcut = newWeaponShortcut;
-    }
-
-    private void DiscardCurrentWeaponShortcut()
-    {
-        if (weaponShortcut >= 0)
-        {
-            EquipableItem[] newArray = GameManager.instance.GetInventoryManager().FastSwapWeaponArray;
-            newArray[weaponShortcut] = null;
-            GameManager.instance.GetInventoryManager().FastSwapWeaponArray = newArray;
-        }
     }
 }

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using AYellowpaper.SerializedCollections;
@@ -6,24 +5,31 @@ using StarterAssets;
 
 public class InventoryManager : MonoBehaviour
 {
+    #region Inventory Configuration
+
+    [Header("Inventory Configuration")]
     [SerializeField] private int inventoryWidth;
     public int InventoryWidth { get { return inventoryWidth; }}
 
     [SerializeField] private int inventoryHeight;
     public int InventoryHeight { get { return inventoryHeight;} }
 
+    #endregion
+
+    #region Ammo Related Variables
+
+    [Header("Ammo Related Variables")]
     [SerializedDictionary("Ammo Type", "Current Stocked Ammo")]
     public SerializedDictionary<AmmoType, int> StockedAmmoDictionary;
 
     [SerializedDictionary("Ammo Type", "Ammo Item Stack")]
     public SerializedDictionary<AmmoType, List<AmmoItem>> AmmoItemListDictionary;
 
-    [SerializeField] private List<Item> blockedItems = new List<Item>();
-    public List<Item> BlockedItems { get { return blockedItems; }}
+    #endregion
 
-    [SerializeField] private string savedInventory;
-    public string SavedInventory { get { return savedInventory; } }
+    #region Weapon Fast Swap Related Variables
 
+    [Header("Weapon Fast Swap Related Variables")]
     [SerializeField] private EquipableItem[] fastSwapWeaponArray = new EquipableItem[8];
     public EquipableItem[] FastSwapWeaponArray { get { return fastSwapWeaponArray; } set { fastSwapWeaponArray = value; OnFastSwapConfigurationChange(); } }
 
@@ -36,12 +42,26 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private List<int> fastSwapIndexes;
     [SerializeField] private int currentEquippedWeaponShortcutIndex = -1;
 
-    #region References
+    #endregion
 
-    private StarterAssetsInputs playerInput;
-    private InputsUI UIInput;
+    #region Inventory Information Variables
+
+    [Header("Inventory Information Variables")]
+    [SerializeField] private List<Item> blockedItems = new List<Item>();
+    public List<Item> BlockedItems { get { return blockedItems; } }
+
+    [SerializeField] private string savedInventory;
+    public string SavedInventory { get { return savedInventory; } }
 
     #endregion
+
+    #region Object References
+
+    private StarterAssetsInputs playerInput;
+
+    #endregion
+
+    #region Events and Delegates
 
     public delegate void OnStockedAmmoChangeDelegate();
     public event OnStockedAmmoChangeDelegate OnStockedAmmoChange;
@@ -51,10 +71,11 @@ public class InventoryManager : MonoBehaviour
         OnStockedAmmoChange();
     }
 
+    #endregion
+
     private void Start()
     {
         playerInput = GameManager.instance.GetPlayer().GetComponent<StarterAssetsInputs>();
-        UIInput = GameManager.instance.GetPlayer().GetComponent<InputsUI>();
     }
 
     private void Update()
@@ -105,6 +126,8 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
+    #region Fast Swap Methods
+
     private bool HasFastSwapWeapons()
     {
         return fastSwapIndexes.Count > 0;
@@ -122,4 +145,6 @@ public class InventoryManager : MonoBehaviour
                 fastSwapIndexes.Add(weaponIndex);
         }
     }
+
+    #endregion
 }

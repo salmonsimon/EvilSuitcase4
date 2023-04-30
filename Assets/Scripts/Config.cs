@@ -42,6 +42,12 @@ public static class Config
 
     #endregion
 
+    #region Inventory
+
+    public const float FAST_SWAP_GAMEPLAY_PANEL_SHOW_DURATION = 2f;
+
+    #endregion
+
     #region Time Delays
 
     public const float SMALL_DELAY = .1f;

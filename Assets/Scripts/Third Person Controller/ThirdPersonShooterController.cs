@@ -152,12 +152,12 @@ public class ThirdPersonShooterController : MonoBehaviour
     {
         string containerName = "";
 
-        if (equipableItem.GetItemSO().itemType == ItemSO.ItemType.Melee)
+        if (equipableItem.GetItemSO().ItemType == ItemType.Melee)
             containerName = Config.MELEE_WEAPON_CONTAINER_NAME;
-        else if (equipableItem.GetItemSO().itemType == ItemSO.ItemType.Gun)
+        else if (equipableItem.GetItemSO().ItemType == ItemType.Gun)
             containerName = Config.GUN_CONTAINER_NAME;
 
-        Transform weaponTransform = weaponContainer.Find(containerName + "/" + equipableItem.GetItemSO().itemName);
+        Transform weaponTransform = weaponContainer.Find(containerName + "/" + equipableItem.GetItemSO().ItemName);
 
         if (weaponTransform && weaponTransform.TryGetComponent(out Weapon weaponToEquip))
             EquipWeapon(weaponToEquip, equipableItem);

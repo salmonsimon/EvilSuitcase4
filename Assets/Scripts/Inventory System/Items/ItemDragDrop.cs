@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -30,14 +28,9 @@ public class ItemDragDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandle
         canvasGroup.alpha = .7f;
         canvasGroup.blocksRaycasts = false;
 
-        placedObject.CreateVisualGrid(transform.GetChild(0), placedObject.GetItemSO() as ItemSO, inventoryTetris.GetGrid().GetCellSize());
+        placedObject.CreateVisualBackgroundGrid(transform.GetChild(0), placedObject.GetItemSO() as ItemScriptableObject, inventoryTetris.GetGrid().GetCellSize());
 
         GameManager.instance.GetInventoryDragDropSystem().StartedDragging(inventoryTetris, placedObject);
-    }
-
-    public void OnDrag(PointerEventData eventData)
-    {
-        //rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -46,6 +39,11 @@ public class ItemDragDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandle
         canvasGroup.blocksRaycasts = true;
 
         GameManager.instance.GetInventoryDragDropSystem().StoppedDragging(inventoryTetris, placedObject);
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+
     }
 
     public void OnPointerDown(PointerEventData eventData)

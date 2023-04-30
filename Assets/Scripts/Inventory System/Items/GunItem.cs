@@ -6,8 +6,15 @@ using UnityEngine.EventSystems;
 
 public class GunItem : EquipableItem, IPointerDownHandler
 {
+    #region Parameters
+
+    [Header("Ammo Related Information")]
     [SerializeField] private AmmoType ammoType;
     public AmmoType AmmoType { get { return ammoType; } }
+
+    #endregion
+
+    #region Variables
 
     [SerializeField] private int currentAmmo;
     public int CurrentAmmo
@@ -19,9 +26,6 @@ public class GunItem : EquipableItem, IPointerDownHandler
             {
                 currentAmmo = value;
                 UpdateAmmoText();
-
-                if (OnAmmoAmountChange != null)
-                    OnAmmoAmountChange();
             }
         }
     }
@@ -30,10 +34,13 @@ public class GunItem : EquipableItem, IPointerDownHandler
 
     private TextMeshProUGUI ammoText;
 
+    #endregion
+
+    #region Object References
+
     [SerializeField] protected RectTransform ammoTextPanel;
 
-    public delegate void OnAmmoAmountChangeDelegate();
-    public event OnAmmoAmountChangeDelegate OnAmmoAmountChange;
+    #endregion
 
     protected override void Awake()
     {
@@ -44,10 +51,16 @@ public class GunItem : EquipableItem, IPointerDownHandler
         UpdateAmmoText();
     }
 
+    #region Getters and Setters
+
     private void UpdateAmmoText()
     {
         ammoText.text = currentAmmo.ToString();
     }
+
+    #endregion
+
+    #region Item Main Functionalities
 
     public override void RotateInfoPanels()
     {
@@ -90,4 +103,6 @@ public class GunItem : EquipableItem, IPointerDownHandler
                 break;
         }
     }
+
+    #endregion
 }
