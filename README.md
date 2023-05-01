@@ -52,6 +52,13 @@ The roadmap will be split into what has already been done and what is to be deve
         One Point Spawner: 7: Done
         Multiple Point Spawner: 7: Done
         Testing: 7: Done
+        
+    section Tetris Inventory
+        RE4 Tetris Inventory Visuals: 7: Done
+        InventoryManager: 7: Done
+        Items Functionalities: 7: Done
+        Weapon Fast Swap Configuration: 7: Done
+        Weapon Fast Swap Gameplay: 7: Done
 ```
 
 ### To Do
@@ -59,9 +66,6 @@ The roadmap will be split into what has already been done and what is to be deve
 ```mermaid 
   journey
     title To Do
-        
-    section Tetris Inventory + Menu Updates
-        TBD: 1: Pending
     
     section Wave Manager
         Wave Cleared Rewards: 1: Pending
@@ -467,3 +471,55 @@ Our first zombie uses a Finite State Machine with the following states: _ZombieC
 The _Ragdoll_, _ResettingBones_ and _Standing_ states are all ragdoll based states, being the falling, getting in position and standing state respectively.
 
 As mentioned above, on top of the Finite State Machine we have a _Ragdoll System_ which will be used for hit reaction, which enables the ragdoll for a frame to check the new position of their hit body parts and then interpolates those positions with the animated positions to give a realistic feel when hit. The state of the machine will only change to ragdoll mode if certain threshold is surpassed, otherwise this system will only work on top of the FSM.
+
+## Inventory System
+
+One of the main iconic mechanincs of this game will be based on its inventory, which works like the suitcase inventory seen in Resident Evil 4 or Escape from Tarkov. The main idea of using this inventory system is to give the player more difficulty when setting their needed items for next waves of zombies all while having a set time limit. Also, to further down the difficulty we will be blocking items each wave to make it even more random and unexpected.
+
+### Inventory Manager
+
+This class is the one responsible for storing the information of the current items that we have. How much ammo of each type do we have, what weapons do we have set in fast swap shortcuts, etc.
+
+### Inventory UI
+
+This class will be the responsible of enabling/disabling all UI elements involved in this inventory system, being the pause menu (in which we can see the items we're currently holding, sort them, equip or discard items), rewards menu (open each time we finish a wave), fast swap configuration and fast swap gameplay panels.
+
+### Enums
+
+To be used across different classes related to the inventory system we will be using the following enums:
+
+- AmmoType:
+  - Ammo9mm
+  - Ammo7mm
+  - Ammo12G
+  - AmmoRocketLauncher
+  - AmmoCrossbow
+  
+- ItemType:
+  - Ammo
+  - Gun
+  - Melee
+  - Consumable
+  
+### Grid
+
+Is the main class in which Inventories are based on, defining the actual grid, positions, etc.
+
+### Inventory Visual Related Classes
+
+In this section we will briefly describe the classes involved in the visual aspect of the inventory system.
+
+- Inventory: main canvas panel of the inventory system. This is where items will be stored and placed and we can have multiple inventory panels in the game, so we will differentiate between main inventories (ones which represent our actual inventory) and non main inventories (which represent inventories containing rewards to be used)
+- InventoryDragDropSystem: as the name implies, this class has the drag and drop functionalities, checking when items are being dragged and then placed in different positions of inventories
+- InventoryManualPlacement: this class is made for testing purposes, so we can quickly test if the inventories are working correctly. Used to populate manually any inventory
+- ItemGhost: when dragging any item we will display its visual reference as a moving "ghost", and this class is responsible for that behaviour
+
+### Item Related Classes
+
+Items are the main component of our inventories, as mentioned above in the enums section we have different types of items, such as _Guns_, _Melee weapons_, _Consumables_ and _Ammo_.
+
+Constant information is stored in the ***ItemScriptableObject*** class, which holds information about the item dimensions, item type, item name and different prefabs used throught inventories.
+
+Variable information will be stored in the Item class category, for example being it current ammo, max ammo capacity, etc.
+
+Also for the drag and drop system to work properly we will attach the ItemDragDrop class to all item prefabs.
