@@ -22,6 +22,7 @@ public class Explosion : MonoBehaviour
         explosionParticleSystem.gameObject.SetActive(true);
 
         explosionParticleSystem.Play();
+        GameManager.instance.GetCinemachineShake().ShakeCamera(Config.CAMERASHAKE_EXPLOSION_AMPLITUDE, Config.CAMERASHAKE_EXPLOSION_DURATION);
     }
 
     private void OnDisable()

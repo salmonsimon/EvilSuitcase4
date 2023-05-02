@@ -96,7 +96,7 @@ public class Gun : Weapon
         }
         else
         {
-            if (CanReload())
+            if (CanReload() && playerThirdPersonShooterController.IsAbleToReload)
                 playerThirdPersonShooterController.PlayReloadAnimation();
             else
                 sfx.PlayAudioClip(gunConfiguration.AudioConfig.EmptyClip);

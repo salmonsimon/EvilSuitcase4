@@ -44,10 +44,14 @@ public class ThirdPersonShooterController : MonoBehaviour
     private bool aiming = false;
 
     private bool isReloading = false;
+    public bool IsReloading { get { return isReloading; } }
+
     private AnimationClip reloadAnimationClip = null;
     private Coroutine reloadCoroutine = null;
 
     private bool isAbleToReload = true;
+    public bool IsAbleToReload { get { return isAbleToReload; } }
+
     private Coroutine shotgunShootCoroutine = null;
 
     #endregion

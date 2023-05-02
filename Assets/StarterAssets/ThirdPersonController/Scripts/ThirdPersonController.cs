@@ -117,6 +117,8 @@ namespace StarterAssets
 
         private bool _hasAnimator;
 
+        private ThirdPersonShooterController thirdPersonShooterController;
+
         private bool IsCurrentDeviceMouse
         {
             get
@@ -157,6 +159,8 @@ namespace StarterAssets
             // reset our timeouts on start
             _jumpTimeoutDelta = JumpTimeout;
             _fallTimeoutDelta = FallTimeout;
+
+            thirdPersonShooterController = GetComponent<ThirdPersonShooterController>();
         }
 
         private void Update()
@@ -228,6 +232,9 @@ namespace StarterAssets
         {
             // set target speed based on move speed, sprint speed and if sprint is pressed
             float targetSpeed = _input.sprint && AbleToSprint ? SprintSpeed : MoveSpeed;
+
+            if (_input.aim && !thirdPersonShooterController.IsReloading) 
+                targetSpeed = 0;
 
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
