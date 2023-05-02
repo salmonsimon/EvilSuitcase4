@@ -58,6 +58,7 @@ public class InventoryManager : MonoBehaviour
     #region Object References
 
     private StarterAssetsInputs playerInput;
+    private ThirdPersonShooterController playerThirdPersonShooterController;
 
     #endregion
 
@@ -76,10 +77,14 @@ public class InventoryManager : MonoBehaviour
     private void Start()
     {
         playerInput = GameManager.instance.GetPlayer().GetComponent<StarterAssetsInputs>();
+        playerThirdPersonShooterController = GameManager.instance.GetPlayer().GetComponent<ThirdPersonShooterController>();
     }
 
     private void Update()
     {
+        if (playerThirdPersonShooterController.IsReloading || !playerThirdPersonShooterController.IsAbleToReload)
+            return;
+
         if (!GameManager.instance.GetInventoryUI().IsGamePaused && 
             HasFastSwapWeapons() && 
             playerInput.weaponShortcut > -1)
