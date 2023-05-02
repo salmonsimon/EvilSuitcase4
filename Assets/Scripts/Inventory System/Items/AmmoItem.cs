@@ -28,6 +28,7 @@ public class AmmoItem : Item
             {
                 currentAmmo = value;
                 UpdateAmmoText();
+                HoldingInventory.Save();
             }
         }
     }

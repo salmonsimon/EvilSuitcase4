@@ -208,6 +208,12 @@ public class InventoryUI : MonoBehaviour
 
         SetGamePaused(true);
 
+        InventoryManager inventoryManager = GameManager.instance.GetInventoryManager();
+        int mainInventoryWidth = inventoryManager.InventoryWidth;
+        int mainInventoryHeight = inventoryManager.InventoryHeight;
+
+        pauseInventoryPanel.GetComponent<Inventory>().InventorySetup(mainInventoryWidth, mainInventoryHeight);
+
         pauseInventoryPanel.SetActive(true);
         settingsPanel.SetActive(false);
     }

@@ -26,6 +26,7 @@ public class GunItem : EquipableItem, IPointerDownHandler
             {
                 currentAmmo = value;
                 UpdateAmmoText();
+                HoldingInventory.Save();
             }
         }
     }

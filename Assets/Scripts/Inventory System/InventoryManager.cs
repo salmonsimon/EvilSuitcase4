@@ -51,7 +51,7 @@ public class InventoryManager : MonoBehaviour
     public List<Item> BlockedItems { get { return blockedItems; } }
 
     [SerializeField] private string savedInventory;
-    public string SavedInventory { get { return savedInventory; } }
+    public string SavedInventory { get { return savedInventory; } set { savedInventory = value; } }
 
     #endregion
 
