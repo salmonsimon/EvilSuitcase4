@@ -90,17 +90,6 @@ public class HealthManager : MonoBehaviour
     protected virtual void Death()
     {
         IsAlive = false;
-
-        /*
-        foreach (Transform child in transform)
-        {
-            if (child.TryGetComponent<ParticleSystem>(out ParticleSystem particleSystem))
-                GameManager.instance.GetSurfaceManager().DisableEffect(particleSystem.gameObject);
-        }
-        */
-
-        // TO DO: DELETE THIS LATER, THIS IS FOR TESTING
-        //StartCoroutine(WaitAndDestroy());
     }
 
     private IEnumerator WaitAndDestroy(float delay = 0f)

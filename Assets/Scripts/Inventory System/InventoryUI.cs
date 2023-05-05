@@ -74,7 +74,7 @@ public class InventoryUI : MonoBehaviour
             /*
             else if (IsSubclassOfRawGeneric(fastSwapItem.GetType(), typeof(WeaponItem)))
             {
-                // Same but add durability
+                // TO DO: Same but add durability
             }
             */
 
@@ -115,7 +115,7 @@ public class InventoryUI : MonoBehaviour
                 /*
                 else if (IsSubclassOfRawGeneric(item.GetType(), typeof(WeaponItem)))
                 {
-                    // Same but add durability
+                    // TO DO: Same but add durability
                 }
                 */
 
@@ -181,7 +181,7 @@ public class InventoryUI : MonoBehaviour
             /*
             else if (IsSubclassOfRawGeneric(fastSwapItem.GetType(), typeof(WeaponItem)))
             {
-                // Same but add durability
+                // TO DO: Same but add durability
             }
             */
 
@@ -228,7 +228,7 @@ public class InventoryUI : MonoBehaviour
                 /*
                 else if (IsSubclassOfRawGeneric(item.GetType(), typeof(WeaponItem)))
                 {
-                    // Same but add durability
+                    // TO DO: Same but add durability
                 }
                 */
 

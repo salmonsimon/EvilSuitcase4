@@ -80,6 +80,7 @@ public class WaveManager : MonoBehaviour
 
     private void WaveCleared()
     {
+        // TO DO:
         // Here open the rewards inventory and all rewards obtained
     }
 

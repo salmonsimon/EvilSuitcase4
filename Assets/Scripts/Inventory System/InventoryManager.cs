@@ -93,21 +93,6 @@ public class InventoryManager : MonoBehaviour
 
     private void Update()
     {
-        // TO DO: DELETE THIS AFTER TESTING PROPERLY
-        if (playerInput.blockItems)
-        {
-            BlockRandomItems(2);
-
-            playerInput.blockItems = false;
-        }
-        else if (playerInput.unblockItems)
-        {
-            UnblockBlockedItems();
-
-            playerInput.unblockItems = false;
-        }
-        // TO DO: DELETE UNTIL HERE AFTER TESTING PROPERLY
-
         if (playerThirdPersonShooterController.IsReloading || !playerThirdPersonShooterController.IsAbleToReload)
             return;
 

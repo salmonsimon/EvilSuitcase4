@@ -70,7 +70,6 @@ public class ThirdPersonShooterController : MonoBehaviour
         playerGunAnimations = GetComponent<PlayerGunAnimations>();
 
         animator = GetComponent<Animator>();
-        //EquipWeapon(equippedWeapon, equippedWeaponItem);
     }
 
     private void Update()
