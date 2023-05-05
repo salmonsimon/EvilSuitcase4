@@ -48,13 +48,19 @@ public class HealthManager : MonoBehaviour
             if (isAlive == value) return;
 
             isAlive = value;
-            if (OnAliveStatusChange != null)
-                OnAliveStatusChange();
+
+            if (IsAlive && OnRevival != null)
+                OnRevival();
+            else if (!IsAlive && OnDeath != null)
+                OnDeath();
         }
     }
 
-    public delegate void OnAliveStatusChangeDelegate();
-    public event OnAliveStatusChangeDelegate OnAliveStatusChange;
+    public delegate void OnRevivalDelegate();
+    public event OnRevivalDelegate OnRevival;
+
+    public delegate void OnDeathDelegate();
+    public event OnDeathDelegate OnDeath;
 
     #endregion
 

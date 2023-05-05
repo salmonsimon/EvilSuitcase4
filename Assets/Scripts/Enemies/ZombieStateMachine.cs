@@ -72,7 +72,9 @@ public class ZombieStateMachine : MonoBehaviour
         currentState = stateFactory.Chase();
         currentState.EnterState();
 
-        healthManager.OnAliveStatusChange += OnAliveStatusChange;
+        healthManager.OnDeath += OnDeath;
+        healthManager.OnRevival += OnRevival;
+
         ragdollSystem.OnRagdollActivate += ActivateRagdoll;
     }
 
@@ -104,12 +106,14 @@ public class ZombieStateMachine : MonoBehaviour
         currentState.EnterState();
     }
 
-    private void OnAliveStatusChange()
+    private void OnDeath()
     {
-        if (healthManager.IsAlive)
-            ChangeState(stateFactory.Chase());
-        else
-            ChangeState(stateFactory.Dead());
+        ChangeState(stateFactory.Dead());
+    }
+
+    private void OnRevival()
+    {
+        ChangeState(stateFactory.Chase());
     }
 
     public void PopulateBoneTransforms(BoneTransform[] boneTransforms)

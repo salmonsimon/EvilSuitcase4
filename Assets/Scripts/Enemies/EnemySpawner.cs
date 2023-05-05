@@ -9,36 +9,28 @@ using UnityEngine.Pool;
 public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] private List<Transform> spawnPositions;
-    [SerializeField] private float maxDelayUntilNextSpawn = 2f;
+    [SerializeField] private float maxDelayUntilNextSpawn = 4f;
 
-    #region TO DO: CHANGE INTO WAVE MANAGER
-
-    private Dictionary<int, ObjectPool<GameObject>> ObjectPools = new();
-    private Transform poolContainer;
-
-    [SerializeField] private int enemiesToSpawn;
-    [SerializeField] private List<GameObject> enemyPrefabs;
-    [SerializeField] private List<float> enemySpawnProbabilities;
-
-    // we will pass into this one only the pool dictionary and the numer of enemies to spawn
-    // the pools themselves will be stored on the wave manager script
-
-    #endregion
-
-
-    private void Awake()
+    public void SpawnEnemies(WaveManager.WaveSpawnStruct wave)
     {
-        poolContainer = new GameObject("Pool Container").transform;
+        List<GameObject> enemyPrefabs = new List<GameObject>();
+        List<float> enemySpawnProbabilities = new List<float>();
+        
+        foreach (WaveManager.SpawnObjectStruct spawnObject in wave.SpawnObjects)
+        {
+            enemyPrefabs.Add(spawnObject.Prefab);
+            enemySpawnProbabilities.Add(spawnObject.SpawnProbability);
+        }
+
+        StartCoroutine(SpawnEnemiesCoroutine(wave.EnemiesToSpawn, enemyPrefabs, enemySpawnProbabilities));
     }
 
-    private void Start()
-    {
-        StartCoroutine(SpawnEnemiesCoroutine());
-    }
-
-    private IEnumerator SpawnEnemiesCoroutine()
+    private IEnumerator SpawnEnemiesCoroutine(int enemiesToSpawn, List<GameObject> enemyPrefabs, List<float> enemySpawnProbabilities)
     {
         int i = 0;
+
+        Dictionary<string, ObjectPool<GameObject>> objectPools = GameManager.instance.GetWaveManager().SpawnedObjectPoolsDictionary;
+        Transform poolContainer = GameManager.instance.GetWaveManager().PoolContainer;
 
         while (i < enemiesToSpawn)
         {
@@ -49,12 +41,19 @@ public class EnemySpawner : MonoBehaviour
 
             Vector3 randomSpawnPosition = GetRandomSpawnPosition().position;
 
-            if (!ObjectPools.ContainsKey(enemyIndexToSpawn))
+            string enemyToSpawnName = enemyPrefabs[enemyIndexToSpawn].name;
+
+            if (!objectPools.ContainsKey(enemyToSpawnName))
             {
-                ObjectPools.Add(enemyIndexToSpawn, new ObjectPool<GameObject>(() => Instantiate(enemyPrefabs[enemyIndexToSpawn], poolContainer)));
+                objectPools.Add(enemyToSpawnName, new ObjectPool<GameObject>(() => Instantiate(enemyPrefabs[enemyIndexToSpawn], poolContainer)));
             }
 
-            GameObject spawnedEnemy = ObjectPools[enemyIndexToSpawn].Get();
+            GameObject spawnedEnemy = objectPools[enemyToSpawnName].Get();
+
+            spawnedEnemy.GetComponent<HealthManager>().OnDeath += GameManager.instance.GetWaveManager().OnEnemyDeath;
+
+            spawnedEnemy.AddComponent<PoolableObject>();
+            spawnedEnemy.GetComponent<PoolableObject>().ObjectPool = objectPools[enemyToSpawnName];
 
             NavMeshHit Hit;
             if (NavMesh.SamplePosition(randomSpawnPosition, out Hit, 2f, -1))
@@ -68,7 +67,8 @@ public class EnemySpawner : MonoBehaviour
                 Debug.LogError($"Unable to place NavMeshAgent on NavMesh. Tried to use {randomSpawnPosition}");
             }
 
-            yield return new WaitForSeconds(Random.Range(0f, maxDelayUntilNextSpawn));
+
+            yield return new WaitForSeconds(Random.Range(1f, maxDelayUntilNextSpawn));
 
             i++;
         }
