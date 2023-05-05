@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public static class Utils
 {
@@ -49,5 +50,27 @@ public static class Utils
         }
 
         return false;
+    }
+
+    public static Item GetItemPrefabFromName(string itemSOName, ItemType itemType)
+    {
+        GameObject instantiatedPrefab = GameObject.Instantiate(Resources.Load("Prefabs/Item Prefabs/" + itemType.ToString() + "/" + itemSOName)) as GameObject;
+
+        instantiatedPrefab.TryGetComponent(out Item item);
+
+        return item;
+    }
+
+    public static void Shuffle<T>(this IList<T> list)
+    {
+        int n = list.Count;
+        while (n > 1)
+        {
+            n--;
+            int k = random.Next(n + 1);
+            T value = list[k];
+            list[k] = list[n];
+            list[n] = value;
+        }
     }
 }

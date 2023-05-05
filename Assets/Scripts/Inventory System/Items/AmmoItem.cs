@@ -28,7 +28,6 @@ public class AmmoItem : Item
             {
                 currentAmmo = value;
                 UpdateAmmoText();
-                HoldingInventory.Save();
             }
         }
     }
@@ -69,6 +68,8 @@ public class AmmoItem : Item
 
     public override void RemoveFromMainInventory()
     {
+        base.RemoveFromMainInventory();
+
         InventoryManager inventoryManager = GameManager.instance.GetInventoryManager();
 
         inventoryManager.AmmoItemListDictionary[ammoType].Remove(this);
@@ -79,6 +80,8 @@ public class AmmoItem : Item
 
     public override void AddToMainInventory()
     {
+        base.AddToMainInventory();
+
         InventoryManager inventoryManager = GameManager.instance.GetInventoryManager();
 
         if (!inventoryManager.StockedAmmoDictionary.ContainsKey(ammoType))
@@ -137,6 +140,8 @@ public class AmmoItem : Item
 
         inventoryManager.StockedAmmoDictionary[ammoType] -= currentAmmo;
         inventoryManager.StockedAmmoChange();
+
+        this.RemoveFromMainInventory();
 
         Destroy(gameObject);
     }

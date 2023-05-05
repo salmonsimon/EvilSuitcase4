@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using static Utils;
 
 [RequireComponent(typeof(GraphicRaycaster),  typeof(Canvas))]
 public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
@@ -20,6 +21,8 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
     [SerializeField] protected ItemScriptableObject itemSO;
     [SerializeField] protected RectTransform buttonsPanel;
 
+    protected GameObject blockedPanel;
+
     #endregion
 
     #region Parameters
@@ -36,8 +39,11 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
     protected Direction direction;
     protected Vector2Int origin;
 
-    private Inventory holdingInventory;
+    protected Inventory holdingInventory;
     public Inventory HoldingInventory { get { return holdingInventory; } set { holdingInventory = value; } }
+
+    protected bool isBlocked;
+    public bool IsBlocked { get { return isBlocked; } set { isBlocked = value; } }
 
     #endregion
 
@@ -51,6 +57,17 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
 
         width = itemSO.Width;
         height = itemSO.Height;
+
+        blockedPanel = transform.Find("Blocked Panel").gameObject;
+        blockedPanel.SetActive(false);
+    }
+
+    protected void OnEnable()
+    {
+        if (IsBlocked)
+            blockedPanel.SetActive(true);
+        else
+            blockedPanel.SetActive(false);
     }
 
     public void ItemSetup(Transform parent, Vector2 anchoredPosition, Vector2Int origin, Direction direction)
@@ -193,12 +210,12 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
 
     public virtual void AddToMainInventory()
     {
-
+        GameManager.instance.GetInventoryManager().SavedItems.Add(this);
     }
 
     public virtual void RemoveFromMainInventory()
     {
-
+        GameManager.instance.GetInventoryManager().SavedItems.Remove(this);
     }
 
     public virtual void RotateInfoPanels()
@@ -217,13 +234,61 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
         Destroy(gameObject);
     }
 
+    public virtual void BlockItem()
+    {
+        isBlocked = true;
+
+        blockedPanel.SetActive(true);
+
+        if (IsSubclassOfRawGeneric(GetType(), typeof(EquipableItem)))
+        {
+            EquipableItem equipableItem = GetComponent<EquipableItem>();
+            equipableItem.DiscardCurrentWeaponShortcut(true);
+
+            EquipableItem currentEquipedItem = GameManager.instance.GetInventoryManager().EquippedItem;
+
+            if (currentEquipedItem && currentEquipedItem.Equals(equipableItem))
+                equipableItem.Unequip();
+        }
+        else if (IsSubclassOfRawGeneric(GetType(), typeof(AmmoItem)))
+        {
+            AmmoItem ammoItem = GetComponent<AmmoItem>();
+            ammoItem.RemoveFromMainInventory();
+        }
+    }
+
+    public virtual void UnblockItem()
+    {
+        isBlocked = false;
+
+        blockedPanel.SetActive(false);
+
+        if (IsSubclassOfRawGeneric(GetType(), typeof(EquipableItem)))
+        {
+            EquipableItem equipableItem = GetComponent<EquipableItem>();
+            int weaponShortcut = equipableItem.WeaponShortcut;
+
+            if (weaponShortcut >= 0)
+            {
+                GameManager.instance.GetInventoryUI().SetFastSwapCandidate(equipableItem);
+                GameManager.instance.GetInventoryUI().SetFastSwapWeapon(weaponShortcut);
+            }
+            
+        }
+        else if (IsSubclassOfRawGeneric(GetType(), typeof(AmmoItem)))
+        {
+            AmmoItem ammoItem = GetComponent<AmmoItem>();
+            ammoItem.AddToMainInventory();
+        }
+    }
+
     #endregion
 
     #region Mouse/Keyboard Input Scheme
 
     public virtual void OnPointerClick(PointerEventData eventData)
     {
-        if (eventData.button == PointerEventData.InputButton.Right)
+        if (eventData.button == PointerEventData.InputButton.Right && !IsBlocked)
         {
             HoldingInventory.SetNewOpenButton(buttonsPanel.gameObject);
             buttonsPanel.gameObject.SetActive(true);

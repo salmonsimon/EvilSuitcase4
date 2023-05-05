@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using static Utils;
 
 public class Inventory : MonoBehaviour, IPointerDownHandler
 {
@@ -53,8 +54,8 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
 
     private void OnEnable()
     {
-        // here charge inventory if main inventory
-        // (charge from saved inventory in inventory manager)
+        if (MainInventory)
+            LoadInventory();
     }
 
     private void OnDisable()
@@ -63,6 +64,9 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
         DiscardCandidate = null;
 
         SetNewOpenButton(null);
+
+        if (MainInventory)
+            SaveInventory();
     }
 
     private void Awake()
@@ -135,8 +139,6 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
         GetComponent<RectTransform>().pivot = new Vector2((gridWidth * cellSize / 2), (gridHeight * cellSize / 2));
 
         CreateInventoryBackground();
-
-        Load(GameManager.instance.GetInventoryManager().SavedInventory);
     }
 
     public Grid<GridObject> GetGrid()
@@ -213,10 +215,7 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
             item.GetComponent<Canvas>().sortingOrder = 1000 - (20 * gridPositionList[0].y) - gridPositionList[0].x;
 
             if (mainInventory && !loadingInventory)
-            {
                 item.AddToMainInventory();
-                GameManager.instance.GetInventoryManager().SavedInventory = Save();
-            }
 
             return true;
         }
@@ -284,7 +283,6 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
         if (DiscardCandidate)
         {
             DiscardCandidate.Discard();
-            Save();
         }
     }
 
@@ -318,27 +316,20 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
 
     #region Saving / Loading (WIP)
 
-    [Serializable]
-    public struct AddItem
+    public void LoadInventory()
     {
-        public string itemName;
-        public ItemType itemType;
-        public Vector2Int gridPosition;
-        public Item.Direction direction;
-        public int currentAmmo;
-        public int currentDurability;
+        List<Item> savedItems = GameManager.instance.GetInventoryManager().SavedItems;
+        List<Item> blockedItems = GameManager.instance.GetInventoryManager().BlockedItems;
+
+        foreach (Item item in savedItems)
+            TryPlaceItem(item, item.GetGridPosition(), item.GetDirection(), true);
+
+        foreach (Item item in blockedItems)
+            TryPlaceItem(item, item.GetGridPosition(), item.GetDirection(), true);
     }
 
-    [Serializable]
-    public struct ListAddItem
+    public void SaveInventory()
     {
-        public List<AddItem> addItemList;
-    }
-
-    public string Save()
-    {
-        Debug.Log("Saving inventory");
-
         List<Item> itemList = new List<Item>();
         for (int x = 0; x < grid.GetWidth(); x++)
         {
@@ -352,66 +343,8 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
             }
         }
 
-        List<AddItem> addItemList = new List<AddItem>();
         foreach (Item item in itemList)
-        {
-            int currentAmmo = 0;
-            int currentDurability = 0;
-
-            if (item.TryGetComponent(out GunItem gunItem))
-                currentAmmo = gunItem.CurrentAmmo;
-            else if (item.TryGetComponent(out AmmoItem ammoItem))
-                currentAmmo = ammoItem.CurrentAmmo;
-            //else if (item.TryGetComponent(out MeleeItem meleeItem))
-                // currentDurability = meleeItem.CurrentDurability;
-
-            addItemList.Add(new AddItem
-            {
-                direction = item.GetDirection(),
-                gridPosition = item.GetGridPosition(),
-                itemName = (item.GetItemSO() as ItemScriptableObject).name,
-                itemType = item.GetItemType(),
-                currentAmmo = currentAmmo,
-                currentDurability = currentDurability
-            });
-
-        }
-
-        return JsonUtility.ToJson(new ListAddItem { addItemList = addItemList });
-    }
-
-    public Item GetItemPrefabFromName(string itemSOName, ItemType itemType)
-    {
-        GameObject instantiatedPrefab = Instantiate(Resources.Load("Scriptable Objects/Item Prefabs/" + itemType.ToString() + "/" + itemSOName)) as GameObject;
-
-        instantiatedPrefab.TryGetComponent(out Item item);
-
-        return item;
-    }
-
-    public void Load(string loadString)
-    {
-        if (string.IsNullOrEmpty(loadString))
-            return;
-
-        foreach (Transform child in itemContainer)
-            Destroy(child.gameObject);
-
-        ListAddItem listAddItem = JsonUtility.FromJson<ListAddItem>(loadString);
-
-        foreach (AddItem addItem in listAddItem.addItemList)
-        {
-            Item itemToPlace = GetItemPrefabFromName(addItem.itemName, addItem.itemType);
-
-            if (itemToPlace.TryGetComponent(out GunItem gunItem))
-                itemToPlace.GetComponent<GunItem>().CurrentAmmo = addItem.currentAmmo;
-            else if (itemToPlace.TryGetComponent(out AmmoItem ammoItem))
-                itemToPlace.GetComponent<AmmoItem>().CurrentAmmo = addItem.currentAmmo;
-            //else if (itemToPlace.TryGetComponent(out MeleeItem meleeItem))
-            // itemToPlace.GetComponent<MeleeItem>().currentDurability = addItem.currentDurability;
-
-            TryPlaceItem(itemToPlace, addItem.gridPosition, addItem.direction, true);
-        }
+            item.transform.SetParent(GameManager.instance.GetInventoryManager().ItemContainer.transform);
     }
 
     #endregion

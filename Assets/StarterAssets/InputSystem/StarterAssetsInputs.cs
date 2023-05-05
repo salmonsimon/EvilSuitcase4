@@ -28,6 +28,10 @@ namespace StarterAssets
 		public int weaponShortcut = -1;
         public Vector2 scrollWheel;
 
+		[Header("For Testing, to delete afterwards")]
+		public bool blockItems;
+		public bool unblockItems;
+
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
         public void OnMove(InputValue value)
 		{
@@ -117,8 +121,26 @@ namespace StarterAssets
 		{
             ScrollWheelInput(value.Get<Vector2>());
         }
-#endif
 
+        public void OnBlockItems(InputValue value)
+        {
+            BlockItemsInput(value.isPressed);
+        }
+
+        public void OnUnblockItems(InputValue value)
+        {
+            UnblockItemsInput(value.isPressed);
+        }
+#endif
+        public void BlockItemsInput(bool newBlockItemsState)
+        {
+            blockItems = newBlockItemsState;
+        }
+
+        public void UnblockItemsInput(bool newUnblockItemsState)
+        {
+            unblockItems = newUnblockItemsState;
+        }
 
         public void MoveInput(Vector2 newMoveDirection)
 		{

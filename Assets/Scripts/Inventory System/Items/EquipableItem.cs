@@ -1,8 +1,11 @@
+using UnityEngine;
+
 public class EquipableItem : Item
 {
     #region Variables
 
-    protected int weaponShortcut = -1;
+    [SerializeField] protected int weaponShortcut = -1;
+    public int WeaponShortcut { get { return weaponShortcut; } }
 
     #endregion
 
@@ -12,7 +15,7 @@ public class EquipableItem : Item
         Destroy(gameObject);
     }
 
-    private void DiscardCurrentWeaponShortcut()
+    public void DiscardCurrentWeaponShortcut(bool saveWeaponShortcut = false)
     {
         if (weaponShortcut >= 0)
         {
@@ -20,12 +23,22 @@ public class EquipableItem : Item
             newArray[weaponShortcut] = null;
             GameManager.instance.GetInventoryManager().FastSwapWeaponArray = newArray;
         }
+
+        if (!saveWeaponShortcut)
+            weaponShortcut = -1;
     }
 
     public void Equip()
     {
         GameManager.instance.GetInventoryManager().EquippedItem = this;
         GameManager.instance.GetPlayer().GetComponent<ThirdPersonShooterController>().FindAndEquipWeapon(this);
+    }
+
+    public void Unequip()
+    {
+        GameManager.instance.GetInventoryManager().EquippedItem = null;
+        GameManager.instance.GetPlayer().GetComponent<ThirdPersonShooterController>().UnequipWeapon();
+        GameManager.instance.GetInventoryManager().CurrentEquippedWeaponShortcutIndex = -1;
     }
 
     public void OpenFastSwapConfigPanel()

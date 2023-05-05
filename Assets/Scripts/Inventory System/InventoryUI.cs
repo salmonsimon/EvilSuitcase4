@@ -1,6 +1,7 @@
 using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -76,6 +77,51 @@ public class InventoryUI : MonoBehaviour
                 // Same but add durability
             }
             */
+
+            GameObject blockedPanel = itemPanel.Find("Blocked Panel").gameObject;
+            blockedPanel.SetActive(false);
+        }
+
+        List<Item> blockedItems = GameManager.instance.GetInventoryManager().BlockedItems;
+
+        foreach (Item item in blockedItems)
+        {
+            if (item.TryGetComponent(out EquipableItem equipableItem) && equipableItem.WeaponShortcut >= 0)
+            {
+                int weaponShortcut = equipableItem.WeaponShortcut;
+
+                Transform itemPanel = fastSwapConfigPanel.transform.GetChild(weaponShortcut);
+
+                Transform weaponSpriteContainer = itemPanel.Find("Weapon Sprite");
+
+                foreach (Transform child in weaponSpriteContainer)
+                    Destroy(child.gameObject);
+
+                TextMeshProUGUI TMPRO = itemPanel.GetComponentInChildren<TextMeshProUGUI>(true);
+                TMPRO.gameObject.SetActive(false);
+
+                Instantiate(item.GetItemSO().ItemFastSwapVisual, weaponSpriteContainer);
+                weaponSpriteContainer.gameObject.SetActive(true);
+
+                if (IsSubclassOfRawGeneric(item.GetType(), typeof(GunItem)))
+                {
+                    GunItem gunItem = (GunItem)item;
+
+                    string ammoText = gunItem.CurrentAmmo + "/" + ammoDictionary[gunItem.AmmoType];
+
+                    TMPRO.text = ammoText;
+                    TMPRO.gameObject.SetActive(true);
+                }
+                /*
+                else if (IsSubclassOfRawGeneric(item.GetType(), typeof(WeaponItem)))
+                {
+                    // Same but add durability
+                }
+                */
+
+                GameObject blockedPanel = itemPanel.Find("Blocked Panel").gameObject;
+                blockedPanel.SetActive(true);
+            }
         }
 
         fastSwapConfigPanel.SetActive(true);
@@ -138,6 +184,57 @@ public class InventoryUI : MonoBehaviour
                 // Same but add durability
             }
             */
+
+            GameObject blockedPanel = itemPanel.Find("Blocked Panel").gameObject;
+            blockedPanel.SetActive(false);
+        }
+
+        List<Item> blockedItems = GameManager.instance.GetInventoryManager().BlockedItems;
+
+        foreach (Item item in blockedItems)
+        {
+            if (item.TryGetComponent(out EquipableItem equipableItem) && equipableItem.WeaponShortcut >= 0)
+            {
+                int weaponShortcut = equipableItem.WeaponShortcut;
+
+                Transform itemPanel = fastSwapGameplayPanel.transform.GetChild(weaponShortcut);
+
+                Transform weaponSpriteContainer = itemPanel.Find("Weapon Sprite");
+
+                foreach (Transform child in weaponSpriteContainer)
+                    Destroy(child.gameObject);
+
+                TextMeshProUGUI TMPRO = itemPanel.GetComponentInChildren<TextMeshProUGUI>(true);
+                TMPRO.gameObject.SetActive(false);
+
+                Image panel = itemPanel.GetComponentInChildren<Image>();
+                Color nonEquippedWeaponColor = Color.black;
+                nonEquippedWeaponColor.a = .3f;
+
+                panel.color = nonEquippedWeaponColor;
+
+                Instantiate(item.GetItemSO().ItemFastSwapVisual, weaponSpriteContainer);
+                weaponSpriteContainer.gameObject.SetActive(true);
+
+                if (IsSubclassOfRawGeneric(item.GetType(), typeof(GunItem)))
+                {
+                    GunItem gunItem = (GunItem)item;
+
+                    string ammoText = gunItem.CurrentAmmo + "/" + ammoDictionary[gunItem.AmmoType];
+
+                    TMPRO.text = ammoText;
+                    TMPRO.gameObject.SetActive(true);
+                }
+                /*
+                else if (IsSubclassOfRawGeneric(item.GetType(), typeof(WeaponItem)))
+                {
+                    // Same but add durability
+                }
+                */
+
+                GameObject blockedPanel = itemPanel.Find("Blocked Panel").gameObject;
+                blockedPanel.SetActive(true);
+            }
         }
     }
 
@@ -182,11 +279,23 @@ public class InventoryUI : MonoBehaviour
 
     public void SetFastSwapWeapon(int fastSwapIndex)
     {
+        EquipableItem[] currentFastSwapWeaponArray = GameManager.instance.GetInventoryManager().FastSwapWeaponArray;
+        List<Item> blockedItems = GameManager.instance.GetInventoryManager().BlockedItems;
+
+        if (currentFastSwapWeaponArray[fastSwapIndex] != null)
+            currentFastSwapWeaponArray[fastSwapIndex].SetWeaponShortcut(-1);
+
+        foreach (Item blockedItem in blockedItems)
+        {
+            if (blockedItem.TryGetComponent(out EquipableItem equipableItem) && equipableItem.WeaponShortcut == fastSwapIndex)
+                equipableItem.SetWeaponShortcut(-1);
+        }
+
         if (fastSwapCandidate)
         {
             fastSwapCandidate.SetWeaponShortcut(fastSwapIndex);
 
-            EquipableItem[] newArray = GameManager.instance.GetInventoryManager().FastSwapWeaponArray;
+            EquipableItem[] newArray = currentFastSwapWeaponArray;
             newArray[fastSwapIndex] = fastSwapCandidate;
             GameManager.instance.GetInventoryManager().FastSwapWeaponArray = newArray;
 

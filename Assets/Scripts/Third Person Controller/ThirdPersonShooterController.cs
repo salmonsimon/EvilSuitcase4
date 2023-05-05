@@ -152,6 +152,12 @@ public class ThirdPersonShooterController : MonoBehaviour
         }
     }
 
+    public void UnequipWeapon()
+    {
+        ActivateWeapon(equippedWeapon, false);
+        equippedWeapon = null;
+    }
+
     public void FindAndEquipWeapon(EquipableItem equipableItem)
     {
         string containerName = "";
