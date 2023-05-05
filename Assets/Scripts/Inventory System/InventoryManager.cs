@@ -2,6 +2,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using AYellowpaper.SerializedCollections;
 using StarterAssets;
+using static Inventory;
+using static Utils;
+using static UnityEditor.Timeline.Actions.MenuPriority;
+using System.Linq;
+using System.Collections.Concurrent;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -40,18 +45,21 @@ public class InventoryManager : MonoBehaviour
     public int FastSwapIndex { get { return fastSwapIndex; } }
 
     [SerializeField] private List<int> fastSwapIndexes;
+
     [SerializeField] private int currentEquippedWeaponShortcutIndex = -1;
+    public int CurrentEquippedWeaponShortcutIndex { get { return currentEquippedWeaponShortcutIndex; } set { currentEquippedWeaponShortcutIndex = value; } }
 
     #endregion
 
     #region Inventory Information Variables
 
     [Header("Inventory Information Variables")]
-    [SerializeField] private List<Item> blockedItems = new List<Item>();
+
+    private List<Item> blockedItems = new List<Item>();
     public List<Item> BlockedItems { get { return blockedItems; } }
 
-    [SerializeField] private string savedInventory;
-    public string SavedInventory { get { return savedInventory; } }
+    [SerializeField] private List<Item> savedItems = new List<Item>();
+    public List<Item> SavedItems { get { return savedItems; } set { savedItems = value; } }
 
     #endregion
 
@@ -60,6 +68,9 @@ public class InventoryManager : MonoBehaviour
     private StarterAssetsInputs playerInput;
     private ThirdPersonShooterController playerThirdPersonShooterController;
 
+    [SerializeField] private GameObject itemContainer;
+    public GameObject ItemContainer { get { return itemContainer; } }
+ 
     #endregion
 
     #region Events and Delegates
@@ -149,6 +160,44 @@ public class InventoryManager : MonoBehaviour
             if (fastSwapWeapon)
                 fastSwapIndexes.Add(weaponIndex);
         }
+    }
+
+    #endregion
+
+    #region Item Blocking Methods
+
+    public void BlockRandomItems(int itemsToBlock)
+    {
+        List<int> randomIndexList = Enumerable.Range(0, SavedItems.Count).ToList();
+        randomIndexList.Shuffle();
+
+        if (itemsToBlock > SavedItems.Count)
+            itemsToBlock = SavedItems.Count;
+
+        int i = 0;
+
+        while (itemsToBlock > 0 && i < SavedItems.Count)
+        {
+            Item itemToBlock = SavedItems[randomIndexList[i]];
+
+            itemToBlock.BlockItem();
+            blockedItems.Add(itemToBlock);
+
+            itemsToBlock--;
+            i++;
+        }
+
+        GameManager.instance.GetInventoryUI().LoadFastSwapGameplayPanel(currentEquippedWeaponShortcutIndex);
+    }
+
+    public void UnblockBlockedItems()
+    {
+        foreach (Item blockedItem in blockedItems)
+            blockedItem.UnblockItem();
+
+        this.blockedItems.Clear();
+
+        GameManager.instance.GetInventoryUI().LoadFastSwapGameplayPanel(currentEquippedWeaponShortcutIndex);
     }
 
     #endregion

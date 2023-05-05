@@ -70,7 +70,6 @@ public class ThirdPersonShooterController : MonoBehaviour
         playerGunAnimations = GetComponent<PlayerGunAnimations>();
 
         animator = GetComponent<Animator>();
-        //EquipWeapon(equippedWeapon, equippedWeaponItem);
     }
 
     private void Update()
@@ -150,6 +149,12 @@ public class ThirdPersonShooterController : MonoBehaviour
 
             transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 20f);
         }
+    }
+
+    public void UnequipWeapon()
+    {
+        ActivateWeapon(equippedWeapon, false);
+        equippedWeapon = null;
     }
 
     public void FindAndEquipWeapon(EquipableItem equipableItem)

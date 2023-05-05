@@ -115,7 +115,7 @@ public class Gun : Weapon
         int reloadAmount = Mathf.Min(maxReloadAmount, bulletsToFillClip);
 
         currentClipAmmo += reloadAmount;
-        GameManager.instance.GetInventoryManager().EquippedItem.GetComponent<GunItem>().CurrentAmmo+= reloadAmount;
+        GameManager.instance.GetInventoryManager().EquippedItem.GetComponent<GunItem>().CurrentAmmo += reloadAmount;
 
         InventoryManager inventoryManager = GameManager.instance.GetInventoryManager();
 

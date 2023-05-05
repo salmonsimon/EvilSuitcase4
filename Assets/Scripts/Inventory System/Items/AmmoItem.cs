@@ -68,6 +68,8 @@ public class AmmoItem : Item
 
     public override void RemoveFromMainInventory()
     {
+        base.RemoveFromMainInventory();
+
         InventoryManager inventoryManager = GameManager.instance.GetInventoryManager();
 
         inventoryManager.AmmoItemListDictionary[ammoType].Remove(this);
@@ -78,6 +80,8 @@ public class AmmoItem : Item
 
     public override void AddToMainInventory()
     {
+        base.AddToMainInventory();
+
         InventoryManager inventoryManager = GameManager.instance.GetInventoryManager();
 
         if (!inventoryManager.StockedAmmoDictionary.ContainsKey(ammoType))
@@ -134,8 +138,7 @@ public class AmmoItem : Item
     {
         InventoryManager inventoryManager = GameManager.instance.GetInventoryManager();
 
-        inventoryManager.StockedAmmoDictionary[ammoType] -= currentAmmo;
-        inventoryManager.StockedAmmoChange();
+        RemoveFromMainInventory();
 
         Destroy(gameObject);
     }

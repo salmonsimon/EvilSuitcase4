@@ -117,8 +117,8 @@ namespace StarterAssets
 		{
             ScrollWheelInput(value.Get<Vector2>());
         }
-#endif
 
+#endif
 
         public void MoveInput(Vector2 newMoveDirection)
 		{

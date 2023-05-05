@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using static Utils;
 
 public class Inventory : MonoBehaviour, IPointerDownHandler
 {
@@ -50,12 +52,21 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
 
     #endregion
 
+    private void OnEnable()
+    {
+        if (MainInventory)
+            LoadInventory();
+    }
+
     private void OnDisable()
     {
         discardConfirmationPanel.SetActive(false);
         DiscardCandidate = null;
 
         SetNewOpenButton(null);
+
+        if (MainInventory)
+            SaveInventory();
     }
 
     private void Awake()
@@ -118,6 +129,18 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
 
     #region Getters and Setters
 
+    public void InventorySetup(int gridWidth, int gridHeight)
+    {
+        this.gridWidth = gridWidth;
+        this.gridHeight = gridHeight;
+
+        grid = new Grid<GridObject>(gridWidth, gridHeight, cellSize, new Vector3(0, 0, 0), (Grid<GridObject> g, int x, int y) => new GridObject(g, x, y));
+
+        GetComponent<RectTransform>().pivot = new Vector2((gridWidth * cellSize / 2), (gridHeight * cellSize / 2));
+
+        CreateInventoryBackground();
+    }
+
     public Grid<GridObject> GetGrid()
     {
         return grid;
@@ -143,7 +166,7 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
         return grid.IsValidGridPosition(gridPosition);
     }
 
-    public bool TryPlaceItem(Item item, Vector2Int placedObjectOrigin, Item.Direction direction)
+    public bool TryPlaceItem(Item item, Vector2Int placedObjectOrigin, Item.Direction direction, bool loadingInventory = false)
     {
         int width = item.GetItemSO().Width;
         int height = item.GetItemSO().Height;
@@ -191,7 +214,7 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
             item.GetComponent<Canvas>().overrideSorting = true;
             item.GetComponent<Canvas>().sortingOrder = 1000 - (20 * gridPositionList[0].y) - gridPositionList[0].x;
 
-            if (mainInventory)
+            if (mainInventory && !loadingInventory)
                 item.AddToMainInventory();
 
             return true;
@@ -223,6 +246,12 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
         Transform template = backgroundSlotTemplate;
         template.gameObject.SetActive(false);
 
+        foreach (Transform child in background)
+        {
+            if (!child.Equals(backgroundSlotTemplate))
+                Destroy(child.gameObject);
+        }
+
         for (int x = 0; x < GetGrid().GetWidth(); x++)
         {
             for (int y = 0; y < GetGrid().GetHeight(); y++)
@@ -252,7 +281,9 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
     public void DiscardConfirmationButton()
     {
         if (DiscardCandidate)
+        {
             DiscardCandidate.Discard();
+        }
     }
 
     public void CancelDiscardButton()
@@ -285,24 +316,19 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
 
     #region Saving / Loading (WIP)
 
-    /*
-
-    [Serializable]
-    public struct AddItem
+    public void LoadInventory()
     {
-        public string itemSOName;
-        public ItemSO.ItemType itemType;
-        public Vector2Int gridPosition;
-        public Item.Direction direction;
+        List<Item> savedItems = GameManager.instance.GetInventoryManager().SavedItems;
+        List<Item> blockedItems = GameManager.instance.GetInventoryManager().BlockedItems;
+
+        foreach (Item item in savedItems)
+            TryPlaceItem(item, item.GetGridPosition(), item.GetDirection(), true);
+
+        foreach (Item item in blockedItems)
+            TryPlaceItem(item, item.GetGridPosition(), item.GetDirection(), true);
     }
 
-    [Serializable]
-    public struct ListAddItem
-    {
-        public List<AddItem> addItemList;
-    }
-
-    public string Save()
+    public void SaveInventory()
     {
         List<Item> itemList = new List<Item>();
         for (int x = 0; x < grid.GetWidth(); x++)
@@ -317,39 +343,9 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
             }
         }
 
-        List<AddItem> addItemList = new List<AddItem>();
         foreach (Item item in itemList)
-        {
-            addItemList.Add(new AddItem
-            {
-                direction = item.GetDirection(),
-                gridPosition = item.GetGridPosition(),
-                itemSOName = (item.GetItemSO() as ItemSO).name,
-                itemType = item.GetItemType()
-            });
-
-        }
-
-        return JsonUtility.ToJson(new ListAddItem { addItemList = addItemList });
+            item.transform.SetParent(GameManager.instance.GetInventoryManager().ItemContainer.transform);
     }
-
-    public ItemSO GetItemSOFromName(string itemSOName, ItemSO.ItemType itemType)
-    {
-        ItemSO itemSO = Resources.Load("Scriptable Objects/Items/" + itemType.ToString() + "/" + itemSOName) as ItemSO;
-
-        return itemSO;
-    }
-
-    public void Load(string loadString)
-    {
-        ListAddItem listAddItem = JsonUtility.FromJson<ListAddItem>(loadString);
-
-        foreach (AddItem addItem in listAddItem.addItemList)
-        {
-            TryPlaceItem(GetItemSOFromName(addItem.itemSOName, addItem.itemType), addItem.gridPosition, addItem.direction);
-        }
-    }
-    */
 
     #endregion
 }

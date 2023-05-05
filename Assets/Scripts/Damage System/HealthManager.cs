@@ -48,13 +48,19 @@ public class HealthManager : MonoBehaviour
             if (isAlive == value) return;
 
             isAlive = value;
-            if (OnAliveStatusChange != null)
-                OnAliveStatusChange();
+
+            if (IsAlive && OnRevival != null)
+                OnRevival();
+            else if (!IsAlive && OnDeath != null)
+                OnDeath();
         }
     }
 
-    public delegate void OnAliveStatusChangeDelegate();
-    public event OnAliveStatusChangeDelegate OnAliveStatusChange;
+    public delegate void OnRevivalDelegate();
+    public event OnRevivalDelegate OnRevival;
+
+    public delegate void OnDeathDelegate();
+    public event OnDeathDelegate OnDeath;
 
     #endregion
 
@@ -84,17 +90,6 @@ public class HealthManager : MonoBehaviour
     protected virtual void Death()
     {
         IsAlive = false;
-
-        /*
-        foreach (Transform child in transform)
-        {
-            if (child.TryGetComponent<ParticleSystem>(out ParticleSystem particleSystem))
-                GameManager.instance.GetSurfaceManager().DisableEffect(particleSystem.gameObject);
-        }
-        */
-
-        // TO DO: DELETE THIS LATER, THIS IS FOR TESTING
-        //StartCoroutine(WaitAndDestroy());
     }
 
     private IEnumerator WaitAndDestroy(float delay = 0f)
