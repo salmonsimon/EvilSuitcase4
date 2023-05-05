@@ -138,10 +138,7 @@ public class AmmoItem : Item
     {
         InventoryManager inventoryManager = GameManager.instance.GetInventoryManager();
 
-        inventoryManager.StockedAmmoDictionary[ammoType] -= currentAmmo;
-        inventoryManager.StockedAmmoChange();
-
-        this.RemoveFromMainInventory();
+        RemoveFromMainInventory();
 
         Destroy(gameObject);
     }
