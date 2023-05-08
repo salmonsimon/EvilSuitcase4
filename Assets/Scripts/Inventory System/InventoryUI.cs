@@ -324,6 +324,7 @@ public class InventoryUI : MonoBehaviour
         pauseInventoryPanel.GetComponent<Inventory>().InventorySetup(mainInventoryWidth, mainInventoryHeight);
 
         pauseInventoryPanel.SetActive(true);
+
         settingsPanel.SetActive(false);
     }
 

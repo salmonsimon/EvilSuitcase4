@@ -13,6 +13,8 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
 
     [Header("Inventory Configuration")]
     [SerializeField] private bool mainInventory = true;
+    [SerializeField] private bool fixedPosition = false;
+
     public bool MainInventory { get { return mainInventory; } }
 
     [SerializeField] private GameObject discardConfirmationPanel;
@@ -139,7 +141,8 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
 
         grid = new Grid<GridObject>(gridWidth, gridHeight, cellSize, new Vector3(0, 0, 0), (Grid<GridObject> g, int x, int y) => new GridObject(g, x, y));
 
-        GetComponent<RectTransform>().anchoredPosition = new Vector2(-(gridWidth * cellSize / 2), -(gridHeight * cellSize / 2));
+        if (!fixedPosition)
+            GetComponent<RectTransform>().anchoredPosition = new Vector2(-(gridWidth * cellSize / 2), -(gridHeight * cellSize / 2));
 
         CreateInventoryBackground();
     }
