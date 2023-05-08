@@ -4960,37 +4960,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 3262170920585987228}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &709236062
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 709236063}
-  m_Layer: 0
-  m_Name: Item Container
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &709236063
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 709236062}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 496875435}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &712005137
 GameObject:
   m_ObjectHideFlags: 0
@@ -6396,6 +6365,33 @@ MonoBehaviour:
     - Prefab: {fileID: 2415460792606355714, guid: 6e6fde8ab6a950c479672bb59a81c2ae,
         type: 3}
       SpawnProbability: 0.5
+  rewards:
+  - RewardItem:
+    - Item: {fileID: 6530900219213045720, guid: 379cda0942c91e34da108f2c5649e6bd,
+        type: 3}
+      ItemType: 0
+      Probability: 1
+      Amount: 1
+      AmmoMinMax: {x: 20, y: 20}
+      LoadedAmmoMinMax: {x: 0, y: 0}
+      DurabilityMinMax: {x: 0, y: 0}
+    - Item: {fileID: 4220394600422452821, guid: 8c4ed81e33b10c6428bdff342e8c47a9,
+        type: 3}
+      ItemType: 1
+      Probability: 1
+      Amount: 1
+      AmmoMinMax: {x: 0, y: 0}
+      LoadedAmmoMinMax: {x: 10, y: 10}
+      DurabilityMinMax: {x: 0, y: 0}
+  - RewardItem:
+    - Item: {fileID: 6530900219213045720, guid: 379cda0942c91e34da108f2c5649e6bd,
+        type: 3}
+      ItemType: 0
+      Probability: 0.3
+      Amount: 2
+      AmmoMinMax: {x: 10, y: 30}
+      LoadedAmmoMinMax: {x: 0, y: 0}
+      DurabilityMinMax: {x: 0, y: 0}
 --- !u!4 &1035439536
 Transform:
   m_ObjectHideFlags: 0
@@ -13468,8 +13464,6 @@ MonoBehaviour:
   cursorInputForLook: 1
   weaponShortcut: -1
   scrollWheel: {x: 0, y: 0}
-  blockItems: 0
-  unblockItems: 0
 --- !u!4 &272993187387712767
 Transform:
   m_ObjectHideFlags: 0
@@ -14360,16 +14354,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1366940458081160734, guid: 5444c1fceaedb6440bbb11246ccb00f7,
-        type: 3}
-      propertyPath: itemContainer
-      value: 
-      objectReference: {fileID: 709236062}
-    - target: {fileID: 1366940458081160734, guid: 5444c1fceaedb6440bbb11246ccb00f7,
-        type: 3}
-      propertyPath: savedInventory
-      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5444c1fceaedb6440bbb11246ccb00f7, type: 3}

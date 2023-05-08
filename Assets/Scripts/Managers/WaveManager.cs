@@ -22,11 +22,18 @@ public class WaveManager : MonoBehaviour
         public List<SpawnObjectStruct> SpawnObjects;
     }
 
+    [System.Serializable]
+    public struct WaveRewardsStruct
+    {
+        public List<RewardItem> RewardItem;
+    }
+
     #endregion
 
     #region Parameters
 
     [SerializeField] List<WaveSpawnStruct> waves;
+    [SerializeField] List<WaveRewardsStruct> rewards;
 
     #endregion
 
