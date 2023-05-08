@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using static Utils;
 
-[RequireComponent(typeof(GraphicRaycaster),  typeof(Canvas))]
+[RequireComponent(typeof(GraphicRaycaster), typeof(Canvas))]
 public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
 {
     public enum Direction
@@ -22,6 +22,7 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
     [SerializeField] protected RectTransform buttonsPanel;
 
     protected GameObject blockedPanel;
+    protected GameObject visualPanel;
 
     #endregion
 
@@ -29,8 +30,9 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
 
     protected float width;
     protected float height;
-    protected float cellWidth;
-    protected float cellHeight;
+
+    protected float cellSize = 50f;
+    public float CellSize { get { return cellSize; } private set { cellSize = value; } }
 
     #endregion
 
@@ -52,14 +54,13 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
     {
         RectTransform rectTransform = GetComponent<RectTransform>();
 
-        cellWidth = rectTransform.sizeDelta.x;
-        cellHeight = rectTransform.sizeDelta.y;
-
         width = itemSO.Width;
         height = itemSO.Height;
 
         blockedPanel = transform.Find("Blocked Panel").gameObject;
         blockedPanel.SetActive(false);
+
+        visualPanel = transform.GetChild(0).gameObject;
     }
 
     protected void OnEnable()
@@ -70,7 +71,7 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
             blockedPanel.SetActive(false);
     }
 
-    public void ItemSetup(Transform parent, Vector2 anchoredPosition, Vector2Int origin, Direction direction)
+    public void ItemSetup(Transform parent, Vector2 anchoredPosition, Vector2Int origin, Direction direction, float inventoryCellSize)
     {
         transform.SetParent(parent);
         transform.rotation = Quaternion.Euler(0, GetRotationAngle(direction), 0);
@@ -79,9 +80,13 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
 
         this.origin = origin;
         this.direction = direction;
+
+        float newScale = inventoryCellSize / CellSize;
+
+        transform.localScale = new Vector3(newScale, newScale, newScale);
     }
 
-    public void CreateVisualBackgroundGrid(Transform visualParentTransform, ItemScriptableObject itemTetrisSO, float cellSize)
+    public void CreateVisualBackgroundGrid(Transform visualParentTransform, ItemScriptableObject itemTetrisSO)
     {
         Transform visualTransform = Instantiate(itemTetrisSO.GridVisual, visualParentTransform);
 

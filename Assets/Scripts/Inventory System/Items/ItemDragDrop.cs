@@ -28,7 +28,7 @@ public class ItemDragDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandle
         canvasGroup.alpha = .7f;
         canvasGroup.blocksRaycasts = false;
 
-        placedObject.CreateVisualBackgroundGrid(transform.GetChild(0), placedObject.GetItemSO() as ItemScriptableObject, inventoryTetris.GetGrid().GetCellSize());
+        placedObject.CreateVisualBackgroundGrid(transform.GetChild(0), placedObject.GetItemSO() as ItemScriptableObject);
 
         GameManager.instance.GetInventoryDragDropSystem().StartedDragging(inventoryTetris, placedObject);
     }
