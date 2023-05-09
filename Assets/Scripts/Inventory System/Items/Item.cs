@@ -28,8 +28,11 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
 
     #region Parameters
 
-    protected float width;
-    protected float height;
+    protected int width;
+    public int Width { get { return width; } }
+
+    protected int height;
+    public int Height { get { return height; } }
 
     protected float cellSize = 50f;
     public float CellSize { get { return cellSize; } private set { cellSize = value; } }
@@ -39,6 +42,7 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
     #region Variables
 
     protected Direction direction;
+
     protected Vector2Int origin;
 
     protected Inventory holdingInventory;
@@ -131,6 +135,11 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
     public Direction GetDirection()
     {
         return direction;
+    }
+
+    public void SetDirection(Direction direction)
+    {
+        this.direction = direction;
     }
 
     public ItemScriptableObject GetItemSO()

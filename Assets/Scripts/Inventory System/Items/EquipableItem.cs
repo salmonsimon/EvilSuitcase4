@@ -12,6 +12,8 @@ public class EquipableItem : Item
     public override void Discard()
     {
         DiscardCurrentWeaponShortcut();
+        RemoveFromMainInventory();
+
         Destroy(gameObject);
     }
 

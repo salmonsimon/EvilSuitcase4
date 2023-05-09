@@ -21,7 +21,10 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
 
     [Header("Grid Configuration")]
     [SerializeField] private int gridWidth = 10;
+    public int GridWidth { get { return gridWidth; } }
+
     [SerializeField] private int gridHeight = 10;
+    public int GridHeight { get { return gridHeight; } }
 
     [SerializeField] private float cellSize = 50f;
     public float CellSize { get { return cellSize; } }
@@ -65,22 +68,20 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
 
     private void OnDisable()
     {
-        discardConfirmationPanel.SetActive(false);
-        DiscardCandidate = null;
-
         SetNewOpenButton(null);
 
-        if (MainInventory)
+        if (mainInventory)
+        {
+            discardConfirmationPanel.SetActive(false);
+            DiscardCandidate = null;
+
             SaveInventory();
+        }
     }
 
     private void Awake()
     {
-        grid = new Grid<GridObject>(gridWidth, gridHeight, cellSize, new Vector3(0, 0, 0), (Grid<GridObject> g, int x, int y) => new GridObject(g, x, y));
-
         backgroundPreview.gameObject.SetActive(false);
-
-        CreateInventoryBackground();
     }
 
     public class GridObject
@@ -345,6 +346,8 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
                 {
                     itemList.Remove(grid.GetGridObject(x, y).GetItem());
                     itemList.Add(grid.GetGridObject(x, y).GetItem());
+                    
+                    RemoveItemAt(new Vector2Int(x, y));
                 }
             }
         }

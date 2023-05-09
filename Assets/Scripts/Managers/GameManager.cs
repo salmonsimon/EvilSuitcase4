@@ -37,6 +37,9 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private bool isOnMainMenu = false;
 
+    private bool isOnRewardsUI = false;
+    public bool IsOnRewardsUI { get { return isOnRewardsUI; } set { isOnRewardsUI = value; } }
+
     private bool isGamePaused;
     private bool isTeleporting;
 
@@ -78,9 +81,9 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (!inventoryUI.IsGamePaused && !isOnMainMenu && Input.GetKeyDown(KeyCode.Escape))
+        if (!inventoryUI.IsGamePaused && !isOnMainMenu && !isOnRewardsUI && Input.GetKeyDown(KeyCode.Escape))
             inventoryUI.PauseGame();
-        else if (inventoryUI.IsGamePaused && !isOnMainMenu && Input.GetKeyDown(KeyCode.Escape))
+        else if (inventoryUI.IsGamePaused && !isOnMainMenu && !isOnRewardsUI && Input.GetKeyDown(KeyCode.Escape))
             inventoryUI.ResumeGame();
     }
 

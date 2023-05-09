@@ -7780,42 +7780,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!1 &1048676499470055118
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1048676499470055117}
-  m_Layer: 5
-  m_Name: Rewards Panel
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!224 &1048676499470055117
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1048676499470055118}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3389977744897820826}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1048676499473291505
 GameObject:
   m_ObjectHideFlags: 0
@@ -11389,7 +11353,6 @@ RectTransform:
   - {fileID: 3389977745210338843}
   - {fileID: 3389977743775274127}
   - {fileID: 3389977745040194055}
-  - {fileID: 3371996823422388705}
   m_Father: {fileID: 3389977744897820826}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -11411,6 +11374,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainInventory: 1
+  fixedPosition: 0
   discardConfirmationPanel: {fileID: 7616269274072958208}
   gridWidth: 10
   gridHeight: 10
@@ -15865,7 +15829,7 @@ RectTransform:
   - {fileID: 3389977743761498726}
   - {fileID: 1048676498630839136}
   - {fileID: 1048676498971485730}
-  - {fileID: 1048676499470055117}
+  - {fileID: 3371996823422388705}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -15951,7 +15915,6 @@ MonoBehaviour:
   settingsPanel: {fileID: 1048676498971485731}
   fastSwapConfigPanel: {fileID: 1048676498630839137}
   fastSwapGameplayPanel: {fileID: 1048676498871279779}
-  rewardsInventoryPanel: {fileID: 1048676499470055118}
 --- !u!114 &1048676498903858887
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15964,8 +15927,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54ed6a6af5447284dacd57af80af0cb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryList:
-  - {fileID: 3389977743761498727}
+  pauseInventoryList: []
+  rewardsInventoryList: []
 --- !u!1 &3389977744929919200
 GameObject:
   m_ObjectHideFlags: 0
@@ -19198,7 +19161,7 @@ RectTransform:
   - {fileID: 6492136953004426710}
   - {fileID: 435099116599847494}
   - {fileID: 3729894713094993787}
-  m_Father: {fileID: 3389977743761498726}
+  m_Father: {fileID: 3389977744897820826}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

@@ -5,7 +5,8 @@ public class InventoryDragDropSystem : MonoBehaviour
 {
     #region Object References
 
-    [SerializeField] private List<Inventory> inventoryList;
+    [SerializeField] private List<Inventory> pauseInventoryList;
+    [SerializeField] private List<Inventory> rewardsInventoryList;
 
 #if ENABLE_INPUT_SYSTEM
     private InputsUI input;
@@ -25,8 +26,11 @@ public class InventoryDragDropSystem : MonoBehaviour
 
     private void Start()
     {
-        foreach (Inventory inventoryTetris in inventoryList)
-            inventoryTetris.OnItemPlaced += (object sender, Item placedObject) => {};
+        foreach (Inventory inventory in pauseInventoryList)
+            inventory.OnItemPlaced += (object sender, Item placedObject) => {};
+
+        foreach (Inventory inventory in rewardsInventoryList)
+            inventory.OnItemPlaced += (object sender, Item placedObject) => { };
 
         input = GameManager.instance.GetPlayer().GetComponent<InputsUI>();
     }
@@ -90,7 +94,9 @@ public class InventoryDragDropSystem : MonoBehaviour
 
         Inventory toInventory = null;
 
-        foreach (Inventory inventory in inventoryList)
+        List<Inventory> inventoriesToCheck = GameManager.instance.IsOnRewardsUI ? rewardsInventoryList : pauseInventoryList;
+
+        foreach (Inventory inventory in inventoriesToCheck)
         {
             Vector3 screenPoint = input.point;
             RectTransformUtility.ScreenPointToLocalPointInRectangle(inventory.GetItemContainer(), screenPoint, null, out Vector2 anchoredPosition);
