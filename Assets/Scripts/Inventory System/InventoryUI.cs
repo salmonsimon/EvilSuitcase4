@@ -18,6 +18,8 @@ public class InventoryUI : MonoBehaviour
     [SerializeField] private GameObject settingsPanel;
     [SerializeField] private GameObject fastSwapConfigPanel;
     [SerializeField] private GameObject fastSwapGameplayPanel;
+
+    private InputsUI input;
     
     #endregion
 
@@ -37,10 +39,18 @@ public class InventoryUI : MonoBehaviour
 
     #endregion
 
+    private void Start()
+    {
+        input = GameManager.instance.GetPlayer().GetComponent<InputsUI>();
+    }
+
     private void Update()
     {
-        if (IsGamePaused && Input.GetKeyDown(KeyCode.N))
+        if (IsGamePaused && input.autoSort)
+        {
             GameManager.instance.GetInventoryManager().AutoSortMainInventory(pauseInventoryPanel.GetComponent<Inventory>(), GameManager.instance.GetInventoryManager().SavedItems);
+            input.autoSort = false;
+        }
     }
 
     public void OpenAndLoadFastSwapConfigPanel()

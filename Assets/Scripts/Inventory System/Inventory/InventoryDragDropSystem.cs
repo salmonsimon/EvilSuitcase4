@@ -97,6 +97,9 @@ public class InventoryDragDropSystem : MonoBehaviour
         List<Inventory> inventoriesToCheck = GameManager.instance.IsOnRewardsUI ? rewardsInventoryList : pauseInventoryList;
 
         foreach (Inventory inventory in inventoriesToCheck)
+            Debug.Log("Inventories to check: " + inventory.name);
+
+        foreach (Inventory inventory in inventoriesToCheck)
         {
             Vector3 screenPoint = input.point;
             RectTransformUtility.ScreenPointToLocalPointInRectangle(inventory.GetItemContainer(), screenPoint, null, out Vector2 anchoredPosition);

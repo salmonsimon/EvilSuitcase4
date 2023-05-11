@@ -134,6 +134,32 @@ public class AmmoItem : Item
         inventoryManager.StockedAmmoChange();
     }
 
+    public void FillCurrentStockedAmmoWithNewAmmoItem()
+    {
+        InventoryManager inventoryManager = GameManager.instance.GetInventoryManager();
+
+        if (inventoryManager.AmmoItemListDictionary[ammoType].Any())
+        {
+            List<AmmoItem> inventoryAmmoItemList = inventoryManager.AmmoItemListDictionary[ammoType];
+            AmmoItem lastAmmoItemInInventoryList = inventoryAmmoItemList[inventoryAmmoItemList.Count - 1];
+
+            if (lastAmmoItemInInventoryList.CurrentAmmo == lastAmmoItemInInventoryList.MaxAmmo)
+                return;
+            else
+            {
+                int maxFillAmount = Mathf.Min(lastAmmoItemInInventoryList.MaxAmmo, CurrentAmmo);
+                int bulletsToFillAmmoItem = lastAmmoItemInInventoryList.MaxAmmo - lastAmmoItemInInventoryList.CurrentAmmo;
+                int fillAmount = Mathf.Min(maxFillAmount, bulletsToFillAmmoItem);
+
+                lastAmmoItemInInventoryList.CurrentAmmo += fillAmount;
+
+                inventoryAmmoItemList[inventoryAmmoItemList.Count - 1] = lastAmmoItemInInventoryList;
+
+                CurrentAmmo -= fillAmount;
+            }
+        }
+    }
+
     public override void Discard()
     {
         InventoryManager inventoryManager = GameManager.instance.GetInventoryManager();

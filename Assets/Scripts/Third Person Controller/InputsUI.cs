@@ -13,6 +13,7 @@ public class InputsUI : MonoBehaviour
     public bool rightClick;
     public bool rotate;
     public bool pause;
+    public bool autoSort;
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
     public void OnPoint(InputValue value)
@@ -40,6 +41,11 @@ public class InputsUI : MonoBehaviour
         PauseInput(value.isPressed);
     }
 
+    public void OnAutoSort(InputValue value)
+    {
+        AutoSortInput(value.isPressed);
+    }
+
 #endif
 
 
@@ -58,13 +64,18 @@ public class InputsUI : MonoBehaviour
         rightClick = newRightClickState;
     }
 
-    public void RotateInput(bool newRotateInput)
+    public void RotateInput(bool newRotateState)
     {
-        rotate = newRotateInput;
+        rotate = newRotateState;
     }
 
     public void PauseInput(bool newPauseState)
     {
         pause = newPauseState;
+    }
+
+    public void AutoSortInput(bool newAutoSortState)
+    {
+        autoSort = newAutoSortState;
     }
 }

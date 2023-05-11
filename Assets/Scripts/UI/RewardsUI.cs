@@ -15,14 +15,15 @@ public class RewardsUI : MonoBehaviour
     [SerializeField] private Inventory gunsRewardsInventory;
 
     private GameObject player;
+    private InputsUI input;
 
     private void Start()
     {
         player = GameManager.instance.GetPlayer();
+        input = player.GetComponent<InputsUI>();
     }
 
     // TO DO: DELETE UPDATE FUNCTION AFTER TESTING PROPERLY
-    // TO DO: ADD HERE AN OPTION TO AUTO SORT
     private void Update()
     {
         if (!GameManager.instance.IsOnRewardsUI && Input.GetKeyDown(KeyCode.M))
@@ -30,8 +31,11 @@ public class RewardsUI : MonoBehaviour
         else if (GameManager.instance.IsOnRewardsUI && Input.GetKeyDown(KeyCode.M))
             CloseRewardsUI();
 
-        if (GameManager.instance.IsOnRewardsUI && Input.GetKeyDown(KeyCode.N))
+        if (GameManager.instance.IsOnRewardsUI && input.autoSort)
+        {
             GameManager.instance.GetInventoryManager().AutoSortMainInventory(mainInventory, GameManager.instance.GetInventoryManager().SavedItems);
+            input.autoSort = false;
+        }
     }
 
     private void OpenRewardsUI()
@@ -46,6 +50,10 @@ public class RewardsUI : MonoBehaviour
         int mainInventoryHeight = inventoryManager.InventoryHeight;
 
         mainInventory.InventorySetup(mainInventoryWidth, mainInventoryHeight);
+
+        consumableRewardsInventory.InventorySetup(consumableRewardsInventory.GridWidth, consumableRewardsInventory.GridHeight);
+        meleeWeaponRewardsInventory.InventorySetup(meleeWeaponRewardsInventory.GridWidth, meleeWeaponRewardsInventory.GridHeight);
+        gunsRewardsInventory.InventorySetup(gunsRewardsInventory.GridWidth, gunsRewardsInventory.GridHeight);
 
         rewardsPanel.SetActive(true);
     }

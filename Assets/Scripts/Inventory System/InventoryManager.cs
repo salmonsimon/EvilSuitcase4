@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using static Inventory;
 using Mono.Cecil;
+using static UnityEditor.Progress;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -241,7 +242,7 @@ public class InventoryManager : MonoBehaviour
                 continue;
             }
 
-            if (x + item.Width > inventoryWidth)
+            if (x + item.GetCurrentHorizontalDimension() > inventoryWidth)
             {
                 y += largestHeightInCurrentRow;
 
@@ -249,24 +250,49 @@ public class InventoryManager : MonoBehaviour
                 largestHeightInCurrentRow = 0;
             }
 
-            finalHeight = (y + item.Height);
+            finalHeight = y + item.GetCurrentVerticalDimension();
             int remainingHeight = inventoryHeight - finalHeight;
 
             if (remainingHeight >= 0 || !maintainHeight)
             {
-                item.SetOrigin(new Vector2Int(x, y));
+                List<Vector2Int> gridPositionList = Item.GetGridPositionList(new Vector2Int(x, y), item.GetDirection(), item.Width, item.Height);
 
-                List<Vector2Int> gridPositionList = item.GetGridPositionList();
+                bool canPlace = true;
 
                 foreach (Vector2Int gridPosition in gridPositionList)
                 {
-                    grid.GetGridObject(gridPosition.x, gridPosition.y).SetItem(item);
+                    bool isValidPosition = grid.IsValidGridPosition(gridPosition);
+
+                    if (!isValidPosition)
+                    {
+                        canPlace = false;
+                        break;
+                    }
+
+                    if (!grid.GetGridObject(gridPosition.x, gridPosition.y).CanBuild())
+                    {
+                        canPlace = false;
+                        break;
+                    }
                 }
 
-                x += item.Width;
+                if (canPlace)
+                {
+                    item.SetOrigin(new Vector2Int(x, y));
 
-                if (item.Height > largestHeightInCurrentRow)
-                    largestHeightInCurrentRow = item.Height;
+                    foreach (Vector2Int gridPosition in gridPositionList)
+                        grid.GetGridObject(gridPosition.x, gridPosition.y).SetItem(item);
+
+                    x += item.GetCurrentHorizontalDimension();
+
+                    if (item.GetCurrentVerticalDimension() > largestHeightInCurrentRow)
+                        largestHeightInCurrentRow = item.Height;
+                }
+                else
+                {
+                    unplacedItems.Add(item);
+                    couldFillFirstTry = false;
+                }
             }
             else
             {
@@ -286,6 +312,18 @@ public class InventoryManager : MonoBehaviour
         {
             foreach (Item item in unplacedItems)
             {
+                if (item.TryGetComponent(out AmmoItem ammoItem))
+                {
+                    ammoItem.FillCurrentStockedAmmoWithNewAmmoItem();
+
+                    if (ammoItem.CurrentAmmo < 0)
+                    {
+                        sortedItems.Remove(item);
+                        ammoItem.Discard();
+                        continue;
+                    }
+                }
+
                 if (!TryAddingItemManually(grid, item))
                 {
                     couldFillManually = false; 
@@ -295,6 +333,35 @@ public class InventoryManager : MonoBehaviour
 
             if (!couldFillManually)
                 Debug.LogError("Couldn't fill all items in inventory");
+            else
+                GameManager.instance.GetInventoryManager().SavedItems = sortedItems;
+        }
+    }
+
+    public void AddItemManuallyToMainInventory(Inventory inventory, Item item)
+    {
+        if (item.TryGetComponent(out AmmoItem ammoItem))
+        {
+            ammoItem.FillCurrentStockedAmmoWithNewAmmoItem();
+
+            if (ammoItem.CurrentAmmo < 0)
+            {
+                ammoItem.Discard();
+                return;
+            }
+        }
+
+        if (TryAddingItemManually(inventory.GetGrid(), item))
+        {
+            inventory.gameObject.SetActive(false);
+
+            inventory.TryPlaceItem(item, item.GetGridPosition(), item.GetDirection());
+
+            inventory.gameObject.SetActive(true);
+        }
+        else
+        {
+            Debug.LogError("Couldn't add item to main inventory");
         }
     }
 
@@ -303,16 +370,18 @@ public class InventoryManager : MonoBehaviour
         bool couldAddItem = true;
 
         if (!TryAddingItemHorizontally(grid, item))
-            //if (!TryAddingItemVertically(grid, item))
-                couldAddItem = false;
+        {
+            item.SetDirection(Item.Direction.Left);
 
+            if (!TryAddingItemVertically(grid, item))
+                couldAddItem = false;
+        }
+        
         return couldAddItem;
     }
 
     private bool TryAddingItemVertically(Grid<GridObject> grid, Item item)
     {
-        Debug.Log("Adding Item Vertically");
-
         bool couldAdd = true;
 
         bool finishedSearching = false;
@@ -327,22 +396,23 @@ public class InventoryManager : MonoBehaviour
 
         while (!finishedSearching)
         {
-            if (y + item.Width > gridHeight)
+            item.SetDirection(Item.Direction.Left);
+
+            if (y + item.GetCurrentVerticalDimension() > gridHeight)
             {
                 x += minWidthInCurrentColumn;
 
                 y = 0;
-                minWidthInCurrentColumn = 0;
+                minWidthInCurrentColumn = int.MaxValue;
             }
 
-            if (x + 1 > gridWidth)
+            if (x >= gridWidth)
             {
                 couldAdd = false;
                 finishedSearching = true;
+
                 break;
             }
-
-            item.SetDirection(Item.Direction.Left); 
 
             List<Vector2Int> gridPositionList = Item.GetGridPositionList(new Vector2Int(x, y), item.GetDirection(), item.Width, item.Height);
 
@@ -376,16 +446,14 @@ public class InventoryManager : MonoBehaviour
             }
             else
             {
-                Debug.Log("Position to check: " + new Vector2Int(x, y));
-
                 Item placedItem = grid.GetGridObject(x, y).GetItem();
 
-                int remainingItemWidth = placedItem.Width + placedItem.GetGridPosition().x - x;
+                int remainingItemWidth = placedItem.GetCurrentHorizontalDimension() + placedItem.GetGridPosition().x - x;
 
                 if (remainingItemWidth < minWidthInCurrentColumn)
                     minWidthInCurrentColumn = remainingItemWidth;
 
-                y += placedItem.Height;
+                y += placedItem.GetCurrentVerticalDimension();
             }
         }
 
@@ -394,7 +462,6 @@ public class InventoryManager : MonoBehaviour
 
     private bool TryAddingItemHorizontally(Grid<GridObject> grid, Item item)
     {
-        Debug.Log("Adding Item Horizontally");
 
         bool couldAdd = true;
 
@@ -410,7 +477,7 @@ public class InventoryManager : MonoBehaviour
 
         while (!finishedSearching)
         {
-            if (x + item.Width > gridWidth)
+            if (x + item.GetCurrentHorizontalDimension() > gridWidth)
             {
                 y += minHeightInCurrentRow;
 
@@ -418,10 +485,11 @@ public class InventoryManager : MonoBehaviour
                 minHeightInCurrentRow = int.MaxValue;
             }
 
-            if (y + 1 > gridHeight)
+            if (y >= gridHeight)
             {
                 couldAdd = false;
                 finishedSearching = true;
+                
                 break;
             }
 
@@ -457,16 +525,15 @@ public class InventoryManager : MonoBehaviour
             }
             else
             {
-                Debug.Log("Position to check: " + new Vector2Int(x, y));
-
                 Item placedItem = grid.GetGridObject(x, y).GetItem();
 
-                int remainingItemHeight = placedItem.Height + placedItem.GetGridPosition().y - y;
+
+                int remainingItemHeight = placedItem.GetCurrentVerticalDimension() + placedItem.GetGridPosition().y - y;
 
                 if (remainingItemHeight < minHeightInCurrentRow)
                     minHeightInCurrentRow = remainingItemHeight;
 
-                x += placedItem.Width;
+                x += placedItem.GetCurrentHorizontalDimension();
             }
         }
 

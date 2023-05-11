@@ -142,6 +142,30 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
         this.direction = direction;
     }
 
+    public int GetCurrentHorizontalDimension()
+    {
+        switch (direction)
+        {
+            default:
+            case Direction.Down: return Width;
+            case Direction.Left: return Height;
+            case Direction.Up: return Width;
+            case Direction.Right: return Height;
+        }
+    }
+
+    public int GetCurrentVerticalDimension()
+    {
+        switch (direction)
+        {
+            default:
+            case Direction.Down: return Height;
+            case Direction.Left: return Width;
+            case Direction.Up: return Height;
+            case Direction.Right: return Width;
+        }
+    }
+
     public ItemScriptableObject GetItemSO()
     {
         return itemSO;
@@ -215,6 +239,7 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
                 }
                 break;
         }
+
         return gridPositionList;
     }
 
