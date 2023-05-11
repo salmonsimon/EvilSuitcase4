@@ -51,9 +51,9 @@ public class InventoryDragDropSystem : MonoBehaviour
             Vector2Int rotationOffset = Item.GetRotationOffset(direction, draggingItem.GetItemSO().Width, draggingItem.GetItemSO().Height);
             targetPosition += new Vector2(rotationOffset.x, rotationOffset.y) * draggingInventory.GetGrid().GetCellSize();
 
-            targetPosition /= draggingInventory.CellSize; //10f;
+            targetPosition /= 10f; // draggingInventory.CellSize; //10f;
             targetPosition = new Vector2(Mathf.Floor(targetPosition.x), Mathf.Floor(targetPosition.y));
-            targetPosition *= draggingInventory.CellSize; //10f;
+            targetPosition *= 10f; //draggingInventory.CellSize; //10f;
 
             draggingItem.GetComponent<RectTransform>().anchoredPosition = Vector2.Lerp(draggingItem.GetComponent<RectTransform>().anchoredPosition, targetPosition, Time.fixedDeltaTime * 15f);
             draggingItem.transform.rotation = Quaternion.Lerp(draggingItem.transform.rotation, Quaternion.Euler(0, 0, -Item.GetRotationAngle(direction)), Time.fixedDeltaTime * 15f);
@@ -97,12 +97,10 @@ public class InventoryDragDropSystem : MonoBehaviour
         List<Inventory> inventoriesToCheck = GameManager.instance.IsOnRewardsUI ? rewardsInventoryList : pauseInventoryList;
 
         foreach (Inventory inventory in inventoriesToCheck)
-            Debug.Log("Inventories to check: " + inventory.name);
-
-        foreach (Inventory inventory in inventoriesToCheck)
         {
             Vector3 screenPoint = input.point;
             RectTransformUtility.ScreenPointToLocalPointInRectangle(inventory.GetItemContainer(), screenPoint, null, out Vector2 anchoredPosition);
+
             Vector2Int itemOrigin = inventory.GetGridPosition(anchoredPosition);
             itemOrigin = itemOrigin - mouseDragGridPositionOffset;
 
