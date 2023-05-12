@@ -18,8 +18,9 @@ public class InventoryUI : MonoBehaviour
     [SerializeField] private GameObject settingsPanel;
     [SerializeField] private GameObject fastSwapConfigPanel;
     [SerializeField] private GameObject fastSwapGameplayPanel;
-    [SerializeField] private GameObject rewardsInventoryPanel;
 
+    private InputsUI input;
+    
     #endregion
 
     #region Variables
@@ -37,6 +38,20 @@ public class InventoryUI : MonoBehaviour
     private float fastSwapGameplayPanelShowDuration = Config.FAST_SWAP_GAMEPLAY_PANEL_SHOW_DURATION;
 
     #endregion
+
+    private void Start()
+    {
+        input = GameManager.instance.GetPlayer().GetComponent<InputsUI>();
+    }
+
+    private void Update()
+    {
+        if (IsGamePaused && input.autoSort)
+        {
+            GameManager.instance.GetInventoryManager().AutoSortMainInventory(pauseInventoryPanel.GetComponent<Inventory>(), GameManager.instance.GetInventoryManager().SavedItems);
+            input.autoSort = false;
+        }
+    }
 
     public void OpenAndLoadFastSwapConfigPanel()
     {
@@ -324,6 +339,7 @@ public class InventoryUI : MonoBehaviour
         pauseInventoryPanel.GetComponent<Inventory>().InventorySetup(mainInventoryWidth, mainInventoryHeight);
 
         pauseInventoryPanel.SetActive(true);
+
         settingsPanel.SetActive(false);
     }
 

@@ -4,14 +4,24 @@ public class EquipableItem : Item
 {
     #region Variables
 
+    [SerializeField] protected GameObject reloadingMainInventoryButtonPanel;
     [SerializeField] protected int weaponShortcut = -1;
     public int WeaponShortcut { get { return weaponShortcut; } }
 
     #endregion
 
+    protected override void Awake()
+    {
+        base.Awake();
+
+        reloadingMainInventoryButtonPanel.SetActive(false);
+    }
+
     public override void Discard()
     {
         DiscardCurrentWeaponShortcut();
+        RemoveFromMainInventory();
+
         Destroy(gameObject);
     }
 
@@ -52,5 +62,14 @@ public class EquipableItem : Item
         DiscardCurrentWeaponShortcut();
 
         weaponShortcut = newWeaponShortcut;
+    }
+
+    protected override GameObject GetCurrentButtonPanel()
+    {
+        if (GameManager.instance.IsOnRewardsUI)
+            return HoldingInventory.MainInventory ? rewardsMainInventoryButtonPanel : rewardsInventoryButtonPanel;
+        else
+            return GameManager.instance.GetPlayer().GetComponent<ThirdPersonShooterController>().IsReloading ?
+                reloadingMainInventoryButtonPanel : mainInventoryButtonPanel;
     }
 }

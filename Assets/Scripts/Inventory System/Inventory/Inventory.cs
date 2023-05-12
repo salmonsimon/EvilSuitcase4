@@ -13,14 +13,22 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
 
     [Header("Inventory Configuration")]
     [SerializeField] private bool mainInventory = true;
+    [SerializeField] private bool fixedPosition = false;
+
     public bool MainInventory { get { return mainInventory; } }
 
     [SerializeField] private GameObject discardConfirmationPanel;
 
     [Header("Grid Configuration")]
     [SerializeField] private int gridWidth = 10;
+    public int GridWidth { get { return gridWidth; } }
+
     [SerializeField] private int gridHeight = 10;
+    public int GridHeight { get { return gridHeight; } }
+
     [SerializeField] private float cellSize = 50f;
+    public float CellSize { get { return cellSize; } }
+
     [SerializeField] private RectTransform itemContainer;
 
     [Header("Background")]
@@ -41,7 +49,7 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
     private Item discardCandidate;
     public Item DiscardCandidate { get { return discardCandidate; } set { discardCandidate = value; } }
 
-    [SerializeField] private GameObject openItemButtonPanel;
+    private GameObject openItemButtonPanel;
     public GameObject OpenItemButtonPanel { get { return openItemButtonPanel; } }
 
     #endregion
@@ -60,22 +68,20 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
 
     private void OnDisable()
     {
-        discardConfirmationPanel.SetActive(false);
-        DiscardCandidate = null;
-
         SetNewOpenButton(null);
 
-        if (MainInventory)
+        if (mainInventory)
+        {
+            discardConfirmationPanel.SetActive(false);
+            DiscardCandidate = null;
+
             SaveInventory();
+        }
     }
 
     private void Awake()
     {
-        grid = new Grid<GridObject>(gridWidth, gridHeight, cellSize, new Vector3(0, 0, 0), (Grid<GridObject> g, int x, int y) => new GridObject(g, x, y));
-
         backgroundPreview.gameObject.SetActive(false);
-
-        CreateInventoryBackground();
     }
 
     public class GridObject
@@ -136,7 +142,8 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
 
         grid = new Grid<GridObject>(gridWidth, gridHeight, cellSize, new Vector3(0, 0, 0), (Grid<GridObject> g, int x, int y) => new GridObject(g, x, y));
 
-        GetComponent<RectTransform>().pivot = new Vector2((gridWidth * cellSize / 2), (gridHeight * cellSize / 2));
+        if (!fixedPosition)
+            GetComponent<RectTransform>().anchoredPosition = new Vector2(-(gridWidth * cellSize / 2), -(gridHeight * cellSize / 2));
 
         CreateInventoryBackground();
     }
@@ -197,7 +204,7 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
             Vector2Int rotationOffset = Item.GetRotationOffset(direction, width, height);
             Vector3 placedObjectWorldPosition = grid.GetWorldPosition(placedObjectOrigin.x, placedObjectOrigin.y) + new Vector3(rotationOffset.x, rotationOffset.y) * grid.GetCellSize();
 
-            item.ItemSetup(itemContainer, placedObjectWorldPosition, placedObjectOrigin, direction);
+            item.ItemSetup(itemContainer, placedObjectWorldPosition, placedObjectOrigin, direction, cellSize);
 
             item.transform.rotation = Quaternion.Euler(0, 0, -Item.GetRotationAngle(direction));
 
@@ -339,6 +346,8 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
                 {
                     itemList.Remove(grid.GetGridObject(x, y).GetItem());
                     itemList.Add(grid.GetGridObject(x, y).GetItem());
+                    
+                    RemoveItemAt(new Vector2Int(x, y));
                 }
             }
         }

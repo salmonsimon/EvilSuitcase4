@@ -46,7 +46,6 @@ public class GunItem : EquipableItem, IPointerDownHandler
     {
         base.Awake();
 
-        buttonsPanel.gameObject.SetActive(false);
         ammoText = ammoTextPanel.GetComponentInChildren<TextMeshProUGUI>();
         UpdateAmmoText();
     }
@@ -64,32 +63,34 @@ public class GunItem : EquipableItem, IPointerDownHandler
 
     public override void RotateInfoPanels()
     {
+        RectTransform currentButtonPanel = GetCurrentButtonPanel().GetComponent<RectTransform>();
+
         switch (direction)
         {
             case Item.Direction.Down:
-                ammoTextPanel.anchoredPosition = new Vector2(((width - 1)*cellWidth) - 20, 0);
+                ammoTextPanel.anchoredPosition = new Vector2(((width - 1)*cellSize) - 20, 0);
                 ammoTextPanel.rotation = Quaternion.Euler(0, 0, 0);
 
-                buttonsPanel.anchoredPosition = new Vector2(((width - 1) * cellWidth) + 20, ((height - 1) * cellHeight) - 20);
-                buttonsPanel.rotation = Quaternion.Euler(0, 0, 0);
+                currentButtonPanel.anchoredPosition = new Vector2((width * cellSize) + 20, (height * cellSize) - 20);
+                currentButtonPanel.rotation = Quaternion.Euler(0, 0, 0);
 
                 break;
 
             case Item.Direction.Left:
-                ammoTextPanel.anchoredPosition = new Vector2(((width - 1) * cellWidth), ((height - 1) * cellHeight) + 30);
+                ammoTextPanel.anchoredPosition = new Vector2(((width - 1) * cellSize), ((height - 1) * cellSize) + 30);
                 ammoTextPanel.rotation = Quaternion.Euler(0, 0, 0);
 
-                buttonsPanel.anchoredPosition = new Vector2(-30, ((height - 1) * cellHeight) + 20);
-                buttonsPanel.rotation = Quaternion.Euler(0, 0, 0);
+                currentButtonPanel.anchoredPosition = new Vector2(20, (height * cellSize) + 20);
+                currentButtonPanel.rotation = Quaternion.Euler(0, 0, 0);
 
                 break;
 
             case Item.Direction.Up:
-                ammoTextPanel.anchoredPosition = new Vector2(-30, ((height - 1) * cellHeight) + 50);
+                ammoTextPanel.anchoredPosition = new Vector2(-30, ((height - 1) * cellSize) + 50);
                 ammoTextPanel.rotation = Quaternion.Euler(0, 0, 0);
 
-                buttonsPanel.anchoredPosition = new Vector2(-70, -30);
-                buttonsPanel.rotation = Quaternion.Euler(0, 0, 0);
+                currentButtonPanel.anchoredPosition = new Vector2(-20, 20);
+                currentButtonPanel.rotation = Quaternion.Euler(0, 0, 0);
 
                 break;
 
@@ -97,8 +98,8 @@ public class GunItem : EquipableItem, IPointerDownHandler
                 ammoTextPanel.anchoredPosition = new Vector2(-50, 20);
                 ammoTextPanel.rotation = Quaternion.Euler(0, 0, 0);
 
-                buttonsPanel.anchoredPosition = new Vector2(((width - 1) * cellWidth) - 20, -70);
-                buttonsPanel.rotation = Quaternion.Euler(0, 0, 0);
+                currentButtonPanel.anchoredPosition = new Vector2((width * cellSize) - 20, -20);
+                currentButtonPanel.rotation = Quaternion.Euler(0, 0, 0);
 
                 break;
         }

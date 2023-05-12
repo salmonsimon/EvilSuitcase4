@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using AYellowpaper.SerializedCollections;
 using StarterAssets;
-using static Inventory;
-using static Utils;
-using static UnityEditor.Timeline.Actions.MenuPriority;
 using System.Linq;
-using System.Collections.Concurrent;
+using System.Runtime.CompilerServices;
+using static Inventory;
+using Mono.Cecil;
+using static UnityEditor.Progress;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -199,6 +199,370 @@ public class InventoryManager : MonoBehaviour
 
         GameManager.instance.GetInventoryUI().LoadFastSwapGameplayPanel(currentEquippedWeaponShortcutIndex);
     }
+
+    #endregion
+
+    #region Inventory Filling Methods
+
+    public void AutoSortMainInventory(Inventory inventory, List<Item> items)
+    {
+        inventory.gameObject.SetActive(false);
+
+        FillInventory(inventory, items);
+
+        inventory.gameObject.SetActive(true);
+    }
+
+    public void FillInventory(Inventory inventory, List<Item> items, bool maintainHeight = true)
+    {
+        int inventoryWidth = inventory.GridWidth;
+        int inventoryHeight = inventory.GridHeight;
+
+        Grid<GridObject> grid = new Grid<GridObject>(inventoryWidth, inventoryHeight, 50f, new Vector3(0, 0, 0), (Grid<GridObject> g, int x, int y) => new GridObject(g, x, y));
+
+        List<Item> sortedItems = SortItemsByHeight(items);
+        List<Item> unplacedItems = new List<Item>();
+
+        bool couldFillFirstTry = true;
+        bool couldFillManually = true;
+
+        int x = 0;
+        int y = 0;
+        int largestHeightInCurrentRow = 0;
+
+        int finalHeight = 0;
+
+        foreach (Item item in sortedItems)
+        {
+            item.SetDirection(Item.Direction.Down);
+
+            if (!couldFillFirstTry)
+            {
+                unplacedItems.Add(item);
+                continue;
+            }
+
+            if (x + item.GetCurrentHorizontalDimension() > inventoryWidth)
+            {
+                y += largestHeightInCurrentRow;
+
+                x = 0;
+                largestHeightInCurrentRow = 0;
+            }
+
+            finalHeight = y + item.GetCurrentVerticalDimension();
+            int remainingHeight = inventoryHeight - finalHeight;
+
+            if (remainingHeight >= 0 || !maintainHeight)
+            {
+                List<Vector2Int> gridPositionList = Item.GetGridPositionList(new Vector2Int(x, y), item.GetDirection(), item.Width, item.Height);
+
+                bool canPlace = true;
+
+                foreach (Vector2Int gridPosition in gridPositionList)
+                {
+                    bool isValidPosition = grid.IsValidGridPosition(gridPosition);
+
+                    if (!isValidPosition)
+                    {
+                        canPlace = false;
+                        break;
+                    }
+
+                    if (!grid.GetGridObject(gridPosition.x, gridPosition.y).CanBuild())
+                    {
+                        canPlace = false;
+                        break;
+                    }
+                }
+
+                if (canPlace)
+                {
+                    item.SetOrigin(new Vector2Int(x, y));
+
+                    foreach (Vector2Int gridPosition in gridPositionList)
+                        grid.GetGridObject(gridPosition.x, gridPosition.y).SetItem(item);
+
+                    x += item.GetCurrentHorizontalDimension();
+
+                    if (item.GetCurrentVerticalDimension() > largestHeightInCurrentRow)
+                        largestHeightInCurrentRow = item.Height;
+                }
+                else
+                {
+                    unplacedItems.Add(item);
+                    couldFillFirstTry = false;
+                }
+            }
+            else
+            {
+                unplacedItems.Add(item);
+                couldFillFirstTry = false;
+            }
+        }
+
+        if (couldFillFirstTry)
+        {
+            if (!maintainHeight && finalHeight > inventoryHeight)
+                inventory.InventorySetup(inventoryWidth, finalHeight);
+
+            GameManager.instance.GetInventoryManager().SavedItems = sortedItems;
+        }
+        else
+        {
+            foreach (Item item in unplacedItems)
+            {
+                if (item.TryGetComponent(out AmmoItem ammoItem))
+                {
+                    ammoItem.FillCurrentStockedAmmoWithNewAmmoItem();
+
+                    if (ammoItem.CurrentAmmo < 0)
+                    {
+                        sortedItems.Remove(item);
+                        ammoItem.Discard();
+                        continue;
+                    }
+                }
+
+                if (!TryAddingItemManually(grid, item))
+                {
+                    couldFillManually = false; 
+                    break;
+                }
+            }
+
+            if (!couldFillManually)
+                Debug.LogError("Couldn't fill all items in inventory");
+            else
+                GameManager.instance.GetInventoryManager().SavedItems = sortedItems;
+        }
+    }
+
+    public bool AddItemManuallyToMainInventory(Inventory inventory, Item item)
+    {
+        bool couldAddItem = true;
+
+        if (item.TryGetComponent(out AmmoItem ammoItem))
+        {
+            ammoItem.FillCurrentStockedAmmoWithNewAmmoItem();
+
+            if (ammoItem.CurrentAmmo < 0)
+            {
+                ammoItem.Discard();
+
+                return couldAddItem;
+            }
+        }
+
+        if (TryAddingItemManually(inventory.GetGrid(), item))
+        {
+            inventory.gameObject.SetActive(false);
+
+            inventory.TryPlaceItem(item, item.GetGridPosition(), item.GetDirection());
+
+            inventory.gameObject.SetActive(true);
+        }
+        else
+        {
+            AutoSortMainInventory(inventory, GameManager.instance.GetInventoryManager().SavedItems);
+
+            if (TryAddingItemManually(inventory.GetGrid(), item))
+            {
+                inventory.gameObject.SetActive(false);
+
+                inventory.TryPlaceItem(item, item.GetGridPosition(), item.GetDirection());
+
+                inventory.gameObject.SetActive(true);
+            }
+            else
+                couldAddItem = false;
+        }
+
+        return couldAddItem;
+    }
+
+    public bool TryAddingItemManually(Grid<GridObject> grid, Item item)
+    {
+        bool couldAddItem = true;
+
+        if (!TryAddingItemHorizontally(grid, item))
+        {
+            item.SetDirection(Item.Direction.Left);
+
+            if (!TryAddingItemVertically(grid, item))
+                couldAddItem = false;
+        }
+        
+        return couldAddItem;
+    }
+
+    private bool TryAddingItemVertically(Grid<GridObject> grid, Item item)
+    {
+        bool couldAdd = true;
+
+        bool finishedSearching = false;
+
+        int gridWidth = grid.GetWidth();
+        int gridHeight = grid.GetHeight();
+
+        int x = 0;
+        int y = 0;
+
+        int minWidthInCurrentColumn = int.MaxValue;
+
+        while (!finishedSearching)
+        {
+            item.SetDirection(Item.Direction.Left);
+
+            if (y + item.GetCurrentVerticalDimension() > gridHeight)
+            {
+                x += minWidthInCurrentColumn;
+
+                y = 0;
+                minWidthInCurrentColumn = int.MaxValue;
+            }
+
+            if (x >= gridWidth)
+            {
+                couldAdd = false;
+                finishedSearching = true;
+
+                break;
+            }
+
+            List<Vector2Int> gridPositionList = Item.GetGridPositionList(new Vector2Int(x, y), item.GetDirection(), item.Width, item.Height);
+
+            bool canPlace = true;
+
+            foreach (Vector2Int gridPosition in gridPositionList)
+            {
+                bool isValidPosition = grid.IsValidGridPosition(gridPosition);
+
+                if (!isValidPosition)
+                {
+                    canPlace = false;
+                    break;
+                }
+
+                if (!grid.GetGridObject(gridPosition.x, gridPosition.y).CanBuild())
+                {
+                    canPlace = false;
+                    break;
+                }
+            }
+
+            if (canPlace)
+            {
+                item.SetOrigin(new Vector2Int(x, y));
+
+                foreach (Vector2Int gridPosition in gridPositionList)
+                    grid.GetGridObject(gridPosition.x, gridPosition.y).SetItem(item);
+
+                break;
+            }
+            else
+            {
+                Item placedItem = grid.GetGridObject(x, y).GetItem();
+
+                int remainingItemWidth = placedItem.GetCurrentHorizontalDimension() + placedItem.GetGridPosition().x - x;
+
+                if (remainingItemWidth < minWidthInCurrentColumn)
+                    minWidthInCurrentColumn = remainingItemWidth;
+
+                y += placedItem.GetCurrentVerticalDimension();
+            }
+        }
+
+        return couldAdd;
+    }
+
+    private bool TryAddingItemHorizontally(Grid<GridObject> grid, Item item)
+    {
+
+        bool couldAdd = true;
+
+        bool finishedSearching = false;
+
+        int gridWidth = grid.GetWidth();
+        int gridHeight = grid.GetHeight();
+
+        int x = 0;
+        int y = 0;
+
+        int minHeightInCurrentRow = int.MaxValue;
+
+        while (!finishedSearching)
+        {
+            if (x + item.GetCurrentHorizontalDimension() > gridWidth)
+            {
+                y += minHeightInCurrentRow;
+
+                x = 0;
+                minHeightInCurrentRow = int.MaxValue;
+            }
+
+            if (y >= gridHeight)
+            {
+                couldAdd = false;
+                finishedSearching = true;
+                
+                break;
+            }
+
+            List<Vector2Int> gridPositionList = Item.GetGridPositionList(new Vector2Int(x, y), item.GetDirection(), item.Width, item.Height);
+
+            bool canPlace = true;
+
+            foreach (Vector2Int gridPosition in gridPositionList)
+            {
+                bool isValidPosition = grid.IsValidGridPosition(gridPosition);
+
+                if (!isValidPosition)
+                {
+                    canPlace = false;
+                    break;
+                }
+
+                if (!grid.GetGridObject(gridPosition.x, gridPosition.y).CanBuild())
+                {
+                    canPlace = false;
+                    break;
+                }
+            }
+
+            if (canPlace)
+            {
+                item.SetOrigin(new Vector2Int(x, y));
+
+                foreach (Vector2Int gridPosition in gridPositionList)
+                    grid.GetGridObject(gridPosition.x, gridPosition.y).SetItem(item);
+
+                break;
+            }
+            else
+            {
+                Item placedItem = grid.GetGridObject(x, y).GetItem();
+
+
+                int remainingItemHeight = placedItem.GetCurrentVerticalDimension() + placedItem.GetGridPosition().y - y;
+
+                if (remainingItemHeight < minHeightInCurrentRow)
+                    minHeightInCurrentRow = remainingItemHeight;
+
+                x += placedItem.GetCurrentHorizontalDimension();
+            }
+        }
+
+        return couldAdd;
+    }
+
+    private List<Item> SortItemsByHeight(List<Item> items)
+    {
+        List<Item> orderedList = items.OrderBy(i => i.Height).ToList();
+        orderedList.Reverse();
+
+        return orderedList;
+    } 
 
     #endregion
 }

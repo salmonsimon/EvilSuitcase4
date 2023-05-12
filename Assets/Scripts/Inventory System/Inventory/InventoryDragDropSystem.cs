@@ -5,7 +5,8 @@ public class InventoryDragDropSystem : MonoBehaviour
 {
     #region Object References
 
-    [SerializeField] private List<Inventory> inventoryList;
+    [SerializeField] private List<Inventory> pauseInventoryList;
+    [SerializeField] private List<Inventory> rewardsInventoryList;
 
 #if ENABLE_INPUT_SYSTEM
     private InputsUI input;
@@ -25,8 +26,11 @@ public class InventoryDragDropSystem : MonoBehaviour
 
     private void Start()
     {
-        foreach (Inventory inventoryTetris in inventoryList)
-            inventoryTetris.OnItemPlaced += (object sender, Item placedObject) => {};
+        foreach (Inventory inventory in pauseInventoryList)
+            inventory.OnItemPlaced += (object sender, Item placedObject) => {};
+
+        foreach (Inventory inventory in rewardsInventoryList)
+            inventory.OnItemPlaced += (object sender, Item placedObject) => { };
 
         input = GameManager.instance.GetPlayer().GetComponent<InputsUI>();
     }
@@ -47,9 +51,9 @@ public class InventoryDragDropSystem : MonoBehaviour
             Vector2Int rotationOffset = Item.GetRotationOffset(direction, draggingItem.GetItemSO().Width, draggingItem.GetItemSO().Height);
             targetPosition += new Vector2(rotationOffset.x, rotationOffset.y) * draggingInventory.GetGrid().GetCellSize();
 
-            targetPosition /= 10f;// draggingInventoryTetris.GetGrid().GetCellSize();
+            targetPosition /= 10f; // draggingInventory.CellSize; //10f;
             targetPosition = new Vector2(Mathf.Floor(targetPosition.x), Mathf.Floor(targetPosition.y));
-            targetPosition *= 10f;
+            targetPosition *= 10f; //draggingInventory.CellSize; //10f;
 
             draggingItem.GetComponent<RectTransform>().anchoredPosition = Vector2.Lerp(draggingItem.GetComponent<RectTransform>().anchoredPosition, targetPosition, Time.fixedDeltaTime * 15f);
             draggingItem.transform.rotation = Quaternion.Lerp(draggingItem.transform.rotation, Quaternion.Euler(0, 0, -Item.GetRotationAngle(direction)), Time.fixedDeltaTime * 15f);
@@ -90,10 +94,13 @@ public class InventoryDragDropSystem : MonoBehaviour
 
         Inventory toInventory = null;
 
-        foreach (Inventory inventory in inventoryList)
+        List<Inventory> inventoriesToCheck = GameManager.instance.IsOnRewardsUI ? rewardsInventoryList : pauseInventoryList;
+
+        foreach (Inventory inventory in inventoriesToCheck)
         {
             Vector3 screenPoint = input.point;
             RectTransformUtility.ScreenPointToLocalPointInRectangle(inventory.GetItemContainer(), screenPoint, null, out Vector2 anchoredPosition);
+
             Vector2Int itemOrigin = inventory.GetGridPosition(anchoredPosition);
             itemOrigin = itemOrigin - mouseDragGridPositionOffset;
 

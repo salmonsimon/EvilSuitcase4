@@ -29,6 +29,7 @@ namespace StarterAssets
         public Vector2 scrollWheel;
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
+
         public void OnMove(InputValue value)
 		{
 			MoveInput(value.Get<Vector2>());

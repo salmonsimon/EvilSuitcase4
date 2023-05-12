@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using static Utils;
 
-[RequireComponent(typeof(GraphicRaycaster),  typeof(Canvas))]
+[RequireComponent(typeof(GraphicRaycaster), typeof(Canvas))]
 public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
 {
     public enum Direction
@@ -19,24 +19,32 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
 
     [Header("Main Object References")]
     [SerializeField] protected ItemScriptableObject itemSO;
-    [SerializeField] protected RectTransform buttonsPanel;
+    [SerializeField] protected GameObject mainInventoryButtonPanel;
+    [SerializeField] protected GameObject rewardsMainInventoryButtonPanel;
+    [SerializeField] protected GameObject rewardsInventoryButtonPanel;
 
     protected GameObject blockedPanel;
+    protected GameObject visualPanel;
 
     #endregion
 
     #region Parameters
 
-    protected float width;
-    protected float height;
-    protected float cellWidth;
-    protected float cellHeight;
+    protected int width;
+    public int Width { get { return width; } }
+
+    protected int height;
+    public int Height { get { return height; } }
+
+    protected float cellSize = 50f;
+    public float CellSize { get { return cellSize; } private set { cellSize = value; } }
 
     #endregion
 
     #region Variables
 
     protected Direction direction;
+
     protected Vector2Int origin;
 
     protected Inventory holdingInventory;
@@ -52,14 +60,17 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
     {
         RectTransform rectTransform = GetComponent<RectTransform>();
 
-        cellWidth = rectTransform.sizeDelta.x;
-        cellHeight = rectTransform.sizeDelta.y;
-
         width = itemSO.Width;
         height = itemSO.Height;
 
+        mainInventoryButtonPanel.SetActive(false);
+        rewardsInventoryButtonPanel.SetActive(false);
+        rewardsMainInventoryButtonPanel.SetActive(false);
+
         blockedPanel = transform.Find("Blocked Panel").gameObject;
         blockedPanel.SetActive(false);
+
+        visualPanel = transform.GetChild(0).gameObject;
     }
 
     protected void OnEnable()
@@ -70,7 +81,7 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
             blockedPanel.SetActive(false);
     }
 
-    public void ItemSetup(Transform parent, Vector2 anchoredPosition, Vector2Int origin, Direction direction)
+    public void ItemSetup(Transform parent, Vector2 anchoredPosition, Vector2Int origin, Direction direction, float inventoryCellSize)
     {
         transform.SetParent(parent);
         transform.rotation = Quaternion.Euler(0, GetRotationAngle(direction), 0);
@@ -79,9 +90,13 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
 
         this.origin = origin;
         this.direction = direction;
+
+        float newScale = inventoryCellSize / CellSize;
+
+        transform.localScale = new Vector3(newScale, newScale, newScale);
     }
 
-    public void CreateVisualBackgroundGrid(Transform visualParentTransform, ItemScriptableObject itemTetrisSO, float cellSize)
+    public void CreateVisualBackgroundGrid(Transform visualParentTransform, ItemScriptableObject itemTetrisSO)
     {
         Transform visualTransform = Instantiate(itemTetrisSO.GridVisual, visualParentTransform);
 
@@ -126,6 +141,35 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
     public Direction GetDirection()
     {
         return direction;
+    }
+
+    public void SetDirection(Direction direction)
+    {
+        this.direction = direction;
+    }
+
+    public int GetCurrentHorizontalDimension()
+    {
+        switch (direction)
+        {
+            default:
+            case Direction.Down: return Width;
+            case Direction.Left: return Height;
+            case Direction.Up: return Width;
+            case Direction.Right: return Height;
+        }
+    }
+
+    public int GetCurrentVerticalDimension()
+    {
+        switch (direction)
+        {
+            default:
+            case Direction.Down: return Height;
+            case Direction.Left: return Width;
+            case Direction.Up: return Height;
+            case Direction.Right: return Width;
+        }
     }
 
     public ItemScriptableObject GetItemSO()
@@ -201,7 +245,18 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
                 }
                 break;
         }
+
         return gridPositionList;
+    }
+
+    protected virtual GameObject GetCurrentButtonPanel()
+    {
+        if (GameManager.instance.IsOnRewardsUI)
+        {
+            return HoldingInventory.MainInventory ? rewardsMainInventoryButtonPanel : rewardsInventoryButtonPanel;
+        }
+        else
+            return mainInventoryButtonPanel;
     }
 
     #endregion
@@ -282,24 +337,34 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
         }
     }
 
+    public void AddButton()
+    {
+        if (!GameManager.instance.GetInventoryManager().AddItemManuallyToMainInventory
+            (GameManager.instance.GetRewardsUI().MainInventory, this))
+            Debug.LogError("Couldn't add item to main inventory");
+    }
+
     #endregion
 
     #region Mouse/Keyboard Input Scheme
 
     public virtual void OnPointerClick(PointerEventData eventData)
     {
+        GameObject buttonPanelToOpen = GetCurrentButtonPanel();
+
         if (eventData.button == PointerEventData.InputButton.Right && !IsBlocked)
         {
-            HoldingInventory.SetNewOpenButton(buttonsPanel.gameObject);
-            buttonsPanel.gameObject.SetActive(true);
+            HoldingInventory.SetNewOpenButton(buttonPanelToOpen.gameObject);
+            buttonPanelToOpen.gameObject.SetActive(true);
         }
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        GameObject currentButtonPanel = GetCurrentButtonPanel();
         GameObject openButtonPanel = HoldingInventory.OpenItemButtonPanel;
 
-        if (openButtonPanel != buttonsPanel.gameObject)
+        if (openButtonPanel != currentButtonPanel.gameObject)
         {
             HoldingInventory.SetNewOpenButton(null);
         }

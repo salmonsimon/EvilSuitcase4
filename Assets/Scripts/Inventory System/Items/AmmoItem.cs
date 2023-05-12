@@ -50,7 +50,6 @@ public class AmmoItem : Item
     {
         base.Awake();
 
-        buttonsPanel.gameObject.SetActive(false);
         ammoText = ammoTextPanel.GetComponentInChildren<TextMeshProUGUI>();
         UpdateAmmoText();
     }
@@ -134,6 +133,32 @@ public class AmmoItem : Item
         inventoryManager.StockedAmmoChange();
     }
 
+    public void FillCurrentStockedAmmoWithNewAmmoItem()
+    {
+        InventoryManager inventoryManager = GameManager.instance.GetInventoryManager();
+
+        if (inventoryManager.AmmoItemListDictionary[ammoType].Any())
+        {
+            List<AmmoItem> inventoryAmmoItemList = inventoryManager.AmmoItemListDictionary[ammoType];
+            AmmoItem lastAmmoItemInInventoryList = inventoryAmmoItemList[inventoryAmmoItemList.Count - 1];
+
+            if (lastAmmoItemInInventoryList.CurrentAmmo == lastAmmoItemInInventoryList.MaxAmmo)
+                return;
+            else
+            {
+                int maxFillAmount = Mathf.Min(lastAmmoItemInInventoryList.MaxAmmo, CurrentAmmo);
+                int bulletsToFillAmmoItem = lastAmmoItemInInventoryList.MaxAmmo - lastAmmoItemInInventoryList.CurrentAmmo;
+                int fillAmount = Mathf.Min(maxFillAmount, bulletsToFillAmmoItem);
+
+                lastAmmoItemInInventoryList.CurrentAmmo += fillAmount;
+
+                inventoryAmmoItemList[inventoryAmmoItemList.Count - 1] = lastAmmoItemInInventoryList;
+
+                CurrentAmmo -= fillAmount;
+            }
+        }
+    }
+
     public override void Discard()
     {
         InventoryManager inventoryManager = GameManager.instance.GetInventoryManager();
@@ -145,32 +170,34 @@ public class AmmoItem : Item
 
     public override void RotateInfoPanels()
     {
+        RectTransform currentButtonPanel = GetCurrentButtonPanel().GetComponent<RectTransform>();
+
         switch (direction)
         {
             case Item.Direction.Down:
-                ammoTextPanel.anchoredPosition = new Vector2(((width - 1) * cellWidth) - 20, 0);
+                ammoTextPanel.anchoredPosition = new Vector2(((width - 1) * cellSize) - 20, 0);
                 ammoTextPanel.rotation = Quaternion.Euler(0, 0, 0);
 
-                buttonsPanel.anchoredPosition = new Vector2(((width - 1) * cellWidth) + 20, ((height - 1) * cellHeight) - 20);
-                buttonsPanel.rotation = Quaternion.Euler(0, 0, 0);
+                currentButtonPanel.anchoredPosition = new Vector2((width * cellSize) + 20, (height * cellSize) - 20);
+                currentButtonPanel.rotation = Quaternion.Euler(0, 0, 0);
 
                 break;
 
             case Item.Direction.Left:
-                ammoTextPanel.anchoredPosition = new Vector2(((width - 1) * cellWidth), ((height - 1) * cellHeight) + 30);
+                ammoTextPanel.anchoredPosition = new Vector2(((width - 1) * cellSize), ((height - 1) * cellSize) + 30);
                 ammoTextPanel.rotation = Quaternion.Euler(0, 0, 0);
 
-                buttonsPanel.anchoredPosition = new Vector2(-30, ((height - 1) * cellHeight) + 20);
-                buttonsPanel.rotation = Quaternion.Euler(0, 0, 0);
+                currentButtonPanel.anchoredPosition = new Vector2(20, (height * cellSize) + 20);
+                currentButtonPanel.rotation = Quaternion.Euler(0, 0, 0);
 
                 break;
 
             case Item.Direction.Up:
-                ammoTextPanel.anchoredPosition = new Vector2(-30, ((height - 1) * cellHeight) + 50);
+                ammoTextPanel.anchoredPosition = new Vector2(-30, ((height - 1) * cellSize) + 50);
                 ammoTextPanel.rotation = Quaternion.Euler(0, 0, 0);
 
-                buttonsPanel.anchoredPosition = new Vector2(-70, -30);
-                buttonsPanel.rotation = Quaternion.Euler(0, 0, 0);
+                currentButtonPanel.anchoredPosition = new Vector2(-20, 20);
+                currentButtonPanel.rotation = Quaternion.Euler(0, 0, 0);
 
                 break;
 
@@ -178,8 +205,8 @@ public class AmmoItem : Item
                 ammoTextPanel.anchoredPosition = new Vector2(-50, 20);
                 ammoTextPanel.rotation = Quaternion.Euler(0, 0, 0);
 
-                buttonsPanel.anchoredPosition = new Vector2(((width - 1) * cellWidth) - 20, -70);
-                buttonsPanel.rotation = Quaternion.Euler(0, 0, 0);
+                currentButtonPanel.anchoredPosition = new Vector2((width * cellSize) - 20, -20);
+                currentButtonPanel.rotation = Quaternion.Euler(0, 0, 0);
 
                 break;
         }

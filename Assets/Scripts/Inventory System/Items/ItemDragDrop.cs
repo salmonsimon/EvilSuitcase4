@@ -1,26 +1,23 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using static UnityEditor.Progress;
 
 public class ItemDragDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
-    private Canvas canvas;
-    private RectTransform rectTransform;
     private CanvasGroup canvasGroup;
 
-    private Inventory inventoryTetris;
+    private Inventory inventory;
     private Item placedObject;
 
     private void Awake()
     {
-        canvas = GetComponentInParent<Canvas>();
-        rectTransform = GetComponent<RectTransform>();
         canvasGroup = GetComponent<CanvasGroup>();
         placedObject = GetComponent<Item>();
     }
 
-    public void Setup(Inventory inventoryTetris)
+    public void Setup(Inventory inventory)
     {
-        this.inventoryTetris = inventoryTetris;
+        this.inventory = inventory;
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -28,9 +25,12 @@ public class ItemDragDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandle
         canvasGroup.alpha = .7f;
         canvasGroup.blocksRaycasts = false;
 
-        placedObject.CreateVisualBackgroundGrid(transform.GetChild(0), placedObject.GetItemSO() as ItemScriptableObject, inventoryTetris.GetGrid().GetCellSize());
+        GetComponent<Canvas>().sortingOrder = 10000;
+        placedObject.HoldingInventory.SetNewOpenButton(null);
 
-        GameManager.instance.GetInventoryDragDropSystem().StartedDragging(inventoryTetris, placedObject);
+        placedObject.CreateVisualBackgroundGrid(transform.GetChild(0), placedObject.GetItemSO() as ItemScriptableObject);
+
+        GameManager.instance.GetInventoryDragDropSystem().StartedDragging(inventory, placedObject);
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -38,7 +38,7 @@ public class ItemDragDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandle
         canvasGroup.alpha = 1f;
         canvasGroup.blocksRaycasts = true;
 
-        GameManager.instance.GetInventoryDragDropSystem().StoppedDragging(inventoryTetris, placedObject);
+        GameManager.instance.GetInventoryDragDropSystem().StoppedDragging(inventory, placedObject);
     }
 
     public void OnDrag(PointerEventData eventData)

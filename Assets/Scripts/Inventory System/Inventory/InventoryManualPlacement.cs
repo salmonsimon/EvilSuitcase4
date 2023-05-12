@@ -14,6 +14,8 @@ public class InventoryManualPlacement : MonoBehaviour
     [SerializeField] private List<Item> testingItemPrefabs = null;
 
     private Inventory inventory;
+    public Inventory Inventory { get { return inventory; } }
+
     private RectTransform itemContainer;
 
 #if ENABLE_INPUT_SYSTEM
