@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -25,7 +26,7 @@ public class WaveManager : MonoBehaviour
     [System.Serializable]
     public struct WaveRewardsStruct
     {
-        public List<RewardItem> RewardItem;
+        public List<RewardItem> RewardItems;
     }
 
     #endregion
@@ -34,6 +35,8 @@ public class WaveManager : MonoBehaviour
 
     [SerializeField] List<WaveSpawnStruct> waves;
     [SerializeField] List<WaveRewardsStruct> rewards;
+    [SerializeField] List<float> rewardsCountdown;
+    [SerializeField] List<int> itemsToBlock;
 
     #endregion
 
@@ -53,6 +56,9 @@ public class WaveManager : MonoBehaviour
     private Transform poolContainer;
     public Transform PoolContainer { get { return poolContainer; } }
 
+    [SerializeField] private GameObject nextWaveCountdownPanel;
+    [SerializeField] private GameObject waveClearedPanel;
+
     #endregion
 
     private void Awake()
@@ -62,6 +68,32 @@ public class WaveManager : MonoBehaviour
 
     private void Start()
     {
+        NextWave();
+    }
+
+    public void NextWave()
+    {
+        StartCoroutine(NextWaveCoroutine());
+    }
+
+    private IEnumerator NextWaveCoroutine()
+    {
+        nextWaveCountdownPanel.SetActive(true);
+
+        TextMeshProUGUI countdownText = nextWaveCountdownPanel.transform.GetComponentInChildren<TextMeshProUGUI>();
+
+        for (int i = 3; i >= 0; i--)
+        {
+            if (i == 0)
+                countdownText.text = "Start!";
+            else
+                countdownText.text = i + "...";
+
+            yield return new WaitForSeconds(1f);
+        }
+
+        nextWaveCountdownPanel.SetActive(false);
+
         StartWave();
     }
 
@@ -87,8 +119,103 @@ public class WaveManager : MonoBehaviour
 
     private void WaveCleared()
     {
-        // TO DO:
-        // Here open the rewards inventory and all rewards obtained
+        StartCoroutine(WaveClearedCoroutine());
+    }
+
+    private IEnumerator WaveClearedCoroutine()
+    {
+        waveClearedPanel.SetActive(true);
+        TextMeshProUGUI countdownText = waveClearedPanel.transform.GetComponentInChildren<TextMeshProUGUI>();
+
+        for (int i = 5; i > 0; i--)
+        {
+            countdownText.text = i + "...";
+
+            yield return new WaitForSeconds(1f);
+        }
+
+        List<Item> rewardItems = DrawRewardItems();
+
+        float transitionTime = GameManager.instance.GetTransitionManager().RunTransition("DoubleWipe");
+
+        yield return new WaitForSeconds(transitionTime);
+
+        waveClearedPanel.SetActive(false);
+
+        GameManager.instance.GetRewardsUI().OpenRewardsUI(rewardItems, rewardsCountdown[currentWave]);
+
+        GameManager.instance.GetTransitionManager().FinishCurrentTransition();
+
+        yield return new WaitForSeconds(transitionTime);
+    }
+
+    public void FinishWave()
+    {
+        StartCoroutine(FinishWaveCoroutine());
+    }
+
+    private IEnumerator FinishWaveCoroutine()
+    {
+        float transitionTime = GameManager.instance.GetTransitionManager().RunTransition("DoubleWipe");
+
+        yield return new WaitForSeconds(transitionTime);
+
+        GameManager.instance.GetRewardsUI().CloseRewardsUI();
+
+        foreach (Item item in GameManager.instance.GetInventoryManager().SavedItems)
+            item.UnblockItem();
+
+        if (currentWave % 10 == 0)
+            CorpseCleanup();
+
+        GameManager.instance.GetTransitionManager().FinishCurrentTransition();
+
+        yield return new WaitForSeconds(transitionTime);
+
+        int itemsBlocked = 0;
+
+        if (itemsToBlock[currentWave] > 0)
+        {
+            GameManager.instance.GetInventoryUI().OpenPauseInventory();
+
+            // SHAKE INVENTORY
+
+            // START EVIL SUITCASE TRANSITION AND EVIL LAUGH
+
+            List<Item> inventoryItems = GameManager.instance.GetInventoryManager().SavedItems;
+            inventoryItems.Shuffle();
+
+            while (itemsBlocked < itemsToBlock[currentWave])
+            {
+                inventoryItems[itemsBlocked].BlockItem();
+                itemsBlocked++;
+            }
+
+            // FINISH EVIL SUITCASE TRANSITION
+        }
+
+        if (itemsBlocked > 0)
+            GameManager.instance.GetInventoryUI().PauseGame();
+
+        yield return new WaitForSeconds(Config.MEDIUM_DELAY);
+
+        NextWave();
+    }
+
+    private List<Item> DrawRewardItems()
+    {
+        List<Item> rewardItems = new List<Item>();
+
+        foreach (RewardItem rewardItem in rewards[currentWave].RewardItems)
+        {
+            for (int itemAmount = 0; itemAmount < rewardItem.Amount; itemAmount++)
+            {
+                if (Random.Range(0, 1) > rewardItem.Probability)
+                    rewardItems.Add(rewardItem.Item.RewardItemSetup(rewardItem));
+            }
+        }
+
+        return rewardItems;
     }
 
     private void CorpseCleanup()

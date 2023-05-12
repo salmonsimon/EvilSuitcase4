@@ -61,6 +61,13 @@ public class GunItem : EquipableItem, IPointerDownHandler
 
     #region Item Main Functionalities
 
+    public override Item RewardItemSetup(RewardItem rewardItem)
+    {
+        CurrentAmmo = Random.Range(rewardItem.LoadedAmmoMinMax.x, rewardItem.LoadedAmmoMinMax.y + 1);
+
+        return this;
+    }
+
     public override void RotateInfoPanels()
     {
         RectTransform currentButtonPanel = GetCurrentButtonPanel().GetComponent<RectTransform>();
