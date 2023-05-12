@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using static UnityEditor.Progress;
 
 public class ItemDragDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
@@ -23,6 +24,9 @@ public class ItemDragDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandle
     {
         canvasGroup.alpha = .7f;
         canvasGroup.blocksRaycasts = false;
+
+        GetComponent<Canvas>().sortingOrder = 10000;
+        placedObject.HoldingInventory.SetNewOpenButton(null);
 
         placedObject.CreateVisualBackgroundGrid(transform.GetChild(0), placedObject.GetItemSO() as ItemScriptableObject);
 

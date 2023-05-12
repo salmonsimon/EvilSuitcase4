@@ -338,8 +338,10 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    public void AddItemManuallyToMainInventory(Inventory inventory, Item item)
+    public bool AddItemManuallyToMainInventory(Inventory inventory, Item item)
     {
+        bool couldAddItem = true;
+
         if (item.TryGetComponent(out AmmoItem ammoItem))
         {
             ammoItem.FillCurrentStockedAmmoWithNewAmmoItem();
@@ -347,7 +349,8 @@ public class InventoryManager : MonoBehaviour
             if (ammoItem.CurrentAmmo < 0)
             {
                 ammoItem.Discard();
-                return;
+
+                return couldAddItem;
             }
         }
 
@@ -361,8 +364,21 @@ public class InventoryManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Couldn't add item to main inventory");
+            AutoSortMainInventory(inventory, GameManager.instance.GetInventoryManager().SavedItems);
+
+            if (TryAddingItemManually(inventory.GetGrid(), item))
+            {
+                inventory.gameObject.SetActive(false);
+
+                inventory.TryPlaceItem(item, item.GetGridPosition(), item.GetDirection());
+
+                inventory.gameObject.SetActive(true);
+            }
+            else
+                couldAddItem = false;
         }
+
+        return couldAddItem;
     }
 
     public bool TryAddingItemManually(Grid<GridObject> grid, Item item)

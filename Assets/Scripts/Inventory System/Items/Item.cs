@@ -19,7 +19,9 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
 
     [Header("Main Object References")]
     [SerializeField] protected ItemScriptableObject itemSO;
-    [SerializeField] protected RectTransform buttonsPanel;
+    [SerializeField] protected GameObject mainInventoryButtonPanel;
+    [SerializeField] protected GameObject rewardsMainInventoryButtonPanel;
+    [SerializeField] protected GameObject rewardsInventoryButtonPanel;
 
     protected GameObject blockedPanel;
     protected GameObject visualPanel;
@@ -60,6 +62,10 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
 
         width = itemSO.Width;
         height = itemSO.Height;
+
+        mainInventoryButtonPanel.SetActive(false);
+        rewardsInventoryButtonPanel.SetActive(false);
+        rewardsMainInventoryButtonPanel.SetActive(false);
 
         blockedPanel = transform.Find("Blocked Panel").gameObject;
         blockedPanel.SetActive(false);
@@ -243,6 +249,16 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
         return gridPositionList;
     }
 
+    protected virtual GameObject GetCurrentButtonPanel()
+    {
+        if (GameManager.instance.IsOnRewardsUI)
+        {
+            return HoldingInventory.MainInventory ? rewardsMainInventoryButtonPanel : rewardsInventoryButtonPanel;
+        }
+        else
+            return mainInventoryButtonPanel;
+    }
+
     #endregion
 
     #region Item Main Functionalities
@@ -321,24 +337,34 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
         }
     }
 
+    public void AddButton()
+    {
+        if (!GameManager.instance.GetInventoryManager().AddItemManuallyToMainInventory
+            (GameManager.instance.GetRewardsUI().MainInventory, this))
+            Debug.LogError("Couldn't add item to main inventory");
+    }
+
     #endregion
 
     #region Mouse/Keyboard Input Scheme
 
     public virtual void OnPointerClick(PointerEventData eventData)
     {
+        GameObject buttonPanelToOpen = GetCurrentButtonPanel();
+
         if (eventData.button == PointerEventData.InputButton.Right && !IsBlocked)
         {
-            HoldingInventory.SetNewOpenButton(buttonsPanel.gameObject);
-            buttonsPanel.gameObject.SetActive(true);
+            HoldingInventory.SetNewOpenButton(buttonPanelToOpen.gameObject);
+            buttonPanelToOpen.gameObject.SetActive(true);
         }
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        GameObject currentButtonPanel = GetCurrentButtonPanel();
         GameObject openButtonPanel = HoldingInventory.OpenItemButtonPanel;
 
-        if (openButtonPanel != buttonsPanel.gameObject)
+        if (openButtonPanel != currentButtonPanel.gameObject)
         {
             HoldingInventory.SetNewOpenButton(null);
         }

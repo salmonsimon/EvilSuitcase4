@@ -9,6 +9,7 @@ public class RewardsUI : MonoBehaviour
     [SerializeField] private GameObject rewardsPanel;
 
     [SerializeField] private Inventory mainInventory;
+    public Inventory MainInventory { get { return mainInventory; } }
 
     [SerializeField] private Inventory consumableRewardsInventory;
     [SerializeField] private Inventory meleeWeaponRewardsInventory;

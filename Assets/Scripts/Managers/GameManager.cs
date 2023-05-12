@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private SFXManager sfxManager;
     [SerializeField] private MusicManager musicManager;
     [SerializeField] private InventoryManager inventoryManager;
+    [SerializeField] private InventoryDragDropSystem inventoryDragDropSystem;
     [SerializeField] private EnemySpawner enemySpawner;
     [SerializeField] private WaveManager waveManager;
 
@@ -27,7 +28,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private MainMenuUI mainMenu;
     [SerializeField] private AmmoDisplayUI ammoDisplayUI;
     [SerializeField] private InventoryUI inventoryUI;
-    [SerializeField] private InventoryDragDropSystem inventoryDragDropSystem;
+    [SerializeField] private RewardsUI rewarsdUI;
+
 
     #endregion
 
@@ -56,13 +58,14 @@ public class GameManager : MonoBehaviour
             Destroy(sfxManager.gameObject);
             Destroy(musicManager.gameObject);
             Destroy(inventoryManager.gameObject);
+            Destroy(inventoryDragDropSystem.gameObject);
             Destroy(enemySpawner.gameObject);
             Destroy(waveManager.gameObject);
 
             Destroy(mainMenu.gameObject);
             Destroy(ammoDisplayUI.gameObject);
             Destroy(inventoryUI.gameObject);
-            Destroy(inventoryDragDropSystem.gameObject);
+            Destroy(rewarsdUI.gameObject);
         }
         else
         {
@@ -231,6 +234,11 @@ public class GameManager : MonoBehaviour
     public WaveManager GetWaveManager()
     {
         return waveManager;
+    }
+
+    public RewardsUI GetRewardsUI()
+    {
+        return rewarsdUI;
     }
 
     #endregion
