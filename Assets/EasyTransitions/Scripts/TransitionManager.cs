@@ -66,6 +66,17 @@ namespace EasyTransition
         public void FinishCurrentTransition()
         {
             currentTransition.FinishTransition();
+
+            float transitionTime = currentTransition.transitionSettings.transitionTime;
+
+            StartCoroutine(FinishCurrentTransitionCoroutine(transitionTime));
+        }
+
+        private IEnumerator FinishCurrentTransitionCoroutine(float waitingTime)
+        {
+            yield return new WaitForSeconds(waitingTime);
+
+            runningTransition = false;
         }
 
         /// <summary>

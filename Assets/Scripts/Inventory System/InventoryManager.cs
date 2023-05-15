@@ -55,7 +55,7 @@ public class InventoryManager : MonoBehaviour
 
     [Header("Inventory Information Variables")]
 
-    private List<Item> blockedItems = new List<Item>();
+    [SerializeField] private List<Item> blockedItems = new List<Item>();
     public List<Item> BlockedItems { get { return blockedItems; } }
 
     [SerializeField] private List<Item> savedItems = new List<Item>();
@@ -213,14 +213,31 @@ public class InventoryManager : MonoBehaviour
         inventory.gameObject.SetActive(true);
     }
 
+    public void FillRewardsInventory(Inventory inventory, List<Item> items)
+    {
+        inventory.gameObject.SetActive(false);
+
+        FillInventory(inventory, items, false);
+
+        foreach (Item item in items)
+            inventory.TryPlaceItem(item, item.GetGridPosition(), item.GetDirection());
+
+        inventory.gameObject.SetActive(true);
+    }
+
     public void FillInventory(Inventory inventory, List<Item> items, bool maintainHeight = true)
     {
         int inventoryWidth = inventory.GridWidth;
         int inventoryHeight = inventory.GridHeight;
 
-        Grid<GridObject> grid = new Grid<GridObject>(inventoryWidth, inventoryHeight, 50f, new Vector3(0, 0, 0), (Grid<GridObject> g, int x, int y) => new GridObject(g, x, y));
+        Grid<GridObject> grid;
 
-        List<Item> sortedItems = SortItemsByHeight(items);
+        if (maintainHeight)
+            grid = new Grid<GridObject>(inventoryWidth, inventoryHeight, 50f, new Vector3(0, 0, 0), (Grid<GridObject> g, int x, int y) => new GridObject(g, x, y));
+        else
+            grid = new Grid<GridObject>(inventoryWidth, 200, 50f, new Vector3(0, 0, 0), (Grid<GridObject> g, int x, int y) => new GridObject(g, x, y));
+
+        List <Item> sortedItems = SortItemsByHeight(items);
         List<Item> unplacedItems = new List<Item>();
 
         bool couldFillFirstTry = true;
@@ -303,10 +320,35 @@ public class InventoryManager : MonoBehaviour
 
         if (couldFillFirstTry)
         {
+            if (inventory.MainInventory)
+                GameManager.instance.GetInventoryManager().SavedItems = sortedItems;
+
             if (!maintainHeight && finalHeight > inventoryHeight)
+            {
                 inventory.InventorySetup(inventoryWidth, finalHeight);
 
-            GameManager.instance.GetInventoryManager().SavedItems = sortedItems;
+                foreach (Item item in sortedItems)
+                {
+                    Vector2Int origin = item.GetGridPosition();
+
+                    int correctedY = finalHeight - origin.y - item.Height;
+                    Vector2Int newOrigin = new Vector2Int(origin.x, correctedY);
+
+                    item.SetOrigin(newOrigin);
+                }
+            }
+            else
+            {
+                foreach (Item item in sortedItems)
+                {
+                    Vector2Int origin = item.GetGridPosition();
+
+                    int correctedY = inventoryHeight - origin.y - item.Height;
+                    Vector2Int newOrigin = new Vector2Int(origin.x, correctedY);
+
+                    item.SetOrigin(newOrigin);
+                }
+            }
         }
         else
         {
@@ -319,7 +361,7 @@ public class InventoryManager : MonoBehaviour
                     if (ammoItem.CurrentAmmo < 0)
                     {
                         sortedItems.Remove(item);
-                        ammoItem.Discard();
+                        Destroy(item.gameObject);
                         continue;
                     }
                 }
@@ -334,7 +376,20 @@ public class InventoryManager : MonoBehaviour
             if (!couldFillManually)
                 Debug.LogError("Couldn't fill all items in inventory");
             else
-                GameManager.instance.GetInventoryManager().SavedItems = sortedItems;
+            {
+                if (inventory.MainInventory)
+                    GameManager.instance.GetInventoryManager().SavedItems = sortedItems;
+
+                foreach (Item item in sortedItems)
+                {
+                    Vector2Int origin = item.GetGridPosition();
+
+                    int correctedY = inventoryHeight - origin.y - item.Height;
+                    Vector2Int newOrigin = new Vector2Int(origin.x, correctedY);
+
+                    item.SetOrigin(newOrigin);
+                }
+            }
         }
     }
 
@@ -348,7 +403,7 @@ public class InventoryManager : MonoBehaviour
 
             if (ammoItem.CurrentAmmo < 0)
             {
-                ammoItem.Discard();
+                Destroy(item.gameObject);
 
                 return couldAddItem;
             }
@@ -542,7 +597,6 @@ public class InventoryManager : MonoBehaviour
             else
             {
                 Item placedItem = grid.GetGridObject(x, y).GetItem();
-
 
                 int remainingItemHeight = placedItem.GetCurrentVerticalDimension() + placedItem.GetGridPosition().y - y;
 

@@ -90,13 +90,13 @@ public class RewardsUI : MonoBehaviour
         InventoryManager inventoryManager = GameManager.instance.GetInventoryManager();
 
         consumableRewardsInventory.InventorySetup(consumableRewardsInventory.GridWidth, consumableRewardsInventory.GridHeight);
-        inventoryManager.FillInventory(consumableRewardsInventory, consumableItems, false);
+        inventoryManager.FillRewardsInventory(consumableRewardsInventory, consumableItems);
 
         meleeWeaponRewardsInventory.InventorySetup(meleeWeaponRewardsInventory.GridWidth, meleeWeaponRewardsInventory.GridHeight);
-        inventoryManager.FillInventory(meleeWeaponRewardsInventory, meleeItems, false);
+        inventoryManager.FillRewardsInventory(meleeWeaponRewardsInventory, meleeItems);
 
         gunsRewardsInventory.InventorySetup(gunsRewardsInventory.GridWidth, gunsRewardsInventory.GridHeight);
-        inventoryManager.FillInventory(gunsRewardsInventory, gunItems, false);
+        inventoryManager.FillRewardsInventory(gunsRewardsInventory, gunItems);
     }
 
     public void CloseRewardsUI()

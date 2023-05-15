@@ -105,8 +105,6 @@ public class WaveManager : MonoBehaviour
         currentEnemiesToKill = wave.EnemiesToSpawn;
 
         GameManager.instance.GetEnemySpawner().SpawnEnemies(wave);
-
-        currentWave++;
     }
 
     public void OnEnemyDeath()
@@ -151,6 +149,8 @@ public class WaveManager : MonoBehaviour
 
     public void FinishWave()
     {
+        GameManager.instance.GetRewardsUI().CloseRewardsUI();
+
         StartCoroutine(FinishWaveCoroutine());
     }
 
@@ -160,12 +160,9 @@ public class WaveManager : MonoBehaviour
 
         yield return new WaitForSeconds(transitionTime);
 
-        GameManager.instance.GetRewardsUI().CloseRewardsUI();
+        GameManager.instance.GetInventoryManager().UnblockBlockedItems();
 
-        foreach (Item item in GameManager.instance.GetInventoryManager().SavedItems)
-            item.UnblockItem();
-
-        if (currentWave % 10 == 0)
+        if (currentWave > 0 && currentWave % 10 == 0)
             CorpseCleanup();
 
         GameManager.instance.GetTransitionManager().FinishCurrentTransition();
@@ -199,6 +196,10 @@ public class WaveManager : MonoBehaviour
 
         yield return new WaitForSeconds(Config.MEDIUM_DELAY);
 
+        currentWave++;
+        
+        yield return null;
+
         NextWave();
     }
 
@@ -210,8 +211,14 @@ public class WaveManager : MonoBehaviour
         {
             for (int itemAmount = 0; itemAmount < rewardItem.Amount; itemAmount++)
             {
-                if (Random.Range(0, 1) > rewardItem.Probability)
-                    rewardItems.Add(rewardItem.Item.RewardItemSetup(rewardItem));
+                if (Random.Range(0f, 1f) < rewardItem.Probability)
+                {
+                    Item drewRewardItem = Instantiate(rewardItem.Item);
+
+                    drewRewardItem.RewardItemSetup(rewardItem);
+
+                    rewardItems.Add(drewRewardItem);
+                }
             }
         }
 

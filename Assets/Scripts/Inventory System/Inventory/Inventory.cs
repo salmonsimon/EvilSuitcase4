@@ -218,6 +218,7 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
             OnItemPlaced?.Invoke(this, item);
             item.HoldingInventory = this;
             item.RotateInfoPanels();
+
             item.GetComponent<Canvas>().overrideSorting = true;
             item.GetComponent<Canvas>().sortingOrder = 1000 - (20 * gridPositionList[0].y) - gridPositionList[0].x;
 
@@ -271,6 +272,8 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
         background.GetComponent<GridLayoutGroup>().cellSize = new Vector2(GetGrid().GetCellSize(), GetGrid().GetCellSize());
 
         background.GetComponent<RectTransform>().sizeDelta = new Vector2(GetGrid().GetWidth(), GetGrid().GetHeight()) * GetGrid().GetCellSize();
+
+        itemContainer.GetComponent<RectTransform>().sizeDelta = new Vector2(GetGrid().GetWidth(), GetGrid().GetHeight()) * GetGrid().GetCellSize();
     }
 
     #endregion
