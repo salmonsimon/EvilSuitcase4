@@ -145,6 +145,12 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
         if (!fixedPosition)
             GetComponent<RectTransform>().anchoredPosition = new Vector2(-(gridWidth * cellSize / 2), -(gridHeight * cellSize / 2));
 
+        if (!mainInventory)
+        {
+            for (int itemIndex = GetItemContainer().childCount - 1; itemIndex >= 0; itemIndex--)
+                Destroy(GetItemContainer().GetChild(itemIndex).gameObject);
+        }
+
         CreateInventoryBackground();
     }
 
@@ -210,17 +216,38 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
 
             item.GetComponent<ItemDragDrop>().Setup(this);
 
-            foreach (Vector2Int gridPosition in gridPositionList)
+            if (!mainInventory)
             {
-                grid.GetGridObject(gridPosition.x, gridPosition.y).SetItem(item);
+                SortedDictionary<int, Item> sortedInventoryItemsDictionary = new SortedDictionary<int, Item>();
+
+                foreach (Transform child in GetItemContainer())
+                {
+                    Item currentItem = child.GetComponent<Item>();
+                    int sortingOrder = 10000 - (200 * placedObjectOrigin.y) - placedObjectOrigin.x;
+
+                    while (sortedInventoryItemsDictionary.ContainsKey(sortingOrder))
+                        sortingOrder++;
+
+                    sortedInventoryItemsDictionary.Add(sortingOrder, currentItem);
+                }
+
+                List<Item> sortedItemList = sortedInventoryItemsDictionary.Values.ToList();
+
+                for (int itemIndex = 0; itemIndex < sortedItemList.Count; itemIndex++)
+                    sortedItemList[itemIndex].transform.SetSiblingIndex(itemIndex);
             }
+            else
+            {
+                item.GetComponent<Canvas>().overrideSorting = true;
+                item.GetComponent<Canvas>().sortingOrder = 1000 - (20 * placedObjectOrigin.y) - placedObjectOrigin.x;
+            }
+
+            foreach (Vector2Int gridPosition in gridPositionList)
+                grid.GetGridObject(gridPosition.x, gridPosition.y).SetItem(item);
 
             OnItemPlaced?.Invoke(this, item);
             item.HoldingInventory = this;
             item.RotateInfoPanels();
-
-            item.GetComponent<Canvas>().overrideSorting = true;
-            item.GetComponent<Canvas>().sortingOrder = 1000 - (20 * gridPositionList[0].y) - gridPositionList[0].x;
 
             if (mainInventory && !loadingInventory)
                 item.AddToMainInventory();

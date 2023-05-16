@@ -97,6 +97,7 @@ public class InventoryManager : MonoBehaviour
             return;
 
         if (!GameManager.instance.GetInventoryUI().IsGamePaused && 
+            !GameManager.instance.IsOnRewardsUI &&
             HasFastSwapWeapons() && 
             playerInput.weaponShortcut > -1)
         {
