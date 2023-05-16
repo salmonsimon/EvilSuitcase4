@@ -1172,6 +1172,33 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.20950542, y: 0.339412, z: 0.27345735}
   m_Center: {x: 0, y: 0.019705996, z: -0.0075317845}
+--- !u!1 &147520254 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7820054702231785756, guid: d4020a5a68304bb45abd0332520a2824,
+    type: 3}
+  m_PrefabInstance: {fileID: 1558333432}
+  m_PrefabAsset: {fileID: 0}
+--- !u!223 &147520259
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 147520254}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
 --- !u!1 &157034716
 GameObject:
   m_ObjectHideFlags: 0
@@ -9239,7 +9266,7 @@ PrefabInstance:
     - target: {fileID: 7820054701270439017, guid: d4020a5a68304bb45abd0332520a2824,
         type: 3}
       propertyPath: m_Name
-      value: Canvas
+      value: Suitcase Transition Canvas
       objectReference: {fileID: 0}
     - target: {fileID: 7820054701270439017, guid: d4020a5a68304bb45abd0332520a2824,
         type: 3}
@@ -9289,6 +9316,21 @@ PrefabInstance:
     - target: {fileID: 7820054701270439021, guid: d4020a5a68304bb45abd0332520a2824,
         type: 3}
       propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7820054701270439021, guid: d4020a5a68304bb45abd0332520a2824,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7820054701270439021, guid: d4020a5a68304bb45abd0332520a2824,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7820054701270439021, guid: d4020a5a68304bb45abd0332520a2824,
+        type: 3}
+      propertyPath: m_LocalScale.z
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7820054701270439021, guid: d4020a5a68304bb45abd0332520a2824,
@@ -9358,8 +9400,38 @@ PrefabInstance:
       objectReference: {fileID: 814912776}
     - target: {fileID: 7820054701270439022, guid: d4020a5a68304bb45abd0332520a2824,
         type: 3}
+      propertyPath: m_RenderMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7820054701270439022, guid: d4020a5a68304bb45abd0332520a2824,
+        type: 3}
+      propertyPath: m_PixelPerfect
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7820054701270439022, guid: d4020a5a68304bb45abd0332520a2824,
+        type: 3}
       propertyPath: m_SortingOrder
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7820054701270439022, guid: d4020a5a68304bb45abd0332520a2824,
+        type: 3}
+      propertyPath: m_PlaneDistance
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7820054701270439023, guid: d4020a5a68304bb45abd0332520a2824,
+        type: 3}
+      propertyPath: m_MatchWidthOrHeight
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7820054701270439023, guid: d4020a5a68304bb45abd0332520a2824,
+        type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 1920
+      objectReference: {fileID: 0}
+    - target: {fileID: 7820054701270439023, guid: d4020a5a68304bb45abd0332520a2824,
+        type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 1080
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d4020a5a68304bb45abd0332520a2824, type: 3}
@@ -20895,6 +20967,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Wave Manager
+      objectReference: {fileID: 0}
+    - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
+        type: 3}
+      propertyPath: itemsToBlock.Array.data[1]
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5435146856260714782, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
         type: 3}

@@ -79,6 +79,8 @@ namespace EasyTransition
             runningTransition = false;
         }
 
+        #region Plugin
+
         /// <summary>
         /// Loads the new Scene asyncronosly with a transition.
         /// </summary>
@@ -197,4 +199,5 @@ namespace EasyTransition
         }
     }
 
+    #endregion
 }

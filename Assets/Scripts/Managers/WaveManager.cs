@@ -1,8 +1,10 @@
+using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Pool;
 
 public class WaveManager : MonoBehaviour
@@ -85,9 +87,15 @@ public class WaveManager : MonoBehaviour
         for (int i = 3; i >= 0; i--)
         {
             if (i == 0)
+            {
                 countdownText.text = "Start!";
+                // TO DO: ADD START SFX
+            }
             else
+            {
                 countdownText.text = i + "...";
+                // TO DO: ADD COUNTER SFX
+            }
 
             yield return new WaitForSeconds(1f);
         }
@@ -129,6 +137,8 @@ public class WaveManager : MonoBehaviour
         {
             countdownText.text = i + "...";
 
+            // TO DO: ADD COUNTER SFX
+
             yield return new WaitForSeconds(1f);
         }
 
@@ -156,6 +166,11 @@ public class WaveManager : MonoBehaviour
 
     private IEnumerator FinishWaveCoroutine()
     {
+        GameObject player = GameManager.instance.GetPlayer();
+
+        player.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
+        player.GetComponent<StarterAssetsInputs>().SetCursorLockState(false);
+
         float transitionTime = GameManager.instance.GetTransitionManager().RunTransition("DoubleWipe");
 
         yield return new WaitForSeconds(transitionTime);
@@ -175,9 +190,15 @@ public class WaveManager : MonoBehaviour
         {
             GameManager.instance.GetInventoryUI().OpenPauseInventory();
 
-            // SHAKE INVENTORY
+            GameManager.instance.GetCinemachineShake().ShakeCamera(Config.CAMERASHAKE_EXPLOSION_AMPLITUDE, Config.CAMERASHAKE_EXPLOSION_DURATION);
+            // TO DO: ADD SHAKE SFX
 
-            // START EVIL SUITCASE TRANSITION AND EVIL LAUGH
+            yield return new WaitForSeconds(Config.CAMERASHAKE_EXPLOSION_DURATION * 2);
+
+            transitionTime = GameManager.instance.GetTransitionManager().RunTransition("PaintSplash");
+            // TO DO: ADD EVIL LAUGH SFX
+
+            yield return new WaitForSeconds(transitionTime);
 
             List<Item> inventoryItems = GameManager.instance.GetInventoryManager().SavedItems;
             inventoryItems.Shuffle();
@@ -188,8 +209,13 @@ public class WaveManager : MonoBehaviour
                 itemsBlocked++;
             }
 
-            // FINISH EVIL SUITCASE TRANSITION
+            GameManager.instance.GetTransitionManager().FinishCurrentTransition();
+
+            yield return new WaitForSeconds(transitionTime);
         }
+
+        player.GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
+        player.GetComponent<StarterAssetsInputs>().SetCursorLockState(true);
 
         if (itemsBlocked > 0)
             GameManager.instance.GetInventoryUI().PauseGame();
