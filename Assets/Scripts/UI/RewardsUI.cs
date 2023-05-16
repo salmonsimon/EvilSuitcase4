@@ -1,6 +1,8 @@
 using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -15,8 +17,12 @@ public class RewardsUI : MonoBehaviour
     [SerializeField] private Inventory meleeWeaponRewardsInventory;
     [SerializeField] private Inventory gunsRewardsInventory;
 
+    [SerializeField] private TextMeshProUGUI rewardsCountdownText;
+
     private GameObject player;
     private InputsUI input;
+
+    private float timer = 0;
 
     private void Start()
     {
@@ -24,22 +30,28 @@ public class RewardsUI : MonoBehaviour
         input = player.GetComponent<InputsUI>();
     }
 
-    // TO DO: DELETE UPDATE FUNCTION AFTER TESTING PROPERLY
     private void Update()
     {
-        if (!GameManager.instance.IsOnRewardsUI && Input.GetKeyDown(KeyCode.M))
-            OpenRewardsUI();
-        else if (GameManager.instance.IsOnRewardsUI && Input.GetKeyDown(KeyCode.M))
-            CloseRewardsUI();
-
         if (GameManager.instance.IsOnRewardsUI && input.autoSort)
         {
             GameManager.instance.GetInventoryManager().AutoSortMainInventory(mainInventory, GameManager.instance.GetInventoryManager().SavedItems);
             input.autoSort = false;
         }
+
+        if (GameManager.instance.IsOnRewardsUI)
+            timer -= Time.deltaTime;
+
+        if (GameManager.instance.IsOnRewardsUI && timer < 0)
+            GameManager.instance.GetWaveManager().FinishWave();
+
+        string countdownString = Utils.FloatToTimeSecondsFormat(timer);
+
+        if (!rewardsCountdownText.text.Equals(countdownString))
+            rewardsCountdownText.text = countdownString;
     }
 
-    private void OpenRewardsUI()
+
+    public void OpenRewardsUI(List<Item> rewardItems, float rewardsCountdown)
     {
         GameManager.instance.IsOnRewardsUI = true;
         player.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
@@ -52,19 +64,52 @@ public class RewardsUI : MonoBehaviour
 
         mainInventory.InventorySetup(mainInventoryWidth, mainInventoryHeight);
 
-        consumableRewardsInventory.InventorySetup(consumableRewardsInventory.GridWidth, consumableRewardsInventory.GridHeight);
-        meleeWeaponRewardsInventory.InventorySetup(meleeWeaponRewardsInventory.GridWidth, meleeWeaponRewardsInventory.GridHeight);
-        gunsRewardsInventory.InventorySetup(gunsRewardsInventory.GridWidth, gunsRewardsInventory.GridHeight);
+        SetupRewardInventories(rewardItems);
 
         rewardsPanel.SetActive(true);
+
+        timer = rewardsCountdown;
     }
 
-    private void CloseRewardsUI()
+    private void SetupRewardInventories(List<Item> rewardItems)
+    {
+        List<Item> consumableItems = new List<Item>();
+        List<Item> meleeItems = new List<Item>();
+        List<Item> gunItems = new List<Item>();
+
+        foreach (Item item in rewardItems)
+        {
+            if (Utils.IsSubclassOfRawGeneric(item.GetType(), typeof(GunItem)))
+                gunItems.Add(item);
+            //else if (Utils.IsSubclassOfRawGeneric(item.GetType(), typeof(MeleeItem)))
+            //    meleeItems.Add(item);
+            else
+                consumableItems.Add(item);
+        }
+
+        InventoryManager inventoryManager = GameManager.instance.GetInventoryManager();
+
+        consumableRewardsInventory.InventorySetup(consumableRewardsInventory.GridWidth, consumableRewardsInventory.GridHeight);
+        inventoryManager.FillRewardsInventory(consumableRewardsInventory, consumableItems);
+
+        meleeWeaponRewardsInventory.InventorySetup(meleeWeaponRewardsInventory.GridWidth, meleeWeaponRewardsInventory.GridHeight);
+        inventoryManager.FillRewardsInventory(meleeWeaponRewardsInventory, meleeItems);
+
+        gunsRewardsInventory.InventorySetup(gunsRewardsInventory.GridWidth, gunsRewardsInventory.GridHeight);
+        inventoryManager.FillRewardsInventory(gunsRewardsInventory, gunItems);
+    }
+
+    public void CloseRewardsUI()
     {
         GameManager.instance.IsOnRewardsUI = false;
         player.GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
         player.GetComponent<StarterAssetsInputs>().SetCursorLockState(true);
 
         rewardsPanel.SetActive(false);
+    }
+
+    public void NextWaveButton()
+    {
+        timer = 0;
     }
 }

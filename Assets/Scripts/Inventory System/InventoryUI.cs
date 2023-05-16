@@ -332,6 +332,13 @@ public class InventoryUI : MonoBehaviour
 
         SetGamePaused(true);
 
+        OpenPauseInventory();
+
+        settingsPanel.SetActive(false);
+    }
+
+    public void OpenPauseInventory()
+    {
         InventoryManager inventoryManager = GameManager.instance.GetInventoryManager();
         int mainInventoryWidth = inventoryManager.InventoryWidth;
         int mainInventoryHeight = inventoryManager.InventoryHeight;
@@ -339,8 +346,6 @@ public class InventoryUI : MonoBehaviour
         pauseInventoryPanel.GetComponent<Inventory>().InventorySetup(mainInventoryWidth, mainInventoryHeight);
 
         pauseInventoryPanel.SetActive(true);
-
-        settingsPanel.SetActive(false);
     }
 
     public void ResumeGame()

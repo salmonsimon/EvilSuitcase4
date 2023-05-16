@@ -102,6 +102,7 @@ public class InventoryDragDropSystem : MonoBehaviour
             RectTransformUtility.ScreenPointToLocalPointInRectangle(inventory.GetItemContainer(), screenPoint, null, out Vector2 anchoredPosition);
 
             Vector2Int itemOrigin = inventory.GetGridPosition(anchoredPosition);
+
             itemOrigin = itemOrigin - mouseDragGridPositionOffset;
 
             if (inventory.IsValidGridPosition(itemOrigin))

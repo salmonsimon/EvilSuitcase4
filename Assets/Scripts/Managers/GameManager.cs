@@ -1,3 +1,4 @@
+using EasyTransition;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.PackageManager;
@@ -22,6 +23,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private InventoryDragDropSystem inventoryDragDropSystem;
     [SerializeField] private EnemySpawner enemySpawner;
     [SerializeField] private WaveManager waveManager;
+    [SerializeField] private TransitionManager transitionManager;
 
     #region UI
 
@@ -61,6 +63,7 @@ public class GameManager : MonoBehaviour
             Destroy(inventoryDragDropSystem.gameObject);
             Destroy(enemySpawner.gameObject);
             Destroy(waveManager.gameObject);
+            Destroy(transitionManager.gameObject);
 
             Destroy(mainMenu.gameObject);
             Destroy(ammoDisplayUI.gameObject);
@@ -239,6 +242,11 @@ public class GameManager : MonoBehaviour
     public RewardsUI GetRewardsUI()
     {
         return rewarsdUI;
+    }
+
+    public TransitionManager GetTransitionManager()
+    {
+        return transitionManager;
     }
 
     #endregion

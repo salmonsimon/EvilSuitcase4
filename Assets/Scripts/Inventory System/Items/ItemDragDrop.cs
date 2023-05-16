@@ -25,6 +25,7 @@ public class ItemDragDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandle
         canvasGroup.alpha = .7f;
         canvasGroup.blocksRaycasts = false;
 
+        GetComponent<Canvas>().overrideSorting = true;
         GetComponent<Canvas>().sortingOrder = 10000;
         placedObject.HoldingInventory.SetNewOpenButton(null);
 
@@ -37,6 +38,8 @@ public class ItemDragDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandle
     {
         canvasGroup.alpha = 1f;
         canvasGroup.blocksRaycasts = true;
+
+        GetComponent<Canvas>().overrideSorting = false;
 
         GameManager.instance.GetInventoryDragDropSystem().StoppedDragging(inventory, placedObject);
     }

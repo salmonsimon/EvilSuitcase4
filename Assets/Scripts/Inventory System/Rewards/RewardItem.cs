@@ -6,7 +6,11 @@ public struct RewardItem
     [Header("Main Configuration")]
     public Item Item;
     public ItemType ItemType;
+
+    [Range(0f, 1f)]
     public float Probability;
+
+    [Range(0, 1000)]
     public int Amount;
 
     [Header("Specific Configuration")]

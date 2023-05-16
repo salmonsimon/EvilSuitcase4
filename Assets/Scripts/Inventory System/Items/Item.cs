@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 using static Utils;
 
 [RequireComponent(typeof(GraphicRaycaster), typeof(Canvas))]
@@ -79,6 +80,11 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
             blockedPanel.SetActive(true);
         else
             blockedPanel.SetActive(false);
+    }
+
+    public virtual Item RewardItemSetup(RewardItem rewardItem)
+    {
+        return this;
     }
 
     public void ItemSetup(Transform parent, Vector2 anchoredPosition, Vector2Int origin, Direction direction, float inventoryCellSize)
@@ -291,6 +297,9 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
 
     public virtual void BlockItem()
     {
+        if (IsBlocked)
+            return;
+
         isBlocked = true;
 
         blockedPanel.SetActive(true);
@@ -314,6 +323,9 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
 
     public virtual void UnblockItem()
     {
+        if (!IsBlocked)
+            return;
+
         isBlocked = false;
 
         blockedPanel.SetActive(false);

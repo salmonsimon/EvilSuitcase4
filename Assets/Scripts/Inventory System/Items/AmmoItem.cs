@@ -65,6 +65,13 @@ public class AmmoItem : Item
 
     #region Item Main Functionalities
 
+    public override Item RewardItemSetup(RewardItem rewardItem)
+    {
+        CurrentAmmo = Random.Range(rewardItem.AmmoMinMax.x, rewardItem.AmmoMinMax.y + 1);
+
+        return this;
+    }
+
     public override void RemoveFromMainInventory()
     {
         base.RemoveFromMainInventory();
