@@ -73,7 +73,7 @@ public class Gun : Weapon
 
         LastshootTime = -gunConfiguration.ShootConfig.FireRate;
 
-        playerThirdPersonShooterController = GameObject.FindGameObjectWithTag(Config.PLAYER_TAG).GetComponent<ThirdPersonShooterController>();
+        playerThirdPersonShooterController = GameManager.instance.GetPlayer().GetComponent<ThirdPersonShooterController>();
 
         ammoDisplayUI = GameManager.instance.GetAmmoDisplayUI();
     }

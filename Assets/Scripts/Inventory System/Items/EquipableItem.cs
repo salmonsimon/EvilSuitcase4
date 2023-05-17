@@ -4,6 +4,7 @@ public class EquipableItem : Item
 {
     #region Variables
 
+    //TO DO: CHANGE THIS AND PUT IT ONLY IN GUNS
     [SerializeField] protected GameObject reloadingMainInventoryButtonPanel;
     [SerializeField] protected int weaponShortcut = -1;
     public int WeaponShortcut { get { return weaponShortcut; } }
@@ -21,6 +22,11 @@ public class EquipableItem : Item
     {
         DiscardCurrentWeaponShortcut();
         RemoveFromMainInventory();
+
+        EquipableItem currentEquipedItem = GameManager.instance.GetInventoryManager().EquippedItem;
+
+        if (currentEquipedItem && currentEquipedItem.Equals(this))
+            Unequip();
 
         Destroy(gameObject);
     }
@@ -64,6 +70,8 @@ public class EquipableItem : Item
         weaponShortcut = newWeaponShortcut;
     }
 
+
+    // TO DO: MAKE THE OVERRIDE IN GUNS TOO, TO ADD THE RELOADING PANEL
     protected override GameObject GetCurrentButtonPanel()
     {
         if (GameManager.instance.IsOnRewardsUI)

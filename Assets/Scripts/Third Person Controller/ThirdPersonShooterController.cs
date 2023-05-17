@@ -54,6 +54,9 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     private Coroutine shotgunShootCoroutine = null;
 
+    private bool isAttacking = false;
+    public bool IsAttacking { get { return isAttacking; } }
+
     #endregion
 
     #region Parameters
@@ -180,6 +183,8 @@ public class ThirdPersonShooterController : MonoBehaviour
 
         if (IsSubclassOfRawGeneric(equippedWeapon.GetType(), typeof(Gun)))
             GunWeaponSetup((GunItem)newWeaponItem);
+        else if (IsSubclassOfRawGeneric(equippedWeapon.GetType(), typeof(MeleeWeapon)))
+            MeleeWeaponSetup((MeleeItem)newWeaponItem);
     }
 
     private void ActivateNewWeapon(Weapon newWeapon)
@@ -203,6 +208,14 @@ public class ThirdPersonShooterController : MonoBehaviour
         GameManager.instance.GetAmmoDisplayUI().Setup(equippedGun.GunConfiguration.AmmoConfig.BulletSprite, equippedGun.CurrentClipAmmo);
 
         equippedGun.SetStarterAssetsInputs(starterAssetsInputs);
+    }
+
+    private void MeleeWeaponSetup(MeleeItem newMeleeItem)
+    {
+        MeleeWeapon equippedMeleeWeapon = equippedWeapon.GetComponent<MeleeWeapon>();
+        equippedMeleeWeapon.CurrentDurability = newMeleeItem.CurrentDurability;
+
+        GameManager.instance.GetAmmoDisplayUI().Setup(equippedMeleeWeapon.WeaponConfiguration.WeaponSprite);
     }
 
     private void ActivateWeapon(Weapon weapon, bool activate)
@@ -295,6 +308,19 @@ public class ThirdPersonShooterController : MonoBehaviour
     {
         isReloading = false;
         equippedWeapon.GetComponent<Gun>().Reload();
+    }
+
+    public void FinishMeleeAttack()
+    {
+        isAttacking = false;
+    }
+
+    public void PlayMeleeAttackAnimation(AnimationClip attackAnimationClip)
+    {
+        isAttacking = true;
+        starterAssetsInputs.shoot = false;
+
+        reloadCoroutine = StartCoroutine(PlayClip(Animator.StringToHash(attackAnimationClip.name), 0f));
     }
 
     public void PlayShotgunShootAnimation(float delay)

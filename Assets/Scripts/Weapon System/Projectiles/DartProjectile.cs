@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class DartProjectile : Projectile
 {
-    [SerializeField] private DamageConfigurationScriptableObject damageConfig;
-    public DamageConfigurationScriptableObject DamageConfig { get { return damageConfig; } set { damageConfig = value; } }
+    [SerializeField] private GunDamageConfigurationScriptableObject damageConfig;
+    public GunDamageConfigurationScriptableObject DamageConfig { get { return damageConfig; } set { damageConfig = value; } }
 
     protected override void OnCollisionEnter(Collision collision)
     {

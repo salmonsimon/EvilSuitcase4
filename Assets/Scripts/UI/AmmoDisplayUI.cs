@@ -7,8 +7,8 @@ using UnityEngine.UI;
 
 public class AmmoDisplayUI : MonoBehaviour
 {
-    [SerializeField] private Image bulletImage;
-    [SerializeField] private TextMeshProUGUI ammoText;
+    [SerializeField] private Image weaponImage;
+    [SerializeField] private TextMeshProUGUI weaponText;
 
     private AmmoType currentAmmoType;
 
@@ -24,7 +24,7 @@ public class AmmoDisplayUI : MonoBehaviour
 
     public void Setup(Sprite bulletSprite, int currentClipAmmo)
     {
-        bulletImage.sprite = bulletSprite;
+        weaponImage.sprite = bulletSprite;
 
         GunItem equippedItem = (GunItem)GameManager.instance.GetInventoryManager().EquippedItem;
         currentAmmoType = equippedItem.AmmoType;
@@ -34,13 +34,37 @@ public class AmmoDisplayUI : MonoBehaviour
         UpdateCounters(currentClipAmmo, currentStockedAmmo);
     }
 
+    public void Setup(Sprite meleeWeaponSprite)
+    {
+        weaponImage.sprite = meleeWeaponSprite;
+
+        MeleeItem equippedItem = (MeleeItem)GameManager.instance.GetInventoryManager().EquippedItem;
+        float currentDurability = equippedItem.CurrentDurability;
+
+        string weaponText = Mathf.RoundToInt((currentDurability * 100)) + "% / 100%";
+        this.weaponText.SetText(weaponText);
+    }
+
     public void UpdateCounters(int currentClipAmmo, int currentStockedAmmo)
     {
         string currentClipAmmoText = ((currentClipAmmo < 10) ? "0" : "") + currentClipAmmo;
         string currentStockedAmmoText = ((currentStockedAmmo < 10) ? "0" : "") + currentStockedAmmo;
 
         string ammoText = currentClipAmmoText + '/' + currentStockedAmmoText;
-        this.ammoText.SetText(ammoText);
+        this.weaponText.SetText(ammoText);
+
+        int fastSwapIndex = GameManager.instance.GetInventoryManager().FastSwapIndex;
+        GameManager.instance.GetInventoryUI().LoadFastSwapGameplayPanel(fastSwapIndex);
+    }
+
+    public void UpdateCounters(float currentDurability)
+    {
+        int currentDurabilityInt = Mathf.RoundToInt(currentDurability * 100);
+
+        string currentDurabilityText = ((currentDurabilityInt < 10) ? "0" : "") + currentDurabilityInt;
+
+        string durabilityText = currentDurabilityText + "% / 100%";
+        this.weaponText.SetText(durabilityText);
 
         int fastSwapIndex = GameManager.instance.GetInventoryManager().FastSwapIndex;
         GameManager.instance.GetInventoryUI().LoadFastSwapGameplayPanel(fastSwapIndex);
@@ -52,8 +76,8 @@ public class AmmoDisplayUI : MonoBehaviour
 
         string currentStockedAmmoText = ((currentStockedAmmo < 10) ? "0" : "") + currentStockedAmmo;
 
-        string ammoText = this.ammoText.text.Split("/")[0] + '/' + currentStockedAmmoText;
-        this.ammoText.SetText(ammoText);
+        string ammoText = this.weaponText.text.Split("/")[0] + '/' + currentStockedAmmoText;
+        this.weaponText.SetText(ammoText);
 
         int fastSwapIndex = GameManager.instance.GetInventoryManager().FastSwapIndex;
         GameManager.instance.GetInventoryUI().LoadFastSwapGameplayPanel(fastSwapIndex);

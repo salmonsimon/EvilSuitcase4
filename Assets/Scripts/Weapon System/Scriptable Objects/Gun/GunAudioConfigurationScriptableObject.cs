@@ -2,7 +2,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Guns/Audio Configuration", fileName = "AudioConfiguration", order = 7)]
-public class AudioConfigurationScriptableObject : ScriptableObject
+public class GunAudioConfigurationScriptableObject : ScriptableObject
 {
     [Range(0, 1f)]
     [SerializeField] private float volume = 1f;

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Explosion : MonoBehaviour
 {
-    [SerializeField] private DamageConfigurationScriptableObject damageConfiguration;
+    [SerializeField] private GunDamageConfigurationScriptableObject damageConfiguration;
     [SerializeField] private float explosionForce = 100;
 
     private SphereCollider explosionCollider;

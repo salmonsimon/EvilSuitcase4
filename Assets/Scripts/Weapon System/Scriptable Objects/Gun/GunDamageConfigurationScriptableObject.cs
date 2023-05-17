@@ -2,7 +2,7 @@ using UnityEngine;
 using static UnityEngine.ParticleSystem;
 
 [CreateAssetMenu(menuName = "Guns/Damage Configuration", fileName = "DamageConfiguration", order = 5)]
-public class DamageConfigurationScriptableObject : ScriptableObject
+public class GunDamageConfigurationScriptableObject : ScriptableObject
 {
     [SerializeField] private MinMaxCurve damageCurve;
     public MinMaxCurve DamageCurve { get { return damageCurve; } }
