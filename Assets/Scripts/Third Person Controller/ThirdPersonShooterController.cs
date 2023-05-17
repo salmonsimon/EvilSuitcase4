@@ -58,8 +58,8 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     #region Parameters
 
-    private float movementSpeed = 5f;
-    private float aimMovementSpeed = 3f;
+    [SerializeField] private float movementSpeed = 5f;
+    [SerializeField] private float aimMovementSpeed = 2f;
 
     #endregion
 
@@ -119,6 +119,8 @@ public class ThirdPersonShooterController : MonoBehaviour
                 equippedWeapon.GetComponent<Gun>().CurrentClipAmmo == 0)
                 starterAssetsInputs.shoot = false;
         }
+
+        // TO DO: IF MELEE ATTACKING SET MOVEMENT SPEED TO 0
     }
 
     private void FixedUpdate()
@@ -313,12 +315,5 @@ public class ThirdPersonShooterController : MonoBehaviour
         yield return new WaitForSeconds(startTime);
 
         animator.Play(clipHash);
-
-        /*
-        if (isAlive)
-        {
-            animator.Play(clipHash);
-        }
-        */
     }
 }
