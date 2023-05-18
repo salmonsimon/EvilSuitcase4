@@ -77,7 +77,7 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     private void Update()
     {
-        if (starterAssetsInputs.aim && !isReloading)
+        if ((starterAssetsInputs.aim && !isReloading) || IsAttacking)
         {
             aiming = true;
 
@@ -122,8 +122,6 @@ public class ThirdPersonShooterController : MonoBehaviour
                 equippedWeapon.GetComponent<Gun>().CurrentClipAmmo == 0)
                 starterAssetsInputs.shoot = false;
         }
-
-        // TO DO: IF MELEE ATTACKING SET MOVEMENT SPEED TO 0
     }
 
     private void FixedUpdate()
@@ -279,14 +277,17 @@ public class ThirdPersonShooterController : MonoBehaviour
                 if (weaponRig.TryGetComponent(out MultiParentConstraint multiParentConstraint))
                     multiParentConstraint.weight = activate ? 1 : 0;
 
+                if (weaponRig.TryGetComponent(out MultiRotationConstraint multiRotationConstraint1))
+                    multiRotationConstraint1.weight = activate ? 1 : 0;
+
                 foreach (Transform child in weaponRig)
                 {
-                    if (child.TryGetComponent(out MultiRotationConstraint multiRotationConstraint))
+                    if (child.TryGetComponent(out MultiRotationConstraint multiRotationConstraint2))
                     {
                         if (child.name == "Spine Rotation")
-                            multiRotationConstraint.weight = activate ? 1 : 0;
+                            multiRotationConstraint2.weight = activate ? 1 : 0;
                         else
-                            multiRotationConstraint.weight = activate ? .3f : 0;
+                            multiRotationConstraint2.weight = activate ? .3f : 0;
                     }
 
                     if (child.TryGetComponent(out TwoBoneIKConstraint twoBoneIKConstraint))
@@ -313,6 +314,9 @@ public class ThirdPersonShooterController : MonoBehaviour
     public void FinishMeleeAttack()
     {
         isAttacking = false;
+
+        if (equippedWeapon.TryGetComponent(out MeleeWeapon meleeWeapon) && meleeWeapon.CurrentDurability <= 0)
+            meleeWeapon.Break();
     }
 
     public void PlayMeleeAttackAnimation(AnimationClip attackAnimationClip)

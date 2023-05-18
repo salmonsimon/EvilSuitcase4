@@ -64,12 +64,11 @@ public class MeleeWeapon : Weapon
 
             float durabilityLoss = weaponConfiguration.DurabilityConfig.GetDurabilityLoss();
             SubstractDurability(durabilityLoss);
-
-            if (CurrentDurability <= 0)
-                Break();
         }
     }
 
+
+    // TO DO: THIS SHOULD BE USED ONLY WHEN HITTING SOME ENEMY, DO IT WHEN COLLIDING WITH AN ENEMY
     protected virtual void SubstractDurability(float durabilityLoss)
     {
         CurrentDurability -= durabilityLoss;
@@ -84,8 +83,10 @@ public class MeleeWeapon : Weapon
         ammoDisplayUI.UpdateCounters(currentDurability);
     }
 
-    private void Break()
+    public void Break()
     {
+        ammoDisplayUI.UnequipWeapon();
+
         sfx.PlayAudioClip(weaponConfiguration.AudioConfig.BreakClip);
 
         GameManager.instance.GetInventoryManager().EquippedItem.Discard();

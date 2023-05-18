@@ -24,6 +24,7 @@ public class WeaponDisplayUI : MonoBehaviour
 
     public void Setup(Sprite bulletSprite, int currentClipAmmo)
     {
+        weaponImage.enabled = true;
         weaponImage.sprite = bulletSprite;
 
         GunItem equippedItem = (GunItem)GameManager.instance.GetInventoryManager().EquippedItem;
@@ -36,6 +37,7 @@ public class WeaponDisplayUI : MonoBehaviour
 
     public void Setup(Sprite meleeWeaponSprite)
     {
+        weaponImage.enabled = true;
         weaponImage.sprite = meleeWeaponSprite;
 
         MeleeItem equippedItem = (MeleeItem)GameManager.instance.GetInventoryManager().EquippedItem;
@@ -60,6 +62,9 @@ public class WeaponDisplayUI : MonoBehaviour
 
     public void UpdateCounters(float currentDurability)
     {
+        if (currentDurability < 0)
+            currentDurability = 0;
+
         int currentDurabilityInt = Mathf.RoundToInt(currentDurability * 100);
 
         string currentDurabilityText = ((currentDurabilityInt < 10) ? "0" : "") + currentDurabilityInt;
@@ -84,5 +89,12 @@ public class WeaponDisplayUI : MonoBehaviour
 
         int fastSwapIndex = GameManager.instance.GetInventoryManager().FastSwapIndex;
         GameManager.instance.GetInventoryUI().LoadFastSwapGameplayPanel(fastSwapIndex);
+    }
+
+    public void UnequipWeapon()
+    {
+        weaponImage.enabled = false;
+
+        this.weaponText.SetText("");
     }
 }
