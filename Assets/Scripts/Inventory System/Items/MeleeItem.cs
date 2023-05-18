@@ -61,7 +61,7 @@ public class MeleeItem : EquipableItem
         switch (direction)
         {
             case Item.Direction.Down:
-                durabilityTextPanel.anchoredPosition = new Vector2(((width - 1) * cellSize) - 20, 0);
+                durabilityTextPanel.anchoredPosition = new Vector2(((width - 1) * cellSize) - 30, 0);
                 durabilityTextPanel.rotation = Quaternion.Euler(0, 0, 0);
 
                 currentButtonPanel.anchoredPosition = new Vector2((width * cellSize) + 20, (height * cellSize) - 20);
@@ -70,7 +70,7 @@ public class MeleeItem : EquipableItem
                 break;
 
             case Item.Direction.Left:
-                durabilityTextPanel.anchoredPosition = new Vector2(((width - 1) * cellSize), ((height - 1) * cellSize) + 30);
+                durabilityTextPanel.anchoredPosition = new Vector2(((width - 1) * cellSize), ((height - 1) * cellSize) + 20);
                 durabilityTextPanel.rotation = Quaternion.Euler(0, 0, 0);
 
                 currentButtonPanel.anchoredPosition = new Vector2(20, (height * cellSize) + 20);
@@ -79,7 +79,7 @@ public class MeleeItem : EquipableItem
                 break;
 
             case Item.Direction.Up:
-                durabilityTextPanel.anchoredPosition = new Vector2(-30, ((height - 1) * cellSize) + 50);
+                durabilityTextPanel.anchoredPosition = new Vector2(-20, ((height - 1) * cellSize) + 50);
                 durabilityTextPanel.rotation = Quaternion.Euler(0, 0, 0);
 
                 currentButtonPanel.anchoredPosition = new Vector2(-20, 20);
@@ -88,7 +88,7 @@ public class MeleeItem : EquipableItem
                 break;
 
             case Item.Direction.Right:
-                durabilityTextPanel.anchoredPosition = new Vector2(-50, 20);
+                durabilityTextPanel.anchoredPosition = new Vector2(-50, 30);
                 durabilityTextPanel.rotation = Quaternion.Euler(0, 0, 0);
 
                 currentButtonPanel.anchoredPosition = new Vector2((width * cellSize) - 20, -20);

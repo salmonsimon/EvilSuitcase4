@@ -59,7 +59,7 @@ public class Gun : Weapon
 
     protected ThirdPersonShooterController playerThirdPersonShooterController;
 
-    protected AmmoDisplayUI ammoDisplayUI;
+    protected WeaponDisplayUI ammoDisplayUI;
 
     protected StarterAssetsInputs starterAssetInputs;
     
@@ -74,8 +74,9 @@ public class Gun : Weapon
         LastshootTime = -gunConfiguration.ShootConfig.FireRate;
 
         playerThirdPersonShooterController = GameManager.instance.GetPlayer().GetComponent<ThirdPersonShooterController>();
+        //starterAssetInputs = GameManager.instance.GetPlayer().GetComponent<StarterAssetsInputs>();
 
-        ammoDisplayUI = GameManager.instance.GetAmmoDisplayUI();
+        ammoDisplayUI = GameManager.instance.GetWeaponDisplayUI();
     }
 
     private void Update()

@@ -205,7 +205,7 @@ public class ThirdPersonShooterController : MonoBehaviour
         reloadAnimationClip = equippedGun.ReloadAnimationClip;
 
         playerGunAnimations.Setup(equippedGun);
-        GameManager.instance.GetAmmoDisplayUI().Setup(equippedGun.GunConfiguration.AmmoConfig.BulletSprite, equippedGun.CurrentClipAmmo);
+        GameManager.instance.GetWeaponDisplayUI().Setup(equippedGun.GunConfiguration.AmmoConfig.BulletSprite, equippedGun.CurrentClipAmmo);
 
         equippedGun.SetStarterAssetsInputs(starterAssetsInputs);
     }
@@ -215,7 +215,7 @@ public class ThirdPersonShooterController : MonoBehaviour
         MeleeWeapon equippedMeleeWeapon = equippedWeapon.GetComponent<MeleeWeapon>();
         equippedMeleeWeapon.CurrentDurability = newMeleeItem.CurrentDurability;
 
-        GameManager.instance.GetAmmoDisplayUI().Setup(equippedMeleeWeapon.WeaponConfiguration.WeaponSprite);
+        GameManager.instance.GetWeaponDisplayUI().Setup(equippedMeleeWeapon.WeaponConfiguration.WeaponSprite);
     }
 
     private void ActivateWeapon(Weapon weapon, bool activate)

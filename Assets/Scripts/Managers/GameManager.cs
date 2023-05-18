@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
     #region UI
 
     [SerializeField] private MainMenuUI mainMenu;
-    [SerializeField] private AmmoDisplayUI ammoDisplayUI;
+    [SerializeField] private WeaponDisplayUI weaponDisplayUI;
     [SerializeField] private InventoryUI inventoryUI;
     [SerializeField] private RewardsUI rewarsdUI;
 
@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
             Destroy(transitionManager.gameObject);
 
             Destroy(mainMenu.gameObject);
-            Destroy(ammoDisplayUI.gameObject);
+            Destroy(weaponDisplayUI.gameObject);
             Destroy(inventoryUI.gameObject);
             Destroy(rewarsdUI.gameObject);
         }
@@ -204,9 +204,9 @@ public class GameManager : MonoBehaviour
         return mainMenu;
     }
 
-    public AmmoDisplayUI GetAmmoDisplayUI()
+    public WeaponDisplayUI GetWeaponDisplayUI()
     {
-        return ammoDisplayUI;
+        return weaponDisplayUI;
     }
 
     public InventoryDragDropSystem GetInventoryDragDropSystem()
