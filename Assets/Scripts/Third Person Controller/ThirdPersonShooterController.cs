@@ -218,7 +218,7 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     private void ActivateWeapon(Weapon weapon, bool activate)
     {
-        string weaponName = equippedWeapon.name;
+        string weaponName = weapon.name;
         string containerName = "";
 
         if (IsSubclassOfRawGeneric(equippedWeapon.GetType(), typeof(Gun)))
@@ -227,6 +227,7 @@ public class ThirdPersonShooterController : MonoBehaviour
             containerName = Config.MELEE_WEAPON_CONTAINER_NAME;
 
         Transform weaponTransform = weaponContainer.Find(containerName + "/" + weaponName);
+
         if (weaponTransform)
             weaponTransform.gameObject.SetActive(activate);
 

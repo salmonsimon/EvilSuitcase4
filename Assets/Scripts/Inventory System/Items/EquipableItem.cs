@@ -52,8 +52,9 @@ public class EquipableItem : Item
 
     public void Unequip()
     {
-        GameManager.instance.GetInventoryManager().EquippedItem = null;
         GameManager.instance.GetPlayer().GetComponent<ThirdPersonShooterController>().UnequipWeapon();
+
+        GameManager.instance.GetInventoryManager().EquippedItem = null;
         GameManager.instance.GetInventoryManager().CurrentEquippedWeaponShortcutIndex = -1;
     }
 

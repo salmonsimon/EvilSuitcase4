@@ -318,9 +318,7 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
     public void DiscardConfirmationButton()
     {
         if (DiscardCandidate)
-        {
             DiscardCandidate.Discard();
-        }
     }
 
     public void CancelDiscardButton()

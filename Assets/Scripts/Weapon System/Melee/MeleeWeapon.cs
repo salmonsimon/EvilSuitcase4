@@ -52,7 +52,7 @@ public class MeleeWeapon : Weapon
 
     public override void Attack()
     {
-        if (!playerThirdPersonShooterController.IsAttacking && 
+        if (!playerThirdPersonShooterController.IsAttacking &&
             Time.time > weaponConfiguration.AttacksConfig.AttackRate + LastAttackTime)
         {
             playerThirdPersonShooterController.PlayMeleeAttackAnimation(currentAttackAnimation);
@@ -85,9 +85,20 @@ public class MeleeWeapon : Weapon
 
     public void Break()
     {
+        StartCoroutine(BreakCoroutine());
+    }
+
+    private IEnumerator BreakCoroutine()
+    {
+        yield return null;
+
         ammoDisplayUI.UnequipWeapon();
 
-        sfx.PlayAudioClip(weaponConfiguration.AudioConfig.BreakClip);
+        playerThirdPersonShooterController.UnequipWeapon();
+
+        GameManager.instance.GetSFXManager().PlaySound(weaponConfiguration.AudioConfig.BreakClip);
+
+        yield return null;
 
         GameManager.instance.GetInventoryManager().EquippedItem.Discard();
     }
