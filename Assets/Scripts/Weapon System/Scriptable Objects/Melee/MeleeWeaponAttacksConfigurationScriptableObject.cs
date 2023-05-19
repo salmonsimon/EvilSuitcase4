@@ -9,4 +9,15 @@ public class MeleeWeaponAttacksConfigurationScriptableObject : ScriptableObject
 
     [SerializeField] private float attackRate = 1f;
     public float AttackRate { get { return attackRate; } }
+
+    #region Camera Configuration
+
+    [Header("Camera Configuration")]
+    [SerializeField] private float cameraShakeAmplitude = 6.0f;
+    public float CameraShakeAmplitude { get { return cameraShakeAmplitude; } }
+
+    [SerializeField] private float cameraShakeDuration = .3f;
+    public float CameraShakeDuration { get { return cameraShakeDuration; } }
+
+    #endregion
 }

@@ -483,12 +483,9 @@ MonoBehaviour:
   waves:
   - EnemiesToSpawn: 1
     SpawnObjects:
-    - Prefab: {fileID: 7285027768795059239, guid: d7c660db2d8156848a4d1a03bccb5521,
-        type: 3}
-      SpawnProbability: 0.5
     - Prefab: {fileID: 2415460792606355714, guid: 6e6fde8ab6a950c479672bb59a81c2ae,
         type: 3}
-      SpawnProbability: 0.5
+      SpawnProbability: 1
   - EnemiesToSpawn: 3
     SpawnObjects:
     - Prefab: {fileID: 7285027768795059239, guid: d7c660db2d8156848a4d1a03bccb5521,
@@ -545,7 +542,7 @@ MonoBehaviour:
   - 60
   - 60
   - 60
-  itemsToBlock: 000000000000000001000000
+  itemsToBlock: 000000000100000001000000
   nextWaveCountdownPanel: {fileID: 5435146855973434741}
   waveClearedPanel: {fileID: 5435146855809049373}
 --- !u!223 &5435146856260714780

@@ -64,7 +64,18 @@ public class HealthManager : MonoBehaviour
 
     #endregion
 
+    #region Parameters
+
     [SerializeField] private bool shakeWhenDamaged = false;
+
+    #endregion
+
+    #region Variables
+
+    private int lastReceivedAttackID;
+    public int LastReceivedAttackID { get { return lastReceivedAttackID; } set { lastReceivedAttackID = value; } }
+
+    #endregion
 
     private void Awake()
     {

@@ -77,21 +77,24 @@ public class InventoryUI : MonoBehaviour
             Instantiate(fastSwapItem.GetItemSO().ItemFastSwapVisual, weaponSpriteContainer);
             weaponSpriteContainer.gameObject.SetActive(true);
 
-            if (IsSubclassOfRawGeneric(fastSwapItem.GetType(), typeof(GunItem)))
+            if (fastSwapItem.TryGetComponent(out GunItem gunItem))
             {
-                GunItem gunItem = (GunItem) fastSwapItem;
-
                 string ammoText = gunItem.CurrentAmmo + "/" + ammoDictionary[gunItem.AmmoType];
 
                 TMPRO.text = ammoText;
                 TMPRO.gameObject.SetActive(true);
             }
-            /*
-            else if (IsSubclassOfRawGeneric(fastSwapItem.GetType(), typeof(WeaponItem)))
+            else if (fastSwapItem.TryGetComponent(out MeleeItem meleeItem))
             {
-                // TO DO: Same but add durability
+                int currentDurabilityInt = Mathf.RoundToInt(meleeItem.CurrentDurability * 100);
+
+                string currentDurabilityText = ((currentDurabilityInt < 10) ? "0" : "") + currentDurabilityInt;
+
+                string durabilityText = currentDurabilityText + "/100%";
+
+                TMPRO.text = durabilityText;
+                TMPRO.gameObject.SetActive(true);
             }
-            */
 
             GameObject blockedPanel = itemPanel.Find("Blocked Panel").gameObject;
             blockedPanel.SetActive(false);
@@ -118,21 +121,24 @@ public class InventoryUI : MonoBehaviour
                 Instantiate(item.GetItemSO().ItemFastSwapVisual, weaponSpriteContainer);
                 weaponSpriteContainer.gameObject.SetActive(true);
 
-                if (IsSubclassOfRawGeneric(item.GetType(), typeof(GunItem)))
+                if (item.TryGetComponent(out GunItem gunItem))
                 {
-                    GunItem gunItem = (GunItem)item;
-
                     string ammoText = gunItem.CurrentAmmo + "/" + ammoDictionary[gunItem.AmmoType];
 
                     TMPRO.text = ammoText;
                     TMPRO.gameObject.SetActive(true);
                 }
-                /*
-                else if (IsSubclassOfRawGeneric(item.GetType(), typeof(WeaponItem)))
+                else if (item.TryGetComponent(out MeleeItem meleeItem))
                 {
-                    // TO DO: Same but add durability
+                    int currentDurabilityInt = Mathf.RoundToInt(meleeItem.CurrentDurability * 100);
+
+                    string currentDurabilityText = ((currentDurabilityInt < 10) ? "0" : "") + currentDurabilityInt;
+
+                    string durabilityText = currentDurabilityText + "/100%";
+
+                    TMPRO.text = durabilityText;
+                    TMPRO.gameObject.SetActive(true);
                 }
-                */
 
                 GameObject blockedPanel = itemPanel.Find("Blocked Panel").gameObject;
                 blockedPanel.SetActive(true);
@@ -184,21 +190,24 @@ public class InventoryUI : MonoBehaviour
 
             weaponSpriteContainer.gameObject.SetActive(true);
 
-            if (IsSubclassOfRawGeneric(fastSwapItem.GetType(), typeof(GunItem)))
+            if (fastSwapItem.TryGetComponent(out GunItem gunItem))
             {
-                GunItem gunItem = (GunItem)fastSwapItem;
-
                 string ammoText = gunItem.CurrentAmmo + "/" + ammoDictionary[gunItem.AmmoType];
 
                 TMPRO.text = ammoText;
                 TMPRO.gameObject.SetActive(true);
             }
-            /*
-            else if (IsSubclassOfRawGeneric(fastSwapItem.GetType(), typeof(WeaponItem)))
+            else if (fastSwapItem.TryGetComponent(out MeleeItem meleeItem))
             {
-                // TO DO: Same but add durability
+                int currentDurabilityInt = Mathf.RoundToInt(meleeItem.CurrentDurability * 100);
+
+                string currentDurabilityText = ((currentDurabilityInt < 10) ? "0" : "") + currentDurabilityInt;
+
+                string durabilityText = currentDurabilityText + "/100%";
+
+                TMPRO.text = durabilityText;
+                TMPRO.gameObject.SetActive(true);
             }
-            */
 
             GameObject blockedPanel = itemPanel.Find("Blocked Panel").gameObject;
             blockedPanel.SetActive(false);
@@ -231,21 +240,24 @@ public class InventoryUI : MonoBehaviour
                 Instantiate(item.GetItemSO().ItemFastSwapVisual, weaponSpriteContainer);
                 weaponSpriteContainer.gameObject.SetActive(true);
 
-                if (IsSubclassOfRawGeneric(item.GetType(), typeof(GunItem)))
+                if (item.TryGetComponent(out GunItem gunItem))
                 {
-                    GunItem gunItem = (GunItem)item;
-
                     string ammoText = gunItem.CurrentAmmo + "/" + ammoDictionary[gunItem.AmmoType];
 
                     TMPRO.text = ammoText;
                     TMPRO.gameObject.SetActive(true);
                 }
-                /*
-                else if (IsSubclassOfRawGeneric(item.GetType(), typeof(WeaponItem)))
+                else if (item.TryGetComponent(out MeleeItem meleeItem))
                 {
-                    // TO DO: Same but add durability
+                    int currentDurabilityInt = Mathf.RoundToInt(meleeItem.CurrentDurability * 100);
+
+                    string currentDurabilityText = ((currentDurabilityInt < 10) ? "0" : "") + currentDurabilityInt;
+
+                    string durabilityText = currentDurabilityText + "/100%";
+
+                    TMPRO.text = durabilityText;
+                    TMPRO.gameObject.SetActive(true);
                 }
-                */
 
                 GameObject blockedPanel = itemPanel.Find("Blocked Panel").gameObject;
                 blockedPanel.SetActive(true);

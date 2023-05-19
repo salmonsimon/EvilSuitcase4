@@ -22,13 +22,16 @@ public class MeleeWeapon : Weapon
     protected AnimationClip currentAttackAnimation;
     protected List<AnimationClip> remainingAttackAnimations;
 
+    private int currentAttackID = -1;
+    public int CurrentAttackID { get { return currentAttackID; }}
+
     #endregion
 
     #region Object References
 
     protected ThirdPersonShooterController playerThirdPersonShooterController;
 
-    protected WeaponDisplayUI ammoDisplayUI;
+    protected WeaponDisplayUI weaponDisplayUI;
 
     #endregion
 
@@ -36,7 +39,7 @@ public class MeleeWeapon : Weapon
     {
         base.Start();
 
-        ammoDisplayUI = GameManager.instance.GetWeaponDisplayUI();
+        weaponDisplayUI = GameManager.instance.GetWeaponDisplayUI();
 
         LastAttackTime = -weaponConfiguration.AttacksConfig.AttackRate;
 
@@ -56,21 +59,21 @@ public class MeleeWeapon : Weapon
             Time.time > weaponConfiguration.AttacksConfig.AttackRate + LastAttackTime)
         {
             playerThirdPersonShooterController.PlayMeleeAttackAnimation(currentAttackAnimation);
+            sfx.PlayAudioClip(weaponConfiguration.AudioConfig.GetRandomAttackClip());
+
+            currentAttackID = Mathf.RoundToInt(Time.time);
 
             remainingAttackAnimations.Add(currentAttackAnimation);
 
             currentAttackAnimation = remainingAttackAnimations[0];
             remainingAttackAnimations.RemoveAt(0);
-
-            float durabilityLoss = weaponConfiguration.DurabilityConfig.GetDurabilityLoss();
-            SubstractDurability(durabilityLoss);
         }
     }
 
-
-    // TO DO: THIS SHOULD BE USED ONLY WHEN HITTING SOME ENEMY, DO IT WHEN COLLIDING WITH AN ENEMY
-    protected virtual void SubstractDurability(float durabilityLoss)
+    public virtual void SubstractDurability()
     {
+        float durabilityLoss = weaponConfiguration.DurabilityConfig.GetDurabilityLoss();
+
         CurrentDurability -= durabilityLoss;
 
         GameManager.instance.GetInventoryManager().EquippedItem.GetComponent<MeleeItem>().CurrentDurability -= durabilityLoss;
@@ -80,7 +83,7 @@ public class MeleeWeapon : Weapon
 
     private void UpdateDurabilityDisplayCounters()
     {
-        ammoDisplayUI.UpdateCounters(currentDurability);
+        weaponDisplayUI.UpdateCounters(currentDurability);
     }
 
     public void Break()
@@ -92,13 +95,11 @@ public class MeleeWeapon : Weapon
     {
         yield return null;
 
-        ammoDisplayUI.UnequipWeapon();
+        weaponDisplayUI.UnequipWeapon();
 
         playerThirdPersonShooterController.UnequipWeapon();
 
         GameManager.instance.GetSFXManager().PlaySound(weaponConfiguration.AudioConfig.BreakClip);
-
-        yield return null;
 
         GameManager.instance.GetInventoryManager().EquippedItem.Discard();
     }
