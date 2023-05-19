@@ -6,7 +6,9 @@ using UnityEngine.Pool;
 public class SurfaceManager : MonoBehaviour
 {
     [SerializeField] private List<SurfaceType> Surfaces = new List<SurfaceType>();
+
     [SerializeField] private Surface DefaultSurface;
+    [SerializeField] private Surface FleshSurface;
 
     private Dictionary<string, ObjectPool<GameObject>> ObjectPools = new();
     private GameObject effectContainer;
@@ -14,6 +16,17 @@ public class SurfaceManager : MonoBehaviour
     private void Awake()
     {
         effectContainer = GameObject.FindGameObjectWithTag(Config.EFFECT_CONTAINER_TAG);
+    }
+
+    public void HandleFleshImpact(GameObject HitObject, Vector3 HitPoint, Vector3 HitNormal, ImpactType Impact, int TriangleIndex)
+    {
+        foreach (Surface.SurfaceImpactTypeEffect typeEffect in FleshSurface.ImpactTypeEffects)
+        {
+            if (typeEffect.ImpactType == Impact)
+            {
+                PlayEffects(HitObject, HitPoint, HitNormal, typeEffect.SurfaceEffect, 1);
+            }
+        }
     }
 
     public void HandleImpact(GameObject HitObject, Vector3 HitPoint, Vector3 HitNormal, ImpactType Impact, int TriangleIndex)
@@ -26,6 +39,8 @@ public class SurfaceManager : MonoBehaviour
                 SurfaceType surfaceType = Surfaces.Find(surface => surface.Albedo == activeTexture.Texture);
                 if (surfaceType != null)
                 {
+                    Debug.Log("Surface type: " + surfaceType.ToString());
+
                     foreach (Surface.SurfaceImpactTypeEffect typeEffect in surfaceType.Surface.ImpactTypeEffects)
                     {
                         if (typeEffect.ImpactType == Impact)

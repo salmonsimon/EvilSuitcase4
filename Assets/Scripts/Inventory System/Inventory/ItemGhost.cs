@@ -58,6 +58,7 @@ public class ItemGhost : MonoBehaviour
         if (placedObjectTypeSO != null)
         {
             visual = Instantiate(placedObjectTypeSO.ItemVisual, transform);
+
             visual.localPosition = Vector3.zero;
             visual.localEulerAngles = Vector3.zero;
 
@@ -66,6 +67,7 @@ public class ItemGhost : MonoBehaviour
             float visualHeight = cellSize * placedObjectTypeSO.Height;
 
             visual.GetComponent<RectTransform>().sizeDelta = new Vector2(visualWidth, visualHeight);
+
             visual.gameObject.SetActive(false);
             visual.gameObject.SetActive(true);
         }

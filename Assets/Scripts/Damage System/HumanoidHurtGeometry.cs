@@ -29,6 +29,16 @@ public class HumanoidHurtGeometry : Damageable
         }
     }
 
+    public override void ReceiveMeleeDamage(int damage, Vector3 force, int attackID)
+    {
+        if (HealthManager.LastReceivedAttackID != attackID)
+        {
+            HealthManager.LastReceivedAttackID = attackID;
+
+            ReceiveDamage(damage, force);
+        }
+    }
+
     public override void ReceiveDamage(int damage, Vector3 force)
     {
         float damageMultiplier = 1f;

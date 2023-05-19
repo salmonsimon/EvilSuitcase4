@@ -24,7 +24,9 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     [Header("Weapon")]
     [SerializeField] private Transform weaponContainer;
-    private Weapon equippedWeapon;
+
+    [SerializeField] private Weapon equippedWeapon;
+    public Weapon EquippedWeapon { get { return equippedWeapon; } }
 
     #region Obejct References
 
@@ -54,12 +56,15 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     private Coroutine shotgunShootCoroutine = null;
 
+    private bool isAttacking = false;
+    public bool IsAttacking { get { return isAttacking; } }
+
     #endregion
 
     #region Parameters
 
-    private float movementSpeed = 5f;
-    private float aimMovementSpeed = 3f;
+    [SerializeField] private float movementSpeed = 5f;
+    [SerializeField] private float aimMovementSpeed = 2f;
 
     #endregion
 
@@ -74,7 +79,7 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     private void Update()
     {
-        if (starterAssetsInputs.aim && !isReloading)
+        if ((starterAssetsInputs.aim && !isReloading) || IsAttacking)
         {
             aiming = true;
 
@@ -178,6 +183,8 @@ public class ThirdPersonShooterController : MonoBehaviour
 
         if (IsSubclassOfRawGeneric(equippedWeapon.GetType(), typeof(Gun)))
             GunWeaponSetup((GunItem)newWeaponItem);
+        else if (IsSubclassOfRawGeneric(equippedWeapon.GetType(), typeof(MeleeWeapon)))
+            MeleeWeaponSetup((MeleeItem)newWeaponItem);
     }
 
     private void ActivateNewWeapon(Weapon newWeapon)
@@ -198,14 +205,22 @@ public class ThirdPersonShooterController : MonoBehaviour
         reloadAnimationClip = equippedGun.ReloadAnimationClip;
 
         playerGunAnimations.Setup(equippedGun);
-        GameManager.instance.GetAmmoDisplayUI().Setup(equippedGun.GunConfiguration.AmmoConfig.BulletSprite, equippedGun.CurrentClipAmmo);
+        GameManager.instance.GetWeaponDisplayUI().Setup(equippedGun.GunConfiguration.AmmoConfig.BulletSprite, equippedGun.CurrentClipAmmo);
 
         equippedGun.SetStarterAssetsInputs(starterAssetsInputs);
     }
 
+    private void MeleeWeaponSetup(MeleeItem newMeleeItem)
+    {
+        MeleeWeapon equippedMeleeWeapon = equippedWeapon.GetComponent<MeleeWeapon>();
+        equippedMeleeWeapon.CurrentDurability = newMeleeItem.CurrentDurability;
+
+        GameManager.instance.GetWeaponDisplayUI().Setup(equippedMeleeWeapon.WeaponConfiguration.WeaponSprite);
+    }
+
     private void ActivateWeapon(Weapon weapon, bool activate)
     {
-        string weaponName = equippedWeapon.name;
+        string weaponName = weapon.name;
         string containerName = "";
 
         if (IsSubclassOfRawGeneric(equippedWeapon.GetType(), typeof(Gun)))
@@ -214,6 +229,7 @@ public class ThirdPersonShooterController : MonoBehaviour
             containerName = Config.MELEE_WEAPON_CONTAINER_NAME;
 
         Transform weaponTransform = weaponContainer.Find(containerName + "/" + weaponName);
+
         if (weaponTransform)
             weaponTransform.gameObject.SetActive(activate);
 
@@ -264,14 +280,17 @@ public class ThirdPersonShooterController : MonoBehaviour
                 if (weaponRig.TryGetComponent(out MultiParentConstraint multiParentConstraint))
                     multiParentConstraint.weight = activate ? 1 : 0;
 
+                if (weaponRig.TryGetComponent(out MultiRotationConstraint multiRotationConstraint1))
+                    multiRotationConstraint1.weight = activate ? 1 : 0;
+
                 foreach (Transform child in weaponRig)
                 {
-                    if (child.TryGetComponent(out MultiRotationConstraint multiRotationConstraint))
+                    if (child.TryGetComponent(out MultiRotationConstraint multiRotationConstraint2))
                     {
                         if (child.name == "Spine Rotation")
-                            multiRotationConstraint.weight = activate ? 1 : 0;
+                            multiRotationConstraint2.weight = activate ? 1 : 0;
                         else
-                            multiRotationConstraint.weight = activate ? .3f : 0;
+                            multiRotationConstraint2.weight = activate ? .3f : 0;
                     }
 
                     if (child.TryGetComponent(out TwoBoneIKConstraint twoBoneIKConstraint))
@@ -295,6 +314,22 @@ public class ThirdPersonShooterController : MonoBehaviour
         equippedWeapon.GetComponent<Gun>().Reload();
     }
 
+    public void FinishMeleeAttack()
+    {
+        isAttacking = false;
+
+        if (equippedWeapon.TryGetComponent(out MeleeWeapon meleeWeapon) && meleeWeapon.CurrentDurability <= 0)
+            meleeWeapon.Break();
+    }
+
+    public void PlayMeleeAttackAnimation(AnimationClip attackAnimationClip)
+    {
+        isAttacking = true;
+        starterAssetsInputs.shoot = false;
+
+        reloadCoroutine = StartCoroutine(PlayClip(Animator.StringToHash(attackAnimationClip.name), 0f));
+    }
+
     public void PlayShotgunShootAnimation(float delay)
     {
         starterAssetsInputs.shoot = false;
@@ -313,12 +348,5 @@ public class ThirdPersonShooterController : MonoBehaviour
         yield return new WaitForSeconds(startTime);
 
         animator.Play(clipHash);
-
-        /*
-        if (isAlive)
-        {
-            animator.Play(clipHash);
-        }
-        */
     }
 }

@@ -10,13 +10,18 @@ public class Damageable : MonoBehaviour
         healthManager = GetComponent<HealthManager>();
     }
 
-    public virtual void ReceiveDamage(int damage, Vector3 Force)
+    public virtual void ReceiveMeleeDamage(int damage, Vector3 force, int attackID)
+    {
+        ReceiveDamage(damage, force);
+    }
+
+    public virtual void ReceiveDamage(int damage, Vector3 force)
     {
         healthManager.ReceiveDamage(damage);
 
         if (TryGetComponent(out Rigidbody rigidbody))
         {
-            rigidbody.AddForce(Force);
+            rigidbody.AddForce(force);
         }
     }
 
