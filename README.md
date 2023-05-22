@@ -1,7 +1,7 @@
 # EvilSuitcase4 (WIP)
 3D third person shooter zombie wave control. Made in Unity.
 
-The objective in this game is survive as long as you can while defeating waves of zombies. After clearing each wave, you'll receive random rewards that will help you survive next waves, but the fun part is that also certain items will be blocked randomly each wave, thus aiming for high replayability.
+The objective in this game is to survive as long as you can while defeating waves of zombies. After clearing each wave, you'll receive random rewards that will help you survive next waves, but the fun part is that also certain items will be blocked randomly each wave, thus aiming for high replayability.
 
 ## Roadmap
 
@@ -59,6 +59,14 @@ The roadmap will be split into what has already been done and what is to be deve
         Items Functionalities: 7: Done
         Weapon Fast Swap Configuration: 7: Done
         Weapon Fast Swap Gameplay: 7: Done
+        
+    section Wave Manager
+        Wave Cleared Rewards: 7: Done
+        Random Item Blocker: 7: Done
+        Polish UI: 7: Done
+        
+    section Melee Weapons
+        Katana: 7: Done
 ```
 
 ### To Do
@@ -66,24 +74,14 @@ The roadmap will be split into what has already been done and what is to be deve
 ```mermaid 
   journey
     title To Do
-    
-    section Wave Manager
-        Wave Cleared Rewards: 1: Pending
-        Random Item Blocker: 1: Pending
-        Polish UI: 1: Pending
-        
     section First Map
         TBD: 1: Pending
         
     section Game UI
         TBD: 1: Pending
         
-    section Melee Weapons
-        TBD: 1: Pending
-        
     section Demo Polish
         TBD: 1: Pending
-    
 ```
 
 ## Third Person Shooter Controller
@@ -189,6 +187,10 @@ Weapon system created using S.O.L.I.D principles for modularity and better code.
 This weapon system is supposed to have the classes ***Gun*** and ***MeleeWeapon*** as a base. So far ***GunHitscan*** and ***GunProjectile*** classes based on the ***Gun*** class have already been created, but ***MeleeWeapon*** weapons are also on the roadmap.
 
 All animations for holding and aiming guns are _Procedural Animations_ which run on top of the base animations from the third person controller. Also, for reloading animations, new animations were created using the ***Animation Rigging*** system.
+
+### Melee Weapons
+
+Melee weapons consist on weapons which deliver attacks by themselves by swinging them. For this demo, only a Katana was programmed and rigged since by using animation rigging, we are unable to properly use mocap animations. All attack animations were made by using animation rigging solutions.
 
 ### Hitscan Guns
 
@@ -523,3 +525,76 @@ Constant information is stored in the ***ItemScriptableObject*** class, which ho
 Variable information will be stored in the Item class category, for example being it current ammo, max ammo capacity, etc.
 
 Also for the drag and drop system to work properly we will attach the ItemDragDrop class to all item prefabs.
+
+## Wave Manager and Rewards
+
+To control the main loop for the game we will be using a wave control model in which we set certain number of zombies to be spawned each wave and by defeating them we will get rewards accordingly to the difficulty of each level.
+
+### Wave Manager
+Structs were created to populate lists which contain information about the enemies to be spawned and rewards to be given each wave. These enums are as follows:
+
+#### Spawn Object Struct
+
+```mermaid
+---
+title: Spawn Object Struct
+---
+classDiagram
+    class SpawnObjectStruct{
+        +GameObject Prefab
+        +float SpawnProbability
+    }
+```
+
+On the _Prefab_ variable, enemy prefabs will be used. On the other hand, the _SpawnProbability_ variable is a variable between 0 and 1 which determines the possibility of spawning its respective prefab.
+
+#### Wave Spawn Struct
+
+```mermaid
+---
+title: Wave Spawn Struct
+---
+classDiagram
+    class WaveSpawnStruct{
+        +int EnemiesToSpawn
+        +List<SpawnObjectStruct> SpawnObjects
+    }
+```
+
+For each wave, we will define a list of _SpawnObjectStruct_ objects, which will define the type of enemies to be spawned.
+
+#### Reward Item
+
+```mermaid
+---
+title: Reward Item
+---
+classDiagram
+    class RewardItem{
+        +Item Item
+        +ItemType ItemType
+        +float Probability
+        +int Amount
+        
+        +Vector2Int AmmoMinMax
+        +Vector2Int LoadedAmmoMinMax
+        +Vector2 DurabilityMinMax
+    }
+```
+This struct will determine an item to be given as a reward (with certain probability), also depending on the item type we will set different vectors which will determine information about the reward item, for example, the amount of ammo certain weapon is currenty loaded with when awarded.
+
+#### Wave Rewards Struct
+
+```mermaid
+---
+title: Wave Rewards Struct
+---
+classDiagram
+    class WaveRewardsStruct{
+        +List<RewardItem> RewardItems
+    }
+```
+
+### Rewards
+
+As for the rewards, these will be given in a specific UI designed to hold different inventories. On the left side we will have the main inventory and on the right side of the UI we will have a scrollable area containing three reward inventories, separated by item type, being Consumables, Melee and Gun inventories respectively.
