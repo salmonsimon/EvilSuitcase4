@@ -67,6 +67,12 @@ The roadmap will be split into what has already been done and what is to be deve
         
     section Melee Weapons
         Katana: 7: Done
+        
+    section First Map
+        Map: 7: Done
+        Lighting: 7: Done
+        Fog: 7: Done
+        Navmesh: 7: Done
 ```
 
 ### To Do
@@ -74,9 +80,6 @@ The roadmap will be split into what has already been done and what is to be deve
 ```mermaid 
   journey
     title To Do
-    section First Map
-        TBD: 1: Pending
-        
     section Game UI
         TBD: 1: Pending
         
