@@ -56,7 +56,7 @@ public class EnemySpawner : MonoBehaviour
             spawnedEnemy.GetComponent<PoolableObject>().ObjectPool = objectPools[enemyToSpawnName];
 
             NavMeshHit Hit;
-            if (NavMesh.SamplePosition(randomSpawnPosition, out Hit, 2f, -1))
+            if (NavMesh.SamplePosition(randomSpawnPosition, out Hit, 5f, -1))
             {
 
                 spawnedEnemy.GetComponent<ZombieStateMachine>().Agent.Warp(Hit.position);

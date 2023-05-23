@@ -127,6 +127,13 @@ public class GunHitscan : Gun
 
                 damageable.ReceiveDamage(gunConfiguration.DamageConfig.GetDamage(distance), hitForce);
             }
+            else if (hit.collider.TryGetComponent(out Rigidbody rigidbody))
+            {
+                Vector3 hitForce = -hit.normal.normalized * GunConfiguration.TrailConfig.HitForce;
+
+                rigidbody.AddForce(hitForce);
+            }
+
         }
 
         yield return new WaitForSeconds(gunConfiguration.TrailConfig.Duration);

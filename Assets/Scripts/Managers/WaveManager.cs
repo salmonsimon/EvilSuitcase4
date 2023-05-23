@@ -15,6 +15,8 @@ public class WaveManager : MonoBehaviour
     public struct SpawnObjectStruct
     {
         public GameObject Prefab;
+
+        [Range(0f, 1f)]
         public float SpawnProbability;
     }
 
