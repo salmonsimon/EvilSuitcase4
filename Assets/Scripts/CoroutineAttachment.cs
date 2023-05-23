@@ -7,11 +7,13 @@ public class CoroutineAttachment : MonoBehaviour
 
     public void StartCoroutine()
     {
-        StartCoroutine(attachedCoroutine);
+        if (transform.parent.gameObject.activeSelf)
+            StartCoroutine(attachedCoroutine);
     }
 
     public void StopCoroutine()
     {
-        StopCoroutine(attachedCoroutine);
+        if (transform.parent.gameObject.activeSelf)
+            StopCoroutine(attachedCoroutine);
     }
 }

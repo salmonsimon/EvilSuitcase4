@@ -48,8 +48,8 @@ public class Explosion : MonoBehaviour
         GameManager.instance.GetCinemachineShake().ShakeCamera(Config.CAMERASHAKE_EXPLOSION_AMPLITUDE, Config.CAMERASHAKE_EXPLOSION_DURATION);
 
         if (other.TryGetComponent(out Damageable damageable))
-        {
             damageable.ReceiveDamage(damageConfiguration.GetDamage(0), explosionForce, transform.position, explosionCollider.radius);
-        }
+        else if (other.TryGetComponent(out Rigidbody rigidBody))
+            rigidBody.AddExplosionForce(explosionForce, transform.position, explosionCollider.radius);
     }
 }
