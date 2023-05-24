@@ -7,6 +7,11 @@ using static Utils;
 
 public class RagdollSystem : MonoBehaviour
 {
+    [SerializeField] private Transform skeleton;
+
+    [SerializeField] private Collider mapCollider;
+    public Collider MapCollider { get { return mapCollider; } }
+
     public List<MuscleComponent> MuscleComponents = new List<MuscleComponent>();
     public List<MuscleComponent> GroundedMuscleComponents = new List<MuscleComponent>();
 
@@ -30,7 +35,7 @@ public class RagdollSystem : MonoBehaviour
         animator = GetComponent<Animator>();
         stateMachine = GetComponent<ZombieStateMachine>();
 
-        foreach (Rigidbody rigidBody in GetComponentsInChildren<Rigidbody>())
+        foreach (Rigidbody rigidBody in skeleton.GetComponentsInChildren<Rigidbody>())
         {
             MuscleComponent newMuscleComponent = rigidBody.AddComponent<MuscleComponent>();
             newMuscleComponent.Transform = rigidBody.transform;
@@ -67,7 +72,12 @@ public class RagdollSystem : MonoBehaviour
             }
 
             if (elapsedRecoverTime >= timeToRecover)
+            {
                 onHitRecovery = false;
+
+                if (!stateMachine.HealthManager.IsAlive)
+                    mapCollider.isTrigger = false;
+            }
         }
 
         if (accumulatedHitForce > 0)
@@ -78,7 +88,10 @@ public class RagdollSystem : MonoBehaviour
     {
         StopAllCoroutines();
 
-        if (!stateMachine.CurrentState.ToSafeString().Equals("ZombieRagdollState"))
+        mapCollider.isTrigger = true;
+
+        if (!stateMachine.CurrentState.ToSafeString().Equals("ZombieRagdollState") &&
+            !stateMachine.CurrentState.ToSafeString().Equals("ZombieDeadState"))
         {
             accumulatedHitForce += force.magnitude;
             if (accumulatedHitForce > MaxHitForce)

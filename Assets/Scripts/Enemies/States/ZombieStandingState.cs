@@ -31,6 +31,8 @@ public class ZombieStandingState : ZombieBaseState
         else
             animationToUse = context.StandUpFromBackAnimation.name;
 
+        context.RagdollSystem.MapCollider.isTrigger = false;
+
         context.RagdollSystem.SetRagdoll(true, true);
 
         context.Animator.Play(animationToUse, -1, 0);

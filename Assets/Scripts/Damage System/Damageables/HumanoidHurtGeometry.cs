@@ -70,9 +70,10 @@ public class HumanoidHurtGeometry : Damageable
                 break;
         }
 
-        healthManager.ReceiveDamage((int)(damage * damageMultiplier));
+        if (HealthManager.IsAlive)
+            healthManager.ReceiveDamage((int)(damage * damageMultiplier));
 
-        if (hasRagdoll && healthManager.IsAlive)
+        if (hasRagdoll) // && healthManager.IsAlive)
         {
             if (bodyPart == HumanoidBodyPart.Head)
                 force *= 1.5f;
