@@ -9,8 +9,6 @@ public class DartProjectile : Projectile
 
     protected override void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Collided on collision enter");
-
         base.OnCollisionEnter(collision);
 
         transform.SetParent(collision.collider.transform);
@@ -20,20 +18,28 @@ public class DartProjectile : Projectile
 
         if (collision.collider.TryGetComponent(out Damageable damageable))
             damageable.ReceiveDamage(damageConfig.GetDamage(distanceTraveled), forceDirection * 40f);
+        else if (collision.collider.TryGetComponent(out Rigidbody rigidbody))
+            rigidbody.AddForce(forceDirection * 5f, ForceMode.Impulse);
     }
 
-    protected override void OnTriggerEnter(Collider collider)
+    protected override void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Collided on trigger enter");
+        base.OnTriggerEnter(other);
 
-        base.OnTriggerEnter(collider);
+        transform.SetParent(other.transform, true);
 
-        transform.SetParent(collider.transform, true);
         Disable();
 
-        Vector3 forceDirection = (collider.transform.position - GameManager.instance.GetPlayer().transform.position).normalized;
+        Vector3 forceDirection = (other.transform.position - GameManager.instance.GetPlayer().transform.position).normalized;
 
-        if (collider.TryGetComponent(out Damageable damageable))
+        if (other.TryGetComponent(out Damageable damageable))
             damageable.ReceiveDamage(damageConfig.GetDamage(distanceTraveled), forceDirection * 40f);
+    }
+
+    protected override void Disable()
+    {
+        Destroy(gameObject.GetComponent<CustomGravity>());
+
+        base.Disable();
     }
 }

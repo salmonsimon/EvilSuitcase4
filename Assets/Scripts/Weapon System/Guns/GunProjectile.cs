@@ -64,7 +64,7 @@ public class GunProjectile : Gun
         }
         else
         {
-            Projectile newProjectile = Instantiate(projectilePrefab, projectileContainer, false);
+            Projectile newProjectile = Instantiate(projectilePrefab, projectileContainer, true);
 
             newProjectile.transform.position = ShootParticleSystem.transform.position;
             newProjectile.LaunchProjectile(shootDirection * projectileLaunchForce);
@@ -73,7 +73,7 @@ public class GunProjectile : Gun
 
     private Projectile CreateBullet()
     {
-        Projectile newProjectile = Instantiate(projectilePrefab, projectileContainer, false);
+        Projectile newProjectile = Instantiate(projectilePrefab, projectileContainer, true);
 
         if (poolableProjectiles)
             newProjectile.ProjectilePool = projectilePool;

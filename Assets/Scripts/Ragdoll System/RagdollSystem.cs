@@ -27,7 +27,7 @@ public class RagdollSystem : MonoBehaviour
     [SerializeField] private float accumulatedHitForce = 0;
     private float accumulatedHitForceRecoveryMultiplier = 25f;
 
-    private bool ragdollMode = false;
+    [SerializeField] private bool ragdollMode = false;
     public bool RagdollMode { get { return ragdollMode; } set { ragdollMode = value; } }
 
     public delegate void OnRagdollActivateDelegate();
@@ -36,11 +36,13 @@ public class RagdollSystem : MonoBehaviour
     private void OnEnable()
     {
         stateMachine.HealthManager.OnDeath += OnDeath;
+        stateMachine.HealthManager.OnRevival += OnRevival;
     }
 
     private void OnDisable()
     {
         stateMachine.HealthManager.OnDeath -= OnDeath;
+        stateMachine.HealthManager.OnRevival -= OnRevival;
     }
 
     private void Awake()
@@ -104,8 +106,6 @@ public class RagdollSystem : MonoBehaviour
 
             if (accumulatedHitForce > MaxHitForce)
             {
-                Debug.Log("Applying force on normal state surpassing max hit force");
-
                 accumulatedHitForce = 0;
                 OnRagdollActivate();
 
@@ -115,31 +115,20 @@ public class RagdollSystem : MonoBehaviour
             }
             else
             {
-                Debug.Log("Applying force on normal state");
-
                 StopAllCoroutines();
                 StartCoroutine(ApplyForceCoroutine(muscleComponent, force));
             }
         }
         else
-        {
-            Debug.Log("Applying force directly on ragdoll or dead state");
-
             muscleComponent.Rigidbody.AddForce(force, ForceMode.Impulse);
-
-        }
     }
 
     public IEnumerator ApplyForceCoroutine(MuscleComponent muscleComponent, Vector3 force)
     {
-        Debug.Log("Entered apply force coroutine");
-
         yield return null;
 
         if (!stateMachine.HealthManager.IsAlive)
             yield break;
-
-        Debug.Log("Still alive in coroutine");
 
         mapCollider.isTrigger = true;
 
@@ -151,8 +140,6 @@ public class RagdollSystem : MonoBehaviour
         {
             if (!RagdollMode && groundedMuscleComponent != muscleComponent)
             {
-                Debug.Log("Locking grounded muscle configurable joint motion");
-
                 groundedMuscleComponent.ConfigurableJoint.xMotion = ConfigurableJointMotion.Locked;
                 groundedMuscleComponent.ConfigurableJoint.yMotion = ConfigurableJointMotion.Locked;
                 groundedMuscleComponent.ConfigurableJoint.zMotion = ConfigurableJointMotion.Locked;
@@ -162,8 +149,6 @@ public class RagdollSystem : MonoBehaviour
             }
             else
             {
-                Debug.Log("Unlocking grounded muscle configurable joint motion");
-
                 groundedMuscleComponent.ConfigurableJoint.xMotion = ConfigurableJointMotion.Free;
                 groundedMuscleComponent.ConfigurableJoint.yMotion = ConfigurableJointMotion.Free;
                 groundedMuscleComponent.ConfigurableJoint.zMotion = ConfigurableJointMotion.Free;
@@ -214,8 +199,6 @@ public class RagdollSystem : MonoBehaviour
 
     public void ResetRagdoll()
     {
-        Debug.Log("Resetting ragdoll");
-
         onHitRecovery = false;
 
         if (stateMachine.HealthManager.IsAlive)
@@ -234,5 +217,12 @@ public class RagdollSystem : MonoBehaviour
         foreach (MuscleComponent groundedMuscleComponent in GroundedMuscleComponents)
             if (groundedMuscleComponent.TryGetComponent(out Collider collider))
                 collider.enabled = false;
+    }
+
+    private void OnRevival()
+    {
+        foreach (MuscleComponent groundedMuscleComponent in GroundedMuscleComponents)
+            if (groundedMuscleComponent.TryGetComponent(out Collider collider))
+                collider.enabled = true;
     }
 }
