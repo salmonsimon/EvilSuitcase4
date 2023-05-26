@@ -25,25 +25,34 @@ public class PlayerBoxDamageDealer : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Vector3 forceDirection = other.transform.position - GameManager.instance.GetPlayer().transform.position;
+        Vector3 playerPosition = GameManager.instance.GetPlayer().transform.position;
+        Vector3 closestPosition = other.ClosestPoint(playerPosition);
+
+        Vector3 forceDirection = (closestPosition - playerPosition).normalized;
         GameManager.instance.GetCinemachineShake().ShakeCamera(meleeWeapon.WeaponConfiguration.AttacksConfig.CameraShakeAmplitude, meleeWeapon.WeaponConfiguration.AttacksConfig.CameraShakeDuration);
 
         if (other.TryGetComponent(out Damageable damageable))
         {
             int damage = meleeWeapon.WeaponConfiguration.DamageConfig.GetDamage();
 
-            damageable.ReceiveMeleeDamage(damage, forceDirection * 150f, meleeWeapon.CurrentAttackID);
+            damageable.ReceiveMeleeDamage(damage, forceDirection * 35f, meleeWeapon.CurrentAttackID);
 
             if (damageable.TryGetComponent(out HumanoidHurtGeometry humanoidHurtGeometry))
-                GameManager.instance.GetSurfaceManager().HandleFleshImpact(damageable.transform.gameObject, Vector3.zero, -forceDirection, impactType, 0);
+                GameManager.instance.GetSurfaceManager().HandleFleshImpact(damageable.transform.gameObject, closestPosition, -forceDirection, impactType, 0);
             else
-                GameManager.instance.GetSurfaceManager().HandleImpact(damageable.transform.gameObject, Vector3.zero, -forceDirection, impactType, 0);
+                GameManager.instance.GetSurfaceManager().HandleImpact(damageable.transform.gameObject, closestPosition, -forceDirection, impactType, 0);
 
             meleeWeapon.SubstractDurability();
         }
+        else if (other.TryGetComponent(out Rigidbody rigidBody))
+        {
+            rigidBody.AddForce(forceDirection * 10f, ForceMode.Impulse);
+
+            GameManager.instance.GetSurfaceManager().HandleImpact(other.transform.gameObject, closestPosition, -forceDirection, impactType, 0);
+        }
         else
         {
-            GameManager.instance.GetSurfaceManager().HandleImpact(other.transform.gameObject, Vector3.zero, -forceDirection, impactType, 0);
+            GameManager.instance.GetSurfaceManager().HandleImpact(other.transform.gameObject, closestPosition, -forceDirection, impactType, 0);
         }
     }
 }

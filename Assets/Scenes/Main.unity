@@ -2079,8 +2079,8 @@ Transform:
   m_Children:
   - {fileID: 997974298}
   - {fileID: 1859566115}
-  - {fileID: 5999110245437260714}
   - {fileID: 1944940394}
+  - {fileID: 5999110245437260714}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -9286,7 +9286,7 @@ Transform:
   - {fileID: 1813896212}
   - {fileID: 2114283753834967213}
   m_Father: {fileID: 431904353}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1946135413 stripped
 Transform:
@@ -11273,6 +11273,42 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 712005138}
     m_Modifications:
+    - target: {fileID: 1048676498903858876, guid: f3890981ae87f1d439ff5e165c1b3b9a,
+        type: 3}
+      propertyPath: testingItemPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 1679215543761796996, guid: fe0272614fe257b4b8010e246f9e17b0,
+        type: 3}
+    - target: {fileID: 1048676498903858876, guid: f3890981ae87f1d439ff5e165c1b3b9a,
+        type: 3}
+      propertyPath: testingItemPrefabs.Array.data[3]
+      value: 
+      objectReference: {fileID: 793850889170039199, guid: c49534b2b93fa9f43802456922451be0,
+        type: 3}
+    - target: {fileID: 1048676498903858876, guid: f3890981ae87f1d439ff5e165c1b3b9a,
+        type: 3}
+      propertyPath: testingItemPrefabs.Array.data[4]
+      value: 
+      objectReference: {fileID: 6530900219213045720, guid: 379cda0942c91e34da108f2c5649e6bd,
+        type: 3}
+    - target: {fileID: 1048676498903858876, guid: f3890981ae87f1d439ff5e165c1b3b9a,
+        type: 3}
+      propertyPath: testingItemPrefabs.Array.data[5]
+      value: 
+      objectReference: {fileID: 6530900219213045720, guid: 8eb2817ad118cc94bbcf51a36bdfb36b,
+        type: 3}
+    - target: {fileID: 1048676498903858876, guid: f3890981ae87f1d439ff5e165c1b3b9a,
+        type: 3}
+      propertyPath: testingItemPrefabs.Array.data[6]
+      value: 
+      objectReference: {fileID: 6530900219213045720, guid: 71f2a908dd0f2cb48a76405bbef6bb54,
+        type: 3}
+    - target: {fileID: 1048676498903858876, guid: f3890981ae87f1d439ff5e165c1b3b9a,
+        type: 3}
+      propertyPath: testingItemPrefabs.Array.data[7]
+      value: 
+      objectReference: {fileID: 6530900219213045720, guid: 1d44d854fa0f2cc40b5a324171e7f6e9,
+        type: 3}
     - target: {fileID: 1048676498903858887, guid: f3890981ae87f1d439ff5e165c1b3b9a,
         type: 3}
       propertyPath: rewardsInventoryList.Array.data[0]
@@ -13238,7 +13274,7 @@ MonoBehaviour:
   GroundedRadius: 0.28
   GroundLayers:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 2241
   CinemachineCameraTarget: {fileID: 8338988565414295943}
   TopClamp: 25
   BottomClamp: -15
@@ -14134,6 +14170,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3328253903211340679, guid: f499d005f80a75d48b10508ec068155c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4270679590390335650, guid: f499d005f80a75d48b10508ec068155c,
         type: 3}

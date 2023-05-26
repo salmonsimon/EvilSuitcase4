@@ -31,7 +31,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1649783996960972562}
-  - {fileID: 5470596855763354555}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -178,7 +177,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 5470596855763354555}
   m_Father: {fileID: 6594581310846687830}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 5.46, z: 0}
@@ -261,7 +261,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 3
 --- !u!114 &166034905758791682
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -295,12 +295,12 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 6594581310846687830}
+    m_TransformParent: {fileID: 1649783996960972562}
     m_Modifications:
     - target: {fileID: 6787855544332440740, guid: 46626156812430541a59498d954c78f3,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6787855544332440740, guid: 46626156812430541a59498d954c78f3,
         type: 3}
@@ -325,17 +325,17 @@ PrefabInstance:
     - target: {fileID: 6787855544332440740, guid: 46626156812430541a59498d954c78f3,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 6787855544332440740, guid: 46626156812430541a59498d954c78f3,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 6787855544332440740, guid: 46626156812430541a59498d954c78f3,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 6787855544332440740, guid: 46626156812430541a59498d954c78f3,
         type: 3}

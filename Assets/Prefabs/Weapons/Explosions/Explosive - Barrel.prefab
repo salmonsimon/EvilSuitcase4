@@ -33,7 +33,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 7707526911930103177}
   m_Father: {fileID: 4088329223286522113}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -128.588, z: 0}
@@ -116,7 +117,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 3
 --- !u!114 &3935250258904675028
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -176,7 +177,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 225252683720292245}
-  - {fileID: 7707526911930103177}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -190,8 +190,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_audioClip: {fileID: 8300000, guid: f157d2c2b46f7814e8dec5ee4a14eaab, type: 3}
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -295,12 +295,12 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 4088329223286522113}
+    m_TransformParent: {fileID: 225252683720292245}
     m_Modifications:
     - target: {fileID: 6787855544332440740, guid: 46626156812430541a59498d954c78f3,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6787855544332440740, guid: 46626156812430541a59498d954c78f3,
         type: 3}
@@ -340,17 +340,17 @@ PrefabInstance:
     - target: {fileID: 6787855544332440740, guid: 46626156812430541a59498d954c78f3,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 6787855544332440740, guid: 46626156812430541a59498d954c78f3,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 6787855544332440740, guid: 46626156812430541a59498d954c78f3,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 6787855544332440740, guid: 46626156812430541a59498d954c78f3,
         type: 3}

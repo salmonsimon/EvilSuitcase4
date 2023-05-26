@@ -18,17 +18,30 @@ public class RagdollSystem : MonoBehaviour
     private Animator animator;
     private ZombieStateMachine stateMachine;
 
-    private bool onHitRecovery = false;
+    [SerializeField] private bool onHitRecovery = false;
     private float timeToRecover = 1f;
-    private float elapsedRecoverTime = 0f;
+    [SerializeField] private float elapsedRecoverTime = 0f;
     private float hitRecoverMultiplier = 2f;
 
     [SerializeField] private float MaxHitForce = 500f;
     [SerializeField] private float accumulatedHitForce = 0;
     private float accumulatedHitForceRecoveryMultiplier = 25f;
 
+    private bool ragdollMode = false;
+    public bool RagdollMode { get { return ragdollMode; } set { ragdollMode = value; } }
+
     public delegate void OnRagdollActivateDelegate();
     public event OnRagdollActivateDelegate OnRagdollActivate;
+
+    private void OnEnable()
+    {
+        stateMachine.HealthManager.OnDeath += OnDeath;
+    }
+
+    private void OnDisable()
+    {
+        stateMachine.HealthManager.OnDeath -= OnDeath;
+    }
 
     private void Awake()
     {
@@ -42,6 +55,9 @@ public class RagdollSystem : MonoBehaviour
             newMuscleComponent.Rigidbody = rigidBody;
             newMuscleComponent.Collider = rigidBody.transform.GetComponent<Collider>();
             newMuscleComponent.BodyPart = rigidBody.transform.GetComponent<HumanoidHurtGeometry>().BodyPart;
+
+            newMuscleComponent.Collider.enabled = false;
+            newMuscleComponent.Collider.enabled = true;
 
             MuscleComponents.Add(newMuscleComponent);
 
@@ -72,12 +88,7 @@ public class RagdollSystem : MonoBehaviour
             }
 
             if (elapsedRecoverTime >= timeToRecover)
-            {
-                onHitRecovery = false;
-
-                if (!stateMachine.HealthManager.IsAlive)
-                    mapCollider.isTrigger = false;
-            }
+                ResetRagdoll();
         }
 
         if (accumulatedHitForce > 0)
@@ -86,41 +97,62 @@ public class RagdollSystem : MonoBehaviour
 
     public void ApplyForce(MuscleComponent muscleComponent, Vector3 force)
     {
-        StopAllCoroutines();
-
-        mapCollider.isTrigger = true;
-
         if (!stateMachine.CurrentState.ToSafeString().Equals("ZombieRagdollState") &&
             !stateMachine.CurrentState.ToSafeString().Equals("ZombieDeadState"))
         {
             accumulatedHitForce += force.magnitude;
+
             if (accumulatedHitForce > MaxHitForce)
             {
+                Debug.Log("Applying force on normal state surpassing max hit force");
+
                 accumulatedHitForce = 0;
                 OnRagdollActivate();
+
                 muscleComponent.Rigidbody.AddForce(force, ForceMode.Impulse);
+
                 return;
             }
+            else
+            {
+                Debug.Log("Applying force on normal state");
 
-            StartCoroutine(ApplyForceCoroutine(muscleComponent, force));
+                StopAllCoroutines();
+                StartCoroutine(ApplyForceCoroutine(muscleComponent, force));
+            }
         }
         else
+        {
+            Debug.Log("Applying force directly on ragdoll or dead state");
+
             muscleComponent.Rigidbody.AddForce(force, ForceMode.Impulse);
+
+        }
     }
 
     public IEnumerator ApplyForceCoroutine(MuscleComponent muscleComponent, Vector3 force)
     {
+        Debug.Log("Entered apply force coroutine");
+
         yield return null;
 
         if (!stateMachine.HealthManager.IsAlive)
             yield break;
 
+        Debug.Log("Still alive in coroutine");
+
+        mapCollider.isTrigger = true;
+
+        yield return null;
+
         SetRagdoll(false, false);
 
         foreach (MuscleComponent groundedMuscleComponent in GroundedMuscleComponents)
         {
-            if (groundedMuscleComponent != muscleComponent)
+            if (!RagdollMode && groundedMuscleComponent != muscleComponent)
             {
+                Debug.Log("Locking grounded muscle configurable joint motion");
+
                 groundedMuscleComponent.ConfigurableJoint.xMotion = ConfigurableJointMotion.Locked;
                 groundedMuscleComponent.ConfigurableJoint.yMotion = ConfigurableJointMotion.Locked;
                 groundedMuscleComponent.ConfigurableJoint.zMotion = ConfigurableJointMotion.Locked;
@@ -128,21 +160,18 @@ public class RagdollSystem : MonoBehaviour
                 if (groundedMuscleComponent.transform.childCount > 0)
                     groundedMuscleComponent.ConfigurableJoint.anchor = groundedMuscleComponent.transform.GetChild(0).localPosition;
             }
-        }
-
-        muscleComponent.Rigidbody.AddForce(force, ForceMode.Impulse);
-
-        yield return null;
-
-        if (muscleComponent.BodyPart != HumanoidBodyPart.Foot)
-        {
-            foreach (MuscleComponent groundedMuscleComponent in GroundedMuscleComponents)
+            else
             {
+                Debug.Log("Unlocking grounded muscle configurable joint motion");
+
                 groundedMuscleComponent.ConfigurableJoint.xMotion = ConfigurableJointMotion.Free;
                 groundedMuscleComponent.ConfigurableJoint.yMotion = ConfigurableJointMotion.Free;
                 groundedMuscleComponent.ConfigurableJoint.zMotion = ConfigurableJointMotion.Free;
             }
         }
+
+        if (!RagdollMode)
+            muscleComponent.Rigidbody.AddForce(force, ForceMode.Impulse);
 
         yield return null;
 
@@ -183,11 +212,14 @@ public class RagdollSystem : MonoBehaviour
             GetComponent<ZombieSFX>().PlayRandomHurtAudioClip();
     }
 
-    private void ResetRagdoll()
+    public void ResetRagdoll()
     {
-        SetRagdoll(true, true);
+        Debug.Log("Resetting ragdoll");
 
         onHitRecovery = false;
+
+        if (stateMachine.HealthManager.IsAlive)
+            mapCollider.isTrigger = false;
 
         foreach (MuscleComponent groundedMuscleComponent in GroundedMuscleComponents)
         {
@@ -195,5 +227,12 @@ public class RagdollSystem : MonoBehaviour
             groundedMuscleComponent.ConfigurableJoint.yMotion = ConfigurableJointMotion.Free;
             groundedMuscleComponent.ConfigurableJoint.zMotion = ConfigurableJointMotion.Free;
         }
+    }
+
+    private void OnDeath()
+    {
+        foreach (MuscleComponent groundedMuscleComponent in GroundedMuscleComponents)
+            if (groundedMuscleComponent.TryGetComponent(out Collider collider))
+                collider.enabled = false;
     }
 }

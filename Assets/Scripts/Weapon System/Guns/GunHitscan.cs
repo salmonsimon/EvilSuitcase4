@@ -129,9 +129,9 @@ public class GunHitscan : Gun
             }
             else if (hit.collider.TryGetComponent(out Rigidbody rigidbody))
             {
-                Vector3 hitForce = -hit.normal.normalized * GunConfiguration.TrailConfig.HitForce;
+                Vector3 hitForce = -hit.normal.normalized * (GunConfiguration.TrailConfig.HitForce / 3);
 
-                rigidbody.AddForce(hitForce);
+                rigidbody.AddForce(hitForce, ForceMode.Impulse);
             }
 
         }

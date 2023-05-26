@@ -73,12 +73,18 @@ public class HumanoidHurtGeometry : Damageable
         if (HealthManager.IsAlive)
             healthManager.ReceiveDamage((int)(damage * damageMultiplier));
 
-        if (hasRagdoll) // && healthManager.IsAlive)
-        {
-            if (bodyPart == HumanoidBodyPart.Head)
-                force *= 1.5f;
-
+        if (hasRagdoll)
             ragdollSystem.ApplyForce(muscleComponent, force);
-        }
+    }
+
+    public override void ReceiveDamage(int damage, float explosionForce, Vector3 explosionPosition, float explosionRadius)
+    {
+        if (HealthManager.IsAlive)
+            healthManager.ReceiveDamage(damage);
+
+        Vector3 force = transform.position - explosionPosition;
+
+        if (hasRagdoll)
+            ragdollSystem.ApplyForce(muscleComponent, force * 5f);
     }
 }

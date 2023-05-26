@@ -56,7 +56,9 @@ public class Explosive : MonoBehaviour
     {
         audioSource.Play();
 
-        foreach(Transform particleEffect in model.transform)
+        explosionObject.transform.SetParent(transform);
+
+        foreach (Transform particleEffect in model.transform)
             Destroy(particleEffect.gameObject);
 
         model.SetActive(false);
@@ -65,7 +67,7 @@ public class Explosive : MonoBehaviour
 
         explosionObject.gameObject.SetActive(true);
 
-        WaitToDisable(disableTime);
+        StartCoroutine(WaitToDisable(disableTime));
     }
 
     private IEnumerator WaitToDisable(float delay)
