@@ -14,18 +14,32 @@ public class DartProjectile : Projectile
         transform.SetParent(collision.collider.transform);
         Disable();
 
+        Vector3 forceDirection = -collision.contacts[0].normal;
+
         if (collision.collider.TryGetComponent(out Damageable damageable))
-            damageable.ReceiveDamage(damageConfig.GetDamage(distanceTraveled), Vector3.zero);
+            damageable.ReceiveDamage(damageConfig.GetDamage(distanceTraveled), forceDirection * 40f);
+        else if (collision.collider.TryGetComponent(out Rigidbody rigidbody))
+            rigidbody.AddForce(forceDirection * 5f, ForceMode.Impulse);
     }
 
-    protected override void OnTriggerEnter(Collider collider)
+    protected override void OnTriggerEnter(Collider other)
     {
-        base.OnTriggerEnter(collider);
+        base.OnTriggerEnter(other);
 
-        transform.SetParent(collider.transform, true);
+        transform.SetParent(other.transform, true);
+
         Disable();
 
-        if (collider.TryGetComponent(out Damageable damageable))
-            damageable.ReceiveDamage(damageConfig.GetDamage(distanceTraveled), Vector3.zero);
+        Vector3 forceDirection = (other.transform.position - GameManager.instance.GetPlayer().transform.position).normalized;
+
+        if (other.TryGetComponent(out Damageable damageable))
+            damageable.ReceiveDamage(damageConfig.GetDamage(distanceTraveled), forceDirection * 40f);
+    }
+
+    protected override void Disable()
+    {
+        Destroy(gameObject.GetComponent<CustomGravity>());
+
+        base.Disable();
     }
 }

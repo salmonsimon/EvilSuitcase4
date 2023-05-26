@@ -23,6 +23,10 @@ public class ZombieRagdollState : ZombieBaseState
     {
         context.Agent.enabled = false;
 
+        context.RagdollSystem.MapCollider.isTrigger = true;
+        context.RagdollSystem.MapCollider.enabled = false;
+
+        context.RagdollSystem.RagdollMode = true;
         context.RagdollSystem.SetRagdoll(false, true);
         readyToResetBones = false;
 

@@ -58,7 +58,7 @@ public class Projectile : MonoBehaviour
         }
 
         if (rigidBody.velocity.magnitude > 0)
-            transform.rotation.SetLookRotation(rigidBody.velocity);
+            transform.rotation = Quaternion.LookRotation(rigidBody.velocity.normalized, Vector3.up);
     }
 
     public virtual void LaunchProjectile(Vector3 launchForce)

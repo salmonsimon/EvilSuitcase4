@@ -31,6 +31,7 @@ public class ZombieStandingState : ZombieBaseState
         else
             animationToUse = context.StandUpFromBackAnimation.name;
 
+        context.RagdollSystem.RagdollMode = false;
         context.RagdollSystem.SetRagdoll(true, true);
 
         context.Animator.Play(animationToUse, -1, 0);
@@ -39,6 +40,9 @@ public class ZombieStandingState : ZombieBaseState
     public override void ExitState()
     {
         context.Agent.enabled = true;
+
+        context.RagdollSystem.MapCollider.isTrigger = false;
+        context.RagdollSystem.MapCollider.enabled = true;
     }
 
     public override void UpdateState()

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3062870269352120422}
   - component: {fileID: 2079213394010858107}
-  - component: {fileID: 2079213394010858106}
+  - component: {fileID: -1318383109874172563}
   - component: {fileID: 2079213394010858104}
   - component: {fileID: 7800704400378751078}
   - component: {fileID: 299098482600097267}
@@ -56,7 +56,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 1
---- !u!65 &2079213394010858106
+--- !u!65 &-1318383109874172563
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -64,7 +64,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2079213394010858101}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.2, y: 0.2, z: 0.73354006}
@@ -455,6 +455,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Explosion
+      objectReference: {fileID: 0}
+    - target: {fileID: 6787855544332440742, guid: 46626156812430541a59498d954c78f3,
+        type: 3}
+      propertyPath: explosionForce
+      value: 1000
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46626156812430541a59498d954c78f3, type: 3}
