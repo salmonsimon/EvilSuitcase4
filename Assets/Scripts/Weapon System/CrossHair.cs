@@ -17,22 +17,24 @@ public class CrossHair : MonoBehaviour
     private RaycastHit crossHairRaycastHit;
 
     private bool isReloading;
+    private float currentReloadingTime = -1f;
+
     private bool isShrinking;
 
     private Vector3 crosshairOriginalScale;
 
     #region Weapon Dependant
 
-    private float reloadSpeed;
-    public float ReloadSpeed { get { return reloadSpeed; } private set { reloadSpeed = value; } }
+    [SerializeField] private float reloadAnimationDuration;
+    public float ReloadSpeed { get { return reloadAnimationDuration; } private set { reloadAnimationDuration = value; } }
 
-    private float expandingValue = .5f;
+    private float expandingValue = .3f;
     public float ExpandingValue { get { return expandingValue; } private set { expandingValue = value; } }
 
     private float shrinkSpeed = 2f;
     public float ShrinkSpeed { get { return shrinkSpeed; } private set { shrinkSpeed = value; } }
 
-    private float crosshairMaxScale;
+    private float crosshairMaxScale = 2f;
     public float CrosshairMaxScale { get { return crosshairMaxScale; } private set { crosshairMaxScale = value; } }
 
     #region CrossHair Images
@@ -80,9 +82,9 @@ public class CrossHair : MonoBehaviour
         expanding.sprite = crosshairConfig.Expanding;
 
         if (crosshairConfig.WeaponType == WeaponType.Gun)
-            reloadSpeed = crosshairConfig.ReloadAnimationClip.length;
+            reloadAnimationDuration = crosshairConfig.ReloadAnimationClip.length;
         else
-            reloadSpeed = -1;
+            reloadAnimationDuration = -1;
 
         ShowReloadUI(false);
         ShowCrossHairUI(true);
@@ -138,14 +140,14 @@ public class CrossHair : MonoBehaviour
     {
         isShrinking = true; 
 
-        do
+        while (crosshairOriginalScale.x < expanding.rectTransform.localScale.x)
         {
             expanding.rectTransform.localScale = new Vector3(expanding.rectTransform.localScale.x - Time.deltaTime * shrinkSpeed,
                                                              expanding.rectTransform.localScale.y - Time.deltaTime * shrinkSpeed,
                                                              expanding.rectTransform.localScale.z - Time.deltaTime * shrinkSpeed);
-            yield return new WaitForEndOfFrame();
+
+            yield return null;
         }
-        while (crosshairOriginalScale.x < expanding.rectTransform.localScale.x);
 
         isShrinking = false;
         yield return new WaitForEndOfFrame();
@@ -156,21 +158,27 @@ public class CrossHair : MonoBehaviour
         isReloading = true;
 
         reload.fillAmount = 0;
+        currentReloadingTime = 0f;
 
         ShowReloadUI(true);
         ShowCrossHairUI(false);
 
-        do
+        while (currentReloadingTime < reloadAnimationDuration)
         {
-            reload.fillAmount += Time.deltaTime * reloadSpeed;
-            yield return new WaitForEndOfFrame();
+            currentReloadingTime += Time.deltaTime;
+
+            reload.fillAmount =  currentReloadingTime / reloadAnimationDuration;
+
+            yield return null;
         }
-        while (reload.fillAmount < 1f);
+
+        reload.fillAmount = 1f;
 
         SetCrossHairUIColor(Color.white);
 
         ShowReloadUI(false);
-        ShowCrossHairUI(true);
+
+        yield return null;
 
         isReloading = false;
 

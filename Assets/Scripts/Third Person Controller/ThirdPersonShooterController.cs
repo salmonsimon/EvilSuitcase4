@@ -192,8 +192,13 @@ public class ThirdPersonShooterController : MonoBehaviour
 
         if (newWeapon.TryGetComponent(out Gun gun))
         {
-            GunWeaponSetup((GunItem)newWeaponItem);
-            crosshair.SetupCrossHair(gun.GunConfiguration.CrossHairConfig);   
+            GunItem newGunItem = (GunItem)newWeaponItem;
+
+            GunWeaponSetup(newGunItem);
+            crosshair.SetupCrossHair(gun.GunConfiguration.CrossHairConfig);
+
+            if (newGunItem.CurrentAmmo == 0)
+                crosshair.OutOfBullets();
         }
         else if (newWeapon.TryGetComponent(out MeleeWeapon meleeWeapon))
         {
