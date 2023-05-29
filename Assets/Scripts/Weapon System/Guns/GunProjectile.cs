@@ -41,6 +41,7 @@ public class GunProjectile : Gun
             GameManager.instance.GetCinemachineShake().ShakeCamera(gunConfiguration.ShootConfig.CameraShakeAmplitude, gunConfiguration.ShootConfig.CameraShakeDuration);
 
             SubstractClipAmmo();
+            crossHair.ExpandCrosshair();
 
             float crosshairDistance = Vector3.Distance(crossHairTarget.position, ShootParticleSystem.transform.position);
 

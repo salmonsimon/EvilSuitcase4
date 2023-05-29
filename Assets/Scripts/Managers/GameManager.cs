@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private WeaponDisplayUI weaponDisplayUI;
     [SerializeField] private InventoryUI inventoryUI;
     [SerializeField] private RewardsUI rewarsdUI;
-
+    [SerializeField] private CrossHair crosshair;
 
     #endregion
 
@@ -69,6 +69,7 @@ public class GameManager : MonoBehaviour
             Destroy(weaponDisplayUI.gameObject);
             Destroy(inventoryUI.gameObject);
             Destroy(rewarsdUI.gameObject);
+            Destroy(crosshair.gameObject);
         }
         else
         {
@@ -247,6 +248,11 @@ public class GameManager : MonoBehaviour
     public TransitionManager GetTransitionManager()
     {
         return transitionManager;
+    }
+
+    public CrossHair GetCrossHair()
+    {
+        return crosshair;
     }
 
     #endregion

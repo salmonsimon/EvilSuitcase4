@@ -31,5 +31,8 @@ public class MeleeWeaponScriptableObject : ScriptableObject
     [SerializeField] private MeleeWeaponAudioConfigurationScriptableObject audioConfig;
     public MeleeWeaponAudioConfigurationScriptableObject AudioConfig { get { return audioConfig; } }
 
+    [SerializeField] private CrosshairConfigurationScriptableObject crossHairConfig;
+    public CrosshairConfigurationScriptableObject CrossHairConfig { get { return crossHairConfig; } }
+
     #endregion
 }

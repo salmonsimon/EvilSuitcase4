@@ -43,6 +43,7 @@ public class GunHitscan : Gun
             GameManager.instance.GetCinemachineShake().ShakeCamera(gunConfiguration.ShootConfig.CameraShakeAmplitude, gunConfiguration.ShootConfig.CameraShakeDuration);
 
             SubstractClipAmmo();
+            crossHair.ExpandCrosshair();
 
             for (int i = 0; i < gunConfiguration.ShootConfig.PelletsPerBullet; i++)
             {
