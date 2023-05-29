@@ -28,7 +28,7 @@ public class ThirdPersonShooterController : MonoBehaviour
     [SerializeField] private Weapon equippedWeapon;
     public Weapon EquippedWeapon { get { return equippedWeapon; } }
 
-    #region Obejct References
+    #region Object References
 
     private ThirdPersonController thirdPersonController;
     public ThirdPersonController ThirdPersonController { get { return thirdPersonController; } }
@@ -37,6 +37,8 @@ public class ThirdPersonShooterController : MonoBehaviour
     private PlayerGunAnimations playerGunAnimations;
 
     private Animator animator;
+
+    private CrossHair crosshair;
 
     #endregion
 
@@ -75,6 +77,7 @@ public class ThirdPersonShooterController : MonoBehaviour
         playerGunAnimations = GetComponent<PlayerGunAnimations>();
 
         animator = GetComponent<Animator>();
+        crosshair = GameManager.instance.GetCrossHair();
     }
 
     private void Update()
@@ -82,6 +85,7 @@ public class ThirdPersonShooterController : MonoBehaviour
         if ((starterAssetsInputs.aim && !isReloading) || IsAttacking)
         {
             aiming = true;
+            crosshair.ShowCrossHairUI(true);
 
             aimVirtualCamera.gameObject.SetActive(true);
 
@@ -93,6 +97,8 @@ public class ThirdPersonShooterController : MonoBehaviour
         else 
         {
             aiming = false;
+            crosshair.ShowCrossHairUI(false);
+
             starterAssetsInputs.shoot = false;
 
             aimVirtualCamera.gameObject.SetActive(false);
@@ -122,7 +128,10 @@ public class ThirdPersonShooterController : MonoBehaviour
 
             if (IsSubclassOfRawGeneric(equippedWeapon.GetType(), typeof(Gun)) &&
                 equippedWeapon.GetComponent<Gun>().CurrentClipAmmo == 0)
+            {
                 starterAssetsInputs.shoot = false;
+                crosshair.OutOfBullets();
+            }
         }
     }
 
@@ -181,10 +190,22 @@ public class ThirdPersonShooterController : MonoBehaviour
     {
         ActivateNewWeapon(newWeapon);
 
-        if (IsSubclassOfRawGeneric(equippedWeapon.GetType(), typeof(Gun)))
-            GunWeaponSetup((GunItem)newWeaponItem);
-        else if (IsSubclassOfRawGeneric(equippedWeapon.GetType(), typeof(MeleeWeapon)))
+        if (newWeapon.TryGetComponent(out Gun gun))
+        {
+            GunItem newGunItem = (GunItem)newWeaponItem;
+
+            GunWeaponSetup(newGunItem);
+            crosshair.SetupCrossHair(gun.GunConfiguration.CrossHairConfig);
+
+            if (newGunItem.CurrentAmmo == 0)
+                crosshair.OutOfBullets();
+        }
+        else if (newWeapon.TryGetComponent(out MeleeWeapon meleeWeapon))
+        {
             MeleeWeaponSetup((MeleeItem)newWeaponItem);
+            crosshair.SetupCrossHair(meleeWeapon.WeaponConfiguration.CrossHairConfig);
+        }
+            
     }
 
     private void ActivateNewWeapon(Weapon newWeapon)
@@ -304,6 +325,8 @@ public class ThirdPersonShooterController : MonoBehaviour
     {
         isReloading = true;
         starterAssetsInputs.shoot = false;
+
+        crosshair.ReloadWeapon();
 
         reloadCoroutine = StartCoroutine(PlayClip(Animator.StringToHash(reloadAnimationClip.name), 0f));
     }

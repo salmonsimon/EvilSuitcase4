@@ -1,13 +1,68 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CrossHair : MonoBehaviour
 {
+    #region Configuration
+
+    [SerializeField] private LayerMask hitMask;
+
+    #endregion
+
+    #region Variables
+
     private Ray crossHairRay;
     private RaycastHit crossHairRaycastHit;
 
-    [SerializeField] private LayerMask hitMask;
+    private bool isReloading;
+    private float currentReloadingTime = -1f;
+
+    private bool isShrinking;
+
+    private Vector3 crosshairOriginalScale;
+
+    #region Weapon Dependant
+
+    [SerializeField] private float reloadAnimationDuration;
+    public float ReloadSpeed { get { return reloadAnimationDuration; } private set { reloadAnimationDuration = value; } }
+
+    private float expandingValue = .3f;
+    public float ExpandingValue { get { return expandingValue; } private set { expandingValue = value; } }
+
+    private float shrinkSpeed = 2f;
+    public float ShrinkSpeed { get { return shrinkSpeed; } private set { shrinkSpeed = value; } }
+
+    private float crosshairMaxScale = 2f;
+    public float CrosshairMaxScale { get { return crosshairMaxScale; } private set { crosshairMaxScale = value; } }
+
+    #region CrossHair Images
+
+    [SerializeField] private Image dot;
+    public Image Dot { get { return dot; } private set { dot = value; } }
+
+    [SerializeField] private Image inner;
+    public Image Inner { get { return inner; } private set { inner = value; } }
+
+    [SerializeField] private Image expanding;
+    public Image Expanding { get { return expanding; } private set { expanding = value; } }
+
+    [SerializeField] private Image reload;
+    public Image Reload { get { return reload; } private set { reload = value; } }
+
+    #endregion
+
+    #endregion
+
+    #endregion
+
+    private void Start()
+    {
+        reload.enabled = false;
+
+        crosshairOriginalScale = expanding.rectTransform.localScale;
+    }
 
     private void Update()
     {
@@ -18,5 +73,117 @@ public class CrossHair : MonoBehaviour
             transform.position = crossHairRaycastHit.point;
         else
             transform.position = crossHairRay.origin + crossHairRay.direction.normalized * 100;
+    }
+
+    public void SetupCrossHair(CrosshairConfigurationScriptableObject crosshairConfig)
+    {
+        dot.sprite = crosshairConfig.Dot;
+        inner.sprite = crosshairConfig.Inner;
+        expanding.sprite = crosshairConfig.Expanding;
+
+        if (crosshairConfig.WeaponType == WeaponType.Gun)
+            reloadAnimationDuration = crosshairConfig.ReloadAnimationClip.length;
+        else
+            reloadAnimationDuration = -1;
+
+        ShowReloadUI(false);
+        ShowCrossHairUI(true);
+        SetCrossHairUIColor(Color.white);
+    }
+
+    private void ShowReloadUI(bool value)
+    {
+        reload.enabled = value;
+    }
+
+    public void ShowCrossHairUI(bool value)
+    {
+        
+        inner.enabled = inner.sprite ? value : false;
+        dot.enabled = dot.sprite ? value : false;
+        expanding.enabled = expanding.sprite ? value : false;
+    }
+
+    private void SetCrossHairUIColor(Color newColor)
+    {
+        inner.color = newColor;
+        dot.color = newColor;
+        expanding.color = newColor;
+    }
+
+    public void OutOfBullets()
+    {
+        SetCrossHairUIColor(Color.red);
+    }
+
+    public void ReloadWeapon()
+    {
+        if (!isReloading)
+            StartCoroutine(ReloadCoroutine());
+    }
+
+    public void ExpandCrosshair()
+    {
+        if (expanding.rectTransform.localScale.x < crosshairMaxScale)
+        {
+            expanding.rectTransform.localScale += new Vector3(expandingValue, expandingValue, expandingValue);
+        }
+        else
+            expanding.rectTransform.localScale = new Vector3(crosshairMaxScale, crosshairMaxScale, crosshairMaxScale);
+
+
+        if (!isShrinking)
+            StartCoroutine(ShrinkCrosshair());
+    }
+
+    private IEnumerator ShrinkCrosshair()
+    {
+        isShrinking = true; 
+
+        while (crosshairOriginalScale.x < expanding.rectTransform.localScale.x)
+        {
+            expanding.rectTransform.localScale = new Vector3(expanding.rectTransform.localScale.x - Time.deltaTime * shrinkSpeed,
+                                                             expanding.rectTransform.localScale.y - Time.deltaTime * shrinkSpeed,
+                                                             expanding.rectTransform.localScale.z - Time.deltaTime * shrinkSpeed);
+
+            yield return null;
+        }
+
+        isShrinking = false;
+        yield return new WaitForEndOfFrame();
+    }
+
+    private IEnumerator ReloadCoroutine()
+    {
+        isReloading = true;
+
+        reload.fillAmount = 0;
+        currentReloadingTime = 0f;
+
+        ShowReloadUI(true);
+        ShowCrossHairUI(false);
+
+        while (currentReloadingTime < reloadAnimationDuration)
+        {
+            currentReloadingTime += Time.deltaTime;
+
+            reload.fillAmount =  currentReloadingTime / reloadAnimationDuration;
+
+            yield return null;
+        }
+
+        reload.fillAmount = 1f;
+
+        SetCrossHairUIColor(Color.white);
+
+        ShowReloadUI(false);
+
+        yield return null;
+
+        isReloading = false;
+
+        expanding.rectTransform.localScale = crosshairOriginalScale;
+
+        yield return new WaitForEndOfFrame();
     }
 }

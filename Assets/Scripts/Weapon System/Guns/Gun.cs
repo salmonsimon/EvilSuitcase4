@@ -62,6 +62,8 @@ public class Gun : Weapon
     protected WeaponDisplayUI ammoDisplayUI;
 
     protected StarterAssetsInputs starterAssetInputs;
+
+    protected CrossHair crossHair;
     
     #endregion
 
@@ -77,6 +79,7 @@ public class Gun : Weapon
         //starterAssetInputs = GameManager.instance.GetPlayer().GetComponent<StarterAssetsInputs>();
 
         ammoDisplayUI = GameManager.instance.GetWeaponDisplayUI();
+        crossHair = GameManager.instance.GetCrossHair();
     }
 
     private void Update()

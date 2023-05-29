@@ -35,5 +35,8 @@ public class GunScriptableObject : ScriptableObject
     [SerializeField] private GunAudioConfigurationScriptableObject audioConfig;
     public GunAudioConfigurationScriptableObject AudioConfig { get { return audioConfig; } }
 
+    [SerializeField] private CrosshairConfigurationScriptableObject crossHairConfig;
+    public CrosshairConfigurationScriptableObject CrossHairConfig { get { return crossHairConfig; } }
+
     #endregion
 }
