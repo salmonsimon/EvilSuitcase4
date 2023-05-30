@@ -21,6 +21,7 @@ public class ThirdPersonShooterController : MonoBehaviour
     [Header("Rigging")]
     [SerializeField] private List<Rig> idleRigs;
     [SerializeField] private List<Rig> aimRigs;
+    [SerializeField] private List<Rig> attackRigs;
 
     [Header("Weapon")]
     [SerializeField] private Transform weaponContainer;
@@ -82,7 +83,24 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     private void Update()
     {
-        if ((starterAssetsInputs.aim && !isReloading) || IsAttacking)
+        if (IsAttacking)
+        {
+            aiming = false;
+
+            crosshair.ShowCrossHairUI(false);
+
+            aimVirtualCamera.gameObject.SetActive(false);
+
+            thirdPersonController.SetSensitivity(aimSensitivity);
+            thirdPersonController.SetRotateOnMove(false);
+            thirdPersonController.SetAbleToSprint(false);
+
+            thirdPersonController.MoveSpeed = 0f;
+
+            return;
+        }
+
+        if ((starterAssetsInputs.aim && !isReloading))
         {
             aiming = true;
             crosshair.ShowCrossHairUI(true);
@@ -140,6 +158,23 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (IsAttacking)
+        {
+            foreach (Rig rig in attackRigs)
+                rig.weight = Mathf.Lerp(rig.weight, 1f, Time.deltaTime * 20f);
+
+            foreach (Rig rig in idleRigs)
+                rig.weight = Mathf.Lerp(rig.weight, 0f, Time.deltaTime * 20f);
+        }
+        else
+        {
+            foreach (Rig rig in attackRigs)
+                rig.weight = Mathf.Lerp(rig.weight, 0f, Time.deltaTime * 20f);
+
+            foreach (Rig rig in idleRigs)
+                rig.weight = Mathf.Lerp(rig.weight, 1f, Time.deltaTime * 20f);
+        }
+
         if (aiming)
         {
             if (Vector3.Dot(transform.forward, aimDirection) > .9f)
@@ -317,6 +352,31 @@ public class ThirdPersonShooterController : MonoBehaviour
                             multiRotationConstraint2.weight = activate ? .3f : 0;
                     }
 
+                    if (child.TryGetComponent(out TwoBoneIKConstraint twoBoneIKConstraint))
+                        twoBoneIKConstraint.weight = activate ? 1 : 0;
+                }
+            }
+        }
+
+        foreach (Rig rig in attackRigs)
+        {
+            Transform weaponRig = rig.transform.Find(containerName + "/" + weaponName);
+            if (weaponRig)
+            {
+                if (weaponRig.TryGetComponent(out MultiPositionConstraint multiPositionConstraint))
+                    multiPositionConstraint.weight = activate ? 1 : 0;
+
+                if (weaponRig.TryGetComponent(out MultiAimConstraint multiAimConstraint))
+                    multiAimConstraint.weight = activate ? 1 : 0;
+
+                if (weaponRig.TryGetComponent(out MultiParentConstraint multiParentConstraint))
+                    multiParentConstraint.weight = activate ? 1 : 0;
+
+                if (weaponRig.TryGetComponent(out MultiRotationConstraint multiRotationConstraint1))
+                    multiRotationConstraint1.weight = activate ? 1 : 0;
+
+                foreach (Transform child in weaponRig)
+                {
                     if (child.TryGetComponent(out TwoBoneIKConstraint twoBoneIKConstraint))
                         twoBoneIKConstraint.weight = activate ? 1 : 0;
                 }
