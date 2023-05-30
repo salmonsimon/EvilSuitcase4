@@ -133,6 +133,9 @@ public class ThirdPersonShooterController : MonoBehaviour
                 crosshair.OutOfBullets();
             }
         }
+
+        if (IsReloading)
+            thirdPersonController.SetAbleToSprint(false);
     }
 
     private void FixedUpdate()
@@ -334,6 +337,7 @@ public class ThirdPersonShooterController : MonoBehaviour
     public void FinishedReloading()
     {
         isReloading = false;
+
         equippedWeapon.GetComponent<Gun>().Reload();
     }
 

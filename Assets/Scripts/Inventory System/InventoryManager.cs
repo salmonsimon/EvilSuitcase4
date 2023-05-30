@@ -167,7 +167,7 @@ public class InventoryManager : MonoBehaviour
 
     #region Item Blocking Methods
 
-    public void BlockRandomItems(int itemsToBlock)
+    public bool BlockRandomItems(int itemsToBlock)
     {
         List<int> randomIndexList = Enumerable.Range(0, SavedItems.Count).ToList();
         randomIndexList.Shuffle();
@@ -189,6 +189,8 @@ public class InventoryManager : MonoBehaviour
         }
 
         GameManager.instance.GetInventoryUI().LoadFastSwapGameplayPanel(currentEquippedWeaponShortcutIndex);
+
+        return i > 0;
     }
 
     public void UnblockBlockedItems()

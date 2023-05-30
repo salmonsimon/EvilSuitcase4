@@ -45,7 +45,7 @@ namespace StarterAssets
 
 		public void OnJump(InputValue value)
 		{
-			JumpInput(value.isPressed);
+			//JumpInput(value.isPressed);
 		}
 
         public void OnShoot(InputValue value)
@@ -133,7 +133,7 @@ namespace StarterAssets
 
 		public void JumpInput(bool newJumpState)
 		{
-			jump = newJumpState;
+			//jump = newJumpState;
 		}
 
         public void ShootInput(bool newShootState)
