@@ -192,7 +192,7 @@ public class WaveManager : MonoBehaviour
         {
             GameManager.instance.GetInventoryUI().OpenPauseInventory();
 
-            GameManager.instance.GetCinemachineShake().ShakeCamera(Config.CAMERASHAKE_EXPLOSION_AMPLITUDE, Config.CAMERASHAKE_EXPLOSION_DURATION);
+            GameManager.instance.GetCinemachineShake().ShakeCameras(Config.CAMERASHAKE_EXPLOSION_AMPLITUDE, Config.CAMERASHAKE_EXPLOSION_DURATION);
             // TO DO: ADD SHAKE SFX
 
             yield return new WaitForSeconds(Config.CAMERASHAKE_EXPLOSION_DURATION * 2);

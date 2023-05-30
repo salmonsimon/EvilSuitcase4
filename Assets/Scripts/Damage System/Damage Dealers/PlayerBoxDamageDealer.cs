@@ -29,7 +29,7 @@ public class PlayerBoxDamageDealer : MonoBehaviour
         Vector3 closestPosition = other.ClosestPoint(playerPosition);
 
         Vector3 forceDirection = (closestPosition - playerPosition).normalized;
-        GameManager.instance.GetCinemachineShake().ShakeCamera(meleeWeapon.WeaponConfiguration.AttacksConfig.CameraShakeAmplitude, meleeWeapon.WeaponConfiguration.AttacksConfig.CameraShakeDuration);
+        GameManager.instance.GetCinemachineShake().ShakeCameras(meleeWeapon.WeaponConfiguration.AttacksConfig.CameraShakeAmplitude, meleeWeapon.WeaponConfiguration.AttacksConfig.CameraShakeDuration);
 
         if (other.TryGetComponent(out Damageable damageable))
         {

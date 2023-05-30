@@ -40,7 +40,7 @@ public class GunHitscan : Gun
             if (string.Equals(GunConfiguration.GunName, "Shotgun"))
                 playerThirdPersonShooterController.PlayShotgunShootAnimation(gunConfiguration.AmmoConfig.ShootAnimationDelay);
 
-            GameManager.instance.GetCinemachineShake().ShakeCamera(gunConfiguration.ShootConfig.CameraShakeAmplitude, gunConfiguration.ShootConfig.CameraShakeDuration);
+            GameManager.instance.GetCinemachineShake().ShakeCameras(gunConfiguration.ShootConfig.CameraShakeAmplitude, gunConfiguration.ShootConfig.CameraShakeDuration);
 
             SubstractClipAmmo();
             crossHair.ExpandCrosshair();

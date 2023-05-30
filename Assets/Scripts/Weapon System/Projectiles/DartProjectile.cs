@@ -7,6 +7,12 @@ public class DartProjectile : Projectile
     [SerializeField] private GunDamageConfigurationScriptableObject damageConfig;
     public GunDamageConfigurationScriptableObject DamageConfig { get { return damageConfig; } set { damageConfig = value; } }
 
+    protected void FixedUpdate()
+    {
+        if (!isDisabled)
+            rigidBody.velocity = new Vector3(rigidBody.velocity.x, rigidBody.velocity.y, launchForce.z);
+    }
+
     protected override void OnCollisionEnter(Collision collision)
     {
         base.OnCollisionEnter(collision);

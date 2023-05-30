@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 using UnityEngine.SceneManagement;
+using System.Linq;
 
 public class CinemachineShake : MonoBehaviour
 {
-    private CinemachineVirtualCamera cinemachineVirtualCamera;
-    private CinemachineBasicMultiChannelPerlin cinemachineBasicMultiChannelPerlin;
+    private List<CinemachineVirtualCamera> cinemachineVirtualCameraList = new List<CinemachineVirtualCamera>();
+    private List<CinemachineBasicMultiChannelPerlin> cinemachineBasicMultiChannelPerlinList = new List<CinemachineBasicMultiChannelPerlin>();
+
     private NoiseSettings noiseSettings;
 
     private float startingIntensity;
@@ -18,11 +20,8 @@ public class CinemachineShake : MonoBehaviour
     private void Awake()
     {
         noiseSettings = Resources.Load(Config.SHAKE_FILE) as NoiseSettings;
-    }
 
-    private void Start()
-    {
-        SetVirtualCamera();
+        cinemachineVirtualCameraList = FindObjectsOfType<CinemachineVirtualCamera>().ToList();
     }
 
     private void OnEnable()
@@ -36,37 +35,36 @@ public class CinemachineShake : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        SetVirtualCamera();
+        SetVirtualCameras(cinemachineVirtualCameraList);
     }
 
-    public void SetVirtualCamera()
+    public void SetVirtualCameras(List<CinemachineVirtualCamera> virtualCameras)
     {
-        CinemachineVirtualCamera[] virtualCameras = FindObjectsOfType<CinemachineVirtualCamera>();
-
-        for (int i = 0; i < virtualCameras.Length; i++)
+        foreach (CinemachineVirtualCamera virtualCamera in virtualCameras)
         {
-            if (i == 0)
-            {
-                cinemachineVirtualCamera = virtualCameras[i];
-            }
-            else if (virtualCameras[i].Priority > cinemachineVirtualCamera.Priority)
-            {
-                cinemachineVirtualCamera = virtualCameras[i];
-            }
-        }
+                if (virtualCamera.TryGetComponent(out CinemachineBasicMultiChannelPerlin cinemachineBasicMultiChannelPerlin))
+                {
+                    cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = 0;
+                    cinemachineBasicMultiChannelPerlin.m_NoiseProfile = noiseSettings;
 
-        if (cinemachineVirtualCamera)
-        {
-            cinemachineBasicMultiChannelPerlin = cinemachineVirtualCamera.AddCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
-            cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = 0;
-            cinemachineBasicMultiChannelPerlin.m_NoiseProfile = noiseSettings;
+                    cinemachineBasicMultiChannelPerlinList.Add(cinemachineBasicMultiChannelPerlin);
+                }
+                else
+                {
+                    CinemachineBasicMultiChannelPerlin perlin = virtualCamera.AddCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+
+                    perlin.m_AmplitudeGain = 0;
+                    perlin.m_NoiseProfile = noiseSettings;
+
+                    cinemachineBasicMultiChannelPerlinList.Add(perlin);
+                }
         }
-        
     }
 
-    public void ShakeCamera(float intensity, float time)
+    public void ShakeCameras(float intensity, float time)
     {
-        cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = intensity;
+        foreach (CinemachineBasicMultiChannelPerlin perlin in cinemachineBasicMultiChannelPerlinList)
+            perlin.m_AmplitudeGain = intensity;
 
         startingIntensity = intensity;
         shakeTimerTotal = time;
@@ -79,7 +77,8 @@ public class CinemachineShake : MonoBehaviour
         {
             shakeTimer -= Time.deltaTime;
 
-            cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = Mathf.Lerp(0f, startingIntensity, shakeTimer / shakeTimerTotal);
+            foreach (CinemachineBasicMultiChannelPerlin perlin in cinemachineBasicMultiChannelPerlinList)
+                perlin.m_AmplitudeGain = Mathf.Lerp(0f, startingIntensity, shakeTimer / shakeTimerTotal);
         }
     }
 }
