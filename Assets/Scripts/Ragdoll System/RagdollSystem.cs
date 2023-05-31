@@ -109,6 +109,8 @@ public class RagdollSystem : MonoBehaviour
                 accumulatedHitForce = 0;
                 OnRagdollActivate();
 
+                StopAllCoroutines();
+
                 muscleComponent.Rigidbody.AddForce(force, ForceMode.Impulse);
 
                 return;

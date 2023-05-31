@@ -186,13 +186,13 @@ public class WaveManager : MonoBehaviour
 
         yield return new WaitForSeconds(transitionTime);
 
-        int itemsBlocked = 0;
+        bool blockedItems = false;
 
         if (itemsToBlock[currentWave] > 0)
         {
             GameManager.instance.GetInventoryUI().OpenPauseInventory();
 
-            GameManager.instance.GetCinemachineShake().ShakeCamera(Config.CAMERASHAKE_EXPLOSION_AMPLITUDE, Config.CAMERASHAKE_EXPLOSION_DURATION);
+            GameManager.instance.GetCinemachineShake().ShakeCameras(Config.CAMERASHAKE_EXPLOSION_AMPLITUDE, Config.CAMERASHAKE_EXPLOSION_DURATION);
             // TO DO: ADD SHAKE SFX
 
             yield return new WaitForSeconds(Config.CAMERASHAKE_EXPLOSION_DURATION * 2);
@@ -202,14 +202,7 @@ public class WaveManager : MonoBehaviour
 
             yield return new WaitForSeconds(transitionTime);
 
-            List<Item> inventoryItems = GameManager.instance.GetInventoryManager().SavedItems;
-            inventoryItems.Shuffle();
-
-            while (itemsBlocked < itemsToBlock[currentWave])
-            {
-                inventoryItems[itemsBlocked].BlockItem();
-                itemsBlocked++;
-            }
+            blockedItems = GameManager.instance.GetInventoryManager().BlockRandomItems(itemsToBlock[currentWave]);
 
             GameManager.instance.GetTransitionManager().FinishCurrentTransition();
 
@@ -219,7 +212,7 @@ public class WaveManager : MonoBehaviour
         player.GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
         player.GetComponent<StarterAssetsInputs>().SetCursorLockState(true);
 
-        if (itemsBlocked > 0)
+        if (blockedItems)
             GameManager.instance.GetInventoryUI().PauseGame();
 
         yield return new WaitForSeconds(Config.MEDIUM_DELAY);

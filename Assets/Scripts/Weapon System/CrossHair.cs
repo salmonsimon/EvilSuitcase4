@@ -25,13 +25,13 @@ public class CrossHair : MonoBehaviour
 
     #region Weapon Dependant
 
-    [SerializeField] private float reloadAnimationDuration;
+    private float reloadAnimationDuration;
     public float ReloadSpeed { get { return reloadAnimationDuration; } private set { reloadAnimationDuration = value; } }
 
     private float expandingValue = .3f;
     public float ExpandingValue { get { return expandingValue; } private set { expandingValue = value; } }
 
-    private float shrinkSpeed = 2f;
+    private float shrinkSpeed = 1f;
     public float ShrinkSpeed { get { return shrinkSpeed; } private set { shrinkSpeed = value; } }
 
     private float crosshairMaxScale = 2f;
@@ -82,9 +82,20 @@ public class CrossHair : MonoBehaviour
         expanding.sprite = crosshairConfig.Expanding;
 
         if (crosshairConfig.WeaponType == WeaponType.Gun)
+        {
             reloadAnimationDuration = crosshairConfig.ReloadAnimationClip.length;
+
+            if (crosshairConfig.HasExpandingImage)
+            {
+                crosshairMaxScale = crosshairConfig.CrosshairMaxScale;
+                expandingValue = crosshairConfig.ExpandingValue;
+                shrinkSpeed = crosshairConfig.ShrinkingSpeed;
+            }
+        }
         else
             reloadAnimationDuration = -1;
+
+        expanding.rectTransform.localScale = crosshairOriginalScale;
 
         ShowReloadUI(false);
         ShowCrossHairUI(true);
@@ -148,6 +159,8 @@ public class CrossHair : MonoBehaviour
 
             yield return null;
         }
+
+        expanding.rectTransform.localScale = crosshairOriginalScale;
 
         isShrinking = false;
         yield return new WaitForEndOfFrame();

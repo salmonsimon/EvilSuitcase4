@@ -29,20 +29,23 @@ public class PlayerBoxDamageDealer : MonoBehaviour
         Vector3 closestPosition = other.ClosestPoint(playerPosition);
 
         Vector3 forceDirection = (closestPosition - playerPosition).normalized;
-        GameManager.instance.GetCinemachineShake().ShakeCamera(meleeWeapon.WeaponConfiguration.AttacksConfig.CameraShakeAmplitude, meleeWeapon.WeaponConfiguration.AttacksConfig.CameraShakeDuration);
+        GameManager.instance.GetCinemachineShake().ShakeCameras(meleeWeapon.WeaponConfiguration.AttacksConfig.CameraShakeAmplitude, meleeWeapon.WeaponConfiguration.AttacksConfig.CameraShakeDuration);
 
         if (other.TryGetComponent(out Damageable damageable))
         {
             int damage = meleeWeapon.WeaponConfiguration.DamageConfig.GetDamage();
 
-            damageable.ReceiveMeleeDamage(damage, forceDirection * 35f, meleeWeapon.CurrentAttackID);
+            if (damageable.HealthManager.LastReceivedAttackID != meleeWeapon.CurrentAttackID)
+            {
+                damageable.ReceiveMeleeDamage(damage, forceDirection * 35f, meleeWeapon.CurrentAttackID);
 
-            if (damageable.TryGetComponent(out HumanoidHurtGeometry humanoidHurtGeometry))
-                GameManager.instance.GetSurfaceManager().HandleFleshImpact(damageable.transform.gameObject, closestPosition, -forceDirection, impactType, 0);
-            else
-                GameManager.instance.GetSurfaceManager().HandleImpact(damageable.transform.gameObject, closestPosition, -forceDirection, impactType, 0);
+                if (damageable.TryGetComponent(out HumanoidHurtGeometry humanoidHurtGeometry))
+                    GameManager.instance.GetSurfaceManager().HandleFleshImpact(damageable.transform.gameObject, closestPosition, -forceDirection, impactType, 0);
+                else
+                    GameManager.instance.GetSurfaceManager().HandleImpact(damageable.transform.gameObject, closestPosition, -forceDirection, impactType, 0);
 
-            meleeWeapon.SubstractDurability();
+                meleeWeapon.SubstractDurability();
+            }
         }
         else if (other.TryGetComponent(out Rigidbody rigidBody))
         {

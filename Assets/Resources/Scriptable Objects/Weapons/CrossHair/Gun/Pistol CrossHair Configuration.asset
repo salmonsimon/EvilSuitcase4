@@ -10,11 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 264b2edfb00b5e045af857db1b72392d, type: 3}
-  m_Name: Crossbow CrossHair Configuration 1
+  m_Name: Pistol CrossHair Configuration
   m_EditorClassIdentifier: 
   weaponType: 1
-  dot: {fileID: 0}
-  inner: {fileID: -1403262809, guid: db63fa1c2adceb141974024b30ffa6db, type: 3}
-  expanding: {fileID: 0}
+  hasDotImage: 1
+  hasInnerImage: 0
+  hasExpandingImage: 1
+  dot: {fileID: 21300000, guid: 009cdbafd1ce35047b242adcc2806d0c, type: 3}
+  inner: {fileID: 0}
+  expanding: {fileID: 21300000, guid: 36fe8b6a4dff68c459cce43768bb91f2, type: 3}
+  crosshairMaxScale: 2
   expandingValue: 0.5
-  reloadAnimationClip: {fileID: 7400000, guid: 51b0d0e9572fb7a4c9a67ca102f8c075, type: 2}
+  shrinkingSpeed: 1
+  reloadAnimationClip: {fileID: 7400000, guid: 503f3e49595caf7448aed2176c19aef6, type: 2}

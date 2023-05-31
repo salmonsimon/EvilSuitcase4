@@ -89,7 +89,7 @@ public class HealthManager : MonoBehaviour
             Damage(damage);
 
             if (shakeWhenDamaged)
-                GameManager.instance.GetCinemachineShake().ShakeCamera(Config.CAMERASHAKE_HIT_AMPLITUDE, Config.CAMERASHAKE_HIT_DURATION);
+                GameManager.instance.GetCinemachineShake().ShakeCameras(Config.CAMERASHAKE_HIT_AMPLITUDE, Config.CAMERASHAKE_HIT_DURATION);
 
             if (currentHitPoints < 1)
             {

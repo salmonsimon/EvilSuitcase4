@@ -36,6 +36,8 @@ public class Projectile : MonoBehaviour
     protected Vector3 startPosition;
     protected float distanceTraveled;
 
+    protected Vector3 launchForce;
+
     #endregion
 
     protected virtual void Awake()
@@ -63,6 +65,8 @@ public class Projectile : MonoBehaviour
 
     public virtual void LaunchProjectile(Vector3 launchForce)
     {
+        this.launchForce = launchForce;
+
         startPosition = transform.position;
 
         transform.forward = launchForce.normalized;
