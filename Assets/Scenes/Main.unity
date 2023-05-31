@@ -698,38 +698,6 @@ MonoBehaviour:
     m_HintWeight: 1
     m_MaintainTargetPositionOffset: 0
     m_MaintainTargetRotationOffset: 0
---- !u!1 &202107519
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 202107520}
-  m_Layer: 2
-  m_Name: Hitbox Container
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &202107520
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 202107519}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.412}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 2054453862}
-  m_Father: {fileID: 3893294199144290918}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &205097987
 GameObject:
   m_ObjectHideFlags: 0
@@ -2135,18 +2103,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 8618696680691838845}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &413805925 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8581652341711300381, guid: 43d594b9c6d02874ca1618674bdf42aa,
-    type: 3}
-  m_PrefabInstance: {fileID: 8581652341711300373}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5b50f6dab1781e4297d53bcc4f8f9b0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &426722493 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 426722493, guid: 5828d664f3efb25469f799cb7c4e8ba5,
@@ -10665,66 +10621,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 8618696680691838845}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &2054453861
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2054453862}
-  - component: {fileID: 2054453864}
-  - component: {fileID: 2054453863}
-  m_Layer: 14
-  m_Name: Katana Hitbox
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2054453862
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2054453861}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0.448}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 202107520}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2054453863
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2054453861}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 57b195f5f19243443815a10c992b9b43, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  meleeWeapon: {fileID: 413805925}
-  impactType: {fileID: 11400000, guid: 80e2a9f7732eb18489faa944892f51a2, type: 2}
---- !u!65 &2054453864
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2054453861}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 0.5, z: 1.5}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!224 &2067428102 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3780764832922099483, guid: 5133e931b0c00fa419214d2ac76ba431,
@@ -13526,7 +13422,6 @@ Transform:
   - {fileID: 5381607115813873558}
   - {fileID: 1145774874}
   - {fileID: 157034717}
-  - {fileID: 202107520}
   m_Father: {fileID: 712005138}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -14359,7 +14254,7 @@ PrefabInstance:
     - target: {fileID: 5435146856260714752, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5435146856260714782, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
         type: 3}
