@@ -48,7 +48,7 @@ public class InventoryManualPlacement : MonoBehaviour
         if (canvas == null)
             canvas = GetComponentInParent<Canvas>();
 
-        itemContainer = transform.Find("ItemContainer").GetComponent<RectTransform>();
+        itemContainer = inventory.PanelContainer.transform.Find("ItemContainer").GetComponent<RectTransform>();
 
         playerInput = GameManager.instance.GetPlayer().GetComponent<PlayerInput>();
         input = GameManager.instance.GetPlayer().GetComponent<InputsUI>();
