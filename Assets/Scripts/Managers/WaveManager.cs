@@ -90,7 +90,7 @@ public class WaveManager : MonoBehaviour
         {
             if (i == 0)
             {
-                countdownText.text = "Start!";
+                countdownText.text = "START!";
                 // TO DO: ADD START SFX
             }
             else

@@ -525,6 +525,8 @@ public class InventoryManager : MonoBehaviour
                 Debug.Log("X: " + x);
                 Debug.Log("Y: " + y);
 
+                Debug.Log("placed item: " + placedItem.name);
+
                 int remainingItemWidth = placedItem.GetCurrentHorizontalDimension() + placedItem.GetGridPosition().x - x;
 
                 if (remainingItemWidth < minWidthInCurrentColumn)
