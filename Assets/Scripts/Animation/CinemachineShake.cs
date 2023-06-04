@@ -17,6 +17,8 @@ public class CinemachineShake : MonoBehaviour
     private float shakeTimer;
     private float shakeTimerTotal;
 
+    private bool shakingUI;
+
     private void Awake()
     {
         noiseSettings = Resources.Load(Config.SHAKE_FILE) as NoiseSettings;
@@ -71,11 +73,31 @@ public class CinemachineShake : MonoBehaviour
         shakeTimer = time;
     }
 
+    public void ShakeCamerasUI(float intensity, float time)
+    {
+        foreach (CinemachineBasicMultiChannelPerlin perlin in cinemachineBasicMultiChannelPerlinList)
+            perlin.m_AmplitudeGain = intensity;
+
+        startingIntensity = intensity;
+        shakeTimerTotal = time;
+        shakeTimer = time;
+
+        shakingUI = true;
+    }
+
     private void Update()
     {
         if (shakeTimer > 0)
         {
             shakeTimer -= Time.deltaTime;
+
+            foreach (CinemachineBasicMultiChannelPerlin perlin in cinemachineBasicMultiChannelPerlinList)
+                perlin.m_AmplitudeGain = Mathf.Lerp(0f, startingIntensity, shakeTimer / shakeTimerTotal);
+        }
+
+        if (shakingUI && shakeTimer > 0)
+        {
+            shakeTimer -= Time.fixedDeltaTime;
 
             foreach (CinemachineBasicMultiChannelPerlin perlin in cinemachineBasicMultiChannelPerlinList)
                 perlin.m_AmplitudeGain = Mathf.Lerp(0f, startingIntensity, shakeTimer / shakeTimerTotal);

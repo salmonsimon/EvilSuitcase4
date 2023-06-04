@@ -122,7 +122,7 @@ public class GameManager : MonoBehaviour
 
     private bool IsAbleToPause()
     {
-        return  !isOnMainMenu && !isOnRewardsUI && !pauseMenuUI.IsOnKeyBindingsPanel;
+        return  !isOnMainMenu && !isOnRewardsUI && !pauseMenuUI.IsOnKeyBindingsPanel && !transitionManager.RunningTransition;
     }
 
     public void OnSceneLoaded(Scene scene, LoadSceneMode mode)

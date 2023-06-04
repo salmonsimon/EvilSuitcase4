@@ -2,6 +2,7 @@ using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -49,9 +50,69 @@ public class WaveManager : MonoBehaviour
     private Dictionary<string, ObjectPool<GameObject>> spawnedObjectPoolsDictionary = new();
     public Dictionary<string, ObjectPool<GameObject>> SpawnedObjectPoolsDictionary { get { return spawnedObjectPoolsDictionary; } }
 
-    private int currentWave = 0;
     private int currentKilledEnemies = 0;
     private int currentEnemiesToKill = 0;
+
+    #region Statistics Variables / Properties
+
+    private int currentWave = 0;
+    public int CurrentWave {  
+        get { return currentWave; }
+        private set
+        {
+            if (currentWave == value) return;
+
+            currentWave = value;
+
+            if (OnWaveValueChange != null)
+                OnWaveValueChange();
+        }
+    }
+
+    private int totalEnemiesKilled = 0;
+    public int TotalEnemiesKilled { 
+        get { return totalEnemiesKilled; } 
+        private set
+        {
+            if (totalEnemiesKilled == value) return;
+
+            totalEnemiesKilled = value;
+
+            if (OnEnemyKilled != null)
+                OnEnemyKilled();
+        }
+    
+    }
+
+    private int hitsReceived;
+    public int HitsReceived { 
+        get { return hitsReceived; }
+        private set { 
+            if (hitsReceived == value) return;
+
+            hitsReceived = value;
+
+            if (OnHitReceived != null)
+                OnHitReceived();
+        }
+    }
+
+    private float timeAlive = 0f;
+    public float TimeAlive { 
+        get { return timeAlive; }
+        private set
+        {
+            if (timeAlive == value)
+                return;
+
+            timeAlive = value;
+
+            if (OnTimeAliveChange != null)
+                OnTimeAliveChange();
+        } 
+    }
+
+    #endregion
 
     #endregion
 
@@ -65,6 +126,22 @@ public class WaveManager : MonoBehaviour
 
     #endregion
 
+    #region Events and Delegates
+
+    public delegate void OnEnemyKilledDelegate();
+    public event OnEnemyKilledDelegate OnEnemyKilled;
+
+    public delegate void OnHitReceivedDelegate();
+    public event OnHitReceivedDelegate OnHitReceived;
+
+    public delegate void OnWaveValueChangeDelegate();
+    public event OnWaveValueChangeDelegate OnWaveValueChange;
+
+    public delegate void OnTimeAliveChangeDelegate();
+    public event OnTimeAliveChangeDelegate OnTimeAliveChange;
+
+    #endregion
+
     private void Awake()
     {
         poolContainer = new GameObject("Pool Container").transform;
@@ -73,6 +150,19 @@ public class WaveManager : MonoBehaviour
     private void Start()
     {
         NextWave();
+
+        GameManager.instance.GetPlayer().GetComponent<HealthManager>().OnDamaged += HitReceived;
+    }
+
+    private void HitReceived()
+    {
+        HitsReceived++;
+    }
+
+    private void Update()
+    {
+        if (!GameManager.instance.IsOnRewardsUI && !GameManager.instance.IsOnMainMenu())
+            TimeAlive += Time.deltaTime;
     }
 
     public void NextWave()
@@ -120,6 +210,7 @@ public class WaveManager : MonoBehaviour
     public void OnEnemyDeath()
     {
         currentKilledEnemies++;
+        TotalEnemiesKilled++;
 
         if (currentKilledEnemies == currentEnemiesToKill)
             WaveCleared();
@@ -148,11 +239,13 @@ public class WaveManager : MonoBehaviour
 
         float transitionTime = GameManager.instance.GetTransitionManager().RunTransition("DoubleWipe");
 
-        yield return new WaitForSeconds(transitionTime);
+        yield return new WaitForSeconds(transitionTime + Config.MEDIUM_DELAY);
 
         waveClearedPanel.SetActive(false);
 
         GameManager.instance.GetRewardsUI().OpenRewardsUI(rewardItems, rewardsCountdown[currentWave]);
+
+        GameManager.instance.IsOnRewardsUI = true;
 
         GameManager.instance.GetTransitionManager().FinishCurrentTransition();
 
@@ -161,6 +254,8 @@ public class WaveManager : MonoBehaviour
 
     public void FinishWave()
     {
+        GameManager.instance.IsOnRewardsUI = false;
+
         GameManager.instance.GetRewardsUI().CloseRewardsUI();
 
         StartCoroutine(FinishWaveCoroutine());
@@ -184,15 +279,15 @@ public class WaveManager : MonoBehaviour
 
         GameManager.instance.GetTransitionManager().FinishCurrentTransition();
 
-        yield return new WaitForSeconds(transitionTime);
-
         bool blockedItems = false;
 
         if (itemsToBlock[currentWave] > 0)
         {
+            yield return new WaitForSeconds(transitionTime);
+
             GameManager.instance.GetPauseMenuUI().OpenPauseInventory();
 
-            GameManager.instance.GetCinemachineShake().ShakeCameras(Config.CAMERASHAKE_EXPLOSION_AMPLITUDE, Config.CAMERASHAKE_EXPLOSION_DURATION);
+            GameManager.instance.GetCinemachineShake().ShakeCamerasUI(Config.CAMERASHAKE_EXPLOSION_AMPLITUDE, Config.CAMERASHAKE_EXPLOSION_DURATION);
             // TO DO: ADD SHAKE SFX
 
             yield return new WaitForSeconds(Config.CAMERASHAKE_EXPLOSION_DURATION * 2);
@@ -217,7 +312,7 @@ public class WaveManager : MonoBehaviour
 
         yield return new WaitForSeconds(Config.MEDIUM_DELAY);
 
-        currentWave++;
+        CurrentWave++;
         
         yield return null;
 

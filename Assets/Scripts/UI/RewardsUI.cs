@@ -53,7 +53,6 @@ public class RewardsUI : MonoBehaviour
 
     public void OpenRewardsUI(List<Item> rewardItems, float rewardsCountdown)
     {
-        GameManager.instance.IsOnRewardsUI = true;
         player.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
         player.GetComponent<StarterAssetsInputs>().SetCursorLockState(false);
         Cursor.visible = true;
@@ -101,7 +100,6 @@ public class RewardsUI : MonoBehaviour
 
     public void CloseRewardsUI()
     {
-        GameManager.instance.IsOnRewardsUI = false;
         player.GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
         player.GetComponent<StarterAssetsInputs>().SetCursorLockState(true);
 
