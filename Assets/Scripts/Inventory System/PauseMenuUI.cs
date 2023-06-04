@@ -6,6 +6,7 @@ using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using static Utils;
@@ -22,7 +23,7 @@ public class PauseMenuUI : MonoBehaviour
 
     [SerializeField] private List<GameObject> pauseMenuPanelList;
     [SerializeField] private CircularScrollingList iconCircularScrillList;
-    [SerializeField] private int activePanelIndex = 0;
+    private int activePanelIndex = 0;
 
     [Header("Fast Swap Panels")]
     [SerializeField] private GameObject fastSwapConfigPanel;
@@ -514,6 +515,13 @@ public class PauseMenuUI : MonoBehaviour
     {
         isOnKeyBindingPanel = true;
 
+        EventSystem.current.SetSelectedGameObject(null);
+
+        iconContainer.SetActive(false);
+
+        foreach (GameObject panel in pauseMenuPanelList)
+            panel.SetActive(false);
+
         keyBindingPanel.SetActive(true);
     }
 
@@ -522,6 +530,10 @@ public class PauseMenuUI : MonoBehaviour
         isOnKeyBindingPanel = false;
 
         keyBindingPanel.SetActive(false);
+
+        iconContainer.SetActive(true);
+
+        OpenActiveMenuPanel();
     }
 
     #endregion
@@ -542,6 +554,20 @@ public class PauseMenuUI : MonoBehaviour
     public void UpdateSFXVolume(float value)
     {
         GameManager.instance.GetSFXManager().UpdateVolume(value);
+    }
+
+    #endregion
+
+    #region Gameplay Settings
+
+    public void SetQuality(int qualityIndex)
+    {
+        QualitySettings.SetQualityLevel(qualityIndex);
+    }
+
+    public void SetFullscreen(bool isFullscreen)
+    {
+        Screen.fullScreen = isFullscreen;
     }
 
     #endregion
