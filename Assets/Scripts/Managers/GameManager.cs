@@ -122,7 +122,7 @@ public class GameManager : MonoBehaviour
 
     private bool IsAbleToPause()
     {
-        return  !isOnMainMenu && !isOnRewardsUI;
+        return  !isOnMainMenu && !isOnRewardsUI && !pauseMenuUI.IsOnKeyBindingsPanel;
     }
 
     public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -182,6 +182,11 @@ public class GameManager : MonoBehaviour
         levelLoader.LoadLevel(Config.MAIN_MENU_SCENE_NAME, Config.CROSSFADE_TRANSITION);
 
         pauseMenuUI.gameObject.SetActive(false);
+    }
+
+    public void Quit()
+    {
+        // TO DO: ADD METHOD TO QUIT GAME
     }
 
     #region Getters and Setters

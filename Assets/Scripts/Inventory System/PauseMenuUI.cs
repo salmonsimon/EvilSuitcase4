@@ -44,6 +44,9 @@ public class PauseMenuUI : MonoBehaviour
     private bool isGamePaused = false;
     public bool IsGamePaused { get { return isGamePaused; } }
 
+    private bool isOnKeyBindingPanel = false;
+    public bool IsOnKeyBindingsPanel { get { return isOnKeyBindingPanel; } }
+
     #endregion
 
     #region Parameters
@@ -57,11 +60,13 @@ public class PauseMenuUI : MonoBehaviour
         input = GameManager.instance.GetPlayer().GetComponent<InputsUI>();
 
         iconCircularScrillList.SetInteractable(false);
+
+        SetAudioSlidersVolumesPauseMenu();
     }
 
     private void Update()
     {
-        if (isGamePaused)
+        if (isGamePaused && !isOnKeyBindingPanel)
         {
             if (input.next)
             {
@@ -78,6 +83,11 @@ public class PauseMenuUI : MonoBehaviour
                 GameManager.instance.GetInventoryManager().AutoSortMainInventory(inventoryPanel.GetComponent<Inventory>(), GameManager.instance.GetInventoryManager().SavedItems);
                 input.autoSort = false;
             }
+        }
+        else if (isGamePaused && isOnKeyBindingPanel && input.pause)
+        {
+            CloseKeyBindingsPanel();
+            input.pause = false;
         }
     }
 
@@ -467,6 +477,11 @@ public class PauseMenuUI : MonoBehaviour
         GameManager.instance.ToMainMenu();
     }
 
+    public void QuitButton()
+    {
+        GameManager.instance.Quit();
+    }
+
     private void NextMenu()
     {
         pauseMenuPanelList[activePanelIndex].SetActive(false);
@@ -495,10 +510,18 @@ public class PauseMenuUI : MonoBehaviour
         pauseMenuPanelList[activePanelIndex].SetActive(true);
     }
 
-    public void OnNewIconSelected(ListBox previousSelected, ListBox newSelected)
+    public void KeyBindingsButton()
     {
-        previousSelected.GetComponent<CanvasGroup>().alpha = .3f;
-        newSelected.GetComponent<CanvasGroup>().alpha = 1f;
+        isOnKeyBindingPanel = true;
+
+        keyBindingPanel.SetActive(true);
+    }
+
+    private void CloseKeyBindingsPanel()
+    {
+        isOnKeyBindingPanel = false;
+
+        keyBindingPanel.SetActive(false);
     }
 
     #endregion
