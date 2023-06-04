@@ -190,7 +190,7 @@ public class WaveManager : MonoBehaviour
 
         if (itemsToBlock[currentWave] > 0)
         {
-            GameManager.instance.GetInventoryUI().OpenPauseInventory();
+            GameManager.instance.GetPauseMenuUI().OpenPauseInventory();
 
             GameManager.instance.GetCinemachineShake().ShakeCameras(Config.CAMERASHAKE_EXPLOSION_AMPLITUDE, Config.CAMERASHAKE_EXPLOSION_DURATION);
             // TO DO: ADD SHAKE SFX
@@ -213,7 +213,7 @@ public class WaveManager : MonoBehaviour
         player.GetComponent<StarterAssetsInputs>().SetCursorLockState(true);
 
         if (blockedItems)
-            GameManager.instance.GetInventoryUI().PauseGame();
+            GameManager.instance.GetPauseMenuUI().PauseGameAndOpenInventory();
 
         yield return new WaitForSeconds(Config.MEDIUM_DELAY);
 

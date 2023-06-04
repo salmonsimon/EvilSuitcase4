@@ -638,6 +638,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Next",
+                    "type": "Button",
+                    "id": "f3a46620-e4f1-4df3-9150-6f9a600fa409",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Previous",
+                    "type": "Button",
+                    "id": "0756011c-3919-430d-9853-e16039490f53",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -1028,6 +1046,17 @@
                 },
                 {
                     "name": "",
+                    "id": "71667a8a-3427-4298-93ca-0e66fb3ee6e9",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "91e939ff-03e0-4c96-92e3-d02c0cfcb7f1",
                     "path": "<Gamepad>/start",
                     "interactions": "",
@@ -1045,6 +1074,28 @@
                     "processors": "",
                     "groups": "KeyboardMouse",
                     "action": "AutoSort",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a3b60b5a-6a31-4bc3-bfb8-9cd8595ff242",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "Next",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "acf09384-2880-4c5f-94d2-36f0641d9d75",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "Previous",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -337,8 +337,8 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
 
             if (weaponShortcut >= 0)
             {
-                GameManager.instance.GetInventoryUI().SetFastSwapCandidate(equipableItem);
-                GameManager.instance.GetInventoryUI().SetFastSwapWeapon(weaponShortcut);
+                GameManager.instance.GetPauseMenuUI().SetFastSwapCandidate(equipableItem);
+                GameManager.instance.GetPauseMenuUI().SetFastSwapWeapon(weaponShortcut);
             }
             
         }

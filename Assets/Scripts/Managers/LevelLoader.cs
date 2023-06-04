@@ -34,7 +34,7 @@ public class LevelLoader : MonoBehaviour
 
         yield return new WaitForSeconds(startTransitionDuration);
 
-        GameManager.instance.GetInventoryUI().SetGamePaused(true);
+        GameManager.instance.GetPauseMenuUI().SetGamePaused(true);
 
         AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
 
@@ -48,7 +48,7 @@ public class LevelLoader : MonoBehaviour
     {
         if (lastTransitionType != null)
         {
-            GameManager.instance.GetInventoryUI().SetGamePaused(false);
+            GameManager.instance.GetPauseMenuUI().SetGamePaused(false);
 
             switch (lastTransitionType)
             {

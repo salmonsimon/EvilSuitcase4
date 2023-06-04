@@ -1,3 +1,4 @@
+using AirFishLab.ScrollingList;
 using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,15 +10,27 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using static Utils;
 
-public class InventoryUI : MonoBehaviour
+public class PauseMenuUI : MonoBehaviour
 {
     #region Object References
 
-    [Header("Panel References")]
-    [SerializeField] private GameObject pauseInventoryPanel;
-    [SerializeField] private GameObject settingsPanel;
+    [Header("References")]
+    [SerializeField] private GameObject iconContainer;
+    [SerializeField] private GameObject keyBindingPanel;
+
+    [SerializeField] private GameObject inventoryPanel;
+
+    [SerializeField] private List<GameObject> pauseMenuPanelList;
+    [SerializeField] private CircularScrollingList iconCircularScrillList;
+    [SerializeField] private int activePanelIndex = 0;
+
+    [Header("Fast Swap Panels")]
     [SerializeField] private GameObject fastSwapConfigPanel;
     [SerializeField] private GameObject fastSwapGameplayPanel;
+
+    [Header("Audio Sliders")]
+    [SerializeField] Slider musicVolumeSlider;
+    [SerializeField] Slider sfxVolumeSlider;
 
     private InputsUI input;
     
@@ -42,14 +55,29 @@ public class InventoryUI : MonoBehaviour
     private void Start()
     {
         input = GameManager.instance.GetPlayer().GetComponent<InputsUI>();
+
+        iconCircularScrillList.SetInteractable(false);
     }
 
     private void Update()
     {
-        if (IsGamePaused && input.autoSort)
+        if (isGamePaused)
         {
-            GameManager.instance.GetInventoryManager().AutoSortMainInventory(pauseInventoryPanel.GetComponent<Inventory>(), GameManager.instance.GetInventoryManager().SavedItems);
-            input.autoSort = false;
+            if (input.next)
+            {
+                NextMenu();
+                input.next = false;
+            }
+            else if (input.previous)
+            {
+                PreviousMenu();
+                input.previous = false;
+            }
+            else if (input.autoSort)
+            {
+                GameManager.instance.GetInventoryManager().AutoSortMainInventory(inventoryPanel.GetComponent<Inventory>(), GameManager.instance.GetInventoryManager().SavedItems);
+                input.autoSort = false;
+            }
         }
     }
 
@@ -342,22 +370,68 @@ public class InventoryUI : MonoBehaviour
         player.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
         player.GetComponent<StarterAssetsInputs>().SetCursorLockState(false);
 
+        iconContainer.SetActive(true);
+
+        SetGamePaused(true);
+
+        OpenActiveMenuPanel();
+    }
+
+    public void PauseGameAndOpenInventory()
+    {
+        GameManager.instance.GetSFXManager().PlaySound(Config.PAUSE_SFX);
+
+        GameObject player = GameManager.instance.GetPlayer();
+        player.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
+        player.GetComponent<StarterAssetsInputs>().SetCursorLockState(false);
+
+        iconContainer.SetActive(true);
+
         SetGamePaused(true);
 
         OpenPauseInventory();
+    }
 
-        settingsPanel.SetActive(false);
+    private void OpenActiveMenuPanel()
+    {
+        if (activePanelIndex == 0)
+            InventorySetup();
+
+        pauseMenuPanelList[activePanelIndex].SetActive(true);
+
+        StartCoroutine(WaitAndSetActiveIconAlphaCoroutine());
+    }
+
+    public void WaitAndSetActiveIconAlpha()
+    {
+        foreach (Transform child in iconCircularScrillList.transform)
+            child.GetComponent<CanvasGroup>().alpha = .3f;
+
+        Transform activeIcon = iconCircularScrillList.transform.GetChild(iconCircularScrillList.ListBank.GetContentCount() - 1);
+        activeIcon.GetComponent<CanvasGroup>().alpha = 1.0f;
+    }
+
+    private IEnumerator WaitAndSetActiveIconAlphaCoroutine()
+    {
+        yield return null;
+
+        WaitAndSetActiveIconAlpha();
     }
 
     public void OpenPauseInventory()
+    {
+        InventorySetup();
+
+        inventoryPanel.SetActive(true);
+    }
+
+    private void InventorySetup()
     {
         InventoryManager inventoryManager = GameManager.instance.GetInventoryManager();
         int mainInventoryWidth = inventoryManager.InventoryWidth;
         int mainInventoryHeight = inventoryManager.InventoryHeight;
 
-        pauseInventoryPanel.GetComponent<Inventory>().InventorySetup(mainInventoryWidth, mainInventoryHeight);
-
-        pauseInventoryPanel.SetActive(true);
+        inventoryPanel.GetComponent<Inventory>().InventorySetup(mainInventoryWidth, mainInventoryHeight);
     }
 
     public void ResumeGame()
@@ -369,13 +443,17 @@ public class InventoryUI : MonoBehaviour
         player.GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
         player.GetComponent<StarterAssetsInputs>().SetCursorLockState(true);
 
-        pauseInventoryPanel.SetActive(false);
-        settingsPanel.SetActive(false);
-        fastSwapConfigPanel.SetActive(false);
+        iconContainer.SetActive(false);
+
+        keyBindingPanel.SetActive(false);
+
+        foreach(GameObject panel in pauseMenuPanelList)
+            panel.SetActive(false);
     }
 
     public void SetGamePaused(bool value)
     {
+
         isGamePaused = value;
 
         if (value)
@@ -384,9 +462,63 @@ public class InventoryUI : MonoBehaviour
             Time.timeScale = 1f;
     }
 
-    public void ToMainMenu()
+    public void MainMenuButton()
     {
         GameManager.instance.ToMainMenu();
+    }
+
+    private void NextMenu()
+    {
+        pauseMenuPanelList[activePanelIndex].SetActive(false);
+
+        Transform activeIcon = iconCircularScrillList.transform.GetChild(iconCircularScrillList.ListBank.GetContentCount() - 1);
+        activeIcon.GetComponent<CanvasGroup>().alpha = .3f;
+
+        activePanelIndex = (int)Mathf.Repeat(activePanelIndex + 1, iconCircularScrillList.ListBank.GetContentCount());
+
+        iconCircularScrillList.SelectContentID(activePanelIndex);
+
+        pauseMenuPanelList[activePanelIndex].SetActive(true);
+    }
+
+    private void PreviousMenu()
+    {
+        pauseMenuPanelList[activePanelIndex].SetActive(false);
+
+        Transform activeIcon = iconCircularScrillList.transform.GetChild(iconCircularScrillList.ListBank.GetContentCount() - 1);
+        activeIcon.GetComponent<CanvasGroup>().alpha = .3f;
+
+        activePanelIndex = (int)Mathf.Repeat(activePanelIndex - 1, iconCircularScrillList.ListBank.GetContentCount());
+
+        iconCircularScrillList.SelectContentID(activePanelIndex);
+
+        pauseMenuPanelList[activePanelIndex].SetActive(true);
+    }
+
+    public void OnNewIconSelected(ListBox previousSelected, ListBox newSelected)
+    {
+        previousSelected.GetComponent<CanvasGroup>().alpha = .3f;
+        newSelected.GetComponent<CanvasGroup>().alpha = 1f;
+    }
+
+    #endregion
+
+    #region Audio
+
+    public void SetAudioSlidersVolumesPauseMenu()
+    {
+        musicVolumeSlider.value = Settings.Instance.musicVolume;
+        sfxVolumeSlider.value = Settings.Instance.SFXVolume;
+    }
+
+    public void UpdateMusicVolume(float value)
+    {
+        GameManager.instance.GetMusicManager().UpdateVolume(value);
+    }
+
+    public void UpdateSFXVolume(float value)
+    {
+        GameManager.instance.GetSFXManager().UpdateVolume(value);
     }
 
     #endregion

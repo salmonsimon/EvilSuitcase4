@@ -62,8 +62,8 @@ public class EquipableItem : Item
 
     public void OpenFastSwapConfigPanel()
     {
-        GameManager.instance.GetInventoryUI().SetFastSwapCandidate(this);
-        GameManager.instance.GetInventoryUI().OpenAndLoadFastSwapConfigPanel();
+        GameManager.instance.GetPauseMenuUI().SetFastSwapCandidate(this);
+        GameManager.instance.GetPauseMenuUI().OpenAndLoadFastSwapConfigPanel();
     }
 
     public void SetWeaponShortcut(int newWeaponShortcut)

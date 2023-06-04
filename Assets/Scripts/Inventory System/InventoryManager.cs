@@ -96,7 +96,7 @@ public class InventoryManager : MonoBehaviour
         if (playerThirdPersonShooterController.IsReloading || !playerThirdPersonShooterController.IsAbleToReload)
             return;
 
-        if (!GameManager.instance.GetInventoryUI().IsGamePaused && 
+        if (!GameManager.instance.GetPauseMenuUI().IsGamePaused && 
             !GameManager.instance.IsOnRewardsUI &&
             HasFastSwapWeapons() && 
             playerInput.weaponShortcut > -1)
@@ -107,12 +107,12 @@ public class InventoryManager : MonoBehaviour
             {
                 equipableItem.Equip();
                 currentEquippedWeaponShortcutIndex = playerInput.weaponShortcut;
-                GameManager.instance.GetInventoryUI().ShowFastSwapGameplayPanel(currentEquippedWeaponShortcutIndex);
+                GameManager.instance.GetPauseMenuUI().ShowFastSwapGameplayPanel(currentEquippedWeaponShortcutIndex);
             }
 
             playerInput.weaponShortcut = -1;
         }
-        else if (!GameManager.instance.GetInventoryUI().IsGamePaused &&
+        else if (!GameManager.instance.GetPauseMenuUI().IsGamePaused &&
                  HasFastSwapWeapons() &&
                  fastSwapIndexes.Count > 1 &&
                  playerInput.scrollWheel != Vector2.zero)
@@ -136,7 +136,7 @@ public class InventoryManager : MonoBehaviour
             {
                 fastSwapWeaponArray[indexOfWeaponToEquip].Equip();
                 currentEquippedWeaponShortcutIndex = indexOfWeaponToEquip;
-                GameManager.instance.GetInventoryUI().ShowFastSwapGameplayPanel(currentEquippedWeaponShortcutIndex);
+                GameManager.instance.GetPauseMenuUI().ShowFastSwapGameplayPanel(currentEquippedWeaponShortcutIndex);
             }
 
             playerInput.scrollWheel = Vector2.zero;
@@ -188,7 +188,7 @@ public class InventoryManager : MonoBehaviour
             i++;
         }
 
-        GameManager.instance.GetInventoryUI().LoadFastSwapGameplayPanel(currentEquippedWeaponShortcutIndex);
+        GameManager.instance.GetPauseMenuUI().LoadFastSwapGameplayPanel(currentEquippedWeaponShortcutIndex);
 
         return i > 0;
     }
@@ -200,7 +200,7 @@ public class InventoryManager : MonoBehaviour
 
         this.blockedItems.Clear();
 
-        GameManager.instance.GetInventoryUI().LoadFastSwapGameplayPanel(currentEquippedWeaponShortcutIndex);
+        GameManager.instance.GetPauseMenuUI().LoadFastSwapGameplayPanel(currentEquippedWeaponShortcutIndex);
     }
 
     #endregion
