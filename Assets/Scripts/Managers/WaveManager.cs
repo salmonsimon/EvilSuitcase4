@@ -287,11 +287,6 @@ public class WaveManager : MonoBehaviour
 
             GameManager.instance.GetPauseMenuUI().OpenPauseInventory();
 
-            GameManager.instance.GetCinemachineShake().ShakeCamerasUI(Config.CAMERASHAKE_EXPLOSION_AMPLITUDE, Config.CAMERASHAKE_EXPLOSION_DURATION);
-            // TO DO: ADD SHAKE SFX
-
-            yield return new WaitForSeconds(Config.CAMERASHAKE_EXPLOSION_DURATION * 2);
-
             transitionTime = GameManager.instance.GetTransitionManager().RunTransition("PaintSplash");
             // TO DO: ADD EVIL LAUGH SFX
 
