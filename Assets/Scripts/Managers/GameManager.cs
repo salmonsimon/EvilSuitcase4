@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private EnemySpawner enemySpawner;
     [SerializeField] private WaveManager waveManager;
     [SerializeField] private TransitionManager transitionManager;
+    [SerializeField] private ControlIconsManager controlIconsManager;
 
     #region UI
 
@@ -76,6 +77,7 @@ public class GameManager : MonoBehaviour
             Destroy(enemySpawner.gameObject);
             Destroy(waveManager.gameObject);
             Destroy(transitionManager.gameObject);
+            Destroy(controlIconsManager.gameObject);
 
             Destroy(mainMenu.gameObject);
             Destroy(weaponDisplayUI.gameObject);
@@ -289,6 +291,11 @@ public class GameManager : MonoBehaviour
     public CrossHair GetCrossHair()
     {
         return crosshair;
+    }
+
+    public ControlIconsManager GetControlIconsManager()
+    {
+        return controlIconsManager;
     }
 
     #endregion
