@@ -17,6 +17,8 @@ public class CinemachineShake : MonoBehaviour
     private float shakeTimer;
     private float shakeTimerTotal;
 
+    private bool shakingUI;
+
     private void Awake()
     {
         noiseSettings = Resources.Load(Config.SHAKE_FILE) as NoiseSettings;

@@ -1,8 +1,10 @@
 using EasyTransition;
+using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.PackageManager;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.VFX;
@@ -24,12 +26,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] private EnemySpawner enemySpawner;
     [SerializeField] private WaveManager waveManager;
     [SerializeField] private TransitionManager transitionManager;
+    [SerializeField] private ControlIconsManager controlIconsManager;
 
     #region UI
 
     [SerializeField] private MainMenuUI mainMenu;
     [SerializeField] private WeaponDisplayUI weaponDisplayUI;
-    [SerializeField] private InventoryUI inventoryUI;
+    [SerializeField] private PauseMenuUI pauseMenuUI;
     [SerializeField] private RewardsUI rewarsdUI;
     [SerializeField] private CrossHair crosshair;
 
@@ -46,6 +49,16 @@ public class GameManager : MonoBehaviour
 
     private bool isGamePaused;
     private bool isTeleporting;
+
+    private bool isOnTransition = false;
+    public bool IsOnTransition { get { return isOnTransition; } set { isOnTransition = value; } }
+
+    #endregion
+
+    #region Input
+
+    private StarterAssetsInputs inputGameplay;
+    private InputsUI inputUI;
 
     #endregion
 
@@ -64,16 +77,23 @@ public class GameManager : MonoBehaviour
             Destroy(enemySpawner.gameObject);
             Destroy(waveManager.gameObject);
             Destroy(transitionManager.gameObject);
+            Destroy(controlIconsManager.gameObject);
 
             Destroy(mainMenu.gameObject);
             Destroy(weaponDisplayUI.gameObject);
-            Destroy(inventoryUI.gameObject);
+            Destroy(pauseMenuUI.gameObject);
             Destroy(rewarsdUI.gameObject);
             Destroy(crosshair.gameObject);
         }
         else
         {
             instance = this;
+
+            inputGameplay = player.GetComponent<StarterAssetsInputs>();
+            inputUI = player.GetComponent<InputsUI>();
+
+            player.GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
+            inputGameplay.SetCursorLockState(true);
         }
     }
 
@@ -88,10 +108,23 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (!inventoryUI.IsGamePaused && !isOnMainMenu && !isOnRewardsUI && Input.GetKeyDown(KeyCode.Escape))
-            inventoryUI.PauseGame();
-        else if (inventoryUI.IsGamePaused && !isOnMainMenu && !isOnRewardsUI && Input.GetKeyDown(KeyCode.Escape))
-            inventoryUI.ResumeGame();
+        if (!pauseMenuUI.IsGamePaused && IsAbleToPause() && inputGameplay.pause)
+        {
+            inputGameplay.pause = false;
+            inputUI.pause = false;
+            pauseMenuUI.PauseGame();
+        }
+        else if (pauseMenuUI.IsGamePaused && IsAbleToPause() && inputUI.pause)
+        {
+            inputGameplay.pause = false;
+            inputUI.pause = false;
+            pauseMenuUI.ResumeGame();
+        }
+    }
+
+    private bool IsAbleToPause()
+    {
+        return  !isOnMainMenu && !isOnRewardsUI && !pauseMenuUI.IsOnKeyBindingsPanel && !transitionManager.RunningTransition;
     }
 
     public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -144,13 +177,18 @@ public class GameManager : MonoBehaviour
 
     public void ToMainMenu()
     {
-        inventoryUI.ResumeGame();
+        pauseMenuUI.ResumeGame();
 
         SetIsOnMainMenu(true);
 
         levelLoader.LoadLevel(Config.MAIN_MENU_SCENE_NAME, Config.CROSSFADE_TRANSITION);
 
-        inventoryUI.gameObject.SetActive(false);
+        pauseMenuUI.gameObject.SetActive(false);
+    }
+
+    public void Quit()
+    {
+        // TO DO: ADD METHOD TO QUIT GAME
     }
 
     #region Getters and Setters
@@ -225,9 +263,9 @@ public class GameManager : MonoBehaviour
         return inventoryManager;
     }
 
-    public InventoryUI GetInventoryUI()
+    public PauseMenuUI GetPauseMenuUI()
     {
-        return inventoryUI;
+        return pauseMenuUI;
     }
 
     public EnemySpawner GetEnemySpawner()
@@ -253,6 +291,11 @@ public class GameManager : MonoBehaviour
     public CrossHair GetCrossHair()
     {
         return crosshair;
+    }
+
+    public ControlIconsManager GetControlIconsManager()
+    {
+        return controlIconsManager;
     }
 
     #endregion

@@ -29,6 +29,9 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
     [SerializeField] private float cellSize = 50f;
     public float CellSize { get { return cellSize; } }
 
+    [SerializeField] private RectTransform panelContainer;
+    public RectTransform PanelContainer { get { return panelContainer; } }
+
     [SerializeField] private RectTransform itemContainer;
 
     [Header("Background")]
@@ -143,7 +146,7 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
         grid = new Grid<GridObject>(gridWidth, gridHeight, cellSize, new Vector3(0, 0, 0), (Grid<GridObject> g, int x, int y) => new GridObject(g, x, y));
 
         if (!fixedPosition)
-            GetComponent<RectTransform>().anchoredPosition = new Vector2(-(gridWidth * cellSize / 2), -(gridHeight * cellSize / 2));
+            panelContainer.anchoredPosition = new Vector2(-(gridWidth * cellSize / 2), -(gridHeight * cellSize / 2));
 
         if (!mainInventory)
         {
