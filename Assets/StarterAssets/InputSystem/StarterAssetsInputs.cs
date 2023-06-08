@@ -30,6 +30,20 @@ namespace StarterAssets
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 
+		public void ResetInputs()
+		{
+			move = Vector2.zero;
+			look = Vector2.zero;
+			jump = false;
+			sprint = false;
+			aim = false; 
+			shoot = false;
+			reload = false;
+			pause = false;
+
+			weaponShortcut = -1;
+		}
+
         public void OnMove(InputValue value)
 		{
 			MoveInput(value.Get<Vector2>());

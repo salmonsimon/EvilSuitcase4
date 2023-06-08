@@ -480,7 +480,7 @@ public class PauseMenuUI : MonoBehaviour
 
     public void QuitButton()
     {
-        GameManager.instance.Quit();
+        Application.Quit();
     }
 
     private void NextMenu()
@@ -562,12 +562,12 @@ public class PauseMenuUI : MonoBehaviour
 
     public void SetQuality(int qualityIndex)
     {
-        QualitySettings.SetQualityLevel(qualityIndex);
+        GameManager.instance.SetQuality(qualityIndex);
     }
 
     public void SetFullscreen(bool isFullscreen)
     {
-        Screen.fullScreen = isFullscreen;
+        GameManager.instance.SetFullscreen(isFullscreen);
     }
 
     #endregion

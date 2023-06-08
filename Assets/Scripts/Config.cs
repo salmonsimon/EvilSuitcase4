@@ -3,7 +3,7 @@ public static class Config
     #region Scene Names
 
     public const string MAIN_MENU_SCENE_NAME = "Main Menu";
-    public const string MAIN_SCENE_NAME = "Main";
+    public const string ROOFTOP_SCENE_NAME = "Rooftop";
 
     #endregion
 
