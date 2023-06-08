@@ -17,6 +17,8 @@ public class ScrollRectEnsureVisible : MonoBehaviour, IPointerEnterHandler, IPoi
     [SerializeField] private bool hasOffset = false;
     [SerializeField] private float offset = 0f;
 
+    List<Selectable> allDescendants;
+
     void Start()
     {
         scrollRectTransform = GetComponent<RectTransform>();
@@ -25,6 +27,8 @@ public class ScrollRectEnsureVisible : MonoBehaviour, IPointerEnterHandler, IPoi
             contentPanel = GetComponent<ScrollRect>().content;
 
         targetPos = contentPanel.anchoredPosition;
+
+        allDescendants = contentPanel.transform.GetComponentsInChildren<Selectable>().ToList();
     }
 
     void Update()
@@ -49,7 +53,7 @@ public class ScrollRectEnsureVisible : MonoBehaviour, IPointerEnterHandler, IPoi
         {
             return;
         }
-        if (!IsDescendantOf(selected.transform, contentPanel.transform))
+        if (!IsDescendantOf(selected.GetComponent<Selectable>()))
         {
             return;
         }
@@ -97,15 +101,8 @@ public class ScrollRectEnsureVisible : MonoBehaviour, IPointerEnterHandler, IPoi
         _mouseHover = false;
     }
 
-    private bool IsDescendantOf(Transform possibleDescendant, Transform possiblePredecessor)
+    private bool IsDescendantOf(Selectable possibleDescendant)
     {
-        bool isDescendant = false;
-
-        List<Transform> allDescendants = possiblePredecessor.GetComponentsInChildren<Transform>().ToList();
-
-        if (allDescendants.Contains(possibleDescendant))
-            isDescendant = true;
-
-        return isDescendant;
+        return allDescendants.Contains(possibleDescendant);
     }
 }

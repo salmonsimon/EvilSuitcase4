@@ -235,11 +235,11 @@ public class WaveManager : MonoBehaviour
             yield return new WaitForSeconds(1f);
         }
 
-        List<Item> rewardItems = DrawRewardItems();
-
         float transitionTime = GameManager.instance.GetTransitionManager().RunTransition("DoubleWipe");
 
         yield return new WaitForSeconds(transitionTime + Config.MEDIUM_DELAY);
+
+        List<Item> rewardItems = DrawRewardItems();
 
         waveClearedPanel.SetActive(false);
 

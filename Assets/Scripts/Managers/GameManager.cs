@@ -138,7 +138,11 @@ public class GameManager : MonoBehaviour
 
     private bool IsAbleToPause()
     {
-        return  !isOnMainMenu && !isOnRewardsUI && !pauseMenuUI.IsOnKeyBindingsPanel && !transitionManager.RunningTransition;
+        return  !isOnMainMenu && 
+                !isOnRewardsUI && 
+                !pauseMenuUI.IsOnKeyBindingsPanel &&
+                !pauseMenuUI.IsOnFastSwapConfiguration &&
+                !transitionManager.RunningTransition;
     }
 
     public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -156,6 +160,7 @@ public class GameManager : MonoBehaviour
                 weaponDisplayUI.gameObject.SetActive(false);
                 cinemachineShake.gameObject.SetActive(false);
                 inventoryManager.gameObject.SetActive(false);
+
                 pauseMenuUI.gameObject.SetActive(false);
                 enemySpawner.gameObject.SetActive(false);
                 waveManager.gameObject.SetActive(false);
@@ -173,8 +178,12 @@ public class GameManager : MonoBehaviour
                 crosshair.gameObject.SetActive(true);
                 weaponDisplayUI.gameObject.SetActive(true);
                 cinemachineShake.gameObject.SetActive(true);
+
                 inventoryManager.gameObject.SetActive(true);
+                inventoryManager.ResetProgress();
+
                 pauseMenuUI.gameObject.SetActive(true);
+
                 enemySpawner.gameObject.SetActive(true);
                 rewarsdUI.gameObject.SetActive(true);
 
@@ -199,6 +208,7 @@ public class GameManager : MonoBehaviour
     public void ToMainMenu()
     {
         pauseMenuUI.ResumeGame();
+        pauseMenuUI.ResetMenu();
 
         SetIsOnMainMenu(true);
 

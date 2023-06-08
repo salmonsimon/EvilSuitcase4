@@ -85,6 +85,18 @@ public class InventoryManager : MonoBehaviour
 
     #endregion
 
+    public void ResetProgress()
+    {
+        for (int i = BlockedItems.Count - 1; i >= 0; i--)
+            BlockedItems[i].Discard();
+
+        for (int j = SavedItems.Count - 1; j >= 0; j--)
+            SavedItems[j].Discard();
+
+        fastSwapIndex = 0;
+        CurrentEquippedWeaponShortcutIndex = -1;
+    }
+
     private void Start()
     {
         playerInput = GameManager.instance.GetPlayer().GetComponent<StarterAssetsInputs>();

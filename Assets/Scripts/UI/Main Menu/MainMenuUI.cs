@@ -14,6 +14,7 @@ public class MainMenuUI : MonoBehaviour
 
     [Header("Panel References")]
     [SerializeField] private List<GameObject> panelList;
+    [SerializeField] private GameObject backgroundPanel;
 
     [Header("Setting Panels")]
     [SerializeField] private GameObject gameplaySettingsPanel;
@@ -88,6 +89,31 @@ public class MainMenuUI : MonoBehaviour
         activePanel = newActivePanel;
     }
 
+    private void WelcomingScreenPanelChange()
+    {
+        GameObject newActivePanel = activePanel.GetComponent<PanelNavigation>().BasePanel;
+
+        panelList[0].GetComponent<Animator>().SetTrigger(Config.ANIMATOR_HIDE_COUNTERS);
+        StartCoroutine(WaitAndDisable(panelList[0], Config.BIG_DELAY * 2 + Config.SMALL_DELAY));
+
+        activePanel = newActivePanel;
+        StartCoroutine(WaitAndEnable(activePanel, Config.BIG_DELAY * 2));
+    }
+
+    private IEnumerator WaitAndDisable(GameObject gameObject, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        gameObject.SetActive(false);
+    }
+
+    private IEnumerator WaitAndEnable(GameObject gameObject, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        gameObject.SetActive(true);
+    }
+
     private void Update()
     {
         if (activePanel.Equals(panelList[0]))
@@ -97,7 +123,7 @@ public class MainMenuUI : MonoBehaviour
                 Mouse.current.rightButton.wasPressedThisFrame ||
                 Mouse.current.middleButton.wasPressedThisFrame)
             {
-                PanelChange();
+                WelcomingScreenPanelChange();
                 inputUI.ResetInputs();
             }
 
