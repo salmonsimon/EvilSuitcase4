@@ -19,7 +19,14 @@ public class SFXManager : MonoBehaviour
     [SerializeField] private AudioClip pauseSFX;
     [SerializeField] private AudioClip resumeSFX;
     [SerializeField] private AudioClip autoSortSFX;
-    [SerializeField] private AudioClip fastSwapSFX;
+
+    [SerializeField] private List<AudioClip> pickupSFX;
+    [SerializeField] private List<AudioClip> dropSFX;
+
+    [SerializeField] private AudioClip rotateSFX;
+    [SerializeField] private AudioClip discardSFX;
+
+    [SerializeField] private AudioClip equipSFX;
 
     [SerializeField] private List<AudioClip> countdownSFX;
 
@@ -87,8 +94,24 @@ public class SFXManager : MonoBehaviour
                 audioSource.PlayOneShot(autoSortSFX);
                 break;
 
-            case Config.FAST_SWAP_SFX:
-                audioSource.PlayOneShot(fastSwapSFX);
+            case Config.PICKUP_SFX:
+                PlayRandomAudioClip(pickupSFX);
+                break;
+
+            case Config.DROP_SFX:
+                PlayRandomAudioClip(dropSFX);
+                break;
+
+            case Config.ROTATE_SFX:
+                audioSource.PlayOneShot(rotateSFX);
+                break;
+
+            case Config.DISCARD_SFX:
+                audioSource.PlayOneShot(discardSFX);
+                break;
+
+            case Config.EQUIP_SFX:
+                audioSource.PlayOneShot(equipSFX);
                 break;
 
             case Config.COUNTDOWN_SFX:

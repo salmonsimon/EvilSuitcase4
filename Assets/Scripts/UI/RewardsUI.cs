@@ -35,6 +35,7 @@ public class RewardsUI : MonoBehaviour
         if (GameManager.instance.IsOnRewardsUI && input.autoSort)
         {
             GameManager.instance.GetInventoryManager().AutoSortMainInventory(mainInventory, GameManager.instance.GetInventoryManager().SavedItems);
+            GameManager.instance.GetSFXManager().PlaySound(Config.AUTO_SORT_SFX);
             input.autoSort = false;
         }
 

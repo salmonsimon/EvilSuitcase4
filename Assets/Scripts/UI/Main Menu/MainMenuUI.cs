@@ -200,6 +200,8 @@ public class MainMenuUI : MonoBehaviour
 
         activePanel.SetActive(true);
 
+        backgroundPanel.SetActive(true);
+
         if (inputGameplay)
             inputGameplay.ResetInputs();
         if (inputUI)

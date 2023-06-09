@@ -88,7 +88,11 @@ public static class Config
     public const string PAUSE_SFX = "Pause";
     public const string RESUME_SFX = "Resume";
     public const string AUTO_SORT_SFX = "AutoSort";
-    public const string FAST_SWAP_SFX = "FastSwap";
+    public const string PICKUP_SFX = "Pickup";
+    public const string DROP_SFX = "Drop";
+    public const string DISCARD_SFX = "Discard";
+    public const string ROTATE_SFX = "Rotate";
+    public const string EQUIP_SFX = "Equip";
     public const string COUNTDOWN_SFX = "Countdown";
     public const string WAVE_START_SFX = "WaveStart";
     public const string GAME_OVER_SFX = "GameOver";

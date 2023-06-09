@@ -120,7 +120,6 @@ public class InventoryManager : MonoBehaviour
                 equipableItem.Equip();
                 currentEquippedWeaponShortcutIndex = playerInput.weaponShortcut;
                 GameManager.instance.GetPauseMenuUI().ShowFastSwapGameplayPanel(currentEquippedWeaponShortcutIndex);
-                GameManager.instance.GetSFXManager().PlaySound(Config.FAST_SWAP_SFX);
             }
 
             playerInput.weaponShortcut = -1;
@@ -150,7 +149,6 @@ public class InventoryManager : MonoBehaviour
                 fastSwapWeaponArray[indexOfWeaponToEquip].Equip();
                 currentEquippedWeaponShortcutIndex = indexOfWeaponToEquip;
                 GameManager.instance.GetPauseMenuUI().ShowFastSwapGameplayPanel(currentEquippedWeaponShortcutIndex);
-                GameManager.instance.GetSFXManager().PlaySound(Config.FAST_SWAP_SFX);
             }
 
             playerInput.scrollWheel = Vector2.zero;

@@ -169,6 +169,9 @@ public class GameManager : MonoBehaviour
                 player.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
                 player.GetComponent<StarterAssetsInputs>().SetCursorLockState(false);
 
+                player.GetComponent<ThirdPersonController>().enabled = false;
+                player.GetComponent<ThirdPersonShooterController>().enabled = false;
+
                 break;
 
             case Config.ROOFTOP_SCENE_NAME:
@@ -189,6 +192,9 @@ public class GameManager : MonoBehaviour
 
                 player.GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
                 player.GetComponent<StarterAssetsInputs>().SetCursorLockState(true);
+
+                player.GetComponent<ThirdPersonController>().enabled = true;
+                player.GetComponent<ThirdPersonShooterController>().enabled = true;
 
                 StartCoroutine(WaitAndEnableWaveManager());
 
@@ -331,11 +337,13 @@ public class GameManager : MonoBehaviour
     public void SetQuality(int qualityIndex)
     {
         QualitySettings.SetQualityLevel(qualityIndex);
+        sfxManager.PlaySound(Config.CLICK_SFX);
     }
 
     public void SetFullscreen(bool isFullscreen)
     {
         Screen.fullScreen = isFullscreen;
+        sfxManager.PlaySound(Config.CLICK_SFX);
     }
 
     #endregion

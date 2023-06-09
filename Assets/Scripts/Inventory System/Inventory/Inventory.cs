@@ -321,7 +321,10 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
     public void DiscardConfirmationButton()
     {
         if (DiscardCandidate)
+        {
             DiscardCandidate.Discard();
+            GameManager.instance.GetSFXManager().PlaySound(Config.DISCARD_SFX);
+        }
     }
 
     public void CancelDiscardButton()

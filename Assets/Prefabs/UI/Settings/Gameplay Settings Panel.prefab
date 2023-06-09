@@ -1195,6 +1195,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: SFX, Assembly-CSharp
+        m_MethodName: 
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 8300000, guid: 0c4c7d32cd94e0747885f39a6ea8b3f6,
+            type: 3}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!114 &928488246
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1224,6 +1237,10 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+  - eventID: 9
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
 --- !u!1 &5093295506633031338
 GameObject:
   m_ObjectHideFlags: 0
@@ -1542,6 +1559,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0489cde6966405b40a0c0334644a09de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hasOffset: 0
+  offset: 0
 --- !u!1 &5093295506649324643
 GameObject:
   m_ObjectHideFlags: 0
@@ -1974,6 +1993,10 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+  - eventID: 9
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
 --- !u!1 &5093295506836050360
 GameObject:
   m_ObjectHideFlags: 0
@@ -3076,6 +3099,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0489cde6966405b40a0c0334644a09de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hasOffset: 0
+  offset: 0
 --- !u!1 &5093295507338942177
 GameObject:
   m_ObjectHideFlags: 0
@@ -3315,14 +3340,13 @@ GameObject:
   - component: {fileID: 5093295506580076783}
   - component: {fileID: 5093295507673818871}
   - component: {fileID: 6987120764483369535}
-  - component: {fileID: 68779171}
   m_Layer: 5
   m_Name: Gameplay Settings Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &5093295507569532387
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3439,20 +3463,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   resolutionsDropdown: {fileID: 5093295506788075461}
 --- !u!114 &6987120764483369535
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5093295507569532384}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68ccd3de5860e754ca89ba7718c28882, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  basePanel: {fileID: 0}
-  defaultSelected: {fileID: 5093295506788075461}
---- !u!114 &68779171
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3685,6 +3695,10 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+  - eventID: 9
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
 --- !u!1 &5093295507866385427
 GameObject:
   m_ObjectHideFlags: 0
@@ -4220,6 +4234,10 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+  - eventID: 9
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
 --- !u!1 &5093295508182873634
 GameObject:
   m_ObjectHideFlags: 0

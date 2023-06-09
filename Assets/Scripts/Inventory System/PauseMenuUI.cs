@@ -477,6 +477,7 @@ public class PauseMenuUI : MonoBehaviour
         InventorySetup();
 
         inventoryPanel.SetActive(true);
+        iconContainer.SetActive(true);
     }
 
     private void InventorySetup()

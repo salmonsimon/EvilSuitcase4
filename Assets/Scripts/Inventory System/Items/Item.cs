@@ -354,6 +354,8 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
         if (!GameManager.instance.GetInventoryManager().AddItemManuallyToMainInventory
             (GameManager.instance.GetRewardsUI().MainInventory, this))
             Debug.LogError("Couldn't add item to main inventory");
+        else
+            GameManager.instance.GetSFXManager().PlaySound(Config.DROP_SFX);
     }
 
     #endregion
@@ -368,6 +370,7 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
         {
             HoldingInventory.SetNewOpenButton(buttonPanelToOpen.gameObject);
             buttonPanelToOpen.gameObject.SetActive(true);
+            GameManager.instance.GetSFXManager().PlaySound(Config.HOVER_SFX);
         }
     }
 
