@@ -53,7 +53,6 @@ public class EquipableItem : Item
 
     public void Unequip()
     {
-
         if (GameManager.instance.GetPlayer().GetComponent<ThirdPersonShooterController>().EquippedWeapon)
             GameManager.instance.GetPlayer().GetComponent<ThirdPersonShooterController>().UnequipWeapon();
 

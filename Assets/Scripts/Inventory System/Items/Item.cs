@@ -276,7 +276,10 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
 
     public virtual void RemoveFromMainInventory()
     {
-        GameManager.instance.GetInventoryManager().SavedItems.Remove(this);
+        if (IsBlocked)
+            GameManager.instance.GetInventoryManager().BlockedItems.Remove(this);
+        else
+            GameManager.instance.GetInventoryManager().SavedItems.Remove(this);
     }
 
     public virtual void RotateInfoPanels()

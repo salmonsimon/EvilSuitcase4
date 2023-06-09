@@ -210,8 +210,13 @@ public class MainMenuUI : MonoBehaviour
 
     public void PlayGame(string sceneName)
     {
+        if (GameManager.instance.IsTeleporting())
+            return;
+
         inputGameplay.ResetInputs();
         inputUI.ResetInputs();
+
+        GameManager.instance.SetIsTeleporting(true);
 
         GameManager.instance.GetSFXManager().PlaySound(Config.EVIL_LAUGH_SFX);
 

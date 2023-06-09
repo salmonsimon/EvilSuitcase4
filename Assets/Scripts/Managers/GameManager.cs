@@ -159,6 +159,7 @@ public class GameManager : MonoBehaviour
                 crosshair.gameObject.SetActive(false);
                 weaponDisplayUI.gameObject.SetActive(false);
                 cinemachineShake.gameObject.SetActive(false);
+
                 inventoryManager.gameObject.SetActive(false);
 
                 pauseMenuUI.gameObject.SetActive(false);
@@ -179,14 +180,16 @@ public class GameManager : MonoBehaviour
                 mainMenu.gameObject.SetActive(false);
 
                 crosshair.gameObject.SetActive(true);
+
                 weaponDisplayUI.gameObject.SetActive(true);
+                weaponDisplayUI.UnequipWeapon();
+
                 cinemachineShake.gameObject.SetActive(true);
 
                 inventoryManager.gameObject.SetActive(true);
                 inventoryManager.ResetProgress();
 
                 pauseMenuUI.gameObject.SetActive(true);
-
                 enemySpawner.gameObject.SetActive(true);
                 rewarsdUI.gameObject.SetActive(true);
 
@@ -194,7 +197,13 @@ public class GameManager : MonoBehaviour
                 player.GetComponent<StarterAssetsInputs>().SetCursorLockState(true);
 
                 player.GetComponent<ThirdPersonController>().enabled = true;
+                // TO DO: RESET CAMERA ROTATION TO IDENTITY
+
                 player.GetComponent<ThirdPersonShooterController>().enabled = true;
+                player.GetComponent<ThirdPersonShooterController>().UnequipWeapon();
+
+                player.transform.position = GameObject.FindGameObjectWithTag("Respawn").transform.position;
+                player.transform.rotation = Quaternion.identity;
 
                 StartCoroutine(WaitAndEnableWaveManager());
 
@@ -213,10 +222,17 @@ public class GameManager : MonoBehaviour
 
     public void ToMainMenu()
     {
+        if (IsTeleporting())
+            return;
+
         pauseMenuUI.ResumeGame();
         pauseMenuUI.ResetMenu();
 
         SetIsOnMainMenu(true);
+
+        SetIsTeleporting(true);
+
+        sfxManager.PlaySound(Config.GAME_OVER_SFX);
 
         levelLoader.LoadLevel(Config.MAIN_MENU_SCENE_NAME, Config.CROSSFADE_TRANSITION);
 
