@@ -3,7 +3,7 @@ public static class Config
     #region Scene Names
 
     public const string MAIN_MENU_SCENE_NAME = "Main Menu";
-    public const string MAIN_SCENE_NAME = "Main";
+    public const string ROOFTOP_SCENE_NAME = "Rooftop";
 
     #endregion
 
@@ -80,8 +80,26 @@ public static class Config
     #region SFX
 
     public const string CLICK_SFX = "Click";
+    public const string BACK_SFX = "Back";
+    public const string HOVER_SFX = "Hover";
+    public const string MENU_CHANGE_SFX = "MenuChange";
+    public const string WELCOME_SCREEN_SFX = "WelcomeScreen";
+    public const string EVIL_LAUGH_SFX = "EvilLaugh";
     public const string PAUSE_SFX = "Pause";
-    public const string WRONG_SFX = "Wrong";
+    public const string RESUME_SFX = "Resume";
+    public const string AUTO_SORT_SFX = "AutoSort";
+    public const string PICKUP_SFX = "Pickup";
+    public const string DROP_SFX = "Drop";
+    public const string DISCARD_SFX = "Discard";
+    public const string ROTATE_SFX = "Rotate";
+    public const string EQUIP_SFX = "Equip";
+    public const string COUNTDOWN_SFX = "Countdown";
+    public const string WAVE_START_SFX = "WaveStart";
+    public const string GAME_OVER_SFX = "GameOver";
+    public const string TRANSITION_START_SFX = "TransitionStart";
+    public const string TRANSITION_END_SFX = "TransitionEnd";
+    public const string BLOOD_SPLATTER_SFX = "BloodSplatter";
+    public const string HEARTBEAT_SFX = "Heartbeat";
 
     #endregion
 }

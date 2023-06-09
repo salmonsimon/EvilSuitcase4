@@ -48,11 +48,11 @@ public class EquipableItem : Item
     {
         GameManager.instance.GetInventoryManager().EquippedItem = this;
         GameManager.instance.GetPlayer().GetComponent<ThirdPersonShooterController>().FindAndEquipWeapon(this);
+        GameManager.instance.GetSFXManager().PlaySound(Config.EQUIP_SFX);
     }
 
     public void Unequip()
     {
-
         if (GameManager.instance.GetPlayer().GetComponent<ThirdPersonShooterController>().EquippedWeapon)
             GameManager.instance.GetPlayer().GetComponent<ThirdPersonShooterController>().UnequipWeapon();
 

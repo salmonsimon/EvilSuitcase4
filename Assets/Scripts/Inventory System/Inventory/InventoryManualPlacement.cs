@@ -81,6 +81,7 @@ public class InventoryManualPlacement : MonoBehaviour
         if (input.rotate && selectedTestingItemPrefab != null)
         {
             dir = Item.GetNextDirection(dir);
+            GameManager.instance.GetSFXManager().PlaySound(Config.ROTATE_SFX);
             input.rotate = false;
         }
 

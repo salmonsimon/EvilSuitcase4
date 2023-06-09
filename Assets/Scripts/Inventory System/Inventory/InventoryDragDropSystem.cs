@@ -40,6 +40,7 @@ public class InventoryDragDropSystem : MonoBehaviour
         if (input.rotate && draggingItem != null)
         {
             direction = Item.GetNextDirection(direction);
+            GameManager.instance.GetSFXManager().PlaySound(Config.ROTATE_SFX);
             input.rotate = false;
         }
 

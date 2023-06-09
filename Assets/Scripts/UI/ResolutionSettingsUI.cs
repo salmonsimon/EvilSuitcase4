@@ -51,5 +51,7 @@ public class ResolutionSettingsUI : MonoBehaviour
         Resolution newResolution = resolutions[resolutionIndex];
 
         Screen.SetResolution(newResolution.width, newResolution.height, Screen.fullScreen);
+
+        GameManager.instance.GetSFXManager().PlaySound(Config.CLICK_SFX);
     }
 }

@@ -38,6 +38,15 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
+    #region Containers
+
+    [SerializeField] private GameObject cameraContainer;
+    [SerializeField] private GameObject effectContainer;
+    [SerializeField] private GameObject proyectileContainer;
+    [SerializeField] private GameObject poolContainer;
+
+    #endregion
+
     #endregion
 
     #region Logic Variables
@@ -84,6 +93,11 @@ public class GameManager : MonoBehaviour
             Destroy(pauseMenuUI.gameObject);
             Destroy(rewarsdUI.gameObject);
             Destroy(crosshair.gameObject);
+
+            Destroy(cameraContainer);
+            Destroy(effectContainer);
+            Destroy(proyectileContainer);
+            Destroy(poolContainer);
         }
         else
         {
@@ -124,71 +138,105 @@ public class GameManager : MonoBehaviour
 
     private bool IsAbleToPause()
     {
-        return  !isOnMainMenu && !isOnRewardsUI && !pauseMenuUI.IsOnKeyBindingsPanel && !transitionManager.RunningTransition;
+        return  !isOnMainMenu && 
+                !isOnRewardsUI && 
+                !pauseMenuUI.IsOnKeyBindingsPanel &&
+                !pauseMenuUI.IsOnFastSwapConfiguration &&
+                !transitionManager.RunningTransition;
     }
 
     public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        /*
         switch (scene.name)
         {
-            case Config.LOGIN_SCENE_NAME:
-
-                mainMenu.gameObject.SetActive(false);
-                pauseMenu.gameObject.SetActive(false);
-
-                progressManager.gameObject.SetActive(false);
-                currencyManager.gameObject.SetActive(false);
-
-                leaderboardUI.gameObject.SetActive(false);
-
-                break;
-
             case Config.MAIN_MENU_SCENE_NAME:
+
+                StopAllCoroutines();
 
                 mainMenu.ResetMainMenu();
                 mainMenu.gameObject.SetActive(true);
 
-                pauseMenu.gameObject.SetActive(false);
+                crosshair.gameObject.SetActive(false);
+                weaponDisplayUI.gameObject.SetActive(false);
+                cinemachineShake.gameObject.SetActive(false);
 
-                progressManager.gameObject.SetActive(true);
-                currencyManager.gameObject.SetActive(true);
+                inventoryManager.gameObject.SetActive(false);
 
-                leaderboardUI.gameObject.SetActive(true);
+                pauseMenuUI.gameObject.SetActive(false);
+                enemySpawner.gameObject.SetActive(false);
+                waveManager.gameObject.SetActive(false);
+                rewarsdUI.gameObject.SetActive(false);
+
+                player.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
+                player.GetComponent<StarterAssetsInputs>().SetCursorLockState(false);
+
+                player.GetComponent<ThirdPersonController>().enabled = false;
+                player.GetComponent<ThirdPersonShooterController>().enabled = false;
 
                 break;
 
-            case Config.MAIN_SCENE_NAME:
+            case Config.ROOFTOP_SCENE_NAME:
 
                 mainMenu.gameObject.SetActive(false);
-                pauseMenu.gameObject.SetActive(true);
 
-                progressManager.gameObject.SetActive(true);
-                currencyManager.gameObject.SetActive(true);
+                crosshair.gameObject.SetActive(true);
 
-                leaderboardUI.gameObject.SetActive(true);
+                weaponDisplayUI.gameObject.SetActive(true);
+                weaponDisplayUI.UnequipWeapon();
+
+                cinemachineShake.gameObject.SetActive(true);
+
+                inventoryManager.gameObject.SetActive(true);
+                inventoryManager.ResetProgress();
+
+                pauseMenuUI.gameObject.SetActive(true);
+                enemySpawner.gameObject.SetActive(true);
+                rewarsdUI.gameObject.SetActive(true);
+
+                player.GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
+                player.GetComponent<StarterAssetsInputs>().SetCursorLockState(true);
+
+                player.GetComponent<ThirdPersonController>().enabled = true;
+                // TO DO: RESET CAMERA ROTATION TO IDENTITY
+
+                player.GetComponent<ThirdPersonShooterController>().enabled = true;
+                player.GetComponent<ThirdPersonShooterController>().UnequipWeapon();
+
+                player.transform.position = GameObject.FindGameObjectWithTag("Respawn").transform.position;
+                player.transform.rotation = Quaternion.identity;
+
+                StartCoroutine(WaitAndEnableWaveManager());
 
                 break;
         }
 
         levelLoader.FinishTransition();
-        */
+    }
+
+    private IEnumerator WaitAndEnableWaveManager()
+    {
+        yield return new WaitForSeconds(2f);
+
+        waveManager.gameObject.SetActive(true);
     }
 
     public void ToMainMenu()
     {
+        if (IsTeleporting())
+            return;
+
         pauseMenuUI.ResumeGame();
+        pauseMenuUI.ResetMenu();
 
         SetIsOnMainMenu(true);
+
+        SetIsTeleporting(true);
+
+        sfxManager.PlaySound(Config.GAME_OVER_SFX);
 
         levelLoader.LoadLevel(Config.MAIN_MENU_SCENE_NAME, Config.CROSSFADE_TRANSITION);
 
         pauseMenuUI.gameObject.SetActive(false);
-    }
-
-    public void Quit()
-    {
-        // TO DO: ADD METHOD TO QUIT GAME
     }
 
     #region Getters and Setters
@@ -296,6 +344,22 @@ public class GameManager : MonoBehaviour
     public ControlIconsManager GetControlIconsManager()
     {
         return controlIconsManager;
+    }
+
+    #endregion
+
+    #region Gameplay Settings
+
+    public void SetQuality(int qualityIndex)
+    {
+        QualitySettings.SetQualityLevel(qualityIndex);
+        sfxManager.PlaySound(Config.CLICK_SFX);
+    }
+
+    public void SetFullscreen(bool isFullscreen)
+    {
+        Screen.fullScreen = isFullscreen;
+        sfxManager.PlaySound(Config.CLICK_SFX);
     }
 
     #endregion

@@ -276,7 +276,10 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
 
     public virtual void RemoveFromMainInventory()
     {
-        GameManager.instance.GetInventoryManager().SavedItems.Remove(this);
+        if (IsBlocked)
+            GameManager.instance.GetInventoryManager().BlockedItems.Remove(this);
+        else
+            GameManager.instance.GetInventoryManager().SavedItems.Remove(this);
     }
 
     public virtual void RotateInfoPanels()
@@ -354,6 +357,8 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
         if (!GameManager.instance.GetInventoryManager().AddItemManuallyToMainInventory
             (GameManager.instance.GetRewardsUI().MainInventory, this))
             Debug.LogError("Couldn't add item to main inventory");
+        else
+            GameManager.instance.GetSFXManager().PlaySound(Config.DROP_SFX);
     }
 
     #endregion
@@ -368,6 +373,7 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
         {
             HoldingInventory.SetNewOpenButton(buttonPanelToOpen.gameObject);
             buttonPanelToOpen.gameObject.SetActive(true);
+            GameManager.instance.GetSFXManager().PlaySound(Config.HOVER_SFX);
         }
     }
 

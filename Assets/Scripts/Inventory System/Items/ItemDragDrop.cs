@@ -42,6 +42,7 @@ public class ItemDragDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandle
         GetComponent<Canvas>().overrideSorting = false;
 
         GameManager.instance.GetInventoryDragDropSystem().StoppedDragging(inventory, placedObject);
+        GameManager.instance.GetSFXManager().PlaySound(Config.DROP_SFX);
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -51,6 +52,6 @@ public class ItemDragDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandle
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        
+        GameManager.instance.GetSFXManager().PlaySound(Config.PICKUP_SFX);
     }
 }

@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using UnityEngine.Windows;
 using static Utils;
 
 public class PauseMenuUI : MonoBehaviour
@@ -48,6 +49,9 @@ public class PauseMenuUI : MonoBehaviour
     private bool isOnKeyBindingPanel = false;
     public bool IsOnKeyBindingsPanel { get { return isOnKeyBindingPanel; } }
 
+    private bool isOnFastSwapConfiguration = false;
+    public bool IsOnFastSwapConfiguration { get { return isOnFastSwapConfiguration; } }
+
     #endregion
 
     #region Parameters
@@ -82,13 +86,49 @@ public class PauseMenuUI : MonoBehaviour
             else if (input.autoSort)
             {
                 GameManager.instance.GetInventoryManager().AutoSortMainInventory(inventoryPanel.GetComponent<Inventory>(), GameManager.instance.GetInventoryManager().SavedItems);
+                GameManager.instance.GetSFXManager().PlaySound(Config.AUTO_SORT_SFX);
                 input.autoSort = false;
+            }
+            else if (isOnFastSwapConfiguration && input.pause)
+            {
+                SetFastSwapCandidate(null);
+
+                GameManager.instance.GetSFXManager().PlaySound(Config.BACK_SFX);
+
+                fastSwapConfigPanel.SetActive(false);
+                isOnFastSwapConfiguration = false;
+
+                input.pause = false;
+
             }
         }
         else if (isGamePaused && isOnKeyBindingPanel && input.pause)
         {
             CloseKeyBindingsPanel();
+
             input.pause = false;
+        }
+        
+        if (input.enter)
+        {
+            var currentSelected = EventSystem.current.currentSelectedGameObject;
+
+            if (currentSelected && currentSelected.activeSelf)
+            {
+                if (currentSelected.TryGetComponent(out Button selectedButton))
+                    selectedButton.onClick.Invoke();
+                else if (currentSelected.TryGetComponent(out TMP_Dropdown dropdown))
+                {
+                    if (!dropdown.IsExpanded)
+                        dropdown.Show();
+                    else
+                        dropdown.Hide();
+                }
+                else if (currentSelected.TryGetComponent(out Toggle toggle))
+                    toggle.isOn = toggle.isOn ? false : true;
+            }
+
+            input.enter = false;
         }
     }
 
@@ -184,6 +224,7 @@ public class PauseMenuUI : MonoBehaviour
             }
         }
 
+        isOnFastSwapConfiguration = true;
         fastSwapConfigPanel.SetActive(true);
     }
 
@@ -367,6 +408,8 @@ public class PauseMenuUI : MonoBehaviour
 
             fastSwapCandidate = null;
         }
+
+        isOnFastSwapConfiguration = false;
     }
 
     #endregion
@@ -434,6 +477,7 @@ public class PauseMenuUI : MonoBehaviour
         InventorySetup();
 
         inventoryPanel.SetActive(true);
+        iconContainer.SetActive(true);
     }
 
     private void InventorySetup()
@@ -448,6 +492,8 @@ public class PauseMenuUI : MonoBehaviour
     public void ResumeGame()
     {
         SetGamePaused(false);
+
+        GameManager.instance.GetSFXManager().PlaySound(Config.RESUME_SFX);
 
         GameObject player = GameManager.instance.GetPlayer();
 
@@ -480,7 +526,17 @@ public class PauseMenuUI : MonoBehaviour
 
     public void QuitButton()
     {
-        GameManager.instance.Quit();
+        Application.Quit();
+    }
+
+    public void ResetMenu()
+    {
+        pauseMenuPanelList[activePanelIndex].SetActive(false);
+
+        activePanelIndex = 0;
+
+        if (iconCircularScrillList.isActiveAndEnabled)
+            iconCircularScrillList.SelectContentID(activePanelIndex);
     }
 
     private void NextMenu()
@@ -491,6 +547,8 @@ public class PauseMenuUI : MonoBehaviour
         activeIcon.GetComponent<CanvasGroup>().alpha = .3f;
 
         activePanelIndex = (int)Mathf.Repeat(activePanelIndex + 1, iconCircularScrillList.ListBank.GetContentCount());
+
+        GameManager.instance.GetSFXManager().PlaySound(Config.MENU_CHANGE_SFX);
 
         iconCircularScrillList.SelectContentID(activePanelIndex);
 
@@ -505,6 +563,8 @@ public class PauseMenuUI : MonoBehaviour
         activeIcon.GetComponent<CanvasGroup>().alpha = .3f;
 
         activePanelIndex = (int)Mathf.Repeat(activePanelIndex - 1, iconCircularScrillList.ListBank.GetContentCount());
+
+        GameManager.instance.GetSFXManager().PlaySound(Config.MENU_CHANGE_SFX);
 
         iconCircularScrillList.SelectContentID(activePanelIndex);
 
@@ -530,6 +590,8 @@ public class PauseMenuUI : MonoBehaviour
         isOnKeyBindingPanel = false;
 
         keyBindingPanel.SetActive(false);
+
+        GameManager.instance.GetSFXManager().PlaySound(Config.BACK_SFX);
 
         iconContainer.SetActive(true);
 
@@ -562,12 +624,12 @@ public class PauseMenuUI : MonoBehaviour
 
     public void SetQuality(int qualityIndex)
     {
-        QualitySettings.SetQualityLevel(qualityIndex);
+        GameManager.instance.SetQuality(qualityIndex);
     }
 
     public void SetFullscreen(bool isFullscreen)
     {
-        Screen.fullScreen = isFullscreen;
+        GameManager.instance.SetFullscreen(isFullscreen);
     }
 
     #endregion

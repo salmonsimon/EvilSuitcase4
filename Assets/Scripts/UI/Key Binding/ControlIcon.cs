@@ -10,15 +10,23 @@ public class ControlIcon : MonoBehaviour
 
     private Image image;
 
+    private ControlIconsManager controlIconsManager;
+
     private void Awake()
     {
         image = GetComponent<Image>();
+    }
+
+    private void Start()
+    {
+        controlIconsManager = GetComponent<ControlIconsManager>();
     }
 
     private void OnEnable()
     {
         string controlPath = input.action.bindings[0].effectivePath.Split("/")[1];
 
-        image.sprite = GameManager.instance.GetControlIconsManager().Keyboard.GetSprite(controlPath);
+        if (controlIconsManager)
+            image.sprite = GameManager.instance.GetControlIconsManager().Keyboard.GetSprite(controlPath);
     }
 }

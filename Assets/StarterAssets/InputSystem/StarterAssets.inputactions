@@ -416,7 +416,7 @@
                 {
                     "name": "",
                     "id": "e3d9820b-9f50-445a-9367-ae4c9e359f9f",
-                    "path": "<Keyboard>/enter",
+                    "path": "<Keyboard>/backspace",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",
@@ -652,6 +652,15 @@
                     "name": "Previous",
                     "type": "Button",
                     "id": "0756011c-3919-430d-9853-e16039490f53",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Enter",
+                    "type": "Button",
+                    "id": "575f3e84-467d-41f0-8874-598acee2a9ae",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -1047,7 +1056,7 @@
                 {
                     "name": "",
                     "id": "71667a8a-3427-4298-93ca-0e66fb3ee6e9",
-                    "path": "<Keyboard>/enter",
+                    "path": "<Keyboard>/backspace",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",
@@ -1096,6 +1105,28 @@
                     "processors": "",
                     "groups": "KeyboardMouse",
                     "action": "Previous",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f556adf7-cad2-44c5-a20c-dea7e89b7ca1",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "Enter",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d179fd4a-a194-4605-a504-52502c3d72c0",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "Enter",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

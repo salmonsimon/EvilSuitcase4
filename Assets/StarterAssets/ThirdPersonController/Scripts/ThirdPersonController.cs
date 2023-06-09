@@ -228,6 +228,11 @@ namespace StarterAssets
                 _cinemachineTargetYaw, 0.0f);
         }
 
+        public void ResetCameraRotation()
+        {
+            CinemachineCameraTarget.transform.rotation = Quaternion.identity;
+        }
+
         private void Move()
         {
             // set target speed based on move speed, sprint speed and if sprint is pressed

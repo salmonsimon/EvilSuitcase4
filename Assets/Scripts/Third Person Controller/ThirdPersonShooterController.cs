@@ -205,8 +205,13 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     public void UnequipWeapon()
     {
-        ActivateWeapon(equippedWeapon, false);
-        equippedWeapon = null;
+        if (equippedWeapon)
+        {
+            ActivateWeapon(equippedWeapon, false);
+            equippedWeapon = null;
+        }
+
+        GameManager.instance.GetWeaponDisplayUI().UnequipWeapon();
     }
 
     public void FindAndEquipWeapon(EquipableItem equipableItem)

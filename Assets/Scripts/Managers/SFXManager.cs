@@ -11,8 +11,31 @@ public class SFXManager : MonoBehaviour
 
     [Header("UI Sounds")]
     [SerializeField] private AudioClip clickSFX;
+    [SerializeField] private AudioClip backSFX;
+    [SerializeField] private AudioClip hoverSFX;
+    [SerializeField] private AudioClip menuChangeSFX;
+    [SerializeField] private AudioClip welcomeScreenSFX;
+    [SerializeField] private AudioClip evilLaughSFX;
     [SerializeField] private AudioClip pauseSFX;
-    [SerializeField] private AudioClip wrongSFX;
+    [SerializeField] private AudioClip resumeSFX;
+    [SerializeField] private AudioClip autoSortSFX;
+
+    [SerializeField] private List<AudioClip> pickupSFX;
+    [SerializeField] private List<AudioClip> dropSFX;
+
+    [SerializeField] private AudioClip rotateSFX;
+    [SerializeField] private AudioClip discardSFX;
+
+    [SerializeField] private AudioClip equipSFX;
+
+    [SerializeField] private List<AudioClip> countdownSFX;
+
+    [SerializeField] private AudioClip waveStartSFX;
+    [SerializeField] private AudioClip gameOverSFX;
+    [SerializeField] private AudioClip transitionStartSFX;
+    [SerializeField] private AudioClip transitionEndSFX;
+    [SerializeField] private AudioClip bloodSplatterSFX;
+    [SerializeField] private AudioClip heartbeatSFX;
 
     private void Awake()
     {
@@ -39,14 +62,85 @@ public class SFXManager : MonoBehaviour
                 audioSource.PlayOneShot(clickSFX);
                 break;
 
+            case Config.BACK_SFX:
+                audioSource.PlayOneShot(backSFX);
+                break;
+
+            case Config.HOVER_SFX:
+                audioSource.PlayOneShot(hoverSFX);
+                break;
+
+            case Config.MENU_CHANGE_SFX:
+                audioSource.PlayOneShot(menuChangeSFX);
+                break;
+
+            case Config.WELCOME_SCREEN_SFX:
+                audioSource.PlayOneShot(welcomeScreenSFX);
+                break;
+
+            case Config.EVIL_LAUGH_SFX:
+                audioSource.PlayOneShot(evilLaughSFX);
+                break;
+
             case Config.PAUSE_SFX:
                 audioSource.PlayOneShot(pauseSFX);
                 break;
 
-            case Config.WRONG_SFX:
-                audioSource.PlayOneShot(wrongSFX);
+            case Config.RESUME_SFX:
+                audioSource.PlayOneShot(resumeSFX);
                 break;
 
+            case Config.AUTO_SORT_SFX:
+                audioSource.PlayOneShot(autoSortSFX);
+                break;
+
+            case Config.PICKUP_SFX:
+                PlayRandomAudioClip(pickupSFX);
+                break;
+
+            case Config.DROP_SFX:
+                PlayRandomAudioClip(dropSFX);
+                break;
+
+            case Config.ROTATE_SFX:
+                audioSource.PlayOneShot(rotateSFX);
+                break;
+
+            case Config.DISCARD_SFX:
+                audioSource.PlayOneShot(discardSFX);
+                break;
+
+            case Config.EQUIP_SFX:
+                audioSource.PlayOneShot(equipSFX);
+                break;
+
+            case Config.COUNTDOWN_SFX:
+                PlayRandomAudioClip(countdownSFX);
+                break;
+
+            case Config.WAVE_START_SFX:
+                audioSource.PlayOneShot(waveStartSFX);
+                break;
+
+            case Config.GAME_OVER_SFX:
+                audioSource.PlayOneShot(gameOverSFX);
+                break;
+
+            case Config.TRANSITION_START_SFX:
+                audioSource.PlayOneShot(transitionStartSFX);
+                break;
+
+            case Config.TRANSITION_END_SFX:
+                audioSource.PlayOneShot(transitionEndSFX);
+                break;
+
+            case Config.BLOOD_SPLATTER_SFX:
+                audioSource.PlayOneShot(bloodSplatterSFX);
+                break;
+
+            case Config.HEARTBEAT_SFX:
+                audioSource.PlayOneShot(heartbeatSFX);
+                break;
         }
     }
 

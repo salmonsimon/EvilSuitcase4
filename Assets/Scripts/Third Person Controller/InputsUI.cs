@@ -16,8 +16,24 @@ public class InputsUI : MonoBehaviour
     public bool autoSort;
     public bool next;
     public bool previous;
+    public bool enter;
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
+
+    public void ResetInputs() 
+    {
+        point = Vector2.zero;
+        click = false;
+        rightClick = false;
+        rotate = false;
+        pause = false;
+        autoSort = false;
+        next = false;
+        previous = false;
+        enter = false;
+    }
+
+
     public void OnPoint(InputValue value)
     {
         PointInput(value.Get<Vector2>());
@@ -56,6 +72,11 @@ public class InputsUI : MonoBehaviour
     public void OnPrevious(InputValue value)
     {
         PreviousInput(value.isPressed);
+    }
+
+    public void OnEnter(InputValue value)
+    {
+        EnterInput(value.isPressed);
     }
 
 #endif
@@ -99,5 +120,10 @@ public class InputsUI : MonoBehaviour
     public void PreviousInput(bool newPreviousState)
     {
         previous = newPreviousState;
+    }
+
+    public void EnterInput(bool newEnterState)
+    {
+        enter = newEnterState;
     }
 }

@@ -181,12 +181,12 @@ public class WaveManager : MonoBehaviour
             if (i == 0)
             {
                 countdownText.text = "START!";
-                // TO DO: ADD START SFX
+                GameManager.instance.GetSFXManager().PlaySound(Config.WAVE_START_SFX);
             }
             else
             {
                 countdownText.text = i + "...";
-                // TO DO: ADD COUNTER SFX
+                GameManager.instance.GetSFXManager().PlaySound(Config.COUNTDOWN_SFX);
             }
 
             yield return new WaitForSeconds(1f);
@@ -230,22 +230,26 @@ public class WaveManager : MonoBehaviour
         {
             countdownText.text = i + "...";
 
-            // TO DO: ADD COUNTER SFX
+            GameManager.instance.GetSFXManager().PlaySound(Config.COUNTDOWN_SFX);
 
             yield return new WaitForSeconds(1f);
         }
 
-        List<Item> rewardItems = DrawRewardItems();
+        GameManager.instance.GetSFXManager().PlaySound(Config.TRANSITION_START_SFX);
 
         float transitionTime = GameManager.instance.GetTransitionManager().RunTransition("DoubleWipe");
 
         yield return new WaitForSeconds(transitionTime + Config.MEDIUM_DELAY);
+
+        List<Item> rewardItems = DrawRewardItems();
 
         waveClearedPanel.SetActive(false);
 
         GameManager.instance.GetRewardsUI().OpenRewardsUI(rewardItems, rewardsCountdown[currentWave]);
 
         GameManager.instance.IsOnRewardsUI = true;
+
+        GameManager.instance.GetSFXManager().PlaySound(Config.TRANSITION_END_SFX);
 
         GameManager.instance.GetTransitionManager().FinishCurrentTransition();
 
@@ -268,6 +272,7 @@ public class WaveManager : MonoBehaviour
         player.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
         player.GetComponent<StarterAssetsInputs>().SetCursorLockState(false);
 
+        GameManager.instance.GetSFXManager().PlaySound(Config.TRANSITION_START_SFX);
         float transitionTime = GameManager.instance.GetTransitionManager().RunTransition("DoubleWipe");
 
         yield return new WaitForSeconds(transitionTime);
@@ -277,6 +282,7 @@ public class WaveManager : MonoBehaviour
         if (currentWave > 0 && currentWave % 10 == 0)
             CorpseCleanup();
 
+        GameManager.instance.GetSFXManager().PlaySound(Config.TRANSITION_END_SFX);
         GameManager.instance.GetTransitionManager().FinishCurrentTransition();
 
         bool blockedItems = false;
@@ -288,7 +294,8 @@ public class WaveManager : MonoBehaviour
             GameManager.instance.GetPauseMenuUI().OpenPauseInventory();
 
             transitionTime = GameManager.instance.GetTransitionManager().RunTransition("PaintSplash");
-            // TO DO: ADD EVIL LAUGH SFX
+
+            GameManager.instance.GetSFXManager().PlaySound(Config.BLOOD_SPLATTER_SFX);
 
             yield return new WaitForSeconds(transitionTime);
 
