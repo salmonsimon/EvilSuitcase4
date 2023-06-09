@@ -14,7 +14,7 @@ public class SFXManager : MonoBehaviour
     [SerializeField] private AudioClip backSFX;
     [SerializeField] private AudioClip hoverSFX;
     [SerializeField] private AudioClip menuChangeSFX;
-    [SerializeField] private AudioClip welcomingScreenSFX;
+    [SerializeField] private AudioClip welcomeScreenSFX;
     [SerializeField] private AudioClip evilLaughSFX;
     [SerializeField] private AudioClip pauseSFX;
     [SerializeField] private AudioClip resumeSFX;
@@ -74,8 +74,8 @@ public class SFXManager : MonoBehaviour
                 audioSource.PlayOneShot(menuChangeSFX);
                 break;
 
-            case Config.WELCOMING_SCREEN_SFX:
-                audioSource.PlayOneShot(welcomingScreenSFX);
+            case Config.WELCOME_SCREEN_SFX:
+                audioSource.PlayOneShot(welcomeScreenSFX);
                 break;
 
             case Config.EVIL_LAUGH_SFX:

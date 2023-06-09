@@ -83,7 +83,7 @@ public static class Config
     public const string BACK_SFX = "Back";
     public const string HOVER_SFX = "Hover";
     public const string MENU_CHANGE_SFX = "MenuChange";
-    public const string WELCOMING_SCREEN_SFX = "WelcomingScreen";
+    public const string WELCOME_SCREEN_SFX = "WelcomeScreen";
     public const string EVIL_LAUGH_SFX = "EvilLaugh";
     public const string PAUSE_SFX = "Pause";
     public const string RESUME_SFX = "Resume";

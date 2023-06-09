@@ -91,11 +91,11 @@ public class MainMenuUI : MonoBehaviour
         activePanel = newActivePanel;
     }
 
-    private void WelcomingScreenPanelChange()
+    private void WelcomeScreenPanelChange()
     {
         GameObject newActivePanel = activePanel.GetComponent<PanelNavigation>().BasePanel;
 
-        GameManager.instance.GetSFXManager().PlaySound(Config.WELCOMING_SCREEN_SFX);
+        GameManager.instance.GetSFXManager().PlaySound(Config.WELCOME_SCREEN_SFX);
 
         panelList[0].GetComponent<Animator>().SetTrigger(Config.ANIMATOR_HIDE_COUNTERS);
         StartCoroutine(WaitAndDisable(panelList[0], Config.BIG_DELAY * 2 + Config.SMALL_DELAY));
@@ -127,7 +127,7 @@ public class MainMenuUI : MonoBehaviour
                 Mouse.current.rightButton.wasPressedThisFrame ||
                 Mouse.current.middleButton.wasPressedThisFrame)
             {
-                WelcomingScreenPanelChange();
+                WelcomeScreenPanelChange();
                 inputUI.ResetInputs();
             }
 
