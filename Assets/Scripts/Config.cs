@@ -80,8 +80,22 @@ public static class Config
     #region SFX
 
     public const string CLICK_SFX = "Click";
+    public const string BACK_SFX = "Back";
+    public const string HOVER_SFX = "Hover";
+    public const string MENU_CHANGE_SFX = "MenuChange";
+    public const string WELCOMING_SCREEN_SFX = "WelcomingScreen";
+    public const string EVIL_LAUGH_SFX = "EvilLaugh";
     public const string PAUSE_SFX = "Pause";
-    public const string WRONG_SFX = "Wrong";
+    public const string RESUME_SFX = "Resume";
+    public const string AUTO_SORT_SFX = "AutoSort";
+    public const string FAST_SWAP_SFX = "FastSwap";
+    public const string COUNTDOWN_SFX = "Countdown";
+    public const string WAVE_START_SFX = "WaveStart";
+    public const string GAME_OVER_SFX = "GameOver";
+    public const string TRANSITION_START_SFX = "TransitionStart";
+    public const string TRANSITION_END_SFX = "TransitionEnd";
+    public const string BLOOD_SPLATTER_SFX = "BloodSplatter";
+    public const string HEARTBEAT_SFX = "Heartbeat";
 
     #endregion
 }

@@ -83,6 +83,8 @@ public class MainMenuUI : MonoBehaviour
     {
         GameObject newActivePanel = activePanel.GetComponent<PanelNavigation>().BasePanel;
 
+        GameManager.instance.GetSFXManager().PlaySound(Config.BACK_SFX);
+
         activePanel.SetActive(false);
         newActivePanel.SetActive(true);
 
@@ -92,6 +94,8 @@ public class MainMenuUI : MonoBehaviour
     private void WelcomingScreenPanelChange()
     {
         GameObject newActivePanel = activePanel.GetComponent<PanelNavigation>().BasePanel;
+
+        GameManager.instance.GetSFXManager().PlaySound(Config.WELCOMING_SCREEN_SFX);
 
         panelList[0].GetComponent<Animator>().SetTrigger(Config.ANIMATOR_HIDE_COUNTERS);
         StartCoroutine(WaitAndDisable(panelList[0], Config.BIG_DELAY * 2 + Config.SMALL_DELAY));
@@ -207,6 +211,8 @@ public class MainMenuUI : MonoBehaviour
         inputGameplay.ResetInputs();
         inputUI.ResetInputs();
 
+        GameManager.instance.GetSFXManager().PlaySound(Config.EVIL_LAUGH_SFX);
+
         GameManager.instance.SetIsOnMainMenu(false);
 
         GameManager.instance.GetLevelLoader().LoadLevel(sceneName, Config.CROSSFADE_TRANSITION);
@@ -236,6 +242,8 @@ public class MainMenuUI : MonoBehaviour
     private void CloseKeyBindingsPanel()
     {
         isOnKeyBindingPanel = false;
+
+        GameManager.instance.GetSFXManager().PlaySound(Config.BACK_SFX);
 
         keyBindingPanel.SetActive(false);
         gameplaySettingsPanel.SetActive(true);

@@ -86,11 +86,14 @@ public class PauseMenuUI : MonoBehaviour
             else if (input.autoSort)
             {
                 GameManager.instance.GetInventoryManager().AutoSortMainInventory(inventoryPanel.GetComponent<Inventory>(), GameManager.instance.GetInventoryManager().SavedItems);
+                GameManager.instance.GetSFXManager().PlaySound(Config.AUTO_SORT_SFX);
                 input.autoSort = false;
             }
             else if (isOnFastSwapConfiguration && input.pause)
             {
                 SetFastSwapCandidate(null);
+
+                GameManager.instance.GetSFXManager().PlaySound(Config.BACK_SFX);
 
                 fastSwapConfigPanel.SetActive(false);
                 isOnFastSwapConfiguration = false;
@@ -489,6 +492,8 @@ public class PauseMenuUI : MonoBehaviour
     {
         SetGamePaused(false);
 
+        GameManager.instance.GetSFXManager().PlaySound(Config.RESUME_SFX);
+
         GameObject player = GameManager.instance.GetPlayer();
 
         player.GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
@@ -542,6 +547,8 @@ public class PauseMenuUI : MonoBehaviour
 
         activePanelIndex = (int)Mathf.Repeat(activePanelIndex + 1, iconCircularScrillList.ListBank.GetContentCount());
 
+        GameManager.instance.GetSFXManager().PlaySound(Config.MENU_CHANGE_SFX);
+
         iconCircularScrillList.SelectContentID(activePanelIndex);
 
         pauseMenuPanelList[activePanelIndex].SetActive(true);
@@ -555,6 +562,8 @@ public class PauseMenuUI : MonoBehaviour
         activeIcon.GetComponent<CanvasGroup>().alpha = .3f;
 
         activePanelIndex = (int)Mathf.Repeat(activePanelIndex - 1, iconCircularScrillList.ListBank.GetContentCount());
+
+        GameManager.instance.GetSFXManager().PlaySound(Config.MENU_CHANGE_SFX);
 
         iconCircularScrillList.SelectContentID(activePanelIndex);
 
@@ -580,6 +589,8 @@ public class PauseMenuUI : MonoBehaviour
         isOnKeyBindingPanel = false;
 
         keyBindingPanel.SetActive(false);
+
+        GameManager.instance.GetSFXManager().PlaySound(Config.BACK_SFX);
 
         iconContainer.SetActive(true);
 
