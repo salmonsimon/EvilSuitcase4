@@ -7,6 +7,10 @@ using UnityEngine;
 
 public class PlayerHealthAnimations : MonoBehaviour
 {
+    [Header("Player Spine Reference")]
+    [SerializeField] private Transform playerSpine;
+    public Transform PlayerSpine { get { return playerSpine; } }
+
     [Header("Animation References")]
     [SerializeField] private List<AnimationClip> hurtAnimations;
     [SerializeField] private List<AnimationClip> deathAnimations;
