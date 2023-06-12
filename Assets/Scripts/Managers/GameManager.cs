@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private WaveManager waveManager;
     [SerializeField] private TransitionManager transitionManager;
     [SerializeField] private ControlIconsManager controlIconsManager;
+    [SerializeField] private BloodManager bloodManager;
 
     #region UI
 
@@ -87,6 +88,7 @@ public class GameManager : MonoBehaviour
             Destroy(waveManager.gameObject);
             Destroy(transitionManager.gameObject);
             Destroy(controlIconsManager.gameObject);
+            Destroy(bloodManager.gameObject);
 
             Destroy(mainMenu.gameObject);
             Destroy(weaponDisplayUI.gameObject);
@@ -167,6 +169,8 @@ public class GameManager : MonoBehaviour
                 waveManager.gameObject.SetActive(false);
                 rewarsdUI.gameObject.SetActive(false);
 
+                bloodManager.gameObject.SetActive(false);
+
                 player.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
                 player.GetComponent<StarterAssetsInputs>().SetCursorLockState(false);
 
@@ -192,6 +196,8 @@ public class GameManager : MonoBehaviour
                 pauseMenuUI.gameObject.SetActive(true);
                 enemySpawner.gameObject.SetActive(true);
                 rewarsdUI.gameObject.SetActive(true);
+
+                bloodManager.gameObject.SetActive(true);
 
                 player.GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
                 player.GetComponent<StarterAssetsInputs>().SetCursorLockState(true);
@@ -344,6 +350,11 @@ public class GameManager : MonoBehaviour
     public ControlIconsManager GetControlIconsManager()
     {
         return controlIconsManager;
+    }
+
+    public BloodManager GetBloodManager()
+    {
+        return bloodManager;
     }
 
     #endregion
