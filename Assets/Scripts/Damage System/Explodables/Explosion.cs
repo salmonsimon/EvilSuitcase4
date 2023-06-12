@@ -36,7 +36,19 @@ public class Explosion : MonoBehaviour
         GameManager.instance.GetCinemachineShake().ShakeCameras(Config.CAMERASHAKE_EXPLOSION_AMPLITUDE, Config.CAMERASHAKE_EXPLOSION_DURATION);
 
         if (other.TryGetComponent(out Damageable damageable))
+        {
             damageable.ReceiveDamage(damageConfiguration.GetDamage(0), explosionForce, transform.position, explosionCollider.radius);
+
+            if (damageable.TryGetComponent(out HumanoidHurtGeometry humanoidHurtGeometry))
+            {
+                Vector3 closestPosition = other.ClosestPoint(transform.position);
+
+                Vector3 forceDirection = (closestPosition - transform.position).normalized;
+
+                GameManager.instance.GetBloodManager().SpawnBloodOnHit(humanoidHurtGeometry.transform, closestPosition, -forceDirection);
+            }
+
+        }
         else if (other.TryGetComponent(out Rigidbody rigidBody))
             rigidBody.AddExplosionForce(explosionForce, transform.position, explosionCollider.radius);
     }

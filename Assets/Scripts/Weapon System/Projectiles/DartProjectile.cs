@@ -23,11 +23,17 @@ public class DartProjectile : Projectile
         Vector3 forceDirection = -collision.contacts[0].normal;
 
         if (collision.collider.TryGetComponent(out Damageable damageable))
+        {
             damageable.ReceiveDamage(damageConfig.GetDamage(distanceTraveled), forceDirection * 40f);
+
+            if (damageable.TryGetComponent(out HumanoidHurtGeometry humanoidHurtGeometry))
+                GameManager.instance.GetBloodManager().SpawnBloodOnHit(humanoidHurtGeometry.transform, collision.contacts[0].point, forceDirection);
+        }
         else if (collision.collider.TryGetComponent(out Rigidbody rigidbody))
             rigidbody.AddForce(forceDirection * 5f, ForceMode.Impulse);
     }
 
+    // NOW NOT ON USE
     protected override void OnTriggerEnter(Collider other)
     {
         base.OnTriggerEnter(other);

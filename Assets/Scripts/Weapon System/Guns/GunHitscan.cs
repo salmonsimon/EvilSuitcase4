@@ -121,12 +121,16 @@ public class GunHitscan : Gun
         if (hit.collider != null)
         {
             GameManager.instance.GetSurfaceManager().HandleImpact(hit.transform.gameObject, endPosition, hit.normal, impactType, 0);
+            
 
             if (hit.collider.TryGetComponent(out Damageable damageable))
             {
                 Vector3 hitForce = -hit.normal.normalized * GunConfiguration.TrailConfig.HitForce;
 
                 damageable.ReceiveDamage(gunConfiguration.DamageConfig.GetDamage(distance), hitForce);
+
+                if (damageable.TryGetComponent(out HumanoidHurtGeometry humanoidHurtGeometry))
+                    GameManager.instance.GetBloodManager().SpawnBloodOnHit(hit);
             }
             else if (hit.collider.TryGetComponent(out Rigidbody rigidbody))
             {

@@ -40,7 +40,10 @@ public class PlayerBoxDamageDealer : MonoBehaviour
                 damageable.ReceiveMeleeDamage(damage, forceDirection * 35f, meleeWeapon.CurrentAttackID);
 
                 if (damageable.TryGetComponent(out HumanoidHurtGeometry humanoidHurtGeometry))
+                {
                     GameManager.instance.GetSurfaceManager().HandleFleshImpact(damageable.transform.gameObject, closestPosition, -forceDirection, impactType, 0);
+                    GameManager.instance.GetBloodManager().SpawnBloodOnHit(damageable.transform, closestPosition, -forceDirection);
+                }
                 else
                     GameManager.instance.GetSurfaceManager().HandleImpact(damageable.transform.gameObject, closestPosition, -forceDirection, impactType, 0);
 
