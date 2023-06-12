@@ -36,6 +36,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private PauseMenuUI pauseMenuUI;
     [SerializeField] private RewardsUI rewarsdUI;
     [SerializeField] private CrossHair crosshair;
+    [SerializeField] private PlayerHealthUI playerHealthUI;
 
     #endregion
 
@@ -95,6 +96,7 @@ public class GameManager : MonoBehaviour
             Destroy(pauseMenuUI.gameObject);
             Destroy(rewarsdUI.gameObject);
             Destroy(crosshair.gameObject);
+            Destroy(playerHealthUI.gameObject);
 
             Destroy(cameraContainer);
             Destroy(effectContainer);
@@ -160,6 +162,7 @@ public class GameManager : MonoBehaviour
 
                 crosshair.gameObject.SetActive(false);
                 weaponDisplayUI.gameObject.SetActive(false);
+                playerHealthUI.gameObject.SetActive(false);
                 cinemachineShake.gameObject.SetActive(false);
 
                 inventoryManager.gameObject.SetActive(false);
@@ -187,6 +190,8 @@ public class GameManager : MonoBehaviour
 
                 weaponDisplayUI.gameObject.SetActive(true);
                 weaponDisplayUI.UnequipWeapon();
+
+                playerHealthUI.gameObject.SetActive(true);
 
                 cinemachineShake.gameObject.SetActive(true);
 
@@ -355,6 +360,11 @@ public class GameManager : MonoBehaviour
     public BloodManager GetBloodManager()
     {
         return bloodManager;
+    }
+
+    public PlayerHealthUI GetPlayerHealthUI()
+    {
+        return playerHealthUI;
     }
 
     #endregion

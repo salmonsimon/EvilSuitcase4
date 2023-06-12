@@ -6,6 +6,7 @@ using StarterAssets;
 using UnityEngine.Animations.Rigging;
 using static Utils;
 using System;
+using UnityEngine.InputSystem;
 
 public class ThirdPersonShooterController : MonoBehaviour
 {
@@ -40,6 +41,10 @@ public class ThirdPersonShooterController : MonoBehaviour
     private Animator animator;
 
     private CrossHair crosshair;
+
+    private PlayerHealthAnimations playerHealthAnimations;
+
+    private HealthManager playerHealthManager;
 
     #endregion
 
@@ -79,10 +84,73 @@ public class ThirdPersonShooterController : MonoBehaviour
 
         animator = GetComponent<Animator>();
         crosshair = GameManager.instance.GetCrossHair();
+        playerHealthAnimations = GetComponent<PlayerHealthAnimations>(); 
+        playerHealthManager = GetComponent<HealthManager>();
+    }
+
+    private void OnEnable()
+    {
+        if (playerHealthManager)
+        {
+            playerHealthManager.OnDeath += Death;
+            playerHealthManager.OnRevival += Revival;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (playerHealthManager)
+        {
+            playerHealthManager.OnDeath -= Death;
+            playerHealthManager.OnRevival -= Revival;
+        }
+    }
+
+    private void Start()
+    {
+        if (playerHealthManager)
+        {
+            playerHealthManager.OnDeath += Death;
+            playerHealthManager.OnRevival += Revival;
+        }
+    }
+
+    private void Death()
+    {
+        aiming = false;
+
+        thirdPersonController.enabled = false;
+    }
+
+    private void Revival()
+    {
+        thirdPersonController.enabled = true;
     }
 
     private void Update()
     {
+        if (!playerHealthManager.IsAlive) return;
+
+        if (playerHealthAnimations.IsOnHurtAnimation)
+        {
+            aiming = false;
+
+            crosshair.ShowCrossHairUI(false);
+
+            aimVirtualCamera.gameObject.SetActive(false);
+
+            thirdPersonController.SetSensitivity(aimSensitivity);
+            thirdPersonController.SetRotateOnMove(true);
+            thirdPersonController.SetAbleToSprint(false);
+
+            thirdPersonController.MoveSpeed = aimMovementSpeed;
+
+            starterAssetsInputs.shoot = false;
+
+            return;
+        }
+            
+
         if (IsAttacking)
         {
             aiming = false;
@@ -440,5 +508,10 @@ public class ThirdPersonShooterController : MonoBehaviour
         yield return new WaitForSeconds(startTime);
 
         animator.Play(clipHash);
+    }
+
+    public bool CanTriggerHurtAnimation()
+    {
+        return !IsAttacking && !IsReloading;
     }
 }

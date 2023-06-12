@@ -21,6 +21,16 @@ public class EnemyBoxDamageDealer : MonoBehaviour
             damageable.ReceiveDamage(GetDamage(), Vector3.zero);
 
             boxCollider.enabled = false;
+
+            if (damageable.TryGetComponent(out HumanoidHurtGeometry humanoidHurtGeometry))
+            {
+                Vector3 enemyPosition = transform.root.position;
+                Vector3 closestPosition = other.ClosestPoint(enemyPosition);
+
+                Vector3 forceDirection = (closestPosition - enemyPosition).normalized;
+
+                GameManager.instance.GetBloodManager().SpawnBloodOnHit(damageable.transform, closestPosition, -forceDirection);
+            }
         }
     }
 
