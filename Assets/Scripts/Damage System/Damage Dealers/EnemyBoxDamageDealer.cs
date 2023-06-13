@@ -5,13 +5,15 @@ using UnityEngine;
 
 public class EnemyBoxDamageDealer : MonoBehaviour
 {
-    [SerializeField] DamageDealerConfigScriptableObject damageDealerConfig;
+    [SerializeField] private DamageDealerConfigScriptableObject damageDealerConfig;
 
     private BoxCollider boxCollider;
+    private ZombieSFX zombieSFX;
 
     private void Start()
     {
         boxCollider = GetComponent<BoxCollider>();
+        zombieSFX = transform.parent.root.GetComponent<ZombieSFX>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -30,6 +32,7 @@ public class EnemyBoxDamageDealer : MonoBehaviour
                 Vector3 forceDirection = (closestPosition - enemyPosition).normalized;
 
                 GameManager.instance.GetBloodManager().SpawnBloodOnHit(damageable.transform, closestPosition, -forceDirection);
+                zombieSFX.PlayRandomHitImpactAudioClip();
             }
         }
     }

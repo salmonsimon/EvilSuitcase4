@@ -43,11 +43,23 @@ public class HealthManager : MonoBehaviour
             OnDamaged();
     }
 
+    private void Recover(int recoverAmount)
+    {
+        int clampedRecoverAmount = Mathf.Clamp(recoverAmount, 0, maxHitPoints - currentHitPoints);
+        CurrentHitPoints += clampedRecoverAmount;
+
+        if (OnRecover != null)
+            OnRecover();
+    }
+
     public delegate void OnCurrentHealthChangeDelegate();
     public event OnCurrentHealthChangeDelegate OnCurrentHealthChange;
 
     public delegate void OnDamagedDelegate();
     public event OnDamagedDelegate OnDamaged;
+
+    public delegate void OnRecoverDelegate();
+    public event OnRecoverDelegate OnRecover;
 
     #endregion
 
@@ -110,6 +122,12 @@ public class HealthManager : MonoBehaviour
                 Death();
             }
         }
+    }
+
+    public virtual void RecoverHealth(int recoverAmount)
+    {
+        if (IsAlive)
+            Recover(recoverAmount);
     }
 
     protected virtual void Death()

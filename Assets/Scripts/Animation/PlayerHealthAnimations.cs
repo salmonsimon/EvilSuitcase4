@@ -17,6 +17,7 @@ public class PlayerHealthAnimations : MonoBehaviour
 
     [Header("Audio References")]
     [SerializeField] private List<AudioClip> hurtAudioClips;
+    [SerializeField] private List<AudioClip> bluntWeaponHitAudioClips;
     [SerializeField] private List<AudioClip> deathAudioClips;
 
     [Header("Camera References")]
@@ -24,9 +25,13 @@ public class PlayerHealthAnimations : MonoBehaviour
     [SerializeField] private Transform playerDeadCameraRootTransform;
 
     [Header("Dead Camera Configuration")]
+    [SerializeField] private float deadCameraRootDefaultHeight = 2.5f;
     [SerializeField] private float deadCameraMaxDistanceTraveled = 5f;
     [SerializeField] private float deadCameraTravelSpeed = .5f;
     [SerializeField] private float deadCameraRotationSpeed = 5f;
+
+    [Header("Other Configurations")]
+    [SerializeField] private float criticalHealthThreshold = .35f;
 
     private float deadCameraCurrentDistanceTraveled = 0f;
 
@@ -46,7 +51,9 @@ public class PlayerHealthAnimations : MonoBehaviour
         sfx = GetComponent<SFX>();
 
         playerHealthManager.OnDamaged += Damaged;
+        playerHealthManager.OnRecover += Recover;
         playerHealthManager.OnDeath += Death;
+        playerHealthManager.OnRevival += Revival;
 
         playerDeadCamera.gameObject.SetActive(false);
     }
@@ -55,11 +62,38 @@ public class PlayerHealthAnimations : MonoBehaviour
     {
         if (playerHealthManager.IsAlive && playerThirdPersonShooterController.CanTriggerHurtAnimation())
             PlayRandomHurtAnimation();
+
+        float currentHitPoints = playerHealthManager.CurrentHitPoints;
+        float maxHitPoints = playerHealthManager.MaxHitPoints;
+        float hitPointsPercentage = currentHitPoints / maxHitPoints;
+
+        if (hitPointsPercentage < criticalHealthThreshold && !GameManager.instance.GetPlayerHealthUI().CriticalHealthGlobalVolume.IsEnabled)
+            GameManager.instance.GetPlayerHealthUI().CriticalHealthGlobalVolume.Enable();
+    }
+
+    private void Recover()
+    {
+        float currentHitPoints = playerHealthManager.CurrentHitPoints;
+        float maxHitPoints = playerHealthManager.MaxHitPoints;
+        float hitPointsPercentage = currentHitPoints / maxHitPoints;
+
+        if (hitPointsPercentage > criticalHealthThreshold && GameManager.instance.GetPlayerHealthUI().CriticalHealthGlobalVolume.IsEnabled)
+            GameManager.instance.GetPlayerHealthUI().CriticalHealthGlobalVolume.Disable();
     }
 
     private void Death()
     {
         PlayRandomDeathAnimation();
+    }
+
+    private void Revival()
+    {
+        GameManager.instance.GetPlayerHealthUI().CriticalHealthGlobalVolume.Disable();
+        GameManager.instance.GetPlayerHealthUI().HurtGlobalVolume.Disable();
+
+        DisableDeadCamera();
+
+        isOnHurtAnimation = false;
     }
 
     public void PlayRandomHurtAnimation()
@@ -73,20 +107,35 @@ public class PlayerHealthAnimations : MonoBehaviour
         isOnHurtAnimation = true;
         StartCoroutine(PlayClip(Animator.StringToHash(hurtAnimationToPlay.name), 0f));
 
-        sfx.PlayRandomAudioClip(hurtAudioClips);
+        if (!GameManager.instance.GetPlayerHealthUI().CriticalHealthGlobalVolume.IsEnabled)
+        {
+            GameManager.instance.GetPlayerHealthUI().HurtGlobalVolume.Enable();
+
+            StartCoroutine(WaitToDisableHurtGlobalVolume());
+        }
+    }
+
+    private IEnumerator WaitToDisableHurtGlobalVolume()
+    {
+        while (IsOnHurtAnimation) yield return null;
+
+        GameManager.instance.GetPlayerHealthUI().HurtGlobalVolume.Disable();
     }
 
     public void PlayRandomDeathAnimation()
     {
         StopAllCoroutines();
-        isOnHurtAnimation = false;
+
+        if (isOnHurtAnimation)
+        {
+            isOnHurtAnimation = false;
+            GameManager.instance.GetPlayerHealthUI().HurtGlobalVolume.Disable();
+        }
 
         int deathAnimationIndex = Random.Range(0, deathAnimations.Count);
         AnimationClip deathAnimationToPlay = deathAnimations[deathAnimationIndex];
 
         StartCoroutine(PlayClip(Animator.StringToHash(deathAnimationToPlay.name), 0f));
-
-        sfx.PlayRandomAudioClip(deathAudioClips);
 
         StartCoroutine(DeadCameraRocketMovement());
         StartCoroutine(WaitAndOpenGameOverPanel(5f));
@@ -142,6 +191,17 @@ public class PlayerHealthAnimations : MonoBehaviour
         }
     }
 
+    private void DisableDeadCamera()
+    {
+        GameObject.FindGameObjectWithTag(Config.MAIN_CAMERA_TAG).GetComponent<CinemachineBrain>().m_DefaultBlend.m_Time = .1f;
+
+        playerDeadCamera.Priority = 1;
+        playerDeadCamera.gameObject.SetActive(false);
+
+        playerDeadCamera.transform.rotation = Quaternion.Euler(Vector3.zero);
+        playerDeadCameraRootTransform.position = new Vector3(0f, deadCameraRootDefaultHeight, 0f);
+    }
+
     public void FinishHurtAnimation()
     {
         isOnHurtAnimation = false;
@@ -152,5 +212,15 @@ public class PlayerHealthAnimations : MonoBehaviour
         yield return new WaitForSeconds(startTime);
 
         animator.Play(clipHash);
+    }
+
+    public void PlayRandomHurtAudioClip()
+    {
+        sfx.PlayRandomAudioClip(hurtAudioClips);
+    }
+
+    public void PlayRandomDeathAudioClip()
+    {
+        sfx.PlayRandomAudioClip(deathAudioClips);
     }
 }

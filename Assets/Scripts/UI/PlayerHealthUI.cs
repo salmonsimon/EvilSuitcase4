@@ -4,13 +4,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using UnityEngine.Windows;
 
 public class PlayerHealthUI : MonoBehaviour
 {
-    [SerializeField] private MicroBar playerHealthBar;
+    [Header("Game Over Panel Reference")]
     [SerializeField] private GameObject gameOverPanel;
+
+    [Header("Health Bar Reference")]
+    [SerializeField] private MicroBar playerHealthBar;
+
+    [Header("Post Processing Volume References")]
+    [SerializeField] private CriticHealthGlobalVolumeAnimator criticalHealthGlobalVolume;
+    public CriticHealthGlobalVolumeAnimator CriticalHealthGlobalVolume { get { return criticalHealthGlobalVolume; } }
+
+    [SerializeField] private HurtGlobalVolumeAnimator hurtGlobalVolume;
+    public HurtGlobalVolumeAnimator HurtGlobalVolume { get { return hurtGlobalVolume; } }
 
     private HealthManager playerHealthManager;
 

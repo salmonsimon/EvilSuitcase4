@@ -56,6 +56,10 @@ public class LevelLoader : MonoBehaviour
                     StartCoroutine(CrossfadeEnd());
                     break;
             }
+
+            Animator playerAnimator = GameManager.instance.GetPlayer().GetComponent<Animator>();
+            playerAnimator.Rebind();
+            playerAnimator.Update(0f);
         }
     }
 

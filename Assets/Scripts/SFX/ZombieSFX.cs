@@ -11,6 +11,7 @@ public class ZombieSFX : SFX
     [SerializeField] private List<AudioClip> deathAudioClips;
     [SerializeField] private List<AudioClip> stepAudioClips;
     [SerializeField] private List<AudioClip> eatingAudioClips;
+    [SerializeField] private List<AudioClip> hitImpactAudioClip;
 
     private float timeUntilNextShortSound = -1f;
     private float shortShoundMinDelay = .5f;
@@ -70,5 +71,10 @@ public class ZombieSFX : SFX
 
             timeUntilNexEatingSound = Random.Range(randomEatingAudioClip.length, randomEatingAudioClip.length + 1f);
         }
+    }
+
+    public void PlayRandomHitImpactAudioClip()
+    {
+        PlayRandomAudioClip(hitImpactAudioClip);
     }
 }

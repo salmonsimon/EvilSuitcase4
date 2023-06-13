@@ -67,6 +67,8 @@ public class ThirdPersonShooterController : MonoBehaviour
     private bool isAttacking = false;
     public bool IsAttacking { get { return isAttacking; } }
 
+    private bool initialized = false;
+
     #endregion
 
     #region Parameters
@@ -90,19 +92,23 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     private void OnEnable()
     {
-        if (playerHealthManager)
+        if (initialized)
         {
             playerHealthManager.OnDeath += Death;
             playerHealthManager.OnRevival += Revival;
+
+            GameManager.instance.GetTransitionManager().OnRunningTransitionValueChange += RunninTransitionValueChange;
         }
     }
 
     private void OnDisable()
     {
-        if (playerHealthManager)
+        if (initialized)
         {
             playerHealthManager.OnDeath -= Death;
             playerHealthManager.OnRevival -= Revival;
+
+            GameManager.instance.GetTransitionManager().OnRunningTransitionValueChange -= RunninTransitionValueChange;
         }
     }
 
@@ -113,6 +119,10 @@ public class ThirdPersonShooterController : MonoBehaviour
             playerHealthManager.OnDeath += Death;
             playerHealthManager.OnRevival += Revival;
         }
+
+        GameManager.instance.GetTransitionManager().OnRunningTransitionValueChange += RunninTransitionValueChange;
+
+        initialized = true;
     }
 
     private void Death()
@@ -127,9 +137,29 @@ public class ThirdPersonShooterController : MonoBehaviour
         thirdPersonController.enabled = true;
     }
 
+    private void RunninTransitionValueChange()
+    {
+        if (GameManager.instance.GetTransitionManager().RunningTransition)
+        {
+            aiming = false;
+
+            starterAssetsInputs.ResetInputs();
+            GetComponent<InputsUI>().ResetInputs();
+
+            thirdPersonController.enabled = false;
+        }
+        else
+        {
+            starterAssetsInputs.ResetInputs();
+            GetComponent<InputsUI>().ResetInputs();
+
+            thirdPersonController.enabled = true;
+        }
+    }
+
     private void Update()
     {
-        if (!playerHealthManager.IsAlive) 
+        if (!playerHealthManager.IsAlive || GameManager.instance.GetTransitionManager().RunningTransition) 
         {
             aimVirtualCamera.gameObject.SetActive(false);
             crosshair.ShowCrossHairUI(false);

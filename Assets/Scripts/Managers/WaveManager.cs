@@ -53,6 +53,8 @@ public class WaveManager : MonoBehaviour
     private int currentKilledEnemies = 0;
     private int currentEnemiesToKill = 0;
 
+    private bool initialized = false;
+
     #region Statistics Variables / Properties
 
     private int currentWave = 0;
@@ -142,21 +144,63 @@ public class WaveManager : MonoBehaviour
 
     #endregion
 
+    private void ResetProgress()
+    {
+        CurrentWave = 0;
+        TimeAlive = 0f;
+        HitsReceived = 0;
+        TotalEnemiesKilled = 0;
+
+        currentEnemiesToKill = 0;
+        currentKilledEnemies = 0;
+
+    }
+
     private void Awake()
     {
         poolContainer = new GameObject("Pool Container").transform;
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        NextWave();
+        if (!initialized)
+            return;
+
+        ResetProgress();
 
         GameManager.instance.GetPlayer().GetComponent<HealthManager>().OnDamaged += HitReceived;
+        GameManager.instance.GetPlayer().GetComponent<HealthManager>().OnDeath += Death;
+
+        NextWave();
+    }
+
+    private void OnDisable()
+    {
+        if (!initialized)
+            return;
+
+        GameManager.instance.GetPlayer().GetComponent<HealthManager>().OnDamaged -= HitReceived;
+        GameManager.instance.GetPlayer().GetComponent<HealthManager>().OnDeath -= Death;
+    }
+
+    private void Start()
+    {
+        GameManager.instance.GetPlayer().GetComponent<HealthManager>().OnDamaged += HitReceived;
+        GameManager.instance.GetPlayer().GetComponent<HealthManager>().OnDeath += Death;
+
+        NextWave();
+
+        initialized = true;
     }
 
     private void HitReceived()
     {
         HitsReceived++;
+    }
+
+    private void Death()
+    {
+        gameObject.SetActive(false);
     }
 
     private void Update()

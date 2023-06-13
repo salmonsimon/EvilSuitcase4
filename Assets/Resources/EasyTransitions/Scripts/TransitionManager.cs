@@ -14,9 +14,23 @@ namespace EasyTransition
         [SerializeField] private GameObject transitionTemplate;
 
         private bool runningTransition;
-        public bool RunningTransition { get { return runningTransition; } }
+        public bool RunningTransition { get { return runningTransition; } 
+            private set 
+            {
+                if (runningTransition == value)
+                    return;
+
+                runningTransition = value; 
+
+                if (OnRunningTransitionValueChange != null)
+                    OnRunningTransitionValueChange();
+            }
+        }
 
         private Transition currentTransition;
+
+        public delegate void OnRunningTransitionValueChangeDelegate();
+        public event OnRunningTransitionValueChangeDelegate OnRunningTransitionValueChange;
 
         public float RunTransition(string transitionID)
         {
@@ -40,7 +54,7 @@ namespace EasyTransition
                     Debug.LogError("The transitionID: " + transitionID + " is not a valid id.");
             }
 
-            runningTransition = true;
+            RunningTransition = true;
 
             StartCoroutine(StartTransitionCoroutine(transitionSettings));
 
@@ -77,7 +91,7 @@ namespace EasyTransition
         {
             yield return new WaitForSeconds(waitingTime);
 
-            runningTransition = false;
+            RunningTransition = false;
         }
 
         #region Plugin

@@ -186,8 +186,6 @@ public class GameManager : MonoBehaviour
 
             case Config.ROOFTOP_SCENE_NAME:
 
-                Debug.Log("Loaded rooftop scene");
-
                 mainMenu.gameObject.SetActive(false);
 
                 crosshair.gameObject.SetActive(true);
@@ -207,6 +205,8 @@ public class GameManager : MonoBehaviour
                 rewarsdUI.gameObject.SetActive(true);
 
                 bloodManager.gameObject.SetActive(true);
+
+                player.GetComponent<HealthManager>().Resurrect();
 
                 player.GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
                 player.GetComponent<StarterAssetsInputs>().SetCursorLockState(true);

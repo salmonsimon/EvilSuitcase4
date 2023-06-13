@@ -141,6 +141,11 @@ namespace StarterAssets
             }
         }
 
+        private void OnEnable()
+        {
+            CinemachineCameraTarget.transform.rotation = Quaternion.Euler(Vector3.zero);
+        }
+
         private void Start()
         {
             _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
