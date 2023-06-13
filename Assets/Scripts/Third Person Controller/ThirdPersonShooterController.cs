@@ -129,7 +129,13 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     private void Update()
     {
-        if (!playerHealthManager.IsAlive) return;
+        if (!playerHealthManager.IsAlive) 
+        {
+            aimVirtualCamera.gameObject.SetActive(false);
+            crosshair.ShowCrossHairUI(false);
+
+            return;
+        }
 
         if (playerHealthAnimations.IsOnHurtAnimation)
         {

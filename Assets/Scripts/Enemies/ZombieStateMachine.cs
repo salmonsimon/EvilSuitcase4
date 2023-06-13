@@ -120,7 +120,8 @@ public class ZombieStateMachine : MonoBehaviour
 
     private void OnPlayerDeath()
     {
-        ChangeState(stateFactory.PlayerDead());
+        if (HealthManager.IsAlive)
+            ChangeState(stateFactory.PlayerDead());
     }
 
     public void PopulateBoneTransforms(BoneTransform[] boneTransforms)

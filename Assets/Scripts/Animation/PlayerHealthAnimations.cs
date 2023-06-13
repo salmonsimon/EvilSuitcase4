@@ -89,6 +89,14 @@ public class PlayerHealthAnimations : MonoBehaviour
         sfx.PlayRandomAudioClip(deathAudioClips);
 
         StartCoroutine(DeadCameraRocketMovement());
+        StartCoroutine(WaitAndOpenGameOverPanel(5f));
+    }
+
+    private IEnumerator WaitAndOpenGameOverPanel(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        GameManager.instance.GetPlayerHealthUI().GameOver();
     }
 
     private IEnumerator DeadCameraRocketMovement()

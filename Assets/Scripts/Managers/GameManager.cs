@@ -110,8 +110,8 @@ public class GameManager : MonoBehaviour
             inputGameplay = player.GetComponent<StarterAssetsInputs>();
             inputUI = player.GetComponent<InputsUI>();
 
-            player.GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
-            inputGameplay.SetCursorLockState(true);
+            player.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
+            inputGameplay.SetCursorLockState(false);
         }
     }
 
@@ -146,7 +146,9 @@ public class GameManager : MonoBehaviour
                 !isOnRewardsUI && 
                 !pauseMenuUI.IsOnKeyBindingsPanel &&
                 !pauseMenuUI.IsOnFastSwapConfiguration &&
-                !transitionManager.RunningTransition;
+                !transitionManager.RunningTransition &&
+                !isTeleporting &&
+                player.GetComponent<HealthManager>().IsAlive;
     }
 
     public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -184,6 +186,8 @@ public class GameManager : MonoBehaviour
 
             case Config.ROOFTOP_SCENE_NAME:
 
+                Debug.Log("Loaded rooftop scene");
+
                 mainMenu.gameObject.SetActive(false);
 
                 crosshair.gameObject.SetActive(true);
@@ -220,6 +224,9 @@ public class GameManager : MonoBehaviour
 
                 break;
         }
+
+        player.GetComponent<StarterAssetsInputs>().ResetInputs();
+        player.GetComponent<InputsUI>().ResetInputs();
 
         levelLoader.FinishTransition();
     }
