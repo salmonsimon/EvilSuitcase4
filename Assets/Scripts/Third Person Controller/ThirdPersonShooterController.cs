@@ -6,6 +6,7 @@ using StarterAssets;
 using UnityEngine.Animations.Rigging;
 using static Utils;
 using System;
+using UnityEngine.InputSystem;
 
 public class ThirdPersonShooterController : MonoBehaviour
 {
@@ -41,6 +42,10 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     private CrossHair crosshair;
 
+    private PlayerHealthAnimations playerHealthAnimations;
+
+    private HealthManager playerHealthManager;
+
     #endregion
 
     #region Logic Variables
@@ -62,6 +67,8 @@ public class ThirdPersonShooterController : MonoBehaviour
     private bool isAttacking = false;
     public bool IsAttacking { get { return isAttacking; } }
 
+    private bool initialized = false;
+
     #endregion
 
     #region Parameters
@@ -79,10 +86,107 @@ public class ThirdPersonShooterController : MonoBehaviour
 
         animator = GetComponent<Animator>();
         crosshair = GameManager.instance.GetCrossHair();
+        playerHealthAnimations = GetComponent<PlayerHealthAnimations>(); 
+        playerHealthManager = GetComponent<HealthManager>();
+    }
+
+    private void OnEnable()
+    {
+        if (initialized)
+        {
+            playerHealthManager.OnDeath += Death;
+            playerHealthManager.OnRevival += Revival;
+
+            GameManager.instance.GetTransitionManager().OnRunningTransitionValueChange += RunninTransitionValueChange;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (initialized)
+        {
+            playerHealthManager.OnDeath -= Death;
+            playerHealthManager.OnRevival -= Revival;
+
+            GameManager.instance.GetTransitionManager().OnRunningTransitionValueChange -= RunninTransitionValueChange;
+        }
+    }
+
+    private void Start()
+    {
+        if (playerHealthManager)
+        {
+            playerHealthManager.OnDeath += Death;
+            playerHealthManager.OnRevival += Revival;
+        }
+
+        GameManager.instance.GetTransitionManager().OnRunningTransitionValueChange += RunninTransitionValueChange;
+
+        initialized = true;
+    }
+
+    private void Death()
+    {
+        aiming = false;
+
+        thirdPersonController.enabled = false;
+    }
+
+    private void Revival()
+    {
+        thirdPersonController.enabled = true;
+    }
+
+    private void RunninTransitionValueChange()
+    {
+        if (GameManager.instance.GetTransitionManager().RunningTransition)
+        {
+            aiming = false;
+
+            starterAssetsInputs.ResetInputs();
+            GetComponent<InputsUI>().ResetInputs();
+
+            thirdPersonController.enabled = false;
+        }
+        else
+        {
+            starterAssetsInputs.ResetInputs();
+            GetComponent<InputsUI>().ResetInputs();
+
+            thirdPersonController.enabled = true;
+        }
     }
 
     private void Update()
     {
+        if (!playerHealthManager.IsAlive || GameManager.instance.GetTransitionManager().RunningTransition) 
+        {
+            aimVirtualCamera.gameObject.SetActive(false);
+            crosshair.ShowCrossHairUI(false);
+
+            return;
+        }
+
+        if (playerHealthAnimations.IsOnHurtAnimation)
+        {
+            aiming = false;
+
+            crosshair.ShowCrossHairUI(false);
+
+            aimVirtualCamera.gameObject.SetActive(false);
+
+            thirdPersonController.SetSensitivity(aimSensitivity);
+            thirdPersonController.SetRotateOnMove(true);
+            thirdPersonController.SetAbleToSprint(false);
+
+            thirdPersonController.MoveSpeed = aimMovementSpeed;
+
+            starterAssetsInputs.shoot = false;
+
+            return;
+        }
+            
+
         if (IsAttacking)
         {
             aiming = false;
@@ -440,5 +544,10 @@ public class ThirdPersonShooterController : MonoBehaviour
         yield return new WaitForSeconds(startTime);
 
         animator.Play(clipHash);
+    }
+
+    public bool CanTriggerHurtAnimation()
+    {
+        return !IsAttacking && !IsReloading;
     }
 }

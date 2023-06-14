@@ -10,10 +10,12 @@ public static class Config
     #region Tags
 
     public const string PROYECTILE_CONTAINER_TAG = "ProyectileContainer";
+    public const string DISPOSABLE_OBJECTS_CONTAINER_TAG = "DisposableObjectsContainer";
     public const string EFFECT_CONTAINER_TAG = "EffectContainer";
     public const string CROSSHAIR_TAG = "CrossHair";
     public const string PLAYER_TAG = "Player";
     public const string DIRECTIONAL_LIGHT_TAG = "DirectionalLight";
+    public const string MAIN_CAMERA_TAG = "MainCamera";
 
     #endregion
 
@@ -38,8 +40,8 @@ public static class Config
 
     public const string SHAKE_FILE = "Cinemachine/6D Shake";
 
-    public const float CAMERASHAKE_HIT_AMPLITUDE = 3f;
-    public const float CAMERASHAKE_HIT_DURATION = .1f;
+    public const float CAMERASHAKE_HIT_AMPLITUDE = 10f;
+    public const float CAMERASHAKE_HIT_DURATION = .4f;
 
     public const float CAMERASHAKE_EXPLOSION_AMPLITUDE = 10f;
     public const float CAMERASHAKE_EXPLOSION_DURATION = .5f;

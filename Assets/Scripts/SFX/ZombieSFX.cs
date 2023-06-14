@@ -10,14 +10,18 @@ public class ZombieSFX : SFX
     [SerializeField] private List<AudioClip> hurtAudioClips;
     [SerializeField] private List<AudioClip> deathAudioClips;
     [SerializeField] private List<AudioClip> stepAudioClips;
+    [SerializeField] private List<AudioClip> eatingAudioClips;
+    [SerializeField] private List<AudioClip> hitImpactAudioClip;
 
     private float timeUntilNextShortSound = -1f;
-    private float shortShoundMinDelay = .5f;
     private float shortSoundMaxDelay = 2f;
+
+    private float timeUntilNexEatingSound = -1f;
 
     private void Update()
     {
         timeUntilNextShortSound -= Time.deltaTime;
+        timeUntilNexEatingSound -= Time.deltaTime;
     }
 
     public void PlayRandomScreamAudioClip()
@@ -34,8 +38,13 @@ public class ZombieSFX : SFX
     {
         if (timeUntilNextShortSound < 0)
         {
-            PlayRandomAudioClip(shortSoundAudioClips);
-            timeUntilNextShortSound = Random.Range(shortShoundMinDelay, shortSoundMaxDelay);
+            int randomClipIndex = Random.Range(0, shortSoundAudioClips.Count);
+
+            PlayAudioClip(shortSoundAudioClips[randomClipIndex]);
+
+
+
+            timeUntilNextShortSound = Random.Range(shortSoundAudioClips[randomClipIndex].length, shortSoundAudioClips[randomClipIndex].length + shortSoundMaxDelay);
         }
     }
 
@@ -52,5 +61,24 @@ public class ZombieSFX : SFX
     public void PlayRandomStepAudioClip()
     {
         PlayRandomAudioClip(stepAudioClips);
+    }
+
+    public void PlayRandomEatingAudioClip()
+    {
+        if (timeUntilNexEatingSound < 0)
+        {
+            int randomEatingAudioClipIndex = Random.Range(0, eatingAudioClips.Count);
+
+            AudioClip randomEatingAudioClip = eatingAudioClips[randomEatingAudioClipIndex];
+
+            PlayAudioClip(randomEatingAudioClip);
+
+            timeUntilNexEatingSound = Random.Range(randomEatingAudioClip.length, randomEatingAudioClip.length + 1f);
+        }
+    }
+
+    public void PlayRandomHitImpactAudioClip()
+    {
+        PlayRandomAudioClip(hitImpactAudioClip);
     }
 }

@@ -5,13 +5,25 @@ using UnityEngine;
 
 public class EnemyBoxDamageDealer : MonoBehaviour
 {
-    [SerializeField] DamageDealerConfigScriptableObject damageDealerConfig;
+    [SerializeField] private DamageDealerConfigScriptableObject damageDealerConfig;
 
     private BoxCollider boxCollider;
+    private ZombieSFX zombieSFX;
+
+    private bool initialized = false;
 
     private void Start()
     {
         boxCollider = GetComponent<BoxCollider>();
+        zombieSFX = transform.parent.parent.GetComponent<ZombieSFX>();
+
+        initialized = true;
+    }
+
+    private void OnEnable()
+    {
+        if (initialized && zombieSFX == null)
+            zombieSFX = transform.parent.parent.GetComponent<ZombieSFX>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -21,6 +33,17 @@ public class EnemyBoxDamageDealer : MonoBehaviour
             damageable.ReceiveDamage(GetDamage(), Vector3.zero);
 
             boxCollider.enabled = false;
+
+            if (damageable.TryGetComponent(out HumanoidHurtGeometry humanoidHurtGeometry))
+            {
+                Vector3 enemyPosition = transform.root.position;
+                Vector3 closestPosition = other.ClosestPoint(enemyPosition);
+
+                Vector3 forceDirection = (closestPosition - enemyPosition).normalized;
+
+                GameManager.instance.GetBloodManager().SpawnBloodOnHit(damageable.transform, closestPosition, -forceDirection);
+                zombieSFX.PlayRandomHitImpactAudioClip();
+            }
         }
     }
 

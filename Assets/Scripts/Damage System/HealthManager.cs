@@ -15,7 +15,18 @@ public class HealthManager : MonoBehaviour
     #region CurrentHitPoints
 
     [SerializeField] private int currentHitPoints = 1;
-    public int CurrentHitPoints { get { return currentHitPoints; } set { currentHitPoints = value; } }
+    public int CurrentHitPoints { get { return currentHitPoints; } 
+        set 
+        {
+            if (value == currentHitPoints)
+                return;
+
+            currentHitPoints = value; 
+
+            if (OnCurrentHealthChange != null)
+                OnCurrentHealthChange();
+        } 
+    }
 
     public void SetHealth(int hitPoints)
     {
@@ -25,15 +36,30 @@ public class HealthManager : MonoBehaviour
 
     private void Damage(int damage)
     {
-        int damageTaken = Mathf.Clamp(damage, 0, currentHitPoints);
-        currentHitPoints -= damageTaken;
+        int damageTaken = Mathf.Clamp(damage, 0, CurrentHitPoints);
+        CurrentHitPoints -= damageTaken;
 
-        if (OnDamaged != null && currentHitPoints > 0)
+        if (OnDamaged != null)
             OnDamaged();
     }
 
+    private void Recover(int recoverAmount)
+    {
+        int clampedRecoverAmount = Mathf.Clamp(recoverAmount, 0, maxHitPoints - currentHitPoints);
+        CurrentHitPoints += clampedRecoverAmount;
+
+        if (OnRecover != null)
+            OnRecover();
+    }
+
+    public delegate void OnCurrentHealthChangeDelegate();
+    public event OnCurrentHealthChangeDelegate OnCurrentHealthChange;
+
     public delegate void OnDamagedDelegate();
     public event OnDamagedDelegate OnDamaged;
+
+    public delegate void OnRecoverDelegate();
+    public event OnRecoverDelegate OnRecover;
 
     #endregion
 
@@ -96,6 +122,12 @@ public class HealthManager : MonoBehaviour
                 Death();
             }
         }
+    }
+
+    public virtual void RecoverHealth(int recoverAmount)
+    {
+        if (IsAlive)
+            Recover(recoverAmount);
     }
 
     protected virtual void Death()

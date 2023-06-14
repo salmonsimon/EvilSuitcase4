@@ -76,6 +76,8 @@ public class ZombieStateMachine : MonoBehaviour
         healthManager.OnRevival += OnRevival;
 
         ragdollSystem.OnRagdollActivate += ActivateRagdoll;
+
+        player.GetComponent<HealthManager>().OnDeath += OnPlayerDeath;
     }
 
     private void OnAnimatorMove()
@@ -114,6 +116,12 @@ public class ZombieStateMachine : MonoBehaviour
     private void OnRevival()
     {
         ChangeState(stateFactory.Chase());
+    }
+
+    private void OnPlayerDeath()
+    {
+        if (HealthManager.IsAlive)
+            ChangeState(stateFactory.PlayerDead());
     }
 
     public void PopulateBoneTransforms(BoneTransform[] boneTransforms)

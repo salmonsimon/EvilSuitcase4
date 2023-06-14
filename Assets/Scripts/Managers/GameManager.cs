@@ -36,15 +36,26 @@ public class GameManager : MonoBehaviour
     [SerializeField] private PauseMenuUI pauseMenuUI;
     [SerializeField] private RewardsUI rewarsdUI;
     [SerializeField] private CrossHair crosshair;
+    [SerializeField] private PlayerHealthUI playerHealthUI;
 
     #endregion
 
     #region Containers
 
     [SerializeField] private GameObject cameraContainer;
+    public GameObject CameraContainer { get { return cameraContainer; } }
+
     [SerializeField] private GameObject effectContainer;
-    [SerializeField] private GameObject proyectileContainer;
+    public GameObject EffectContainer { get { return effectContainer; } }
+
+    [SerializeField] private GameObject projectileContainer;
+    public GameObject ProjectileContainer { get { return projectileContainer; } }
+
+    [SerializeField] private GameObject disposableObjectsContainer;
+    public GameObject DisposableObjectsContainer { get { return disposableObjectsContainer; } }
+
     [SerializeField] private GameObject poolContainer;
+    public GameObject PoolContainer { get { return poolContainer; } }
 
     #endregion
 
@@ -95,10 +106,11 @@ public class GameManager : MonoBehaviour
             Destroy(pauseMenuUI.gameObject);
             Destroy(rewarsdUI.gameObject);
             Destroy(crosshair.gameObject);
+            Destroy(playerHealthUI.gameObject);
 
             Destroy(cameraContainer);
             Destroy(effectContainer);
-            Destroy(proyectileContainer);
+            Destroy(projectileContainer);
             Destroy(poolContainer);
         }
         else
@@ -108,8 +120,8 @@ public class GameManager : MonoBehaviour
             inputGameplay = player.GetComponent<StarterAssetsInputs>();
             inputUI = player.GetComponent<InputsUI>();
 
-            player.GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
-            inputGameplay.SetCursorLockState(true);
+            player.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
+            inputGameplay.SetCursorLockState(false);
         }
     }
 
@@ -144,38 +156,41 @@ public class GameManager : MonoBehaviour
                 !isOnRewardsUI && 
                 !pauseMenuUI.IsOnKeyBindingsPanel &&
                 !pauseMenuUI.IsOnFastSwapConfiguration &&
-                !transitionManager.RunningTransition;
+                !transitionManager.RunningTransition &&
+                !isTeleporting &&
+                player.GetComponent<HealthManager>().IsAlive;
     }
 
     public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        StopAllCoroutines();
+
+        crosshair.gameObject.SetActive(false);
+        weaponDisplayUI.gameObject.SetActive(false);
+        playerHealthUI.gameObject.SetActive(false);
+        cinemachineShake.gameObject.SetActive(false);
+
+        inventoryManager.gameObject.SetActive(false);
+
+        pauseMenuUI.gameObject.SetActive(false);
+        enemySpawner.gameObject.SetActive(false);
+        waveManager.gameObject.SetActive(false);
+        rewarsdUI.gameObject.SetActive(false);
+
+        bloodManager.gameObject.SetActive(false);
+
+        player.GetComponent<ThirdPersonController>().enabled = false;
+        player.GetComponent<ThirdPersonShooterController>().enabled = false;
+
         switch (scene.name)
         {
             case Config.MAIN_MENU_SCENE_NAME:
 
-                StopAllCoroutines();
-
                 mainMenu.ResetMainMenu();
                 mainMenu.gameObject.SetActive(true);
 
-                crosshair.gameObject.SetActive(false);
-                weaponDisplayUI.gameObject.SetActive(false);
-                cinemachineShake.gameObject.SetActive(false);
-
-                inventoryManager.gameObject.SetActive(false);
-
-                pauseMenuUI.gameObject.SetActive(false);
-                enemySpawner.gameObject.SetActive(false);
-                waveManager.gameObject.SetActive(false);
-                rewarsdUI.gameObject.SetActive(false);
-
-                bloodManager.gameObject.SetActive(false);
-
                 player.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
                 player.GetComponent<StarterAssetsInputs>().SetCursorLockState(false);
-
-                player.GetComponent<ThirdPersonController>().enabled = false;
-                player.GetComponent<ThirdPersonShooterController>().enabled = false;
 
                 break;
 
@@ -188,6 +203,8 @@ public class GameManager : MonoBehaviour
                 weaponDisplayUI.gameObject.SetActive(true);
                 weaponDisplayUI.UnequipWeapon();
 
+                playerHealthUI.gameObject.SetActive(true);
+
                 cinemachineShake.gameObject.SetActive(true);
 
                 inventoryManager.gameObject.SetActive(true);
@@ -199,22 +216,23 @@ public class GameManager : MonoBehaviour
 
                 bloodManager.gameObject.SetActive(true);
 
+                player.GetComponent<HealthManager>().Resurrect();
+
                 player.GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
                 player.GetComponent<StarterAssetsInputs>().SetCursorLockState(true);
 
                 player.GetComponent<ThirdPersonController>().enabled = true;
-                // TO DO: RESET CAMERA ROTATION TO IDENTITY
 
                 player.GetComponent<ThirdPersonShooterController>().enabled = true;
                 player.GetComponent<ThirdPersonShooterController>().UnequipWeapon();
-
-                player.transform.position = GameObject.FindGameObjectWithTag("Respawn").transform.position;
-                player.transform.rotation = Quaternion.identity;
 
                 StartCoroutine(WaitAndEnableWaveManager());
 
                 break;
         }
+
+        player.GetComponent<StarterAssetsInputs>().ResetInputs();
+        player.GetComponent<InputsUI>().ResetInputs();
 
         levelLoader.FinishTransition();
     }
@@ -355,6 +373,11 @@ public class GameManager : MonoBehaviour
     public BloodManager GetBloodManager()
     {
         return bloodManager;
+    }
+
+    public PlayerHealthUI GetPlayerHealthUI()
+    {
+        return playerHealthUI;
     }
 
     #endregion

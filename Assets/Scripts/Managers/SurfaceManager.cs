@@ -13,9 +13,9 @@ public class SurfaceManager : MonoBehaviour
     private Dictionary<string, ObjectPool<GameObject>> ObjectPools = new();
     private GameObject effectContainer;
 
-    private void Awake()
+    private void Start()
     {
-        effectContainer = GameObject.FindGameObjectWithTag(Config.EFFECT_CONTAINER_TAG);
+        effectContainer = GameManager.instance.EffectContainer;
     }
 
     public void HandleFleshImpact(GameObject HitObject, Vector3 HitPoint, Vector3 HitNormal, ImpactType Impact, int TriangleIndex)
