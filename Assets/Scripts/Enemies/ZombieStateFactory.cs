@@ -9,7 +9,8 @@ enum ZombieStates
     Ragdoll,
     ResettingBones,
     Standing,
-    Dead
+    Dead,
+    PlayerDead
 }
 
 public class ZombieStateFactory
@@ -28,6 +29,7 @@ public class ZombieStateFactory
         states[ZombieStates.ResettingBones] = new ZombieResettingBonesState(context, this);
         states[ZombieStates.Standing] = new ZombieStandingState(context, this);
         states[ZombieStates.Dead] = new ZombieDeadState(context, this);
+        states[ZombieStates.PlayerDead] = new ZombiePlayerDeadState(context, this);
     }
 
     public ZombieBaseState Chase()
@@ -58,5 +60,10 @@ public class ZombieStateFactory
     public ZombieBaseState Dead()
     {
         return states[ZombieStates.Dead];
+    }
+
+    public ZombieBaseState PlayerDead()
+    {
+        return states[ZombieStates.PlayerDead];
     }
 }

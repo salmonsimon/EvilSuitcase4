@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using TMPro;
+using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Pool;
@@ -52,6 +53,8 @@ public class WaveManager : MonoBehaviour
 
     private int currentKilledEnemies = 0;
     private int currentEnemiesToKill = 0;
+
+    private bool initialized = false;
 
     #region Statistics Variables / Properties
 
@@ -118,7 +121,7 @@ public class WaveManager : MonoBehaviour
 
     #region Object References
 
-    private Transform poolContainer;
+    [SerializeField] private Transform poolContainer;
     public Transform PoolContainer { get { return poolContainer; } }
 
     [SerializeField] private GameObject nextWaveCountdownPanel;
@@ -142,21 +145,57 @@ public class WaveManager : MonoBehaviour
 
     #endregion
 
-    private void Awake()
+    private void ResetProgress()
     {
-        poolContainer = new GameObject("Pool Container").transform;
+        CurrentWave = 0;
+        TimeAlive = 0f;
+        HitsReceived = 0;
+        TotalEnemiesKilled = 0;
+
+        currentEnemiesToKill = 0;
+        currentKilledEnemies = 0;
+    }
+
+    private void OnEnable()
+    {
+        if (!initialized)
+            return;
+
+        ResetProgress();
+
+        GameManager.instance.GetPlayer().GetComponent<HealthManager>().OnDamaged += HitReceived;
+        GameManager.instance.GetPlayer().GetComponent<HealthManager>().OnDeath += Death;
+
+        NextWave();
+    }
+
+    private void OnDisable()
+    {
+        if (!initialized)
+            return;
+
+        GameManager.instance.GetPlayer().GetComponent<HealthManager>().OnDamaged -= HitReceived;
+        GameManager.instance.GetPlayer().GetComponent<HealthManager>().OnDeath -= Death;
     }
 
     private void Start()
     {
+        GameManager.instance.GetPlayer().GetComponent<HealthManager>().OnDamaged += HitReceived;
+        GameManager.instance.GetPlayer().GetComponent<HealthManager>().OnDeath += Death;
+
         NextWave();
 
-        GameManager.instance.GetPlayer().GetComponent<HealthManager>().OnDamaged += HitReceived;
+        initialized = true;
     }
 
     private void HitReceived()
     {
         HitsReceived++;
+    }
+
+    private void Death()
+    {
+        gameObject.SetActive(false);
     }
 
     private void Update()
@@ -343,16 +382,18 @@ public class WaveManager : MonoBehaviour
         return rewardItems;
     }
 
-    private void CorpseCleanup()
+    public void CorpseCleanup()
     {
         foreach (Transform corpse in PoolContainer)
         {
             ObjectPool<GameObject> pool = corpse.GetComponent<PoolableObject>().ObjectPool;
 
-            corpse.gameObject.SetActive(false);
+            if (corpse.gameObject.activeSelf)
+            {
+                corpse.gameObject.SetActive(false);
 
-            pool.Release(corpse.gameObject);
+                pool.Release(corpse.gameObject);
+            }
         }
-
     }
 }

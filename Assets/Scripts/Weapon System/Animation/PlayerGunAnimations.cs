@@ -10,11 +10,11 @@ public class PlayerGunAnimations : MonoBehaviour
     private Gun equippedWeapon;
     private GameObject animationObject;
 
-    private GameObject droppedObjectContainer;
+    private GameObject disposableObjectContainer;
 
-    private void Awake()
+    private void Start()
     {
-        droppedObjectContainer = GameObject.FindGameObjectWithTag(Config.PROYECTILE_CONTAINER_TAG);
+        disposableObjectContainer = GameManager.instance.DisposableObjectsContainer;
     }
 
     public void Setup(Gun equippedWeapon)
@@ -39,7 +39,7 @@ public class PlayerGunAnimations : MonoBehaviour
     public void PistolDropMagazine()
     {
         GameObject droppedMagazine = Instantiate(equippedWeapon.AnimationObject, equippedWeapon.AnimationObject.transform.position, equippedWeapon.AnimationObject.transform.rotation);
-        droppedMagazine.transform.parent = droppedObjectContainer.transform;
+        droppedMagazine.transform.parent = disposableObjectContainer.transform;
 
         droppedMagazine.AddComponent<Rigidbody>();
         droppedMagazine.GetComponent<Rigidbody>().collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
@@ -76,7 +76,7 @@ public class PlayerGunAnimations : MonoBehaviour
     public void MachinegunDropMagazine() 
     {
         GameObject droppedMagazine = Instantiate(animationObject, animationObject.transform.position, animationObject.transform.rotation);
-        droppedMagazine.transform.parent = droppedObjectContainer.transform;
+        droppedMagazine.transform.parent = disposableObjectContainer.transform;
 
         droppedMagazine.AddComponent<Rigidbody>();
         droppedMagazine.GetComponent<Rigidbody>().collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
@@ -113,7 +113,7 @@ public class PlayerGunAnimations : MonoBehaviour
     public void UziDropMagazine()
     {
         GameObject droppedMagazine = Instantiate(animationObject, animationObject.transform.position, animationObject.transform.rotation);
-        droppedMagazine.transform.parent = droppedObjectContainer.transform;
+        droppedMagazine.transform.parent = disposableObjectContainer.transform;
 
         droppedMagazine.AddComponent<Rigidbody>();
         droppedMagazine.GetComponent<Rigidbody>().collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;

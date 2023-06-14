@@ -56,6 +56,15 @@ public class LevelLoader : MonoBehaviour
                     StartCoroutine(CrossfadeEnd());
                     break;
             }
+
+            GameObject player = GameManager.instance.GetPlayer();
+
+            Animator playerAnimator = player.GetComponent<Animator>();
+            playerAnimator.Rebind();
+            playerAnimator.Update(0f);
+
+            player.transform.position = GameObject.FindGameObjectWithTag("Respawn").transform.position;
+            player.transform.rotation = Quaternion.identity;
         }
     }
 
