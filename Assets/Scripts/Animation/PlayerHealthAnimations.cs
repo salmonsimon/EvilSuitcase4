@@ -40,6 +40,8 @@ public class PlayerHealthAnimations : MonoBehaviour
     private HealthManager playerHealthManager;
     private SFX sfx;
 
+    private List<Collider> hurtColliders = new List<Collider>();
+
     private bool isOnHurtAnimation = false;
     public bool IsOnHurtAnimation { get { return isOnHurtAnimation; } }
 
@@ -56,6 +58,13 @@ public class PlayerHealthAnimations : MonoBehaviour
         playerHealthManager.OnRevival += Revival;
 
         playerDeadCamera.gameObject.SetActive(false);
+
+
+        foreach (HumanoidHurtGeometry humanoidHurtGeometry in
+                 GameManager.instance.GetPlayer().GetComponentsInChildren<HumanoidHurtGeometry>())
+        {
+            hurtColliders.Add(humanoidHurtGeometry.GetComponent<Collider>());
+        }
     }
 
     private void Damaged()
@@ -68,7 +77,11 @@ public class PlayerHealthAnimations : MonoBehaviour
         float hitPointsPercentage = currentHitPoints / maxHitPoints;
 
         if (hitPointsPercentage < criticalHealthThreshold && !GameManager.instance.GetPlayerHealthUI().CriticalHealthGlobalVolume.IsEnabled)
+        {
+            //animator.SetBool("IsHurt", true);
             GameManager.instance.GetPlayerHealthUI().CriticalHealthGlobalVolume.Enable();
+        }
+            
     }
 
     private void Recover()
@@ -78,11 +91,16 @@ public class PlayerHealthAnimations : MonoBehaviour
         float hitPointsPercentage = currentHitPoints / maxHitPoints;
 
         if (hitPointsPercentage > criticalHealthThreshold && GameManager.instance.GetPlayerHealthUI().CriticalHealthGlobalVolume.IsEnabled)
+        {
+            //animator.SetBool("IsHurt", false);
             GameManager.instance.GetPlayerHealthUI().CriticalHealthGlobalVolume.Disable();
+        }
+            
     }
 
     private void Death()
     {
+        ActivateHurtColliders();
         PlayRandomDeathAnimation();
     }
 
@@ -122,7 +140,13 @@ public class PlayerHealthAnimations : MonoBehaviour
         GameManager.instance.GetPlayerHealthUI().HurtGlobalVolume.Disable();
     }
 
-    public void PlayRandomDeathAnimation()
+    private void ActivateHurtColliders()
+    {
+        foreach (Collider collider in hurtColliders)
+            collider.isTrigger = false;
+    }
+
+    private void PlayRandomDeathAnimation()
     {
         StopAllCoroutines();
 
@@ -198,8 +222,8 @@ public class PlayerHealthAnimations : MonoBehaviour
         playerDeadCamera.Priority = 1;
         playerDeadCamera.gameObject.SetActive(false);
 
-        playerDeadCamera.transform.rotation = Quaternion.Euler(Vector3.zero);
-        playerDeadCameraRootTransform.position = new Vector3(0f, deadCameraRootDefaultHeight, 0f);
+        playerDeadCamera.transform.localEulerAngles = new Vector3(90, 0, 0);
+        playerDeadCameraRootTransform.localPosition = new Vector3(0f, deadCameraRootDefaultHeight, 0f);
     }
 
     public void FinishHurtAnimation()

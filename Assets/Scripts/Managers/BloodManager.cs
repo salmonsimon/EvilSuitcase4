@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BloodManager : MonoBehaviour
 {
@@ -26,6 +29,8 @@ public class BloodManager : MonoBehaviour
 
         if (light)
             directionalLight = light.GetComponent<Light>();
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void OnDisable()
@@ -33,21 +38,32 @@ public class BloodManager : MonoBehaviour
         Destroy(bloodContainer.gameObject);
 
         directionalLight = null;
+
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    private int effectIdx = 0;
+    public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        GameObject light = GameObject.FindGameObjectWithTag(Config.DIRECTIONAL_LIGHT_TAG);
+
+        if (light)
+            directionalLight = light.GetComponent<Light>();
+    }
+
+
+    //private int effectIdx = 0;
 
     public void SpawnBloodOnHit(RaycastHit hit)
     {
         float angle = Mathf.Atan2(hit.normal.x, hit.normal.z) * Mathf.Rad2Deg + 180;
 
-        //var effectIdx = Random.Range(0, bloodEffectPrefabs.Length);
+        var effectIdx = Random.Range(0, bloodEffectPrefabs.Length);
 
-        if (effectIdx == bloodEffectPrefabs.Length) effectIdx = 0;
+        //if (effectIdx == bloodEffectPrefabs.Length) effectIdx = 0;
 
         var bloodInstance = Instantiate(bloodEffectPrefabs[effectIdx], hit.point, Quaternion.Euler(0, angle + 90, 0), bloodContainer.transform);
 
-        effectIdx++;
+        //effectIdx++;
 
         var settings = bloodInstance.GetComponent<BFX_BloodSettings>();
         settings.FreezeDecalDisappearance = infiniteDecal;
@@ -74,7 +90,7 @@ public class BloodManager : MonoBehaviour
 
         var effectIdx = Random.Range(0, bloodEffectPrefabs.Length);
 
-        var bloodInstance = Instantiate(bloodEffectPrefabs[effectIdx], hitPosition, Quaternion.Euler(0, angle + 90, 0));
+        var bloodInstance = Instantiate(bloodEffectPrefabs[effectIdx], hitPosition, Quaternion.Euler(0, angle + 90, 0), bloodContainer.transform);
 
         var settings = bloodInstance.GetComponent<BFX_BloodSettings>();
         settings.FreezeDecalDisappearance = infiniteDecal;

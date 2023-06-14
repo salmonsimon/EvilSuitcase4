@@ -11,8 +11,11 @@ public class GunHitscanAnimations : GunAnimations
     protected override void Awake()
     {
         base.Awake();
+    }
 
-        bulletContainer = GameObject.FindGameObjectWithTag(Config.PROYECTILE_CONTAINER_TAG);
+    private void Start()
+    {
+        bulletContainer = GameManager.instance.DisposableObjectsContainer;
     }
 
     public void DropBullet()

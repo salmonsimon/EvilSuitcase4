@@ -14,7 +14,6 @@ public class ZombieSFX : SFX
     [SerializeField] private List<AudioClip> hitImpactAudioClip;
 
     private float timeUntilNextShortSound = -1f;
-    private float shortShoundMinDelay = .5f;
     private float shortSoundMaxDelay = 2f;
 
     private float timeUntilNexEatingSound = -1f;
@@ -39,8 +38,13 @@ public class ZombieSFX : SFX
     {
         if (timeUntilNextShortSound < 0)
         {
-            PlayRandomAudioClip(shortSoundAudioClips);
-            timeUntilNextShortSound = Random.Range(shortShoundMinDelay, shortSoundMaxDelay);
+            int randomClipIndex = Random.Range(0, shortSoundAudioClips.Count);
+
+            PlayAudioClip(shortSoundAudioClips[randomClipIndex]);
+
+
+
+            timeUntilNextShortSound = Random.Range(shortSoundAudioClips[randomClipIndex].length, shortSoundAudioClips[randomClipIndex].length + shortSoundMaxDelay);
         }
     }
 

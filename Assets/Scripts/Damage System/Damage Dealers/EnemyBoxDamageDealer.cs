@@ -10,10 +10,20 @@ public class EnemyBoxDamageDealer : MonoBehaviour
     private BoxCollider boxCollider;
     private ZombieSFX zombieSFX;
 
+    private bool initialized = false;
+
     private void Start()
     {
         boxCollider = GetComponent<BoxCollider>();
-        zombieSFX = transform.parent.root.GetComponent<ZombieSFX>();
+        zombieSFX = transform.parent.parent.GetComponent<ZombieSFX>();
+
+        initialized = true;
+    }
+
+    private void OnEnable()
+    {
+        if (initialized && zombieSFX == null)
+            zombieSFX = transform.parent.parent.GetComponent<ZombieSFX>();
     }
 
     private void OnTriggerEnter(Collider other)

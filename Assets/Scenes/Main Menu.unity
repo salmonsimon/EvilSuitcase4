@@ -5409,6 +5409,7 @@ Transform:
   - {fileID: 947617520}
   - {fileID: 566461500}
   - {fileID: 2028249259}
+  - {fileID: 2071884463}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -11154,7 +11155,8 @@ MonoBehaviour:
   playerHealthUI: {fileID: 2028249263}
   cameraContainer: {fileID: 1875959691}
   effectContainer: {fileID: 151810898}
-  proyectileContainer: {fileID: 1713069000}
+  projectileContainer: {fileID: 1713069000}
+  disposableObjectsContainer: {fileID: 2071884462}
   poolContainer: {fileID: 947617519}
   isOnMainMenu: 1
 --- !u!4 &1404867715
@@ -13275,7 +13277,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1713069001}
   m_Layer: 0
-  m_Name: Proyectile Container
+  m_Name: Projectile Container
   m_TagString: ProyectileContainer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16042,6 +16044,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50e537d7997c9c34b8e2fa19dff3b44a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &2071884462
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2071884463}
+  m_Layer: 0
+  m_Name: DisposableObjects
+  m_TagString: DisposableObjectsContainer
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2071884463
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2071884462}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 712005138}
+  m_RootOrder: 23
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2083193323
 GameObject:
   m_ObjectHideFlags: 0
@@ -19232,7 +19265,7 @@ MonoBehaviour:
     m_ActionName: UI/New action
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: 3f130b04-9a28-4b2c-bc49-e841dddacf21
+  m_DefaultActionMap: UI
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!143 &4416926082601959638
@@ -19765,6 +19798,16 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
+        type: 3}
+      propertyPath: poolContainer
+      value: 
+      objectReference: {fileID: 947617520}
+    - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
+        type: 3}
+      propertyPath: effectContainer
+      value: 
+      objectReference: {fileID: 151810899}
     - target: {fileID: 5435146856260714782, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
         type: 3}
       propertyPath: m_Pivot.x
@@ -20614,7 +20657,7 @@ Animator:
   m_GameObject: {fileID: 4416926082601959644}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 8adf2095471f46a4296a59509006c214, type: 3}
-  m_Controller: {fileID: 9100000, guid: 40db3173a05ae3242b1c182a09b0a183, type: 2}
+  m_Controller: {fileID: 9100000, guid: 83b78732db07a0b4d9024ded227f121f, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

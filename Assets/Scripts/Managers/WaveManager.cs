@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using TMPro;
+using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Pool;
@@ -120,7 +121,7 @@ public class WaveManager : MonoBehaviour
 
     #region Object References
 
-    private Transform poolContainer;
+    [SerializeField] private Transform poolContainer;
     public Transform PoolContainer { get { return poolContainer; } }
 
     [SerializeField] private GameObject nextWaveCountdownPanel;
@@ -153,12 +154,6 @@ public class WaveManager : MonoBehaviour
 
         currentEnemiesToKill = 0;
         currentKilledEnemies = 0;
-
-    }
-
-    private void Awake()
-    {
-        poolContainer = new GameObject("Pool Container").transform;
     }
 
     private void OnEnable()
@@ -387,16 +382,18 @@ public class WaveManager : MonoBehaviour
         return rewardItems;
     }
 
-    private void CorpseCleanup()
+    public void CorpseCleanup()
     {
         foreach (Transform corpse in PoolContainer)
         {
             ObjectPool<GameObject> pool = corpse.GetComponent<PoolableObject>().ObjectPool;
 
-            corpse.gameObject.SetActive(false);
+            if (corpse.gameObject.activeSelf)
+            {
+                corpse.gameObject.SetActive(false);
 
-            pool.Release(corpse.gameObject);
+                pool.Release(corpse.gameObject);
+            }
         }
-
     }
 }

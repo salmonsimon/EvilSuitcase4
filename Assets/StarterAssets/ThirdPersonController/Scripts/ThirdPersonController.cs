@@ -131,6 +131,24 @@ namespace StarterAssets
             }
         }
 
+        private void Reset()
+        {
+            recoil = Vector2.zero;
+
+            _cinemachineTargetYaw = 0;
+            _cinemachineTargetPitch = 0;
+
+            _speed = 0;
+            _animationBlend = 0;
+            _targetRotation = 0.0f;
+            _rotationVelocity = 0;
+            _verticalVelocity = 0;
+            _terminalVelocity = 53.0f;
+
+            _rotateOnMove = true;
+
+            CinemachineCameraTarget.transform.localEulerAngles = Vector3.zero;
+        }
 
         private void Awake()
         {
@@ -143,7 +161,13 @@ namespace StarterAssets
 
         private void OnEnable()
         {
-            CinemachineCameraTarget.transform.rotation = Quaternion.Euler(Vector3.zero);
+            Reset();
+        }
+
+        private void OnDisable()
+        {
+            if (_hasAnimator)
+                _animator.SetFloat(_animIDSpeed, 0f);
         }
 
         private void Start()

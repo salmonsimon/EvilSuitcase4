@@ -25,6 +25,8 @@ public class PlayerHealthUI : MonoBehaviour
 
     private HealthManager playerHealthManager;
 
+    private bool isOpeningMainMenu = false;
+
     private void OnEnable()
     {
         if (playerHealthManager)
@@ -42,6 +44,8 @@ public class PlayerHealthUI : MonoBehaviour
     {
         if (playerHealthManager)
             playerHealthManager.OnCurrentHealthChange -= Damaged;
+
+        isOpeningMainMenu = false;
     }
 
     private void Start()
@@ -74,14 +78,22 @@ public class PlayerHealthUI : MonoBehaviour
 
     public void ToMainMenu()
     {
-        StartCoroutine(ToMainMenuCoroutine());
+        if (!isOpeningMainMenu || GameManager.instance.IsTeleporting())
+            StartCoroutine(ToMainMenuCoroutine());
     }
 
     private IEnumerator ToMainMenuCoroutine()
     {
+        isOpeningMainMenu = true;
+
         gameOverPanel.GetComponent<Animator>().SetTrigger(Config.ANIMATOR_HIDE_COUNTERS);
 
         yield return new WaitForSeconds(2f);
+
+        GameManager.instance.GetWaveManager().CorpseCleanup();
+
+        foreach (Transform child in GameManager.instance.DisposableObjectsContainer.transform)
+            Destroy(child.gameObject);
 
         GameManager.instance.ToMainMenu();
     }
@@ -96,13 +108,18 @@ public class PlayerHealthUI : MonoBehaviour
 
     private IEnumerator PlayGameCoroutine()
     {
+        GameManager.instance.SetIsTeleporting(true);
+
         gameOverPanel.GetComponent<Animator>().SetTrigger(Config.ANIMATOR_HIDE_COUNTERS);
 
         yield return new WaitForSeconds(2f);
 
-        GameManager.instance.SetIsTeleporting(true);
-
         GameManager.instance.GetSFXManager().PlaySound(Config.EVIL_LAUGH_SFX);
+
+        GameManager.instance.GetWaveManager().CorpseCleanup();
+
+        foreach (Transform child in GameManager.instance.DisposableObjectsContainer.transform)
+            Destroy(child.gameObject);
 
         GameManager.instance.GetLevelLoader().LoadLevel(SceneManager.GetActiveScene().name, Config.CROSSFADE_TRANSITION);
     }

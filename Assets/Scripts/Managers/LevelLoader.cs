@@ -57,9 +57,14 @@ public class LevelLoader : MonoBehaviour
                     break;
             }
 
-            Animator playerAnimator = GameManager.instance.GetPlayer().GetComponent<Animator>();
+            GameObject player = GameManager.instance.GetPlayer();
+
+            Animator playerAnimator = player.GetComponent<Animator>();
             playerAnimator.Rebind();
             playerAnimator.Update(0f);
+
+            player.transform.position = GameObject.FindGameObjectWithTag("Respawn").transform.position;
+            player.transform.rotation = Quaternion.identity;
         }
     }
 
