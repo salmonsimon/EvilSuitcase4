@@ -18,8 +18,17 @@ public class ZombieChaseState : ZombieBaseState
 
     public override void EnterState()
     {
+        context.Agent.enabled = false;
+        context.Agent.enabled = true;
+
+        context.Animator.enabled = false;
+        context.Animator.enabled = true;
+
         context.Animator.SetTrigger("Chase");
         context.Animator.SetBool("IsChasing", true);
+
+        context.RagdollSystem.RagdollMode = false;
+        context.RagdollSystem.SetRagdoll(true, true);
 
         randomDeviation = Random.Range(0, 1);
     }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Windows;
@@ -30,6 +31,8 @@ public class ZombieStateMachine : MonoBehaviour
     private BoneTransform[] standUpFromBellyBoneTransforms;
     private BoneTransform[] standUpFromBackBoneTransforms;
     private BoneTransform[] ragdollBoneTransforms;
+
+    private bool initialized = false;
 
     private void Awake()
     {
@@ -78,6 +81,17 @@ public class ZombieStateMachine : MonoBehaviour
         ragdollSystem.OnRagdollActivate += ActivateRagdoll;
 
         player.GetComponent<HealthManager>().OnDeath += OnPlayerDeath;
+
+        initialized = true;
+    }
+
+    private void OnEnable()
+    {
+        if (initialized)
+        {
+            currentState = stateFactory.Chase();
+            currentState.EnterState();
+        }
     }
 
     private void OnAnimatorMove()
@@ -115,6 +129,9 @@ public class ZombieStateMachine : MonoBehaviour
 
     private void OnRevival()
     {
+        Animator.enabled = false;
+        Animator.enabled = true;
+
         ChangeState(stateFactory.Chase());
     }
 

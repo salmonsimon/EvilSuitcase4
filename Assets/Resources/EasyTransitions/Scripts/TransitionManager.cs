@@ -13,7 +13,7 @@ namespace EasyTransition
         
         [SerializeField] private GameObject transitionTemplate;
 
-        private bool runningTransition;
+        private bool runningTransition = false;
         public bool RunningTransition { get { return runningTransition; } 
             private set 
             {

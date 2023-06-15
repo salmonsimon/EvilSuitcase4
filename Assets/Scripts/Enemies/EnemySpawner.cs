@@ -11,6 +11,42 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private List<Transform> spawnPositions;
     [SerializeField] private float maxDelayUntilNextSpawn = 4f;
 
+    [SerializeField] private List<GameObject> enemyPrefabs;
+    [SerializeField] private int defaultSpawnCount = 100;
+
+    private void Awake()
+    {
+        SpawnZombiesOnAwake();
+    }
+
+    private void SpawnZombiesOnAwake()
+    {
+        Dictionary<string, ObjectPool<GameObject>> objectPools = GameManager.instance.GetWaveManager().SpawnedObjectPoolsDictionary;
+        Transform poolContainer = GameManager.instance.GetWaveManager().PoolContainer;
+
+        foreach (GameObject enemy in enemyPrefabs)
+        {
+            for (int i = 0; i < defaultSpawnCount; i++)
+            {
+                if (!objectPools.ContainsKey(enemy.name))
+                {
+                    objectPools.Add(enemy.name, new ObjectPool<GameObject>(() => Instantiate(enemy, poolContainer)));
+                }
+
+                GameObject spawnedEnemy = objectPools[enemy.name].Get();
+
+                spawnedEnemy.GetComponent<HealthManager>().OnDeath += GameManager.instance.GetWaveManager().OnEnemyDeath;
+
+                spawnedEnemy.AddComponent<PoolableObject>();
+                spawnedEnemy.GetComponent<PoolableObject>().ObjectPool = objectPools[enemy.name];
+
+                spawnedEnemy.SetActive(false);
+            }
+        }
+
+        EnemiesInitializationPoolRelease();
+    }
+
     public void SpawnEnemies(WaveManager.WaveSpawnStruct wave)
     {
         List<GameObject> enemyPrefabs = new List<GameObject>();
@@ -50,15 +86,21 @@ public class EnemySpawner : MonoBehaviour
 
             GameObject spawnedEnemy = objectPools[enemyToSpawnName].Get();
 
-            spawnedEnemy.GetComponent<HealthManager>().OnDeath += GameManager.instance.GetWaveManager().OnEnemyDeath;
+            if (!spawnedEnemy.activeSelf)
+            {
+                spawnedEnemy.SetActive(true);
+            }
+            else
+            {
+                spawnedEnemy.GetComponent<HealthManager>().OnDeath += GameManager.instance.GetWaveManager().OnEnemyDeath;
 
-            spawnedEnemy.AddComponent<PoolableObject>();
-            spawnedEnemy.GetComponent<PoolableObject>().ObjectPool = objectPools[enemyToSpawnName];
+                spawnedEnemy.AddComponent<PoolableObject>();
+                spawnedEnemy.GetComponent<PoolableObject>().ObjectPool = objectPools[enemyToSpawnName];
+            }
 
             NavMeshHit Hit;
             if (NavMesh.SamplePosition(randomSpawnPosition, out Hit, 5f, -1))
             {
-
                 spawnedEnemy.GetComponent<ZombieStateMachine>().Agent.Warp(Hit.position);
                 spawnedEnemy.GetComponent<ZombieStateMachine>().Agent.enabled = true;
             }
@@ -104,6 +146,17 @@ public class EnemySpawner : MonoBehaviour
         for (int i = 0; i < enemySpawnProbabilities.Count; i++)
         {
             enemySpawnProbabilities[i] /= totalProbability;
+        }
+    }
+
+    private void EnemiesInitializationPoolRelease()
+    {
+        Transform poolContainer = GameManager.instance.GetWaveManager().PoolContainer;
+
+        foreach (Transform enemy in poolContainer)
+        {
+            ObjectPool<GameObject> pool = enemy.GetComponent<PoolableObject>().ObjectPool;
+            pool.Release(enemy.gameObject);
         }
     }
 }

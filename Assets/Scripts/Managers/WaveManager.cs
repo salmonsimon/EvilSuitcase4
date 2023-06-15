@@ -154,6 +154,9 @@ public class WaveManager : MonoBehaviour
 
         currentEnemiesToKill = 0;
         currentKilledEnemies = 0;
+
+        waveClearedPanel.SetActive(false);
+        nextWaveCountdownPanel.SetActive(false);
     }
 
     private void OnEnable()
@@ -387,6 +390,9 @@ public class WaveManager : MonoBehaviour
         foreach (Transform corpse in PoolContainer)
         {
             ObjectPool<GameObject> pool = corpse.GetComponent<PoolableObject>().ObjectPool;
+
+            if (corpse.TryGetComponent(out HealthManager healthManager) && !healthManager.IsAlive)
+                healthManager.Resurrect();
 
             if (corpse.gameObject.activeSelf)
             {
