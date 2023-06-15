@@ -93,6 +93,9 @@ public class InventoryManager : MonoBehaviour
         for (int j = SavedItems.Count - 1; j >= 0; j--)
             SavedItems[j].Discard();
 
+        blockedItems.Clear();
+        savedItems.Clear();
+
         fastSwapIndex = 0;
         CurrentEquippedWeaponShortcutIndex = -1;
     }

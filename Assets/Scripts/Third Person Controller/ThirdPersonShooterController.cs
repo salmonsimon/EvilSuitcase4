@@ -146,14 +146,14 @@ public class ThirdPersonShooterController : MonoBehaviour
             starterAssetsInputs.ResetInputs();
             GetComponent<InputsUI>().ResetInputs();
 
-            thirdPersonController.enabled = false;
+            thirdPersonController.AbleToMove = false;
         }
         else
         {
             starterAssetsInputs.ResetInputs();
             GetComponent<InputsUI>().ResetInputs();
 
-            thirdPersonController.enabled = true;
+            thirdPersonController.AbleToMove = true;
         }
     }
 

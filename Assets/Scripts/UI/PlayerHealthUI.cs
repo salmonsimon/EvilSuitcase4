@@ -90,12 +90,15 @@ public class PlayerHealthUI : MonoBehaviour
 
         yield return new WaitForSeconds(2f);
 
-        GameManager.instance.GetWaveManager().CorpseCleanup();
-
         foreach (Transform child in GameManager.instance.DisposableObjectsContainer.transform)
             Destroy(child.gameObject);
 
         GameManager.instance.ToMainMenu();
+
+        yield return new WaitForSeconds(Config.LARGE_DELAY);
+
+        GameManager.instance.GetWaveManager().CorpseCleanup();
+        GameManager.instance.GetBloodManager().BloodCleanup();
     }
 
     public void PlayGame()
@@ -116,11 +119,16 @@ public class PlayerHealthUI : MonoBehaviour
 
         GameManager.instance.GetSFXManager().PlaySound(Config.EVIL_LAUGH_SFX);
 
-        GameManager.instance.GetWaveManager().CorpseCleanup();
-
         foreach (Transform child in GameManager.instance.DisposableObjectsContainer.transform)
             Destroy(child.gameObject);
 
         GameManager.instance.GetLevelLoader().LoadLevel(SceneManager.GetActiveScene().name, Config.CROSSFADE_TRANSITION);
+
+        yield return new WaitForSeconds(Config.LARGE_DELAY);
+
+        GameManager.instance.GetWaveManager().CorpseCleanup();
+        GameManager.instance.GetBloodManager().BloodCleanup();
+
+        GameManager.instance.GetPlayer().transform.position = GameObject.FindGameObjectWithTag("Respawn").transform.position;
     }
 }
