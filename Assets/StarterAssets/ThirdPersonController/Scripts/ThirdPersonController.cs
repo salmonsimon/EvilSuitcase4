@@ -119,6 +119,18 @@ namespace StarterAssets
 
         private ThirdPersonShooterController thirdPersonShooterController;
 
+        [SerializeField] private bool ableToMove = true;
+        public bool AbleToMove { get { return ableToMove; }  set 
+            {
+                if (value == ableToMove)
+                    return;
+
+                ableToMove = value;
+
+                ResetSpeed();
+            } 
+        }
+
         private bool IsCurrentDeviceMouse
         {
             get
@@ -128,6 +140,19 @@ namespace StarterAssets
 #else
 				return false;
 #endif
+            }
+        }
+
+        private void ResetSpeed()
+        {
+            _speed = 0;
+            _animationBlend = 0;
+
+            // update animator if using character
+            if (_hasAnimator)
+            {
+                _animator.SetFloat(_animIDSpeed, _animationBlend);
+                _animator.SetFloat(_animIDMotionSpeed, 1);
             }
         }
 
@@ -198,7 +223,9 @@ namespace StarterAssets
 
             JumpAndGravity();
             GroundedCheck();
-            Move();
+
+            if (AbleToMove)
+                Move();
         }
 
         private void LateUpdate()
