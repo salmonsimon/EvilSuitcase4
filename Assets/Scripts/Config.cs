@@ -103,6 +103,7 @@ public static class Config
     public const string TRANSITION_END_SFX = "TransitionEnd";
     public const string BLOOD_SPLATTER_SFX = "BloodSplatter";
     public const string HEARTBEAT_SFX = "Heartbeat";
+    public const string POTION_SFX = "Potion";
 
     #endregion
 }
