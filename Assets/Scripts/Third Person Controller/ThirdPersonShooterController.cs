@@ -51,7 +51,9 @@ public class ThirdPersonShooterController : MonoBehaviour
     #region Logic Variables
 
     private Vector3 aimDirection;
+
     private bool aiming = false;
+    public bool Aiming { get { return aiming; } }
 
     private bool isReloading = false;
     public bool IsReloading { get { return isReloading; } }

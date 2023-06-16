@@ -70,7 +70,6 @@ public class Gun : Weapon
     protected virtual void Awake()
     {
         ShootParticleSystem = GetComponentInChildren<ParticleSystem>();
-        crossHairTarget = GameObject.FindGameObjectWithTag(Config.CROSSHAIR_TAG).transform;
         weaponAnimations = GetComponentInChildren<GunAnimations>();
 
         LastshootTime = -gunConfiguration.ShootConfig.FireRate;
@@ -79,7 +78,9 @@ public class Gun : Weapon
         //starterAssetInputs = GameManager.instance.GetPlayer().GetComponent<StarterAssetsInputs>();
 
         ammoDisplayUI = GameManager.instance.GetWeaponDisplayUI();
+
         crossHair = GameManager.instance.GetCrossHair();
+        crossHairTarget = crossHair.CrossHairTarget;
     }
 
     private void Update()

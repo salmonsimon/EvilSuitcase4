@@ -5981,6 +5981,37 @@ Transform:
   m_Father: {fileID: 1713423586}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &748044294
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 748044295}
+  m_Layer: 0
+  m_Name: CrossHair Target
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &748044295
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 748044294}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1959294768}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &757527692
 GameObject:
   m_ObjectHideFlags: 0
@@ -16652,9 +16683,9 @@ MonoBehaviour:
   m_CameraRadius: 0.2
   m_Strategy: 1
   m_MaximumEffort: 2
-  m_SmoothingTime: 0.1
-  m_Damping: 0.5
-  m_DampingWhenOccluded: 0.5
+  m_SmoothingTime: 0.5
+  m_Damping: 7
+  m_DampingWhenOccluded: 7
   m_OptimalTargetDistance: 1
 --- !u!1 &2128945344
 GameObject:
@@ -18346,6 +18377,21 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2876668651881942955, guid: 1351a220834ccff4394bcfa43f4f7d17,
+        type: 3}
+      propertyPath: crossHairSpeed
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2876668651881942955, guid: 1351a220834ccff4394bcfa43f4f7d17,
+        type: 3}
+      propertyPath: hitMask.m_Bits
+      value: 2369
+      objectReference: {fileID: 0}
+    - target: {fileID: 2876668651881942955, guid: 1351a220834ccff4394bcfa43f4f7d17,
+        type: 3}
+      propertyPath: crossHairTarget
+      value: 
+      objectReference: {fileID: 748044295}
     - target: {fileID: 2876668651881942964, guid: 1351a220834ccff4394bcfa43f4f7d17,
         type: 3}
       propertyPath: m_RootOrder
@@ -18354,7 +18400,7 @@ PrefabInstance:
     - target: {fileID: 2876668651881942964, guid: 1351a220834ccff4394bcfa43f4f7d17,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.712873
+      value: 1.38
       objectReference: {fileID: 0}
     - target: {fileID: 2876668651881942964, guid: 1351a220834ccff4394bcfa43f4f7d17,
         type: 3}
@@ -18364,7 +18410,7 @@ PrefabInstance:
     - target: {fileID: 2876668651881942964, guid: 1351a220834ccff4394bcfa43f4f7d17,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 6.16
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2876668651881942964, guid: 1351a220834ccff4394bcfa43f4f7d17,
         type: 3}

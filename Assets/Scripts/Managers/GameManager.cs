@@ -158,6 +158,7 @@ public class GameManager : MonoBehaviour
                 !pauseMenuUI.IsOnFastSwapConfiguration &&
                 !transitionManager.RunningTransition &&
                 !isTeleporting &&
+                !player.GetComponent<PlayerHealthAnimations>().IsOnHurtAnimation &&
                 player.GetComponent<HealthManager>().IsAlive;
     }
 
