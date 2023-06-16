@@ -36,6 +36,7 @@ public class SFXManager : MonoBehaviour
     [SerializeField] private AudioClip transitionEndSFX;
     [SerializeField] private AudioClip bloodSplatterSFX;
     [SerializeField] private AudioClip heartbeatSFX;
+    [SerializeField] private AudioClip potionSFX;
 
     private void Awake()
     {
@@ -140,6 +141,10 @@ public class SFXManager : MonoBehaviour
 
             case Config.HEARTBEAT_SFX:
                 audioSource.PlayOneShot(heartbeatSFX);
+                break;
+
+            case Config.POTION_SFX:
+                audioSource.PlayOneShot(potionSFX);
                 break;
         }
     }
