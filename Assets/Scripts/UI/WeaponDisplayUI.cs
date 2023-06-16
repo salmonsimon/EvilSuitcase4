@@ -43,6 +43,8 @@ public class WeaponDisplayUI : MonoBehaviour
         MeleeItem equippedItem = (MeleeItem)GameManager.instance.GetInventoryManager().EquippedItem;
         float currentDurability = equippedItem.CurrentDurability;
 
+        currentAmmoType = AmmoType.None;
+
         UpdateCounters(currentDurability);
     }
 
@@ -80,6 +82,9 @@ public class WeaponDisplayUI : MonoBehaviour
 
     public void UpdateStockedAmmoCounter()
     {
+        if (currentAmmoType.Equals(AmmoType.None))
+            return;
+
         int currentStockedAmmo = GameManager.instance.GetInventoryManager().StockedAmmoDictionary[currentAmmoType];
 
         string currentStockedAmmoText = ((currentStockedAmmo < 10) ? "0" : "") + currentStockedAmmo;

@@ -25,7 +25,7 @@ public class RagdollSystem : MonoBehaviour
 
     [SerializeField] private float MaxHitForce = 500f;
     [SerializeField] private float accumulatedHitForce = 0;
-    private float accumulatedHitForceRecoveryMultiplier = 25f;
+    private float accumulatedHitForceRecoveryMultiplier = 5f;
 
     [SerializeField] private bool ragdollMode = false;
     public bool RagdollMode { get { return ragdollMode; } set { ragdollMode = value; } }

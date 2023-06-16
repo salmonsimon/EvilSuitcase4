@@ -28,6 +28,8 @@ public class Explosive : MonoBehaviour
 
     #endregion
 
+    private bool initialized = false;
+
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
@@ -40,16 +42,44 @@ public class Explosive : MonoBehaviour
     private void Start()
     {
         audioSource.volume = GameManager.instance.GetSFXManager().GetSFXVolume();
+
+        GameManager.instance.GetPauseMenuUI().OnPause += OnPause;
+        GameManager.instance.GetPauseMenuUI().OnResume += OnResume;
+
+        initialized = true;
     }
 
     private void OnEnable()
     {
         modelHealthManager.OnDeath += Explode;
+
+        if (initialized)
+        {
+            GameManager.instance.GetPauseMenuUI().OnPause += OnPause;
+            GameManager.instance.GetPauseMenuUI().OnResume += OnResume;
+        }
+        
     }
 
     private void OnDisable()
     {
         modelHealthManager.OnDeath -= Explode;
+
+        if (initialized)
+        {
+            GameManager.instance.GetPauseMenuUI().OnPause -= OnPause;
+            GameManager.instance.GetPauseMenuUI().OnResume -= OnResume;
+        }
+    }
+
+    private void OnPause()
+    {
+        audioSource.Pause();
+    }
+
+    private void OnResume()
+    {
+        audioSource.UnPause();
     }
 
     private void Explode()
