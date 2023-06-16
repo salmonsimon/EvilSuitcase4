@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7644096696475555258}
   - component: {fileID: 8318278130995186190}
   m_Layer: 5
-  m_Name: Pistol Visual
+  m_Name: Large Medicine Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -51,10 +51,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sprite: {fileID: 6779363653804916480}
-  leftMultiplier: -0.25
-  rightMultiplier: -0.25
-  topMultiplier: 0
-  bottomMultiplier: 0
+  leftMultiplier: 0.1
+  rightMultiplier: 0.1
+  topMultiplier: 0.05
+  bottomMultiplier: 0.05
 --- !u!1 &7947659801644391033
 GameObject:
   m_ObjectHideFlags: 0
@@ -90,8 +90,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -25, y: 0}
-  m_SizeDelta: {x: 50, y: 0}
+  m_AnchoredPosition: {x: 10, y: 5}
+  m_SizeDelta: {x: -20, y: -10}
   m_Pivot: {x: 0, y: 0}
 --- !u!222 &7668034791495283618
 CanvasRenderer:
@@ -121,7 +121,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 1f8934c21d0cb18419f788a463d77b5d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7e00ff3ad29821645a13544e5075929e, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
