@@ -9,6 +9,9 @@ public class CrossHair : MonoBehaviour
 
     [SerializeField] private LayerMask hitMask;
 
+    [SerializeField] private Transform crossHairTarget;
+    public Transform CrossHairTarget { get { return crossHairTarget; } }
+
     #endregion
 
     #region Variables
@@ -57,22 +60,33 @@ public class CrossHair : MonoBehaviour
 
     #endregion
 
+    private ThirdPersonShooterController playerThirdPersonShooterController;
+
     private void Start()
     {
         reload.enabled = false;
 
         crosshairOriginalScale = expanding.rectTransform.localScale;
+
+        playerThirdPersonShooterController = GameManager.instance.GetPlayer().GetComponent<ThirdPersonShooterController>();
     }
 
     private void Update()
     {
         crossHairRay.origin = Camera.main.transform.position;
         crossHairRay.direction = Camera.main.transform.forward;
+        
+        transform.position = crossHairRay.origin + crossHairRay.direction * 100;
+    }
+
+    private void LateUpdate()
+    {
+        float currentCrossHairTargetDepth = Vector3.Distance(crossHairRay.origin, crossHairTarget.position);
 
         if (Physics.Raycast(crossHairRay, out crossHairRaycastHit, 10000, hitMask))
-            transform.position = crossHairRaycastHit.point;
+            crossHairTarget.position = crossHairRaycastHit.point;
         else
-            transform.position = crossHairRay.origin + crossHairRay.direction.normalized * 100;
+            crossHairTarget.position = crossHairRay.origin + crossHairRay.direction * currentCrossHairTargetDepth;
     }
 
     public void SetupCrossHair(CrosshairConfigurationScriptableObject crosshairConfig)

@@ -9,6 +9,8 @@ public class ItemDragDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandle
     private Inventory inventory;
     private Item placedObject;
 
+    private GameObject gridVisual;
+
     private void Awake()
     {
         canvasGroup = GetComponent<CanvasGroup>();
@@ -29,7 +31,10 @@ public class ItemDragDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandle
         GetComponent<Canvas>().sortingOrder = 10000;
         placedObject.HoldingInventory.SetNewOpenButton(null);
 
-        placedObject.CreateVisualBackgroundGrid(transform.GetChild(0), placedObject.GetItemSO() as ItemScriptableObject);
+        if (gridVisual)
+            gridVisual.SetActive(true);
+        else
+            gridVisual = placedObject.CreateVisualBackgroundGrid(transform.GetChild(0), placedObject.GetItemSO() as ItemScriptableObject);
 
         GameManager.instance.GetInventoryDragDropSystem().StartedDragging(inventory, placedObject);
     }
@@ -43,6 +48,9 @@ public class ItemDragDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandle
 
         GameManager.instance.GetInventoryDragDropSystem().StoppedDragging(inventory, placedObject);
         GameManager.instance.GetSFXManager().PlaySound(Config.DROP_SFX);
+
+        if (gridVisual)
+            gridVisual.SetActive(false);
     }
 
     public void OnDrag(PointerEventData eventData)

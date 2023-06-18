@@ -68,7 +68,6 @@ public class GameManager : MonoBehaviour
     private bool isOnRewardsUI = false;
     public bool IsOnRewardsUI { get { return isOnRewardsUI; } set { isOnRewardsUI = value; } }
 
-    private bool isGamePaused;
     private bool isTeleporting;
 
     private bool isOnTransition = false;
@@ -158,6 +157,7 @@ public class GameManager : MonoBehaviour
                 !pauseMenuUI.IsOnFastSwapConfiguration &&
                 !transitionManager.RunningTransition &&
                 !isTeleporting &&
+                !player.GetComponent<PlayerHealthAnimations>().IsOnHurtAnimation &&
                 player.GetComponent<HealthManager>().IsAlive;
     }
 
