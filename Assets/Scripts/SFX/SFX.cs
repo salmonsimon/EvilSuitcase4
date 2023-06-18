@@ -7,7 +7,9 @@ public class SFX : MonoBehaviour
 {
     private AudioSource audioSource;
 
-    [SerializeField] private bool isUI = true; 
+    [SerializeField] private bool isUI = true;
+
+    bool initialized = false;
 
     private void Start()
     {
@@ -16,20 +18,43 @@ public class SFX : MonoBehaviour
         audioSource.volume = GameManager.instance.GetSFXManager().GetSFXVolume();
         audioSource.playOnAwake = false;
 
-        audioSource.spatialBlend = .8f;
-        audioSource.minDistance = 1f;
-        audioSource.maxDistance = 50f;
+        if (!isUI)
+        {
+            audioSource.spatialBlend = 1f;
+            audioSource.minDistance = 3f;
+            audioSource.maxDistance = 200f;
+        }
 
         GameManager.instance.GetPauseMenuUI().OnPause += OnPause;
         GameManager.instance.GetPauseMenuUI().OnResume += OnResume;
+
+        initialized = true;
     }
 
-    private void OnPause()
+    private void OnEnable()
+    {
+        if (initialized)
+        {
+            GameManager.instance.GetPauseMenuUI().OnPause += OnPause;
+            GameManager.instance.GetPauseMenuUI().OnResume += OnResume;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (initialized)
+        {
+            GameManager.instance.GetPauseMenuUI().OnPause -= OnPause;
+            GameManager.instance.GetPauseMenuUI().OnResume -= OnResume;
+        }   
+    }
+
+    protected virtual void OnPause()
     {
         audioSource.Pause();
     }
 
-    private void OnResume()
+    protected virtual void OnResume()
     {
         audioSource.UnPause();
     }

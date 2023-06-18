@@ -84,6 +84,7 @@ public class Explosive : MonoBehaviour
 
     private void Explode()
     {
+        audioSource.minDistance = 10;
         audioSource.Play();
 
         explosionObject.transform.SetParent(transform);
@@ -103,6 +104,10 @@ public class Explosive : MonoBehaviour
     private IEnumerator WaitToDisable(float delay)
     {
         yield return new WaitForSeconds(delay);
+
+        explosionObject.gameObject.SetActive(false);
+
+        yield return new WaitForSeconds(delay * 2);
 
         Destroy(gameObject);
     }

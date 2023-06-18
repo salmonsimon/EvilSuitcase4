@@ -1190,7 +1190,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: ff8240148ee026c4babb53949381e1cd, type: 3}
   - {fileID: 8300000, guid: 1fb023a333ca93a40a9c968a37e6f739, type: 3}
   - {fileID: 8300000, guid: e29d35a3561cf964e9c39f5b99c2696c, type: 3}
-  - {fileID: 8300000, guid: e66b136e063cc4049b96679b13228187, type: 3}
+  - {fileID: 8300000, guid: 48638c7a9292b6743ba49fbdfc70b7a9, type: 3}
   - {fileID: 8300000, guid: efc7bb9783bdf8a4797f4caae38bea34, type: 3}
   - {fileID: 8300000, guid: 5cd921b91deac4f47b05c451951f7a53, type: 3}
   - {fileID: 8300000, guid: c35b1f489447c164f99deded2c2a9a6a, type: 3}
@@ -1209,13 +1209,12 @@ MonoBehaviour:
   shortSoundAudioClips:
   - {fileID: 8300000, guid: 90054576c036ea44096d20cc89ff4da2, type: 3}
   - {fileID: 8300000, guid: a4366158371c9514cae30cfff454dcb2, type: 3}
-  - {fileID: 8300000, guid: 1225b0f997026d64fa600c3fd93f1a74, type: 3}
-  - {fileID: 8300000, guid: dd1338b991c73447a983adbc8effe3d5, type: 3}
-  - {fileID: 8300000, guid: 62fe1ae146558475b8a6c0deffb83970, type: 3}
-  - {fileID: 8300000, guid: 42d8fc3cbacf24ddfbeabbcc89fc2772, type: 3}
-  - {fileID: 8300000, guid: 81727d970aeee438b912e8619fbe8fa3, type: 3}
-  - {fileID: 8300000, guid: d308a80ed23b44c359b18edb48fbb38c, type: 3}
-  - {fileID: 8300000, guid: 2918ee8c1f21e4341bf3aaec7c9694ed, type: 3}
+  - {fileID: 8300000, guid: 864e57f73fe9a714fb16c55225202d29, type: 3}
+  - {fileID: 8300000, guid: aaa82fdcf3e0ab54abd2e84bef1bfb3d, type: 3}
+  - {fileID: 8300000, guid: ad81c877c26d30e4fb3edb957a1902e1, type: 3}
+  - {fileID: 8300000, guid: cd6bdd1fa0a1ea3488d9f8ca3cd60303, type: 3}
+  - {fileID: 8300000, guid: f7ea5eaba876f064e9148d74fad3cca3, type: 3}
+  - {fileID: 8300000, guid: 2844532b59ee63e4e95625cd2e70daab, type: 3}
   - {fileID: 8300000, guid: ebb96c703224744479e6294bd49515d9, type: 3}
   - {fileID: 8300000, guid: f1ff3e33006a291449618f6fc613e928, type: 3}
   - {fileID: 8300000, guid: b771cd0787c16e64e8e8ba11c3c83734, type: 3}
@@ -1237,16 +1236,16 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 9df77b70cadc8384ca073a95aebc666f, type: 3}
   - {fileID: 8300000, guid: 1d92c5ac0e056b045b4461b147f95be5, type: 3}
   stepAudioClips:
-  - {fileID: 8300000, guid: 324c945fef5c54571b8c45070ad8ac7e, type: 3}
-  - {fileID: 8300000, guid: 811cec98f8dde45b6ae0b0bb8feb04f5, type: 3}
-  - {fileID: 8300000, guid: 1fa09acd212104071bfbfa2347dfb2d4, type: 3}
-  - {fileID: 8300000, guid: b150c79fe9e7446ffa42d8f10a990893, type: 3}
+  - {fileID: 8300000, guid: c17a82377e814cd47b7386271cbfb9d8, type: 3}
+  - {fileID: 8300000, guid: f5b5fab2d5c838f46892a92f4557e051, type: 3}
+  - {fileID: 8300000, guid: a733038228507b348bbdae304271fa41, type: 3}
+  - {fileID: 8300000, guid: 74501e2f4ca2cfb4da1ef5a73ab73318, type: 3}
   eatingAudioClips:
   - {fileID: 8300000, guid: fba13fa74833ac24d949a102c0b007dc, type: 3}
   - {fileID: 8300000, guid: aee178239b7766a499b380549b9a6b2d, type: 3}
   hitImpactAudioClip:
-  - {fileID: 8300000, guid: ba0aa4a4c8ad24e45ad00c27222eda98, type: 3}
   - {fileID: 8300000, guid: 28ca85666a2fff64b92824921ce2cf25, type: 3}
+  - {fileID: 8300000, guid: ba0aa4a4c8ad24e45ad00c27222eda98, type: 3}
 --- !u!82 &5116048082088696158
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1268,7 +1267,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 200
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -1278,23 +1277,59 @@ AudioSource:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0
+      time: 0.05
       value: 1
-      inSlope: 0
-      outSlope: 0
+      inSlope: -20.007967
+      outSlope: -20.007967
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.15882263
+      value: 0.37017822
+      inSlope: -0.8859147
+      outSlope: -0.8859147
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.87387276
+      outWeight: 0.5917125
+    - serializedVersion: 3
+      time: 0.30048674
+      value: 0.27163696
+      inSlope: -0.7088877
+      outSlope: -0.7088877
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.5654375
+    - serializedVersion: 3
+      time: 0.5102905
+      value: 0.15383911
+      inSlope: -0.31262448
+      outSlope: -0.31262448
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.7975586
+      value: 0.058898926
+      inSlope: -0.22664645
+      outSlope: -0.22664645
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.5762511
     - serializedVersion: 3
       time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
+      value: 0.006726075
+      inSlope: -0.05001994
+      outSlope: -0.05001994
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
+      inWeight: 0
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
