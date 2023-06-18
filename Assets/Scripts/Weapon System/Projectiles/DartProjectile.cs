@@ -7,6 +7,8 @@ public class DartProjectile : Projectile
     [SerializeField] private GunDamageConfigurationScriptableObject damageConfig;
     public GunDamageConfigurationScriptableObject DamageConfig { get { return damageConfig; } set { damageConfig = value; } }
 
+    [SerializeField] protected ImpactType impactType;
+
     protected void FixedUpdate()
     {
         if (!isDisabled)
@@ -27,13 +29,15 @@ public class DartProjectile : Projectile
             damageable.ReceiveDamage(damageConfig.GetDamage(distanceTraveled), forceDirection * 40f);
 
             if (damageable.TryGetComponent(out HumanoidHurtGeometry humanoidHurtGeometry))
+            {
                 GameManager.instance.GetBloodManager().SpawnBloodOnHit(humanoidHurtGeometry.transform, collision.contacts[0].point, forceDirection);
+                GameManager.instance.GetSurfaceManager().HandleFleshImpact(damageable.transform.gameObject, collision.contacts[0].point, collision.contacts[0].normal, impactType, 0);
+            }
         }
         else if (collision.collider.TryGetComponent(out Rigidbody rigidbody))
             rigidbody.AddForce(forceDirection * 5f, ForceMode.Impulse);
     }
 
-    // NOW NOT ON USE
     protected override void OnTriggerEnter(Collider other)
     {
         base.OnTriggerEnter(other);
@@ -42,10 +46,22 @@ public class DartProjectile : Projectile
 
         Disable();
 
-        Vector3 forceDirection = (other.transform.position - GameManager.instance.GetPlayer().transform.position).normalized;
+        Vector3 forceDirection = (other.transform.position - transform.position).normalized;
 
         if (other.TryGetComponent(out Damageable damageable))
+        {
             damageable.ReceiveDamage(damageConfig.GetDamage(distanceTraveled), forceDirection * 40f);
+
+            if (damageable.TryGetComponent(out HumanoidHurtGeometry humanoidHurtGeometry))
+            {
+                Vector3 closestPosition = other.ClosestPoint(transform.position);
+
+                GameManager.instance.GetBloodManager().SpawnBloodOnHit(humanoidHurtGeometry.transform, closestPosition, -forceDirection);
+                GameManager.instance.GetSurfaceManager().HandleFleshImpact(damageable.transform.gameObject, closestPosition, -forceDirection, impactType, 0);
+            }
+        }
+        else if (other.TryGetComponent(out Rigidbody rigidbody))
+            rigidbody.AddForce(forceDirection * 5f, ForceMode.Impulse);
     }
 
     protected override void Disable()

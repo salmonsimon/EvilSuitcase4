@@ -18,6 +18,8 @@ public class ZombieDeadState : ZombieBaseState
         context.RagdollSystem.ResetRagdoll();
 
         context.RagdollSystem.SetRagdoll(false, true);
+
+        context.Agent.GetComponent<ZombieSFX>().PlayRandomDeathAudioClip();
     }
 
     public override void ExitState()
