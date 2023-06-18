@@ -102,7 +102,7 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
         transform.localScale = new Vector3(newScale, newScale, newScale);
     }
 
-    public void CreateVisualBackgroundGrid(Transform visualParentTransform, ItemScriptableObject itemTetrisSO)
+    public GameObject CreateVisualBackgroundGrid(Transform visualParentTransform, ItemScriptableObject itemTetrisSO)
     {
         Transform visualTransform = Instantiate(itemTetrisSO.GridVisual, visualParentTransform);
 
@@ -125,6 +125,8 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
         visualTransform.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
 
         visualTransform.SetAsFirstSibling();
+
+        return visualTransform.gameObject;
     }
 
     #region Getters and Setters

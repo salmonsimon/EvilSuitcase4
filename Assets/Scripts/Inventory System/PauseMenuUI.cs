@@ -43,8 +43,31 @@ public class PauseMenuUI : MonoBehaviour
     [Header("Variables")]
     private EquipableItem fastSwapCandidate;
 
-    private bool isGamePaused = false;
-    public bool IsGamePaused { get { return isGamePaused; } }
+    private bool isGamePaused;
+    public bool IsGamePaused
+    {
+        get { return isGamePaused; }
+        private set
+        {
+            if (value == isGamePaused)
+                return;
+
+            isGamePaused = value;
+
+            if (isGamePaused && OnPause != null)
+                OnPause();
+            else if (!isGamePaused && OnResume != null)
+                OnResume();
+        }
+    }
+
+    public delegate void OnPauseDelegate();
+    public event OnPauseDelegate OnPause;
+
+    public delegate void OnResumeDelegate();
+    public event OnResumeDelegate OnResume;
+
+
 
     private bool isOnKeyBindingPanel = false;
     public bool IsOnKeyBindingsPanel { get { return isOnKeyBindingPanel; } }
@@ -71,7 +94,7 @@ public class PauseMenuUI : MonoBehaviour
 
     private void Update()
     {
-        if (isGamePaused && !isOnKeyBindingPanel)
+        if (IsGamePaused && !isOnKeyBindingPanel)
         {
             if (input.next)
             {
@@ -102,7 +125,7 @@ public class PauseMenuUI : MonoBehaviour
 
             }
         }
-        else if (isGamePaused && isOnKeyBindingPanel && input.pause)
+        else if (IsGamePaused && isOnKeyBindingPanel && input.pause)
         {
             CloseKeyBindingsPanel();
 
@@ -511,7 +534,7 @@ public class PauseMenuUI : MonoBehaviour
     public void SetGamePaused(bool value)
     {
 
-        isGamePaused = value;
+        IsGamePaused = value;
 
         if (value)
             Time.timeScale = 0f;

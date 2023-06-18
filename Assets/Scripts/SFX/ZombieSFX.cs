@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -38,13 +39,11 @@ public class ZombieSFX : SFX
     {
         if (timeUntilNextShortSound < 0)
         {
-            int randomClipIndex = Random.Range(0, shortSoundAudioClips.Count);
+            int randomClipIndex = UnityEngine.Random.Range(0, shortSoundAudioClips.Count);
 
             PlayAudioClip(shortSoundAudioClips[randomClipIndex]);
 
-
-
-            timeUntilNextShortSound = Random.Range(shortSoundAudioClips[randomClipIndex].length, shortSoundAudioClips[randomClipIndex].length + shortSoundMaxDelay);
+            timeUntilNextShortSound = UnityEngine.Random.Range(shortSoundAudioClips[randomClipIndex].length, shortSoundAudioClips[randomClipIndex].length + shortSoundMaxDelay);
         }
     }
 
@@ -57,23 +56,25 @@ public class ZombieSFX : SFX
     {
         PlayRandomAudioClip(deathAudioClips);
     }
-
     public void PlayRandomStepAudioClip()
     {
-        PlayRandomAudioClip(stepAudioClips);
+        int randomStepAudioClipIndex = UnityEngine.Random.Range(0, stepAudioClips.Count);
+        AudioClip randomStepAudioClip = stepAudioClips[randomStepAudioClipIndex];
+
+        AudioSource.PlayClipAtPoint(randomStepAudioClip, transform.position, GameManager.instance.GetSFXManager().GetSFXVolume());
     }
 
     public void PlayRandomEatingAudioClip()
     {
         if (timeUntilNexEatingSound < 0)
         {
-            int randomEatingAudioClipIndex = Random.Range(0, eatingAudioClips.Count);
+            int randomEatingAudioClipIndex = UnityEngine.Random.Range(0, eatingAudioClips.Count);
 
             AudioClip randomEatingAudioClip = eatingAudioClips[randomEatingAudioClipIndex];
 
             PlayAudioClip(randomEatingAudioClip);
 
-            timeUntilNexEatingSound = Random.Range(randomEatingAudioClip.length, randomEatingAudioClip.length + 1f);
+            timeUntilNexEatingSound = UnityEngine.Random.Range(randomEatingAudioClip.length, randomEatingAudioClip.length + 1f);
         }
     }
 
