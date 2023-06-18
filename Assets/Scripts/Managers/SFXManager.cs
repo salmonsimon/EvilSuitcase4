@@ -1,7 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 
 [RequireComponent(typeof(AudioSource))]
 public class SFXManager : MonoBehaviour
@@ -37,6 +37,8 @@ public class SFXManager : MonoBehaviour
     [SerializeField] private AudioClip bloodSplatterSFX;
     [SerializeField] private AudioClip heartbeatSFX;
     [SerializeField] private AudioClip potionSFX;
+
+    [SerializeField] private List<AudioClip> zombieBulletImpactSFX;
 
     private void Awake()
     {
@@ -161,9 +163,16 @@ public class SFXManager : MonoBehaviour
 
     public void PlayRandomAudioClip(List<AudioClip> audioClips)
     {
-        int randomClip = Random.Range(0, audioClips.Count);
+        int randomClip = UnityEngine.Random.Range(0, audioClips.Count);
 
         PlaySound(audioClips[randomClip]);
+    }
+
+    public void PlayRandomZombieBulletImpactSound(Vector3 hitPosition)
+    {
+        int randomClipIndex = UnityEngine.Random.Range(0, zombieBulletImpactSFX.Count);
+
+        AudioSource.PlayClipAtPoint(zombieBulletImpactSFX[randomClipIndex], hitPosition, GameManager.instance.GetSFXManager().GetSFXVolume());
     }
 
     public float GetSFXVolume()

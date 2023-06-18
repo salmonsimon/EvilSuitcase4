@@ -102,6 +102,8 @@ public class MainMenuUI : MonoBehaviour
 
         activePanel = newActivePanel;
         StartCoroutine(WaitAndEnable(activePanel, Config.BIG_DELAY * 2));
+
+        GameManager.instance.GetMusicManager().PlayMainMenuMusic();
     }
 
     private IEnumerator WaitAndDisable(GameObject gameObject, float delay)

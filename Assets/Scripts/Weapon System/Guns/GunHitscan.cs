@@ -121,7 +121,6 @@ public class GunHitscan : Gun
         if (hit.collider != null)
         {
             GameManager.instance.GetSurfaceManager().HandleImpact(hit.transform.gameObject, endPosition, hit.normal, impactType, 0);
-            
 
             if (hit.collider.TryGetComponent(out Damageable damageable))
             {
@@ -130,7 +129,10 @@ public class GunHitscan : Gun
                 damageable.ReceiveDamage(gunConfiguration.DamageConfig.GetDamage(distance), hitForce);
 
                 if (damageable.TryGetComponent(out HumanoidHurtGeometry humanoidHurtGeometry))
+                {
                     GameManager.instance.GetBloodManager().SpawnBloodOnHit(hit);
+                    GameManager.instance.GetSurfaceManager().HandleFleshImpact(damageable.transform.gameObject, hit.point, hit.normal, impactType, 0);
+                }
             }
             else if (hit.collider.TryGetComponent(out Rigidbody rigidbody))
             {

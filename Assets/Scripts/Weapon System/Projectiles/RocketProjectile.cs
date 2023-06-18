@@ -23,7 +23,6 @@ public class RocketProjectile : Projectile
 
     private void OnEnable()
     {
-        audioSource.Play();
         rocketTrailParticleSystem.Play();
     }
 
@@ -81,6 +80,8 @@ public class RocketProjectile : Projectile
         audioSource.Stop();
 
         explosionObject.gameObject.SetActive(true);
+
+        audioSource.minDistance = 10f;
         sfx.PlayAudioClip(hitAudioClip);
 
         StartCoroutine(WaitToDisable(disableTime));
