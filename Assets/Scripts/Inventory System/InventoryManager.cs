@@ -537,17 +537,17 @@ public class InventoryManager : MonoBehaviour
             {
                 Item placedItem = grid.GetGridObject(x, y).GetItem();
 
-                Debug.Log("X: " + x);
-                Debug.Log("Y: " + y);
+                if (placedItem != null)
+                {
+                    int remainingItemWidth = placedItem.GetCurrentHorizontalDimension() + placedItem.GetGridPosition().x - x;
 
-                Debug.Log("placed item: " + placedItem.name);
+                    if (remainingItemWidth < minWidthInCurrentColumn)
+                        minWidthInCurrentColumn = remainingItemWidth;
 
-                int remainingItemWidth = placedItem.GetCurrentHorizontalDimension() + placedItem.GetGridPosition().x - x;
-
-                if (remainingItemWidth < minWidthInCurrentColumn)
-                    minWidthInCurrentColumn = remainingItemWidth;
-
-                y += placedItem.GetCurrentVerticalDimension();
+                    y += placedItem.GetCurrentVerticalDimension();
+                }
+                else
+                    y++;
             }
         }
 
@@ -621,12 +621,17 @@ public class InventoryManager : MonoBehaviour
             {
                 Item placedItem = grid.GetGridObject(x, y).GetItem();
 
-                int remainingItemHeight = placedItem.GetCurrentVerticalDimension() + placedItem.GetGridPosition().y - y;
+                if (placedItem != null)
+                {
+                    int remainingItemHeight = placedItem.GetCurrentVerticalDimension() + placedItem.GetGridPosition().y - y;
 
-                if (remainingItemHeight < minHeightInCurrentRow)
-                    minHeightInCurrentRow = remainingItemHeight;
+                    if (remainingItemHeight < minHeightInCurrentRow)
+                        minHeightInCurrentRow = remainingItemHeight;
 
-                x += placedItem.GetCurrentHorizontalDimension();
+                    x += placedItem.GetCurrentHorizontalDimension();
+                }
+                else
+                    x++;
             }
         }
 

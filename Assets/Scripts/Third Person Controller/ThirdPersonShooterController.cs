@@ -206,7 +206,7 @@ public class ThirdPersonShooterController : MonoBehaviour
             return;
         }
 
-        if ((starterAssetsInputs.aim && !isReloading))
+        if (starterAssetsInputs.aim && !isReloading)
         {
             aiming = true;
             crosshair.ShowCrossHairUI(true);
@@ -260,6 +260,16 @@ public class ThirdPersonShooterController : MonoBehaviour
 
         if (IsReloading)
             thirdPersonController.SetAbleToSprint(false);
+
+        if (aiming)
+        {
+            Vector3 worldAimTarget = lookAt.position;
+            worldAimTarget.y = transform.position.y;
+
+            aimDirection = (worldAimTarget - transform.position).normalized;
+
+            transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 20f);
+        }
     }
 
     private void FixedUpdate()
@@ -293,19 +303,6 @@ public class ThirdPersonShooterController : MonoBehaviour
         {
             foreach (Rig rig in aimRigs)
                 rig.weight = Mathf.Lerp(rig.weight, 0f, Time.deltaTime * 20f);
-        }
-    }
-
-    private void LateUpdate()
-    {
-        if (aiming)
-        {
-            Vector3 worldAimTarget = lookAt.position;
-            worldAimTarget.y = transform.position.y;
-
-            aimDirection = (worldAimTarget - transform.position).normalized;
-
-            transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 20f);
         }
     }
 
