@@ -70,6 +70,9 @@ public class InventoryManager : MonoBehaviour
 
     [SerializeField] private GameObject itemContainer;
     public GameObject ItemContainer { get { return itemContainer; } }
+
+    [SerializeField] private EquipableItem suitcaseItem;
+    public EquipableItem SuitcaseItem { get { return suitcaseItem; } }
  
     #endregion
 

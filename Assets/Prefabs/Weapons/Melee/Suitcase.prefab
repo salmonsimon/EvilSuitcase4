@@ -1803,7 +1803,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3450036777061292520
 Transform:
   m_ObjectHideFlags: 0
@@ -1811,7 +1811,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3761630341367863145}
-  m_LocalRotation: {x: 0.7071068, y: -0, z: -0.7071068, w: 0}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0.7071068, w: 0}
   m_LocalPosition: {x: 0.35379493, y: 0.617836, z: 0.107076645}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1823,7 +1823,7 @@ Transform:
   - {fileID: 3999497853574890257}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 14.683, z: 0}
+  m_LocalEulerAnglesHint: {x: -180, y: 90, z: 0}
 --- !u!82 &3450036777061292527
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1945,7 +1945,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5b50f6dab1781e4297d53bcc4f8f9b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponConfiguration: {fileID: 0}
+  weaponConfiguration: {fileID: 11400000, guid: 4b01a49561b32d5429bd2aa61cdec1bb,
+    type: 2}
   currentDurability: 1
 --- !u!1 &3871570727149140303
 GameObject:
@@ -2067,14 +2068,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3999497853574890256}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0.2588191, w: 0.9659258}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3450036777061292520}
   m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 30}
 --- !u!65 &3999497853574890263
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2086,7 +2087,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 0.5, z: 0.2}
+  m_Size: {x: 2.5, y: 0.5, z: 0.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3999497853574890262
 MonoBehaviour:
@@ -2101,7 +2102,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meleeWeapon: {fileID: 3450036777061292521}
-  impactType: {fileID: 0}
+  impactType: {fileID: 11400000, guid: 8eb97bc7236296741a215a116ce70b50, type: 2}
 --- !u!1 &3999497853605556334
 GameObject:
   m_ObjectHideFlags: 0
