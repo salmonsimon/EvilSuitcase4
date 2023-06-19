@@ -34,10 +34,11 @@ public class PlayerBoxDamageDealer : MonoBehaviour
         if (other.TryGetComponent(out Damageable damageable))
         {
             int damage = meleeWeapon.WeaponConfiguration.DamageConfig.GetDamage();
+            int force = meleeWeapon.WeaponConfiguration.DamageConfig.Force;
 
             if (damageable.HealthManager.LastReceivedAttackID != meleeWeapon.CurrentAttackID)
             {
-                damageable.ReceiveMeleeDamage(damage, forceDirection * 35f, meleeWeapon.CurrentAttackID);
+                damageable.ReceiveMeleeDamage(damage, forceDirection * force, meleeWeapon.CurrentAttackID);
 
                 if (damageable.TryGetComponent(out HumanoidHurtGeometry humanoidHurtGeometry))
                 {
