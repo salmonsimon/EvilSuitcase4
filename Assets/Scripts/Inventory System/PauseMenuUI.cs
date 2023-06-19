@@ -425,6 +425,9 @@ public class PauseMenuUI : MonoBehaviour
         {
             fastSwapCandidate.SetWeaponShortcut(fastSwapIndex);
 
+            if (fastSwapCandidate.Equals(GameManager.instance.GetInventoryManager().EquippedItem))
+                GameManager.instance.GetInventoryManager().CurrentEquippedWeaponShortcutIndex = fastSwapIndex;
+
             EquipableItem[] newArray = currentFastSwapWeaponArray;
             newArray[fastSwapIndex] = fastSwapCandidate;
             GameManager.instance.GetInventoryManager().FastSwapWeaponArray = newArray;
@@ -619,6 +622,17 @@ public class PauseMenuUI : MonoBehaviour
         iconContainer.SetActive(true);
 
         OpenActiveMenuPanel();
+    }
+
+    public void EquipSuitcaseButton()
+    {
+        GameManager.instance.GetInventoryManager().SuitcaseItem.Equip();
+    }
+
+    public void SetSuitcaseFastSwapButton()
+    {
+        GameManager.instance.GetPauseMenuUI().SetFastSwapCandidate(GameManager.instance.GetInventoryManager().SuitcaseItem);
+        GameManager.instance.GetPauseMenuUI().OpenAndLoadFastSwapConfigPanel();
     }
 
     #endregion

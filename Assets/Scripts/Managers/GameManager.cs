@@ -224,7 +224,6 @@ public class GameManager : MonoBehaviour
                 player.GetComponent<ThirdPersonController>().enabled = true;
 
                 player.GetComponent<ThirdPersonShooterController>().enabled = true;
-                player.GetComponent<ThirdPersonShooterController>().UnequipWeapon();
 
                 StartCoroutine(WaitAndEnableWaveManager());
 

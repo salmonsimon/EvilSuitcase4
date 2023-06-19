@@ -39,7 +39,7 @@ public class InventoryManager : MonoBehaviour
     public EquipableItem[] FastSwapWeaponArray { get { return fastSwapWeaponArray; } set { fastSwapWeaponArray = value; OnFastSwapConfigurationChange(); } }
 
     [SerializeField] private EquipableItem equippedItem;
-    public EquipableItem EquippedItem { get { return equippedItem; } set { equippedItem = value; } }
+    public EquipableItem EquippedItem { get { return equippedItem; } set { equippedItem = value; OnEquippedItemChange(); }  }
 
     [SerializeField] private int fastSwapIndex = 0;
     public int FastSwapIndex { get { return fastSwapIndex; } }
@@ -70,6 +70,9 @@ public class InventoryManager : MonoBehaviour
 
     [SerializeField] private GameObject itemContainer;
     public GameObject ItemContainer { get { return itemContainer; } }
+
+    [SerializeField] private EquipableItem suitcaseItem;
+    public EquipableItem SuitcaseItem { get { return suitcaseItem; } }
  
     #endregion
 
@@ -108,7 +111,9 @@ public class InventoryManager : MonoBehaviour
 
     private void Update()
     {
-        if (playerThirdPersonShooterController.IsReloading || !playerThirdPersonShooterController.IsAbleToReload)
+        if (playerThirdPersonShooterController.IsReloading || 
+            !playerThirdPersonShooterController.IsAbleToReload ||
+            playerThirdPersonShooterController.IsAttacking)
             return;
 
         if (!GameManager.instance.GetPauseMenuUI().IsGamePaused && 
@@ -165,17 +170,52 @@ public class InventoryManager : MonoBehaviour
         return fastSwapIndexes.Count > 0;
     }
 
+    private void OnEquippedItemChange()
+    {
+        if (equippedItem.WeaponShortcut >= 0)
+        {
+            CurrentEquippedWeaponShortcutIndex = equippedItem.WeaponShortcut;
+
+            int i = 0;
+            for (int weaponIndex = 0; weaponIndex < FastSwapWeaponArray.Length; weaponIndex++)
+            {
+                EquipableItem fastSwapWeapon = FastSwapWeaponArray[weaponIndex];
+
+                if (fastSwapWeapon && fastSwapWeapon.Equals(GameManager.instance.GetInventoryManager().EquippedItem))
+                    fastSwapIndex = i;
+                else if (fastSwapWeapon)
+                    i++;
+            }
+        }
+        else
+        {
+            CurrentEquippedWeaponShortcutIndex = -1;
+            fastSwapIndex = 0;
+        }
+    }
+
     private void OnFastSwapConfigurationChange()
     {
         fastSwapIndexes.Clear();
 
+        int i = 0;
         for (int weaponIndex = 0; weaponIndex < FastSwapWeaponArray.Length; weaponIndex++)
         {
             EquipableItem fastSwapWeapon = FastSwapWeaponArray[weaponIndex];
 
-            if (fastSwapWeapon)
+            if (fastSwapWeapon && fastSwapWeapon.Equals(GameManager.instance.GetInventoryManager().EquippedItem))
+                {
+                    fastSwapIndex = i;
+                    fastSwapIndexes.Add(weaponIndex);
+                }
+            else if (fastSwapWeapon)
+            {
                 fastSwapIndexes.Add(weaponIndex);
+                i++;
+            }
         }
+
+        GameManager.instance.GetPauseMenuUI().LoadFastSwapGameplayPanel(currentEquippedWeaponShortcutIndex);
     }
 
     #endregion

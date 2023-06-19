@@ -101,6 +101,8 @@ public class ThirdPersonShooterController : MonoBehaviour
 
             GameManager.instance.GetTransitionManager().OnRunningTransitionValueChange += RunninTransitionValueChange;
         }
+
+        UnequipWeapon();
     }
 
     private void OnDisable()
@@ -315,6 +317,16 @@ public class ThirdPersonShooterController : MonoBehaviour
         }
 
         GameManager.instance.GetWeaponDisplayUI().UnequipWeapon();
+
+        if (!GameManager.instance.IsOnMainMenu())
+            StartCoroutine(WaitAndEquipSuitcase());
+    }
+
+    private IEnumerator WaitAndEquipSuitcase()
+    {
+        yield return null;
+
+        GameManager.instance.GetInventoryManager().SuitcaseItem.Equip();
     }
 
     public void FindAndEquipWeapon(EquipableItem equipableItem)
@@ -351,7 +363,6 @@ public class ThirdPersonShooterController : MonoBehaviour
             MeleeWeaponSetup((MeleeItem)newWeaponItem);
             crosshair.SetupCrossHair(meleeWeapon.WeaponConfiguration.CrossHairConfig);
         }
-            
     }
 
     private void ActivateNewWeapon(Weapon newWeapon)
@@ -403,6 +414,7 @@ public class ThirdPersonShooterController : MonoBehaviour
         foreach (Rig rig in idleRigs)
         {
             Transform weaponRig = rig.transform.Find(containerName + "/" + weaponName);
+
             if (weaponRig)
             {
                 if (weaponRig.TryGetComponent(out MultiPositionConstraint multiPositionConstraint))
