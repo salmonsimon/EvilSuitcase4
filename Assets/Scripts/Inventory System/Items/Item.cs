@@ -6,7 +6,7 @@ using static UnityEditor.Progress;
 using static Utils;
 
 [RequireComponent(typeof(GraphicRaycaster), typeof(Canvas))]
-public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
+public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler
 {
     public enum Direction
     {
@@ -387,6 +387,31 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
         if (openButtonPanel != currentButtonPanel.gameObject)
         {
             HoldingInventory.SetNewOpenButton(null);
+        }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        GameManager.instance.GetSFXManager().PlaySound(Config.HOVER_SFX);
+
+        if (HoldingInventory.MainInventory && GameManager.instance.GetPauseMenuUI().IsGamePaused)
+        {
+            if (holdingInventory.TryGetComponent(out MainInventoryItemInfoUI mainInventoryItemInfoUI))
+            {
+                mainInventoryItemInfoUI.UpdateItemInfoText(itemSO.ItemDescription);
+            }
+        }
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (HoldingInventory.MainInventory && GameManager.instance.GetPauseMenuUI().IsGamePaused)
+        {
+            if (holdingInventory.TryGetComponent(out MainInventoryItemInfoUI mainInventoryItemInfoUI))
+            {
+                mainInventoryItemInfoUI.UpdateItemInfoText("");
+            }
+                
         }
     }
 

@@ -559,6 +559,6 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     public bool CanTriggerHurtAnimation()
     {
-        return !IsAttacking && !IsReloading;
+        return !IsAttacking && !IsReloading; // && IsAbleToReload;
     }
 }

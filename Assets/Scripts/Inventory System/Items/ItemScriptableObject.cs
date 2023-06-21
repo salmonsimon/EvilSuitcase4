@@ -11,6 +11,10 @@ public class ItemScriptableObject : ScriptableObject
     [SerializeField] private string itemName;
     public string ItemName { get { return itemName; } }
 
+    [TextArea]
+    [SerializeField] private string itemDescription;
+    public string ItemDescription { get { return itemDescription; } }
+
     [SerializeField] private ItemType itemType;
     public ItemType ItemType { get { return itemType; } }
 

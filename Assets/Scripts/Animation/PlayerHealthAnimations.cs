@@ -78,6 +78,7 @@ public class PlayerHealthAnimations : MonoBehaviour
 
         if (hitPointsPercentage < criticalHealthThreshold && !GameManager.instance.GetPlayerHealthUI().CriticalHealthGlobalVolume.IsEnabled)
         {
+            // TO DO: USE THIS IF WE FIND BETTER HURT ANIMATIONS FOR LOCOMOTION
             //animator.SetBool("IsHurt", true);
             GameManager.instance.GetPlayerHealthUI().CriticalHealthGlobalVolume.Enable();
         }
