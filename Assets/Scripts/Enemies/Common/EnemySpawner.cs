@@ -101,8 +101,8 @@ public class EnemySpawner : MonoBehaviour
             NavMeshHit Hit;
             if (NavMesh.SamplePosition(randomSpawnPosition, out Hit, 5f, -1))
             {
-                spawnedEnemy.GetComponent<ZombieStateMachine>().Agent.Warp(Hit.position);
-                spawnedEnemy.GetComponent<ZombieStateMachine>().Agent.enabled = true;
+                spawnedEnemy.GetComponent<StateMachine>().Agent.Warp(Hit.position);
+                spawnedEnemy.GetComponent<StateMachine>().Agent.enabled = true;
             }
             else
             {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor.Networking.PlayerConnection;
 using UnityEngine;
 
@@ -20,6 +21,15 @@ public class RuntimeParentSetter : MonoBehaviour
 
     private void Start()
     {
+        foreach (ChildParentCouple childParentCouple in childParentCoupleList)
+        {
+            childParentCouple.Child.parent = childParentCouple.Parent;
+        }
+    }
+
+    /*
+    private void Start()
+    {
         StartCoroutine(WaitAndSetChildParentRelationships());
     }
 
@@ -32,4 +42,5 @@ public class RuntimeParentSetter : MonoBehaviour
             childParentCouple.Child.parent = childParentCouple.Parent;
         }
     }
+    */
 }

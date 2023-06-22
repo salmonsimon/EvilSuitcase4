@@ -1,13 +1,13 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEditor.Rendering.LookDev;
 using UnityEngine;
-using UnityEngine.AI;
 
-public class ZombieChaseState : ZombieBaseState
+public class CrawlingZombieChaseState : CrawlingZombieBaseState
 {
-    
-
     float randomDeviation;
 
-    public ZombieChaseState(ZombieStateMachine zombieStateMachine, ZombieStateFactory zombieStateFactory) : base(zombieStateMachine, zombieStateFactory) { }
+    public CrawlingZombieChaseState(CrawlingZombieStateMachine crawlingZombieStateMachine, CrawlingZombieStateFactory crawlingZombieStateFactory) : base(crawlingZombieStateMachine, crawlingZombieStateFactory) { }
 
     public override void CheckSwitchStates()
     {
@@ -43,11 +43,11 @@ public class ZombieChaseState : ZombieBaseState
         Vector3 playerPosition = context.Player.position;
 
         Vector3 randomSurroundPosition = new Vector3
-            (
+        (
                 playerPosition.x + (context.SurroundRadius * Mathf.Cos(2 * Mathf.PI * randomDeviation)),
-                playerPosition.y,
+        playerPosition.y,
                 playerPosition.z + (context.SurroundRadius * Mathf.Sin(2 * Mathf.PI * randomDeviation))
-            );
+        );
 
         context.Agent.SetDestination(randomSurroundPosition);
 

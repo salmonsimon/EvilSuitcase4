@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class CrawlingZombieAttackState : ZombieBaseState
+public class ZombieAttackState : ZombieBaseState
 {
-    public CrawlingZombieAttackState(ZombieStateMachine zombieStateMachine, ZombieStateFactory zombieStateFactory) : base(zombieStateMachine, zombieStateFactory) { }
+    public ZombieAttackState(ZombieStateMachine zombieStateMachine, ZombieStateFactory zombieStateFactory) : base(zombieStateMachine, zombieStateFactory) { }
 
     public override void CheckSwitchStates()
     {

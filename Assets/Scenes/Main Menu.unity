@@ -22607,6 +22607,21 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 0.9
       objectReference: {fileID: 0}
+    - target: {fileID: 3999497853574890263, guid: 288011b9afd1f8b4aa757160245b20ad,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3999497853574890263, guid: 288011b9afd1f8b4aa757160245b20ad,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3999497853574890263, guid: 288011b9afd1f8b4aa757160245b20ad,
+        type: 3}
+      propertyPath: m_Size.z
+      value: 0.7
+      objectReference: {fileID: 0}
     - target: {fileID: 3999497854252252285, guid: 288011b9afd1f8b4aa757160245b20ad,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -23542,6 +23557,41 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
         type: 3}
+      propertyPath: rewards.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
+        type: 3}
+      propertyPath: itemsToBlock.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
+        type: 3}
+      propertyPath: itemsToBlock.Array.data[1]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
+        type: 3}
+      propertyPath: itemsToBlock.Array.data[2]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
+        type: 3}
+      propertyPath: itemsToBlock.Array.data[3]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
+        type: 3}
+      propertyPath: rewardsCountdown.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
+        type: 3}
+      propertyPath: rewardsCountdown.Array.data[3]
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
+        type: 3}
       propertyPath: waves.Array.data[0].EnemiesToSpawn
       value: 1
       objectReference: {fileID: 0}
@@ -23553,12 +23603,12 @@ PrefabInstance:
     - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
         type: 3}
       propertyPath: waves.Array.data[2].EnemiesToSpawn
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
         type: 3}
       propertyPath: waves.Array.data[3].EnemiesToSpawn
-      value: 5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
         type: 3}
@@ -23572,9 +23622,54 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
         type: 3}
+      propertyPath: waves.Array.data[2].SpawnObjects.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
+        type: 3}
       propertyPath: waves.Array.data[3].SpawnObjects.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
+        type: 3}
+      propertyPath: rewards.Array.data[1].RewardItems.Array.size
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
+        type: 3}
+      propertyPath: rewards.Array.data[3].RewardItems.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
+        type: 3}
+      propertyPath: rewards.Array.data[0].RewardItems.Array.data[0].Item
+      value: 
+      objectReference: {fileID: 7703535562999486616, guid: 72dedf120e62b094ab40ddaa5192ac11,
+        type: 3}
+    - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
+        type: 3}
+      propertyPath: rewards.Array.data[0].RewardItems.Array.data[1].Item
+      value: 
+      objectReference: {fileID: 6530900219213045720, guid: 8eb2817ad118cc94bbcf51a36bdfb36b,
+        type: 3}
+    - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
+        type: 3}
+      propertyPath: rewards.Array.data[1].RewardItems.Array.data[0].Item
+      value: 
+      objectReference: {fileID: 6530900219213045720, guid: 71f2a908dd0f2cb48a76405bbef6bb54,
+        type: 3}
+    - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
+        type: 3}
+      propertyPath: rewards.Array.data[1].RewardItems.Array.data[1].Item
+      value: 
+      objectReference: {fileID: 1679215543761796996, guid: fe0272614fe257b4b8010e246f9e17b0,
+        type: 3}
+    - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
+        type: 3}
+      propertyPath: rewards.Array.data[3].RewardItems.Array.data[0].Item
+      value: 
+      objectReference: {fileID: 6530900219213045720, guid: 379cda0942c91e34da108f2c5649e6bd,
+        type: 3}
     - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
         type: 3}
       propertyPath: waves.Array.data[0].SpawnObjects.Array.data[0].Prefab
@@ -23591,13 +23686,19 @@ PrefabInstance:
         type: 3}
       propertyPath: waves.Array.data[1].SpawnObjects.Array.data[0].Prefab
       value: 
-      objectReference: {fileID: 2415460792606355714, guid: 152bbdb4497dcd54b8428ed4bda7e984,
+      objectReference: {fileID: 2415460792606355714, guid: 7ba15058fa8a9854690ed84631ac01c9,
+        type: 3}
+    - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
+        type: 3}
+      propertyPath: waves.Array.data[2].SpawnObjects.Array.data[0].Prefab
+      value: 
+      objectReference: {fileID: 2415460792606355714, guid: ee5ba275300b3ba4ba22a791ab1f89e3,
         type: 3}
     - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
         type: 3}
       propertyPath: waves.Array.data[3].SpawnObjects.Array.data[0].Prefab
       value: 
-      objectReference: {fileID: 7285027768795059239, guid: d7c660db2d8156848a4d1a03bccb5521,
+      objectReference: {fileID: 2415460792606355714, guid: 7ba15058fa8a9854690ed84631ac01c9,
         type: 3}
     - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
         type: 3}
@@ -23605,6 +23706,61 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2415460792606355714, guid: 6e6fde8ab6a950c479672bb59a81c2ae,
         type: 3}
+    - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
+        type: 3}
+      propertyPath: rewards.Array.data[0].RewardItems.Array.data[1].Amount
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
+        type: 3}
+      propertyPath: rewards.Array.data[1].RewardItems.Array.data[0].Amount
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
+        type: 3}
+      propertyPath: rewards.Array.data[1].RewardItems.Array.data[1].Amount
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
+        type: 3}
+      propertyPath: rewards.Array.data[3].RewardItems.Array.data[0].Amount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
+        type: 3}
+      propertyPath: rewards.Array.data[1].RewardItems.Array.data[1].ItemType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
+        type: 3}
+      propertyPath: rewards.Array.data[1].RewardItems.Array.data[1].Probability
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
+        type: 3}
+      propertyPath: rewards.Array.data[3].RewardItems.Array.data[0].Probability
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
+        type: 3}
+      propertyPath: rewards.Array.data[1].RewardItems.Array.data[1].AmmoMinMax.x
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
+        type: 3}
+      propertyPath: rewards.Array.data[1].RewardItems.Array.data[1].AmmoMinMax.y
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
+        type: 3}
+      propertyPath: rewards.Array.data[3].RewardItems.Array.data[0].AmmoMinMax.x
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
+        type: 3}
+      propertyPath: rewards.Array.data[3].RewardItems.Array.data[0].AmmoMinMax.y
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
         type: 3}
       propertyPath: waves.Array.data[0].SpawnObjects.Array.data[0].SpawnProbability
@@ -23622,8 +23778,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
         type: 3}
+      propertyPath: waves.Array.data[2].SpawnObjects.Array.data[0].SpawnProbability
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
+        type: 3}
       propertyPath: waves.Array.data[3].SpawnObjects.Array.data[0].SpawnProbability
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5435146856260714753, guid: 15fe188647cb2db4d8d94a6651b1e5a7,
         type: 3}
@@ -23853,7 +24014,7 @@ PrefabInstance:
         type: 3}
       propertyPath: enemyPrefabs.Array.data[1]
       value: 
-      objectReference: {fileID: 2415460792606355714, guid: 03299511b40f25845809d4d9dddf02b2,
+      objectReference: {fileID: 2415460792606355714, guid: 7ba15058fa8a9854690ed84631ac01c9,
         type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6d621e2f9219faf469a72eb4a1ac5b39, type: 3}

@@ -16,7 +16,7 @@ public class RagdollSystem : MonoBehaviour
     public List<MuscleComponent> GroundedMuscleComponents = new List<MuscleComponent>();
 
     private Animator animator;
-    private ZombieStateMachine stateMachine;
+    private StateMachine stateMachine;
 
     [SerializeField] private bool onHitRecovery = false;
     private float timeToRecover = 1f;
@@ -33,22 +33,38 @@ public class RagdollSystem : MonoBehaviour
     public delegate void OnRagdollActivateDelegate();
     public event OnRagdollActivateDelegate OnRagdollActivate;
 
+    private bool initialized = false;
+
     private void OnEnable()
-    {
-        stateMachine.HealthManager.OnDeath += OnDeath;
-        stateMachine.HealthManager.OnRevival += OnRevival;
+    { 
+        if (initialized)
+        {
+            stateMachine.HealthManager.OnDeath += OnDeath;
+            stateMachine.HealthManager.OnRevival += OnRevival;
+        }
     }
 
     private void OnDisable()
     {
-        stateMachine.HealthManager.OnDeath -= OnDeath;
-        stateMachine.HealthManager.OnRevival -= OnRevival;
+        if (initialized)
+        {
+            stateMachine.HealthManager.OnDeath -= OnDeath;
+            stateMachine.HealthManager.OnRevival -= OnRevival;
+        }
+    }
+
+    private void Start()
+    {
+        stateMachine.HealthManager.OnDeath += OnDeath;
+        stateMachine.HealthManager.OnRevival += OnRevival;
+
+        initialized = true;
     }
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
-        stateMachine = GetComponent<ZombieStateMachine>();
+        stateMachine = GetComponent<StateMachine>();
 
         foreach (Rigidbody rigidBody in skeleton.GetComponentsInChildren<Rigidbody>())
         {
@@ -99,8 +115,7 @@ public class RagdollSystem : MonoBehaviour
 
     public void ApplyForce(MuscleComponent muscleComponent, Vector3 force)
     {
-        if (!stateMachine.CurrentState.ToSafeString().Equals("ZombieRagdollState") &&
-            !stateMachine.CurrentState.ToSafeString().Equals("ZombieDeadState"))
+        if (!RagdollMode)
         {
             accumulatedHitForce += force.magnitude;
 

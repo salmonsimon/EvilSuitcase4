@@ -1,13 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Windows;
 
-public class ZombieStateMachine : StateMachine
+public class CrawlingZombieStateMachine : StateMachine
 {
-    private ZombieStateFactory stateFactory;
+    private CrawlingZombieStateFactory stateFactory;
 
     private RagdollSystem ragdollSystem;
 
@@ -18,20 +16,18 @@ public class ZombieStateMachine : StateMachine
 
     [SerializeField] private GroundCheck fellCheck;
 
-    [SerializeField] private AnimationClip standUpFromBellyAnimation;
-    [SerializeField] private AnimationClip standUpFromBackAnimation;
+    [SerializeField] private AnimationClip standUpAnimation;
 
     private Transform hipsBone;
     private Transform[] bones;
-    private BoneTransform[] standUpFromBellyBoneTransforms;
-    private BoneTransform[] standUpFromBackBoneTransforms;
+    private BoneTransform[] standUpBoneTransforms;
     private BoneTransform[] ragdollBoneTransforms;
 
     protected override void Awake()
     {
         base.Awake();
 
-        stateFactory = new ZombieStateFactory(this);
+        stateFactory = new CrawlingZombieStateFactory(this);
 
         ragdollSystem = GetComponent<RagdollSystem>();
 
@@ -39,19 +35,16 @@ public class ZombieStateMachine : StateMachine
 
         bones = hipsBone.GetComponentsInChildren<Transform>();
 
-        standUpFromBellyBoneTransforms = new BoneTransform[bones.Length];
-        standUpFromBackBoneTransforms = new BoneTransform[bones.Length];
+        standUpBoneTransforms = new BoneTransform[bones.Length];
         ragdollBoneTransforms = new BoneTransform[bones.Length];
 
         for (int boneIndex = 0; boneIndex < bones.Length; boneIndex++)
         {
-            standUpFromBellyBoneTransforms[boneIndex] = new BoneTransform();
-            standUpFromBackBoneTransforms[boneIndex] = new BoneTransform();
+            standUpBoneTransforms[boneIndex] = new BoneTransform();
             ragdollBoneTransforms[boneIndex] = new BoneTransform();
         }
 
-        PopulateAnimationStartBoneTransforms(standUpFromBellyAnimation, standUpFromBellyBoneTransforms);
-        PopulateAnimationStartBoneTransforms(standUpFromBackAnimation, standUpFromBackBoneTransforms);
+        PopulateAnimationStartBoneTransforms(standUpAnimation, standUpBoneTransforms);
     }
 
     protected override void Start()
@@ -155,16 +148,13 @@ public class ZombieStateMachine : StateMachine
 
     public GroundCheck FellCheck { get { return fellCheck; } }
 
-    public AnimationClip StandUpFromBellyAnimation { get { return standUpFromBellyAnimation; } }
-
-    public AnimationClip StandUpFromBackAnimation { get { return standUpFromBackAnimation; } }
+    public AnimationClip StandUpAnimation { get { return standUpAnimation; } }
 
     public Transform HipsBone { get { return hipsBone; } }
 
-    public Transform[] Bones { get { return bones; } } 
+    public Transform[] Bones { get { return bones; } }
 
-    public BoneTransform[] StandUpFromBellyBoneTransforms { get { return standUpFromBellyBoneTransforms; } }
-    public BoneTransform[] StandUpFromBackBoneTransforms { get { return standUpFromBackBoneTransforms; } }
+    public BoneTransform[] StandUpBoneTransforms { get { return standUpBoneTransforms; } }
     public BoneTransform[] RagdollBoneTransforms { get { return ragdollBoneTransforms; } }
 
     #endregion

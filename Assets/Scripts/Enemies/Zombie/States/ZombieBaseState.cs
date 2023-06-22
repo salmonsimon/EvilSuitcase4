@@ -1,12 +1,9 @@
 using UnityEngine;
 
-public abstract class ZombieBaseState
+public abstract class ZombieBaseState : BaseState
 {
     protected ZombieStateMachine context;
     protected ZombieStateFactory factory;
-
-    private Vector2 velocity;
-    private Vector2 smoothDeltaPosition;
 
     public ZombieBaseState(ZombieStateMachine zombieStateMachine, ZombieStateFactory zombieStateFactory)
     {
@@ -14,17 +11,9 @@ public abstract class ZombieBaseState
         factory = zombieStateFactory;
     }
 
-    public abstract void EnterState();
-
-    public abstract void ExitState();
-
-    public abstract void UpdateState();
-
-    public abstract void CheckSwitchStates();
-
     protected void SwitchState(ZombieBaseState newState)
     {
-        newState.EnterState();
+        base.SwitchState(newState);
 
         context.CurrentState = newState;
     }
