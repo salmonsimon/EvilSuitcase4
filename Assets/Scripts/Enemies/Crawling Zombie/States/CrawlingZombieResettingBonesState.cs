@@ -26,13 +26,11 @@ public class CrawlingZombieResettingBonesState : CrawlingZombieBaseState
 
         elapsedResetBonesTime = 0f;
         readyToStand = false;
-
-        Debug.Log("Entering resetting bones state");
     }
 
     public override void ExitState()
     {
-        Debug.Log("Exiting resetting bones state");
+
     }
 
     public override void UpdateState()

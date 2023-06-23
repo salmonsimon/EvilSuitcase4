@@ -29,8 +29,6 @@ public class CrawlingZombieStandingState : CrawlingZombieBaseState
         context.RagdollSystem.SetRagdoll(true, true);
 
         context.Animator.Play(animationToUse);
-
-        Debug.Log("Entering standing state");
     }
 
     public override void ExitState()
@@ -39,8 +37,6 @@ public class CrawlingZombieStandingState : CrawlingZombieBaseState
 
         context.RagdollSystem.MapCollider.isTrigger = false;
         context.RagdollSystem.MapCollider.enabled = true;
-
-        Debug.Log("Exiting standing state");
     }
 
     public override void UpdateState()

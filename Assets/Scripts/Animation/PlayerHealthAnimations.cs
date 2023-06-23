@@ -1,6 +1,4 @@
 using Cinemachine;
-using DG.Tweening;
-using GLTF.Schema;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

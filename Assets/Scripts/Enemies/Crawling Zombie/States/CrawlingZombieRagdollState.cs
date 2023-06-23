@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 
 public class CrawlingZombieRagdollState : CrawlingZombieBaseState
@@ -32,13 +29,11 @@ public class CrawlingZombieRagdollState : CrawlingZombieBaseState
         readyToResetBones = false;
 
         timeUntilStanding = Random.Range(3f, maxTimeUntilStanding);
-
-        Debug.Log("Entering ragdoll state");
     }
 
     public override void ExitState()
     {
-        Debug.Log("Exiting ragdoll state");
+
     }
 
     public override void UpdateState()

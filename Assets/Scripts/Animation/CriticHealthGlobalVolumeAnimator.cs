@@ -21,14 +21,6 @@ public class CriticHealthGlobalVolumeAnimator : MonoBehaviour
         volume.profile.TryGet<ColorCurves>(out colorCurves);
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.K))
-            Enable();
-        else if (Input.GetKeyDown(KeyCode.L))
-            Disable();
-    }
-
     public void Enable()
     {
         StopAllCoroutines();

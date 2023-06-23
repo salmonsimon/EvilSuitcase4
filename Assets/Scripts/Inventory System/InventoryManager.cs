@@ -3,10 +3,7 @@ using UnityEngine;
 using AYellowpaper.SerializedCollections;
 using StarterAssets;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using static Inventory;
-using Mono.Cecil;
-using static UnityEditor.Progress;
 
 public class InventoryManager : MonoBehaviour
 {

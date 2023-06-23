@@ -1,13 +1,9 @@
 using EasyTransition;
 using StarterAssets;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using UnityEngine.SocialPlatforms.Impl;
-using UnityEngine.VFX;
 
 public class GameManager : MonoBehaviour
 {
@@ -135,13 +131,13 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (!pauseMenuUI.IsGamePaused && IsAbleToPause() && inputGameplay.pause)
+        if (inputGameplay.pause && !pauseMenuUI.IsGamePaused && IsAbleToPause())
         {
             inputGameplay.pause = false;
             inputUI.pause = false;
             pauseMenuUI.PauseGame();
         }
-        else if (pauseMenuUI.IsGamePaused && IsAbleToPause() && inputUI.pause)
+        else if (inputUI.pause && pauseMenuUI.IsGamePaused && IsAbleToPause())
         {
             inputGameplay.pause = false;
             inputUI.pause = false;
