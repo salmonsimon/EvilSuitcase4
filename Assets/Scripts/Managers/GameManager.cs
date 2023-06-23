@@ -11,7 +11,14 @@ public class GameManager : MonoBehaviour
 
     #region GameObjects
 
+    #region Player
+
     [SerializeField] private GameObject player;
+    private HealthManager playerHealthManager;
+    private PlayerHealthAnimations playerHealthAnimations;
+
+    #endregion
+
     [SerializeField] private SurfaceManager surfaceManager;
     [SerializeField] private LevelLoader levelLoader;
     [SerializeField] private CinemachineShake cinemachineShake;
@@ -117,6 +124,11 @@ public class GameManager : MonoBehaviour
 
             player.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
             inputGameplay.SetCursorLockState(false);
+
+            playerHealthManager = player.GetComponent<HealthManager>();
+            playerHealthAnimations = player.GetComponent<PlayerHealthAnimations>();
+
+            Application.targetFrameRate = Screen.currentResolution.refreshRate;
         }
     }
 
@@ -153,8 +165,8 @@ public class GameManager : MonoBehaviour
                 !pauseMenuUI.IsOnFastSwapConfiguration &&
                 !transitionManager.RunningTransition &&
                 !isTeleporting &&
-                !player.GetComponent<PlayerHealthAnimations>().IsOnHurtAnimation &&
-                player.GetComponent<HealthManager>().IsAlive;
+                !playerHealthAnimations.IsOnHurtAnimation &&
+                playerHealthManager.IsAlive;
     }
 
     public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -212,10 +224,10 @@ public class GameManager : MonoBehaviour
 
                 bloodManager.gameObject.SetActive(true);
 
-                player.GetComponent<HealthManager>().Resurrect();
+                playerHealthManager.Resurrect();
 
                 player.GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
-                player.GetComponent<StarterAssetsInputs>().SetCursorLockState(true);
+                inputGameplay.SetCursorLockState(true);
 
                 player.GetComponent<ThirdPersonController>().enabled = true;
 
@@ -226,8 +238,8 @@ public class GameManager : MonoBehaviour
                 break;
         }
 
-        player.GetComponent<StarterAssetsInputs>().ResetInputs();
-        player.GetComponent<InputsUI>().ResetInputs();
+        inputGameplay.ResetInputs();
+        inputUI.ResetInputs();
 
         levelLoader.FinishTransition();
     }

@@ -53,5 +53,7 @@ public class ResolutionSettingsUI : MonoBehaviour
         Screen.SetResolution(newResolution.width, newResolution.height, Screen.fullScreen);
 
         GameManager.instance.GetSFXManager().PlaySound(Config.CLICK_SFX);
+
+        Application.targetFrameRate = Screen.currentResolution.refreshRate;
     }
 }
