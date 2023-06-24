@@ -18,6 +18,7 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
     public bool MainInventory { get { return mainInventory; } }
 
     [SerializeField] private GameObject discardConfirmationPanel;
+    [SerializeField] private TextMeshProUGUI discardConfirmationItemNameText;
 
     [Header("Grid Configuration")]
     [SerializeField] private int gridWidth = 10;
@@ -312,8 +313,7 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
 
     public void OpenDiscardConfirmationPanel()
     {
-        TextMeshProUGUI TMPRO = discardConfirmationPanel.GetComponentInChildren<TextMeshProUGUI>();
-        TMPRO.text = TMPRO.text.Split(":")[0] + ": " + DiscardCandidate.GetItemSO().ItemName;
+        discardConfirmationItemNameText.text = DiscardCandidate.GetItemSO().ItemName;
 
         discardConfirmationPanel.SetActive(true);
     }

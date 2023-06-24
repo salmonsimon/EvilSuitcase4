@@ -2746,7 +2746,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Settings
+  m_text: <color=red>S</color>ettings
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 02f8dbe54a3b0794e9c24ec3ed45660f, type: 2}
   m_sharedMaterial: {fileID: -6082116029947509719, guid: 02f8dbe54a3b0794e9c24ec3ed45660f,
@@ -3433,7 +3433,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: quit
+  m_text: <color=red>q</color>uit
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 02f8dbe54a3b0794e9c24ec3ed45660f, type: 2}
   m_sharedMaterial: {fileID: -6082116029947509719, guid: 02f8dbe54a3b0794e9c24ec3ed45660f,
@@ -4474,7 +4474,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: choose map
+  m_text: <color=red>c</color>hoose <color=red>m</color>ap
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 02f8dbe54a3b0794e9c24ec3ed45660f, type: 2}
   m_sharedMaterial: {fileID: -6082116029947509719, guid: 02f8dbe54a3b0794e9c24ec3ed45660f,
@@ -4912,7 +4912,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Rooftop
+  m_text: <color=red>R</color>ooftop
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 02f8dbe54a3b0794e9c24ec3ed45660f, type: 2}
   m_sharedMaterial: {fileID: -6082116029947509719, guid: 02f8dbe54a3b0794e9c24ec3ed45660f,
@@ -4922,8 +4922,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -5339,8 +5339,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -6498,7 +6498,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: settings
+  m_text: <color=red>s</color>ettings
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 02f8dbe54a3b0794e9c24ec3ed45660f, type: 2}
   m_sharedMaterial: {fileID: -6082116029947509719, guid: 02f8dbe54a3b0794e9c24ec3ed45660f,
@@ -6634,7 +6634,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: play
+  m_text: <color=red>p</color>lay
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 02f8dbe54a3b0794e9c24ec3ed45660f, type: 2}
   m_sharedMaterial: {fileID: -6082116029947509719, guid: 02f8dbe54a3b0794e9c24ec3ed45660f,
@@ -7024,6 +7024,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dd73da6394bfae44b4b3d890283ae99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isUI: 1
 --- !u!1 &6987120764896409695
 GameObject:
   m_ObjectHideFlags: 0
@@ -8070,22 +8071,22 @@ PrefabInstance:
     - target: {fileID: 5093295506638034723, guid: 088cd87846d82274bacaa1d9dad85aff,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5093295507081063891, guid: 088cd87846d82274bacaa1d9dad85aff,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5093295507081063891, guid: 088cd87846d82274bacaa1d9dad85aff,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5093295507081063891, guid: 088cd87846d82274bacaa1d9dad85aff,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: -17
       objectReference: {fileID: 0}
     - target: {fileID: 5093295507569532384, guid: 088cd87846d82274bacaa1d9dad85aff,
         type: 3}
@@ -8215,12 +8216,12 @@ PrefabInstance:
     - target: {fileID: 5093295508046081759, guid: 088cd87846d82274bacaa1d9dad85aff,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5093295508046081759, guid: 088cd87846d82274bacaa1d9dad85aff,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5093295508111010074, guid: 088cd87846d82274bacaa1d9dad85aff,
         type: 3}
@@ -11565,6 +11566,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Key Binding Settings Panel - Keyboard
       objectReference: {fileID: 0}
+    - target: {fileID: 3559620198520120611, guid: 667543e9f93f59c4a8e56a16c64401be,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3559620198520120621, guid: 667543e9f93f59c4a8e56a16c64401be,
         type: 3}
       propertyPath: m_SortingOrder
@@ -11658,12 +11664,12 @@ PrefabInstance:
     - target: {fileID: 5702288721388127444, guid: 667543e9f93f59c4a8e56a16c64401be,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5702288721388127444, guid: 667543e9f93f59c4a8e56a16c64401be,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 0.84615386
       objectReference: {fileID: 0}
     - target: {fileID: 6128671334414249812, guid: 667543e9f93f59c4a8e56a16c64401be,
         type: 3}
@@ -12882,6 +12888,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Audio Settings Panel
       objectReference: {fileID: 0}
+    - target: {fileID: 6079241198397393026, guid: 22f688e17c9176e439b1eee35e6e777d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6079241198397393027, guid: 22f688e17c9176e439b1eee35e6e777d,
         type: 3}
       propertyPath: m_Pivot.x
@@ -12990,27 +13001,27 @@ PrefabInstance:
     - target: {fileID: 6543844680820724487, guid: 22f688e17c9176e439b1eee35e6e777d,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 0.342
       objectReference: {fileID: 0}
     - target: {fileID: 6543844680820724487, guid: 22f688e17c9176e439b1eee35e6e777d,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6543844680820724487, guid: 22f688e17c9176e439b1eee35e6e777d,
         type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0
+      value: 0.342
       objectReference: {fileID: 0}
     - target: {fileID: 6543844681101098888, guid: 22f688e17c9176e439b1eee35e6e777d,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 0.649
       objectReference: {fileID: 0}
     - target: {fileID: 6543844681101098888, guid: 22f688e17c9176e439b1eee35e6e777d,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6543844681762172934, guid: 22f688e17c9176e439b1eee35e6e777d,
         type: 3}
@@ -13020,17 +13031,17 @@ PrefabInstance:
     - target: {fileID: 6543844682090693584, guid: 22f688e17c9176e439b1eee35e6e777d,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 0.649
       objectReference: {fileID: 0}
     - target: {fileID: 6543844682090693584, guid: 22f688e17c9176e439b1eee35e6e777d,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6543844682090693584, guid: 22f688e17c9176e439b1eee35e6e777d,
         type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0
+      value: 0.649
       objectReference: {fileID: 0}
     - target: {fileID: 6543844682138460911, guid: 22f688e17c9176e439b1eee35e6e777d,
         type: 3}
@@ -13045,12 +13056,12 @@ PrefabInstance:
     - target: {fileID: 6543844682795584130, guid: 22f688e17c9176e439b1eee35e6e777d,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 0.342
       objectReference: {fileID: 0}
     - target: {fileID: 6543844682795584130, guid: 22f688e17c9176e439b1eee35e6e777d,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6987120762845437815, guid: 22f688e17c9176e439b1eee35e6e777d,
         type: 3}

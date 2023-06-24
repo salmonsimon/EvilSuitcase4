@@ -391,7 +391,7 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IP
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        GameManager.instance.GetSFXManager().PlaySound(Config.HOVER_SFX);
+        //GameManager.instance.GetSFXManager().PlaySound(Config.HOVER_SFX);
 
         if (HoldingInventory.MainInventory && GameManager.instance.GetPauseMenuUI().IsGamePaused)
         {

@@ -35,7 +35,7 @@ public class SFXManager : MonoBehaviour
     [SerializeField] private AudioClip transitionStartSFX;
     [SerializeField] private AudioClip transitionEndSFX;
     [SerializeField] private AudioClip bloodSplatterSFX;
-    [SerializeField] private AudioClip heartbeatSFX;
+    [SerializeField] private AudioClip heartbeatSingleSFX;
     [SerializeField] private AudioClip potionSFX;
 
     [SerializeField] private List<AudioClip> zombieBulletImpactSFX;
@@ -142,7 +142,7 @@ public class SFXManager : MonoBehaviour
                 break;
 
             case Config.HEARTBEAT_SFX:
-                audioSource.PlayOneShot(heartbeatSFX);
+                Heartbeat();
                 break;
 
             case Config.POTION_SFX:
@@ -178,5 +178,69 @@ public class SFXManager : MonoBehaviour
     public float GetSFXVolume()
     {
         return sfxVolume;
+    }
+
+    public void StopSFX()
+    {
+        audioSource.Stop();
+
+        audioSource.loop = false;
+        audioSource.clip = null;
+        audioSource.pitch = 1;
+    }
+
+    public void Heartbeat()
+    {
+        StopAllCoroutines();
+        StartCoroutine(HeartbeatCoroutine());
+    }
+
+    private IEnumerator HeartbeatCoroutine() 
+    {
+        StopSFX();
+
+        audioSource.clip = heartbeatSingleSFX;
+
+        while (true)
+        {
+            audioSource.Play();
+
+            while (audioSource.isPlaying)
+                yield return null;
+
+            yield return new WaitForSecondsRealtime(.8f);
+        }
+    }
+
+
+    public void DyingHeartbeat()
+    {
+        StopAllCoroutines();
+        StartCoroutine(DyingHeartbeatCoroutine());
+    }
+
+    private IEnumerator DyingHeartbeatCoroutine()
+    {
+        while (audioSource.isPlaying)
+            yield return null;
+
+        StopSFX();
+        audioSource.clip = heartbeatSingleSFX;
+
+        yield return new WaitForSecondsRealtime(.8f);
+
+        while (audioSource.pitch > .5)
+        {
+            audioSource.Play();
+
+            while (audioSource.isPlaying)
+                yield return null;
+
+            audioSource.pitch -= .1f;
+
+            yield return new WaitForSecondsRealtime(1f);
+        }
+
+        StopSFX();
     }
 }

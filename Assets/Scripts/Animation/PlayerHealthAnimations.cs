@@ -79,6 +79,7 @@ public class PlayerHealthAnimations : MonoBehaviour
             // TO DO: USE THIS IF WE FIND BETTER HURT ANIMATIONS FOR LOCOMOTION
             //animator.SetBool("IsHurt", true);
             GameManager.instance.GetPlayerHealthUI().CriticalHealthGlobalVolume.Enable();
+            GameManager.instance.GetSFXManager().PlaySound(Config.HEARTBEAT_SFX);
         }
             
     }
@@ -93,6 +94,7 @@ public class PlayerHealthAnimations : MonoBehaviour
         {
             //animator.SetBool("IsHurt", false);
             GameManager.instance.GetPlayerHealthUI().CriticalHealthGlobalVolume.Disable();
+            GameManager.instance.GetSFXManager().StopSFX();
         }
             
     }
@@ -101,6 +103,7 @@ public class PlayerHealthAnimations : MonoBehaviour
     {
         ActivateHurtColliders();
         PlayRandomDeathAnimation();
+        GameManager.instance.GetSFXManager().DyingHeartbeat();
     }
 
     private void Revival()

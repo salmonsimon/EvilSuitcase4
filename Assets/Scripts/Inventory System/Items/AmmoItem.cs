@@ -162,6 +162,8 @@ public class AmmoItem : Item
                 inventoryAmmoItemList[inventoryAmmoItemList.Count - 1] = lastAmmoItemInInventoryList;
 
                 CurrentAmmo -= fillAmount;
+
+                GameManager.instance.GetSFXManager().PlaySound(Config.DROP_SFX);
             }
         }
     }

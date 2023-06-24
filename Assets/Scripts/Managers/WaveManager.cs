@@ -124,6 +124,9 @@ public class WaveManager : MonoBehaviour
     [SerializeField] private GameObject nextWaveCountdownPanel;
     [SerializeField] private GameObject waveClearedPanel;
 
+    [SerializeField] private Animator waveProgressPanelAnimator;
+    [SerializeField] private TextMeshProUGUI killRemainingVarText;
+
     #endregion
 
     #region Events and Delegates
@@ -219,7 +222,7 @@ public class WaveManager : MonoBehaviour
         {
             if (i == 0)
             {
-                countdownText.text = "START!";
+                countdownText.text = "<color=red>S</color>TART!";
                 GameManager.instance.GetSFXManager().PlaySound(Config.WAVE_START_SFX);
             }
             else
@@ -243,6 +246,9 @@ public class WaveManager : MonoBehaviour
         currentKilledEnemies = 0;
         currentEnemiesToKill = wave.EnemiesToSpawn;
 
+        UpdateKillsRemainingVarText();
+        ShowKillsRemainingPanel(true);
+
         GameManager.instance.GetEnemySpawner().SpawnEnemies(wave);
     }
 
@@ -251,13 +257,31 @@ public class WaveManager : MonoBehaviour
         currentKilledEnemies++;
         TotalEnemiesKilled++;
 
+        UpdateKillsRemainingVarText();
+
         if (currentKilledEnemies == currentEnemiesToKill)
             WaveCleared();
+    }
+
+    private void UpdateKillsRemainingVarText()
+    {
+        int killsRemaining = currentEnemiesToKill - currentKilledEnemies;
+
+        killRemainingVarText.text = killsRemaining.ToString();
+    }
+
+    public void ShowKillsRemainingPanel(bool show)
+    {
+        if (show)
+            waveProgressPanelAnimator.SetTrigger(Config.CROSSFADE_START_TRIGGER);
+        else
+            waveProgressPanelAnimator.SetTrigger(Config.CROSSFADE_END_TRIGGER);
     }
 
     private void WaveCleared()
     {
         StartCoroutine(WaveClearedCoroutine());
+        ShowKillsRemainingPanel(false);
     }
 
     private IEnumerator WaveClearedCoroutine()

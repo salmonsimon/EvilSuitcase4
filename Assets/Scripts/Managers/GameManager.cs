@@ -129,6 +129,8 @@ public class GameManager : MonoBehaviour
             playerHealthAnimations = player.GetComponent<PlayerHealthAnimations>();
 
             Application.targetFrameRate = Screen.currentResolution.refreshRate;
+
+            Settings.Load();
         }
     }
 
