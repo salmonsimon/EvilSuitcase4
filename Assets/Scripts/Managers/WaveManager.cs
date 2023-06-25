@@ -278,6 +278,14 @@ public class WaveManager : MonoBehaviour
             waveProgressPanelAnimator.SetTrigger(Config.CROSSFADE_END_TRIGGER);
     }
 
+    public void EnableKillsRemainingPanel(bool enable)
+    {
+        waveProgressPanelAnimator.gameObject.SetActive(enable);
+
+        if (enable)
+            waveProgressPanelAnimator.SetTrigger(Config.CROSSFADE_START_TRIGGER);
+    }
+
     private void WaveCleared()
     {
         StartCoroutine(WaveClearedCoroutine());

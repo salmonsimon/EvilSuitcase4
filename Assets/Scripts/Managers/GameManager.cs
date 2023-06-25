@@ -147,12 +147,16 @@ public class GameManager : MonoBehaviour
     {
         if (inputGameplay.pause && !pauseMenuUI.IsGamePaused && IsAbleToPause())
         {
+            waveManager.EnableKillsRemainingPanel(false);
+
             inputGameplay.pause = false;
             inputUI.pause = false;
             pauseMenuUI.PauseGame();
         }
         else if (inputUI.pause && pauseMenuUI.IsGamePaused && IsAbleToPause())
         {
+            waveManager.EnableKillsRemainingPanel(true);
+
             inputGameplay.pause = false;
             inputUI.pause = false;
             pauseMenuUI.ResumeGame();

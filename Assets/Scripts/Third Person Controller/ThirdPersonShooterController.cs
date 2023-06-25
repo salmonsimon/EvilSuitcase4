@@ -99,7 +99,7 @@ public class ThirdPersonShooterController : MonoBehaviour
             playerHealthManager.OnDeath += Death;
             playerHealthManager.OnRevival += Revival;
 
-            GameManager.instance.GetTransitionManager().OnRunningTransitionValueChange += RunninTransitionValueChange;
+            GameManager.instance.GetTransitionManager().OnRunningTransitionValueChange += RunningTransitionValueChange;
         }
 
         UnequipWeapon();
@@ -112,7 +112,7 @@ public class ThirdPersonShooterController : MonoBehaviour
             playerHealthManager.OnDeath -= Death;
             playerHealthManager.OnRevival -= Revival;
 
-            GameManager.instance.GetTransitionManager().OnRunningTransitionValueChange -= RunninTransitionValueChange;
+            GameManager.instance.GetTransitionManager().OnRunningTransitionValueChange -= RunningTransitionValueChange;
         }
     }
 
@@ -124,7 +124,7 @@ public class ThirdPersonShooterController : MonoBehaviour
             playerHealthManager.OnRevival += Revival;
         }
 
-        GameManager.instance.GetTransitionManager().OnRunningTransitionValueChange += RunninTransitionValueChange;
+        GameManager.instance.GetTransitionManager().OnRunningTransitionValueChange += RunningTransitionValueChange;
 
         initialized = true;
     }
@@ -141,7 +141,7 @@ public class ThirdPersonShooterController : MonoBehaviour
         thirdPersonController.enabled = true;
     }
 
-    private void RunninTransitionValueChange()
+    private void RunningTransitionValueChange()
     {
         if (GameManager.instance.GetTransitionManager().RunningTransition)
         {
@@ -173,7 +173,10 @@ public class ThirdPersonShooterController : MonoBehaviour
 
         if (playerHealthAnimations.IsOnHurtAnimation)
         {
-            aiming = false;
+            if (EquippedWeapon.name.Equals("Suitcase"))
+                aiming = true;
+            else
+                aiming = false;
 
             crosshair.ShowCrossHairUI(false);
 
@@ -295,7 +298,12 @@ public class ThirdPersonShooterController : MonoBehaviour
 
         if (aiming)
         {
-            if (Vector3.Dot(transform.forward, aimDirection) > .9f)
+            if (playerHealthAnimations.IsOnHurtAnimation)
+            {
+                foreach (Rig rig in aimRigs)
+                    rig.weight = Mathf.Lerp(rig.weight, 1f, Time.deltaTime * 10f);
+            }
+            else if (Vector3.Dot(transform.forward, aimDirection) > .9f)
             {
                 foreach (Rig rig in aimRigs)
                     rig.weight = Mathf.Lerp(rig.weight, 1f, Time.deltaTime * 20f);

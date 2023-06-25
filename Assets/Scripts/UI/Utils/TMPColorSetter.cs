@@ -1,15 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class TextColorSetter : MonoBehaviour
+public class TMPColorSetter : MonoBehaviour
 {
-    private Text text;
+    private TextMeshProUGUI text;
 
     private void Start()
     {
-        text = GetComponent<Text>();
+        text = GetComponent<TextMeshProUGUI>();
     }
 
     public void SetDefaultColor()

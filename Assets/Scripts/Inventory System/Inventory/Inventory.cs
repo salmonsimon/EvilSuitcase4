@@ -313,7 +313,7 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
 
     public void OpenDiscardConfirmationPanel()
     {
-        discardConfirmationItemNameText.text = DiscardCandidate.GetItemSO().ItemName;
+        discardConfirmationItemNameText.text = " \n" + DiscardCandidate.GetItemSO().ItemName;
 
         discardConfirmationPanel.SetActive(true);
     }
