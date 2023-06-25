@@ -81,8 +81,8 @@ public class RewardsUI : MonoBehaviour
         {
             if (Utils.IsSubclassOfRawGeneric(item.GetType(), typeof(GunItem)))
                 gunItems.Add(item);
-            //else if (Utils.IsSubclassOfRawGeneric(item.GetType(), typeof(MeleeItem)))
-            //    meleeItems.Add(item);
+            else if (Utils.IsSubclassOfRawGeneric(item.GetType(), typeof(MeleeItem)))
+                meleeItems.Add(item);
             else
                 consumableItems.Add(item);
         }

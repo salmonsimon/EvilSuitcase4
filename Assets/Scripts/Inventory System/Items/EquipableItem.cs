@@ -18,6 +18,18 @@ public class EquipableItem : Item
         reloadingMainInventoryButtonPanel.SetActive(false);
     }
 
+    public override void RemoveFromMainInventory()
+    {
+        base.RemoveFromMainInventory();
+
+        DiscardCurrentWeaponShortcut();
+
+        EquipableItem currentEquipedItem = GameManager.instance.GetInventoryManager().EquippedItem;
+
+        if (currentEquipedItem && currentEquipedItem.Equals(this))
+            Unequip();
+    }
+
     public override void Discard()
     {
         DiscardCurrentWeaponShortcut();

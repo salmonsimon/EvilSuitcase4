@@ -81,6 +81,10 @@ public class AmmoItem : Item
         inventoryManager.AmmoItemListDictionary[ammoType].Remove(this);
 
         inventoryManager.StockedAmmoDictionary[ammoType] -= currentAmmo;
+
+        if (inventoryManager.StockedAmmoDictionary[ammoType] < 0)
+            inventoryManager.StockedAmmoDictionary[ammoType] = 0;
+
         inventoryManager.StockedAmmoChange();
     }
 
@@ -121,6 +125,7 @@ public class AmmoItem : Item
                 int fillAmount = Mathf.Min(maxFillAmount, bulletsToFillAmmoItem);
 
                 lastAmmoItemInInventoryList.CurrentAmmo += fillAmount;
+                
 
                 inventoryAmmoItemList[inventoryAmmoItemList.Count - 1] = lastAmmoItemInInventoryList;
 

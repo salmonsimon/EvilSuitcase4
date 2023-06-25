@@ -241,7 +241,17 @@ public class WaveManager : MonoBehaviour
 
     public void StartWave()
     {
-        WaveSpawnStruct wave = waves[currentWave];
+        WaveSpawnStruct wave;
+
+        if (currentWave < waves.Count)
+            wave = waves[currentWave];
+        else
+        {
+            wave = waves[waves.Count - 1];
+
+            int extraEnemiesToSpawn = (currentWave - waves.Count) * 2;
+            wave.EnemiesToSpawn += extraEnemiesToSpawn;
+        }
 
         currentKilledEnemies = 0;
         currentEnemiesToKill = wave.EnemiesToSpawn;
@@ -316,7 +326,9 @@ public class WaveManager : MonoBehaviour
 
         waveClearedPanel.SetActive(false);
 
-        GameManager.instance.GetRewardsUI().OpenRewardsUI(rewardItems, rewardsCountdown[currentWave]);
+        float rewardCountdown = currentWave < waves.Count ? rewardsCountdown[currentWave] : 15f;
+
+        GameManager.instance.GetRewardsUI().OpenRewardsUI(rewardItems, rewardCountdown);
 
         GameManager.instance.IsOnRewardsUI = true;
 
@@ -350,7 +362,7 @@ public class WaveManager : MonoBehaviour
 
         GameManager.instance.GetInventoryManager().UnblockBlockedItems();
 
-        if (currentWave > 0 && currentWave % 10 == 0)
+        if (currentWave > 0 && currentWave % 3 == 0)
             CorpseCleanup();
 
         GameManager.instance.GetSFXManager().PlaySound(Config.TRANSITION_END_SFX);
@@ -358,7 +370,9 @@ public class WaveManager : MonoBehaviour
 
         bool blockedItems = false;
 
-        if (itemsToBlock[currentWave] > 0)
+        int itemsToBlockThisWave = currentWave < waves.Count ? itemsToBlock[currentWave] : itemsToBlock[waves.Count - 1];
+
+        if (itemsToBlockThisWave > 0)
         {
             yield return new WaitForSeconds(transitionTime);
 
@@ -370,7 +384,7 @@ public class WaveManager : MonoBehaviour
 
             yield return new WaitForSeconds(transitionTime);
 
-            blockedItems = GameManager.instance.GetInventoryManager().BlockRandomItems(itemsToBlock[currentWave]);
+            blockedItems = GameManager.instance.GetInventoryManager().BlockRandomItems(itemsToBlockThisWave);
 
             GameManager.instance.GetTransitionManager().FinishCurrentTransition();
 
