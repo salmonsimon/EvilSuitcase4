@@ -67,9 +67,6 @@ public class EquipableItem : Item
     {
         if (GameManager.instance.GetPlayer().GetComponent<ThirdPersonShooterController>().EquippedWeapon)
             GameManager.instance.GetPlayer().GetComponent<ThirdPersonShooterController>().UnequipWeapon();
-
-        GameManager.instance.GetInventoryManager().EquippedItem = null;
-        GameManager.instance.GetInventoryManager().CurrentEquippedWeaponShortcutIndex = -1;
     }
 
     public void OpenFastSwapConfigPanel()

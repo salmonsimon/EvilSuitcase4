@@ -70,6 +70,13 @@ public class PlayerHealthAnimations : MonoBehaviour
         if (playerHealthManager.IsAlive && playerThirdPersonShooterController.CanTriggerHurtAnimation())
             PlayRandomHurtAnimation();
 
+        if (!GameManager.instance.GetPlayerHealthUI().CriticalHealthGlobalVolume.IsEnabled)
+        {
+            GameManager.instance.GetPlayerHealthUI().HurtGlobalVolume.Enable();
+
+            StartCoroutine(WaitToDisableHurtGlobalVolume());
+        }
+
         float currentHitPoints = playerHealthManager.CurrentHitPoints;
         float maxHitPoints = playerHealthManager.MaxHitPoints;
         float hitPointsPercentage = currentHitPoints / maxHitPoints;
@@ -127,18 +134,14 @@ public class PlayerHealthAnimations : MonoBehaviour
 
         isOnHurtAnimation = true;
         StartCoroutine(PlayClip(Animator.StringToHash(hurtAnimationToPlay.name), 0f));
-
-        if (!GameManager.instance.GetPlayerHealthUI().CriticalHealthGlobalVolume.IsEnabled)
-        {
-            GameManager.instance.GetPlayerHealthUI().HurtGlobalVolume.Enable();
-
-            StartCoroutine(WaitToDisableHurtGlobalVolume());
-        }
     }
 
     private IEnumerator WaitToDisableHurtGlobalVolume()
     {
-        while (IsOnHurtAnimation) yield return null;
+        if (IsOnHurtAnimation)
+            while (IsOnHurtAnimation) yield return null;
+        else
+            yield return new WaitForSeconds(1.5f);  
 
         GameManager.instance.GetPlayerHealthUI().HurtGlobalVolume.Disable();
     }

@@ -84,13 +84,18 @@ public class MusicManager : MonoBehaviour
 
     public void StopMusic()
     {
+        if (!audioSource.isPlaying)
+            return;
+
         StopAllCoroutines();
 
-        WaitAndStop(fadeDuration + Config.SMALL_DELAY);
+        StartCoroutine(WaitAndStop(fadeDuration + Config.SMALL_DELAY));
     }
 
     private IEnumerator PlayGameplayMusic()
     {
+        yield return new WaitForSeconds(fadeDuration + Config.LARGE_DELAY);
+
         float nextSongRandomDelay = playDelay;
 
         while (true)

@@ -87,11 +87,14 @@ public class PlayerHealthUI : MonoBehaviour
         isOpeningMainMenu = true;
 
         gameOverPanel.GetComponent<Animator>().SetTrigger(Config.ANIMATOR_HIDE_COUNTERS);
+        GameManager.instance.GetMusicManager().StopMusic();
 
         yield return new WaitForSeconds(2f);
 
         foreach (Transform child in GameManager.instance.DisposableObjectsContainer.transform)
             Destroy(child.gameObject);
+
+        yield return new WaitForSeconds(Config.LARGE_DELAY);
 
         GameManager.instance.ToMainMenu();
 
@@ -114,6 +117,7 @@ public class PlayerHealthUI : MonoBehaviour
         GameManager.instance.SetIsTeleporting(true);
 
         gameOverPanel.GetComponent<Animator>().SetTrigger(Config.ANIMATOR_HIDE_COUNTERS);
+        GameManager.instance.GetMusicManager().StopMusic();
 
         yield return new WaitForSeconds(2f);
 
@@ -121,6 +125,8 @@ public class PlayerHealthUI : MonoBehaviour
 
         foreach (Transform child in GameManager.instance.DisposableObjectsContainer.transform)
             Destroy(child.gameObject);
+
+        yield return new WaitForSeconds(Config.LARGE_DELAY);
 
         GameManager.instance.GetLevelLoader().LoadLevel(SceneManager.GetActiveScene().name, Config.CROSSFADE_TRANSITION);
 

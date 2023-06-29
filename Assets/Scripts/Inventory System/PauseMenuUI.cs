@@ -449,6 +449,7 @@ public class PauseMenuUI : MonoBehaviour
         GameObject player = GameManager.instance.GetPlayer();
         player.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
         player.GetComponent<StarterAssetsInputs>().SetCursorLockState(false);
+        Cursor.visible = true;
 
         iconContainer.SetActive(true);
 
@@ -460,12 +461,6 @@ public class PauseMenuUI : MonoBehaviour
     public void PauseGameAndOpenInventory()
     {
         GameManager.instance.GetSFXManager().PlaySound(Config.PAUSE_SFX);
-
-        GameObject player = GameManager.instance.GetPlayer();
-        player.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
-        player.GetComponent<StarterAssetsInputs>().SetCursorLockState(false);
-
-        iconContainer.SetActive(true);
 
         SetGamePaused(true);
 
@@ -502,6 +497,10 @@ public class PauseMenuUI : MonoBehaviour
     {
         InventorySetup();
 
+        GameObject player = GameManager.instance.GetPlayer();
+        player.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
+        player.GetComponent<StarterAssetsInputs>().SetCursorLockState(false);
+
         inventoryPanel.SetActive(true);
         iconContainer.SetActive(true);
     }
@@ -525,6 +524,8 @@ public class PauseMenuUI : MonoBehaviour
 
         player.GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
         player.GetComponent<StarterAssetsInputs>().SetCursorLockState(true);
+        Cursor.visible = false;
+
 
         iconContainer.SetActive(false);
 
@@ -567,6 +568,11 @@ public class PauseMenuUI : MonoBehaviour
 
     private void NextMenu()
     {
+        Item draggingItem = GameManager.instance.GetInventoryDragDropSystem().DraggingItem;
+
+        if (draggingItem)
+            return;
+
         pauseMenuPanelList[activePanelIndex].SetActive(false);
 
         Transform activeIcon = iconCircularScrillList.transform.GetChild(iconCircularScrillList.ListBank.GetContentCount() - 1);
@@ -583,6 +589,11 @@ public class PauseMenuUI : MonoBehaviour
 
     private void PreviousMenu()
     {
+        Item draggingItem = GameManager.instance.GetInventoryDragDropSystem().DraggingItem;
+
+        if (draggingItem)
+            return;
+
         pauseMenuPanelList[activePanelIndex].SetActive(false);
 
         Transform activeIcon = iconCircularScrillList.transform.GetChild(iconCircularScrillList.ListBank.GetContentCount() - 1);

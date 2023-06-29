@@ -87,6 +87,8 @@ public class InventoryManager : MonoBehaviour
 
     public void ResetProgress()
     {
+        SuitcaseItem.DiscardCurrentWeaponShortcut();
+
         for (int i = BlockedItems.Count - 1; i >= 0; i--)
             BlockedItems[i].Discard();
 
@@ -113,10 +115,7 @@ public class InventoryManager : MonoBehaviour
             playerThirdPersonShooterController.IsAttacking)
             return;
 
-        if (!GameManager.instance.GetPauseMenuUI().IsGamePaused && 
-            !GameManager.instance.IsOnRewardsUI &&
-            HasFastSwapWeapons() && 
-            playerInput.weaponShortcut > -1)
+        if (playerInput.weaponShortcut > -1 && AbleToFastSwap())
         {
             EquipableItem equipableItem = FastSwapWeaponArray[playerInput.weaponShortcut];
 
@@ -129,10 +128,7 @@ public class InventoryManager : MonoBehaviour
 
             playerInput.weaponShortcut = -1;
         }
-        else if (!GameManager.instance.GetPauseMenuUI().IsGamePaused &&
-                 HasFastSwapWeapons() &&
-                 fastSwapIndexes.Count > 1 &&
-                 playerInput.scrollWheel != Vector2.zero)
+        else if (playerInput.scrollWheel != Vector2.zero && AbleToFastSwap())
         {
             if (playerInput.scrollWheel.y > 0)
             {
@@ -158,6 +154,15 @@ public class InventoryManager : MonoBehaviour
 
             playerInput.scrollWheel = Vector2.zero;
         }
+    }
+
+    private bool AbleToFastSwap()
+    {
+        return   !GameManager.instance.GetPauseMenuUI().IsGamePaused &&
+                 !GameManager.instance.IsOnRewardsUI &&
+                 !GameManager.instance.GetTransitionManager().RunningTransition &&
+                 GameManager.instance.GetWaveManager().ChallengingWave &&
+                 HasFastSwapWeapons();
     }
 
     #region Fast Swap Methods

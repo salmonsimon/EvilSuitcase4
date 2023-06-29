@@ -1,6 +1,7 @@
 using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -50,6 +51,7 @@ public class WaveManager : MonoBehaviour
 
     private int currentKilledEnemies = 0;
     private int currentEnemiesToKill = 0;
+    private int currentCorpses = 0;
 
     private bool initialized = false;
 
@@ -112,6 +114,11 @@ public class WaveManager : MonoBehaviour
         } 
     }
 
+    private bool showWaveProgress = false;
+
+    private bool challengingWave = false;
+    public bool ChallengingWave { get { return challengingWave; } }
+
     #endregion
 
     #endregion
@@ -154,6 +161,10 @@ public class WaveManager : MonoBehaviour
 
         currentEnemiesToKill = 0;
         currentKilledEnemies = 0;
+        currentCorpses = 0;
+
+        showWaveProgress = false;
+        challengingWave = false;
 
         waveClearedPanel.SetActive(false);
         nextWaveCountdownPanel.SetActive(false);
@@ -203,7 +214,7 @@ public class WaveManager : MonoBehaviour
 
     private void Update()
     {
-        if (!GameManager.instance.IsOnRewardsUI && !GameManager.instance.IsOnMainMenu())
+        if (challengingWave && !GameManager.instance.IsOnMainMenu())
             TimeAlive += Time.deltaTime;
     }
 
@@ -215,6 +226,7 @@ public class WaveManager : MonoBehaviour
     private IEnumerator NextWaveCoroutine()
     {
         nextWaveCountdownPanel.SetActive(true);
+        challengingWave = true;
 
         TextMeshProUGUI countdownText = nextWaveCountdownPanel.transform.GetComponentInChildren<TextMeshProUGUI>();
 
@@ -257,6 +269,7 @@ public class WaveManager : MonoBehaviour
         currentEnemiesToKill = wave.EnemiesToSpawn;
 
         UpdateKillsRemainingVarText();
+
         ShowKillsRemainingPanel(true);
 
         GameManager.instance.GetEnemySpawner().SpawnEnemies(wave);
@@ -265,6 +278,7 @@ public class WaveManager : MonoBehaviour
     public void OnEnemyDeath()
     {
         currentKilledEnemies++;
+        currentCorpses++;
         TotalEnemiesKilled++;
 
         UpdateKillsRemainingVarText();
@@ -283,13 +297,22 @@ public class WaveManager : MonoBehaviour
     public void ShowKillsRemainingPanel(bool show)
     {
         if (show)
+        {
             waveProgressPanelAnimator.SetTrigger(Config.CROSSFADE_START_TRIGGER);
+            showWaveProgress = true;
+        }
         else
+        {
             waveProgressPanelAnimator.SetTrigger(Config.CROSSFADE_END_TRIGGER);
+            showWaveProgress = false;
+        }
     }
 
     public void EnableKillsRemainingPanel(bool enable)
     {
+        if (!showWaveProgress)
+            return;
+
         waveProgressPanelAnimator.gameObject.SetActive(enable);
 
         if (enable)
@@ -316,6 +339,8 @@ public class WaveManager : MonoBehaviour
             yield return new WaitForSeconds(1f);
         }
 
+        challengingWave = false;
+
         GameManager.instance.GetSFXManager().PlaySound(Config.TRANSITION_START_SFX);
 
         float transitionTime = GameManager.instance.GetTransitionManager().RunTransition("DoubleWipe");
@@ -341,8 +366,6 @@ public class WaveManager : MonoBehaviour
 
     public void FinishWave()
     {
-        GameManager.instance.IsOnRewardsUI = false;
-
         GameManager.instance.GetRewardsUI().CloseRewardsUI();
 
         StartCoroutine(FinishWaveCoroutine());
@@ -352,9 +375,6 @@ public class WaveManager : MonoBehaviour
     {
         GameObject player = GameManager.instance.GetPlayer();
 
-        player.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
-        player.GetComponent<StarterAssetsInputs>().SetCursorLockState(false);
-
         GameManager.instance.GetSFXManager().PlaySound(Config.TRANSITION_START_SFX);
         float transitionTime = GameManager.instance.GetTransitionManager().RunTransition("DoubleWipe");
 
@@ -362,7 +382,7 @@ public class WaveManager : MonoBehaviour
 
         GameManager.instance.GetInventoryManager().UnblockBlockedItems();
 
-        if (currentWave > 0 && currentWave % 3 == 0)
+        if (currentCorpses > 10)
             CorpseCleanup();
 
         GameManager.instance.GetSFXManager().PlaySound(Config.TRANSITION_END_SFX);
@@ -376,6 +396,7 @@ public class WaveManager : MonoBehaviour
         {
             yield return new WaitForSeconds(transitionTime);
 
+            // TO DO: CHECK IF CHANGING THIS ONE TO REALLY PAUSING THE GAME WORKS?
             GameManager.instance.GetPauseMenuUI().OpenPauseInventory();
 
             transitionTime = GameManager.instance.GetTransitionManager().RunTransition("PaintSplash");
@@ -391,11 +412,16 @@ public class WaveManager : MonoBehaviour
             yield return new WaitForSeconds(transitionTime);
         }
 
-        player.GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
-        player.GetComponent<StarterAssetsInputs>().SetCursorLockState(true);
-
         if (blockedItems)
+        {
             GameManager.instance.GetPauseMenuUI().PauseGameAndOpenInventory();
+            challengingWave = true;
+        }
+        else
+        {
+            player.GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
+            player.GetComponent<StarterAssetsInputs>().SetCursorLockState(true);
+        }
 
         yield return new WaitForSeconds(Config.MEDIUM_DELAY);
 
@@ -430,6 +456,8 @@ public class WaveManager : MonoBehaviour
 
     public void CorpseCleanup()
     {
+        currentCorpses = 0;
+
         foreach (Transform corpse in PoolContainer)
         {
             ObjectPool<GameObject> pool = corpse.GetComponent<PoolableObject>().ObjectPool;
@@ -439,6 +467,13 @@ public class WaveManager : MonoBehaviour
 
             if (corpse.gameObject.activeSelf)
             {
+                List<DartProjectile> arrows = corpse.GetComponentsInChildren<DartProjectile>(true).ToList();
+                arrows.AddRange(corpse.GetComponents<DartProjectile>().ToList());
+                
+                if (arrows.Count >= 0)
+                    for (int arrowIndex = arrows.Count - 1; arrowIndex >= 0; arrowIndex--)
+                        Destroy(arrows[arrowIndex].gameObject);
+
                 corpse.gameObject.SetActive(false);
 
                 pool.Release(corpse.gameObject);

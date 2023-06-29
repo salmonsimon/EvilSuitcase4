@@ -304,33 +304,29 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IP
         if (IsBlocked)
             return;
 
-        isBlocked = true;
-
         blockedPanel.SetActive(true);
 
-        if (IsSubclassOfRawGeneric(GetType(), typeof(EquipableItem)))
+        if (TryGetComponent(out EquipableItem equipableItem))
         {
-            EquipableItem equipableItem = GetComponent<EquipableItem>();
             equipableItem.DiscardCurrentWeaponShortcut(true);
 
             EquipableItem currentEquipedItem = GameManager.instance.GetInventoryManager().EquippedItem;
 
             if (currentEquipedItem && currentEquipedItem.Equals(equipableItem))
                 equipableItem.Unequip();
+
+            GameManager.instance.GetInventoryManager().SavedItems.Remove(this);
         }
-        else if (IsSubclassOfRawGeneric(GetType(), typeof(AmmoItem)))
-        {
-            AmmoItem ammoItem = GetComponent<AmmoItem>();
-            ammoItem.RemoveFromMainInventory();
-        }
+        else
+            RemoveFromMainInventory();
+
+        isBlocked = true;
     }
 
     public virtual void UnblockItem()
     {
         if (!IsBlocked)
             return;
-
-        isBlocked = false;
 
         blockedPanel.SetActive(false);
 
@@ -346,11 +342,9 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IP
             }
             
         }
-        else if (IsSubclassOfRawGeneric(GetType(), typeof(AmmoItem)))
-        {
-            AmmoItem ammoItem = GetComponent<AmmoItem>();
-            ammoItem.AddToMainInventory();
-        }
+
+        isBlocked = false;
+        AddToMainInventory();
     }
 
     public void AddButton()

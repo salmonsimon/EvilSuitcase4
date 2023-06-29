@@ -216,6 +216,10 @@ public class RagdollSystem : MonoBehaviour
 
     public void ResetRagdoll()
     {
+        StopAllCoroutines();
+
+        SetRagdoll(true, true);
+
         onHitRecovery = false;
 
         if (stateMachine.HealthManager.IsAlive)

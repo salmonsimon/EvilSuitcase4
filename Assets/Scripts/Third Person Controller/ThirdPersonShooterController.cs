@@ -67,9 +67,30 @@ public class ThirdPersonShooterController : MonoBehaviour
     private Coroutine shotgunShootCoroutine = null;
 
     private bool isAttacking = false;
-    public bool IsAttacking { get { return isAttacking; } }
+    public bool IsAttacking 
+    { 
+        get { return isAttacking; } 
+        
+        private set 
+        { 
+            if (value == isAttacking) return; 
+
+            isAttacking = value;
+
+            if (OnAttack != null && isAttacking)
+                OnAttack();
+            else if (OnAttackFinished != null && !isAttacking)
+                OnAttackFinished();
+        } 
+    }
 
     private bool initialized = false;
+
+    public delegate void OnAttackDelegate();
+    public event OnAttackDelegate OnAttack;
+
+    public delegate void OnAttackFinishedDelegate();
+    public event OnAttackFinishedDelegate OnAttackFinished;
 
     #endregion
 
@@ -531,7 +552,7 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     public void FinishMeleeAttack()
     {
-        isAttacking = false;
+        IsAttacking = false;
 
         if (equippedWeapon.TryGetComponent(out MeleeWeapon meleeWeapon) && meleeWeapon.CurrentDurability <= 0)
             meleeWeapon.Break();
@@ -539,7 +560,7 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     public void PlayMeleeAttackAnimation(AnimationClip attackAnimationClip)
     {
-        isAttacking = true;
+        IsAttacking = true;
         starterAssetsInputs.shoot = false;
 
         reloadCoroutine = StartCoroutine(PlayClip(Animator.StringToHash(attackAnimationClip.name), 0f));

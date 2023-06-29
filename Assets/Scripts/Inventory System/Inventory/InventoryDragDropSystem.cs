@@ -17,7 +17,10 @@ public class InventoryDragDropSystem : MonoBehaviour
     #region Variables
 
     private Inventory draggingInventory;
+
     private Item draggingItem;
+    public Item DraggingItem { get { return draggingItem; } }
+
     private Vector2Int mouseDragGridPositionOffset;
     private Vector2 mouseDragAnchoredPositionOffset;
     private Item.Direction direction;

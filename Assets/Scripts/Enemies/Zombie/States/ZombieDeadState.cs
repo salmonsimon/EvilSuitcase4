@@ -1,7 +1,10 @@
+using System.Linq;
 using UnityEngine;
 
 public class ZombieDeadState : ZombieBaseState
 {
+    private bool onRagdollMode = false;
+
     public ZombieDeadState(ZombieStateMachine zombieStateMachine, ZombieStateFactory zombieStateFactory) : base(zombieStateMachine, zombieStateFactory) {}
 
     public override void CheckSwitchStates()
@@ -11,6 +14,8 @@ public class ZombieDeadState : ZombieBaseState
 
     public override void EnterState()
     {
+        context.Agent.enabled = false;
+
         context.RagdollSystem.MapCollider.enabled = false;
 
         context.RagdollSystem.RagdollMode = true;
@@ -20,6 +25,8 @@ public class ZombieDeadState : ZombieBaseState
         context.RagdollSystem.SetRagdoll(false, true);
 
         context.Agent.GetComponent<ZombieSFX>().PlayRandomDeathAudioClip();
+
+        context.DisableHitboxes();
     }
 
     public override void ExitState()
@@ -32,6 +39,17 @@ public class ZombieDeadState : ZombieBaseState
 
     public override void UpdateState()
     {
+        if (!onRagdollMode && context.Animator.enabled == true)
+        {
+            context.RagdollSystem.RagdollMode = true;
 
+            context.RagdollSystem.ResetRagdoll();
+
+            context.RagdollSystem.SetRagdoll(false, true);
+
+            context.Agent.enabled = false;
+
+            onRagdollMode = true;
+        }
     }
 }

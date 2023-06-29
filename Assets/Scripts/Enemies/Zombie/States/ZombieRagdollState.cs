@@ -30,6 +30,8 @@ public class ZombieRagdollState : ZombieBaseState
         context.RagdollSystem.SetRagdoll(false, true);
         readyToResetBones = false;
 
+        context.DisableHitboxes();
+
         timeUntilStanding = Random.Range(3f, maxTimeUntilStanding);
     }
 

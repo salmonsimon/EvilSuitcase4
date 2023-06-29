@@ -82,6 +82,9 @@ public class SFXManager : MonoBehaviour
                 break;
 
             case Config.EVIL_LAUGH_SFX:
+                StopAllCoroutines();
+                StopSFX();
+
                 audioSource.PlayOneShot(evilLaughSFX);
                 break;
 
@@ -126,6 +129,9 @@ public class SFXManager : MonoBehaviour
                 break;
 
             case Config.GAME_OVER_SFX:
+                StopAllCoroutines();
+                StopSFX();
+
                 audioSource.PlayOneShot(gameOverSFX);
                 break;
 

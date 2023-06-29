@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 public class ZombieStateMachine : StateMachine
@@ -134,6 +135,17 @@ public class ZombieStateMachine : StateMachine
 
         transform.position = positionBeforeSampling;
         transform.rotation = rotationBeforeSampling;
+    }
+
+    public void DisableHitboxes()
+    {
+        EnemyBoxDamageDealer[] enemyHitboxes = Agent.gameObject.transform.root.GetComponentsInChildren<EnemyBoxDamageDealer>();
+
+        if (enemyHitboxes.Any())
+        {
+            foreach (EnemyBoxDamageDealer hitbox in enemyHitboxes)
+                hitbox.GetComponent<Collider>().enabled = false;
+        }
     }
 
     #region Getters and Setters

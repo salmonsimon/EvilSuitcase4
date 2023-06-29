@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -119,6 +120,17 @@ public class CrawlingZombieStateMachine : StateMachine
         {
             boneTransforms[boneIndex].Position = bones[boneIndex].localPosition;
             boneTransforms[boneIndex].Rotation = bones[boneIndex].localRotation;
+        }
+    }
+
+    public void DisableHitboxes()
+    {
+        EnemyBoxDamageDealer[] enemyHitboxes = Agent.gameObject.transform.root.GetComponentsInChildren<EnemyBoxDamageDealer>();
+
+        if (enemyHitboxes.Any())
+        {
+            foreach (EnemyBoxDamageDealer hitbox in enemyHitboxes)
+                hitbox.GetComponent<Collider>().enabled = false;
         }
     }
 

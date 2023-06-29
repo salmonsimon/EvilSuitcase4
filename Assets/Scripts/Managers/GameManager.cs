@@ -73,9 +73,6 @@ public class GameManager : MonoBehaviour
 
     private bool isTeleporting;
 
-    private bool isOnTransition = false;
-    public bool IsOnTransition { get { return isOnTransition; } set { isOnTransition = value; } }
-
     #endregion
 
     #region Input
@@ -172,6 +169,7 @@ public class GameManager : MonoBehaviour
                 !transitionManager.RunningTransition &&
                 !isTeleporting &&
                 !playerHealthAnimations.IsOnHurtAnimation &&
+                waveManager.ChallengingWave &&
                 playerHealthManager.IsAlive;
     }
 
