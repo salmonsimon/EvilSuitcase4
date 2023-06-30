@@ -7,12 +7,22 @@ using UnityEngine.UI;
 public class ResolutionSettingsUI : MonoBehaviour
 {
     [SerializeField] private TMP_Dropdown resolutionsDropdown;
+    [SerializeField] private TextMeshProUGUI mainLabel;
 
     private Resolution[] resolutions;
+
+    private bool initialized = false;
 
     private void Start()
     {
         AddResolutionOptionsToDropdown();
+
+        initialized = true;
+    }
+
+    private void OnEnable()
+    {
+        mainLabel.color = Color.white;
     }
 
     private void AddResolutionOptionsToDropdown() 

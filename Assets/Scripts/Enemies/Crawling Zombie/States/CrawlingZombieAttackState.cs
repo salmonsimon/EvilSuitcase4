@@ -14,8 +14,8 @@ public class CrawlingZombieAttackState : CrawlingZombieBaseState
 
     public override void EnterState()
     {
-        context.Animator.SetTrigger("Attack");
         context.Animator.SetBool("IsAttacking", true);
+        context.Animator.SetTrigger("Attack");
     }
 
     public override void ExitState()
@@ -29,7 +29,7 @@ public class CrawlingZombieAttackState : CrawlingZombieBaseState
 
         context.Agent.SetDestination(playerPosition);
 
-        if(context.CloseAttackCollider.IsColliding)
+        if(context.ReachAttackCollider.IsColliding)
             context.Animator.SetBool("OnReach", true);
         else
             context.Animator.SetBool("OnReach", false);

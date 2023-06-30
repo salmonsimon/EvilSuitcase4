@@ -14,8 +14,8 @@ public class ZombieAttackState : ZombieBaseState
 
     public override void EnterState()
     {
-        context.Animator.SetTrigger("Attack");
         context.Animator.SetBool("IsAttacking", true);
+        context.Animator.SetTrigger("Attack");
     }
 
     public override void ExitState()

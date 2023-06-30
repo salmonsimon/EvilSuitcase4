@@ -13,7 +13,7 @@ public class AttackBehaviour : StateMachineBehaviour
     // OnStateUpdate is called before OnStateUpdate is called on any state inside this state machine
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (stateInfo.IsName("Idle") || stateInfo.IsName("Run"))
+        if (stateInfo.IsName("Idle") || stateInfo.IsName("Run") || stateInfo.IsName("Walk"))
         {
             timeUntilNextAttack -= Time.deltaTime;
 
@@ -28,7 +28,7 @@ public class AttackBehaviour : StateMachineBehaviour
     // OnStateExit is called before OnStateExit is called on any state inside this state machine
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (!(stateInfo.IsName("Idle") || stateInfo.IsName("Run")))
+        if (!(stateInfo.IsName("Idle") || stateInfo.IsName("Run") || stateInfo.IsName("Walk")))
         {
             attackAnimationToPlay = Random.Range(0, attackAnimations);
 

@@ -98,8 +98,7 @@ public class AmmoItem : Item
         {
             inventoryManager.StockedAmmoDictionary.Add(ammoType, currentAmmo);
 
-            List<AmmoItem> newAmmoItemList = new List<AmmoItem>();
-            newAmmoItemList.Add(this);
+            List<AmmoItem> newAmmoItemList = new List<AmmoItem> { this };
 
             inventoryManager.AmmoItemListDictionary.Add(ammoType, newAmmoItemList);
         }
@@ -169,8 +168,6 @@ public class AmmoItem : Item
                 CurrentAmmo -= fillAmount;
 
                 inventoryManager.StockedAmmoDictionary[ammoType] += fillAmount;
-
-                GameManager.instance.GetSFXManager().PlaySound(Config.DROP_SFX);
             }
         }
     }

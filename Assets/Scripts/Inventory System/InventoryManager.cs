@@ -264,11 +264,11 @@ public class InventoryManager : MonoBehaviour
 
     #region Inventory Filling Methods
 
-    public void AutoSortMainInventory(Inventory inventory, List<Item> items)
+    public void AutoSortMainInventory(Inventory inventory)
     {
         inventory.gameObject.SetActive(false);
 
-        FillInventory(inventory, items);
+        FillInventory(inventory, GetMainInventoryItems());
 
         inventory.gameObject.SetActive(true);
     }
@@ -381,7 +381,21 @@ public class InventoryManager : MonoBehaviour
         if (couldFillFirstTry)
         {
             if (inventory.MainInventory)
-                GameManager.instance.GetInventoryManager().SavedItems = sortedItems;
+            {
+                List<Item> newSavedItemList = new List<Item>();
+                List<Item> newBlockedItemList = new List<Item>();
+
+                foreach (Item item in sortedItems)
+                {
+                    if (item.IsBlocked)
+                        newBlockedItemList.Add(item);
+                    else
+                        newSavedItemList.Add(item);
+                }
+
+                savedItems = newSavedItemList;
+                blockedItems = newBlockedItemList;
+            }
 
             if (!maintainHeight && finalHeight > inventoryHeight)
             {
@@ -434,11 +448,28 @@ public class InventoryManager : MonoBehaviour
             }
 
             if (!couldFillManually)
+            {
                 Debug.LogError("Couldn't fill all items in inventory");
+                GameManager.instance.GetSFXManager().PlaySound(Config.WRONG_SFX);
+            }
             else
             {
                 if (inventory.MainInventory)
-                    GameManager.instance.GetInventoryManager().SavedItems = sortedItems;
+                {
+                    List<Item> newSavedItemList = new List<Item>();
+                    List<Item> newBlockedItemList = new List<Item>();
+
+                    foreach (Item item in sortedItems)
+                    {
+                        if (item.IsBlocked)
+                            newBlockedItemList.Add(item);
+                        else
+                            newSavedItemList.Add(item);
+                    }
+
+                    savedItems = newSavedItemList;
+                    blockedItems = newBlockedItemList;
+                }
 
                 foreach (Item item in sortedItems)
                 {
@@ -479,7 +510,7 @@ public class InventoryManager : MonoBehaviour
         }
         else
         {
-            AutoSortMainInventory(inventory, GameManager.instance.GetInventoryManager().SavedItems);
+            AutoSortMainInventory(inventory);
 
             if (TryAddingItemManually(inventory.GetGrid(), item))
             {
@@ -507,7 +538,9 @@ public class InventoryManager : MonoBehaviour
             if (!TryAddingItemVertically(grid, item))
                 couldAddItem = false;
         }
-        
+
+        item.SetDirection(Item.Direction.Down);
+
         return couldAddItem;
     }
 
@@ -523,7 +556,7 @@ public class InventoryManager : MonoBehaviour
         int x = 0;
         int y = 0;
 
-        int minWidthInCurrentColumn = int.MaxValue;
+        int minWidthInCurrentColumn = gridWidth;
 
         while (!finishedSearching)
         {
@@ -534,7 +567,7 @@ public class InventoryManager : MonoBehaviour
                 x += minWidthInCurrentColumn;
 
                 y = 0;
-                minWidthInCurrentColumn = int.MaxValue;
+                minWidthInCurrentColumn = gridWidth;
             }
 
             if (x >= gridWidth)
@@ -609,7 +642,7 @@ public class InventoryManager : MonoBehaviour
         int x = 0;
         int y = 0;
 
-        int minHeightInCurrentRow = int.MaxValue;
+        int minHeightInCurrentRow = gridHeight;
 
         while (!finishedSearching)
         {
@@ -618,7 +651,7 @@ public class InventoryManager : MonoBehaviour
                 y += minHeightInCurrentRow;
 
                 x = 0;
-                minHeightInCurrentRow = int.MaxValue;
+                minHeightInCurrentRow = gridHeight;
             }
 
             if (y >= gridHeight)
@@ -686,7 +719,16 @@ public class InventoryManager : MonoBehaviour
         orderedList.Reverse();
 
         return orderedList;
-    } 
+    }
+
+    public List<Item> GetMainInventoryItems()
+    {
+        List<Item> mainInventoryItems = new List<Item>();
+        mainInventoryItems.AddRange(SavedItems);
+        mainInventoryItems.AddRange(BlockedItems);
+
+        return mainInventoryItems;
+    }
 
     #endregion
 }

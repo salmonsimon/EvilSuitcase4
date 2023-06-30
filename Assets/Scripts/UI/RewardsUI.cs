@@ -5,6 +5,7 @@ using System.Threading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class RewardsUI : MonoBehaviour
 {
@@ -20,22 +21,28 @@ public class RewardsUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI rewardsCountdownText;
     [SerializeField] private TextMeshProUGUI waveCounterVariableText;
 
+    [SerializeField] private ScrollRect mainScrollRect; 
+
     private GameObject player;
     private InputsUI input;
 
     private float timer = 0;
 
+    private bool initialized = false;
+
     private void Start()
     {
         player = GameManager.instance.GetPlayer();
         input = player.GetComponent<InputsUI>();
+
+        initialized = true;
     }
 
     private void Update()
     {
         if (input.autoSort && GameManager.instance.IsOnRewardsUI)
         {
-            GameManager.instance.GetInventoryManager().AutoSortMainInventory(mainInventory, GameManager.instance.GetInventoryManager().SavedItems);
+            GameManager.instance.GetInventoryManager().AutoSortMainInventory(mainInventory);
             GameManager.instance.GetSFXManager().PlaySound(Config.AUTO_SORT_SFX);
             input.autoSort = false;
         }
@@ -105,6 +112,8 @@ public class RewardsUI : MonoBehaviour
     {
         GameManager.instance.IsOnRewardsUI = false;
         rewardsPanel.SetActive(false);
+
+        mainScrollRect.verticalNormalizedPosition = 1;
     }
 
     public void NextWaveButton()

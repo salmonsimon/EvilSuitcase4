@@ -13,6 +13,7 @@ public class SFXManager : MonoBehaviour
     [SerializeField] private AudioClip clickSFX;
     [SerializeField] private AudioClip backSFX;
     [SerializeField] private AudioClip hoverSFX;
+    [SerializeField] private AudioClip wrongSFX;
     [SerializeField] private AudioClip menuChangeSFX;
     [SerializeField] private AudioClip welcomeScreenSFX;
     [SerializeField] private AudioClip evilLaughSFX;
@@ -37,8 +38,6 @@ public class SFXManager : MonoBehaviour
     [SerializeField] private AudioClip bloodSplatterSFX;
     [SerializeField] private AudioClip heartbeatSingleSFX;
     [SerializeField] private AudioClip potionSFX;
-
-    [SerializeField] private List<AudioClip> zombieBulletImpactSFX;
 
     private void Awake()
     {
@@ -71,6 +70,10 @@ public class SFXManager : MonoBehaviour
 
             case Config.HOVER_SFX:
                 audioSource.PlayOneShot(hoverSFX);
+                break;
+
+            case Config.WRONG_SFX:
+                audioSource.PlayOneShot(wrongSFX);
                 break;
 
             case Config.MENU_CHANGE_SFX:
@@ -172,13 +175,6 @@ public class SFXManager : MonoBehaviour
         int randomClip = UnityEngine.Random.Range(0, audioClips.Count);
 
         PlaySound(audioClips[randomClip]);
-    }
-
-    public void PlayRandomZombieBulletImpactSound(Vector3 hitPosition)
-    {
-        int randomClipIndex = UnityEngine.Random.Range(0, zombieBulletImpactSFX.Count);
-
-        AudioSource.PlayClipAtPoint(zombieBulletImpactSFX[randomClipIndex], hitPosition, GameManager.instance.GetSFXManager().GetSFXVolume());
     }
 
     public float GetSFXVolume()

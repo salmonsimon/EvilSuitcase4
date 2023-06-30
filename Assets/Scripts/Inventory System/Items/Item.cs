@@ -340,7 +340,6 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IP
                 GameManager.instance.GetPauseMenuUI().SetFastSwapCandidate(equipableItem);
                 GameManager.instance.GetPauseMenuUI().SetFastSwapWeapon(weaponShortcut);
             }
-            
         }
 
         isBlocked = false;
@@ -351,7 +350,10 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IP
     {
         if (!GameManager.instance.GetInventoryManager().AddItemManuallyToMainInventory
             (GameManager.instance.GetRewardsUI().MainInventory, this))
+        {
+            GameManager.instance.GetSFXManager().PlaySound(Config.WRONG_SFX);
             Debug.LogError("Couldn't add item to main inventory");
+        }
         else
             GameManager.instance.GetSFXManager().PlaySound(Config.DROP_SFX);
     }
@@ -385,8 +387,6 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IP
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        //GameManager.instance.GetSFXManager().PlaySound(Config.HOVER_SFX);
-
         if (HoldingInventory.MainInventory && GameManager.instance.GetPauseMenuUI().IsGamePaused)
         {
             if (holdingInventory.TryGetComponent(out MainInventoryItemInfoUI mainInventoryItemInfoUI))
@@ -404,7 +404,6 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IP
             {
                 mainInventoryItemInfoUI.UpdateItemInfoText("");
             }
-                
         }
     }
 

@@ -108,7 +108,7 @@ public class PauseMenuUI : MonoBehaviour
             }
             else if (input.autoSort)
             {
-                GameManager.instance.GetInventoryManager().AutoSortMainInventory(inventoryPanel.GetComponent<Inventory>(), GameManager.instance.GetInventoryManager().SavedItems);
+                GameManager.instance.GetInventoryManager().AutoSortMainInventory(inventoryPanel.GetComponent<Inventory>());
                 GameManager.instance.GetSFXManager().PlaySound(Config.AUTO_SORT_SFX);
                 input.autoSort = false;
             }
