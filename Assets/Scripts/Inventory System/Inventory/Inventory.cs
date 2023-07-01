@@ -18,6 +18,7 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
     public bool MainInventory { get { return mainInventory; } }
 
     [SerializeField] private GameObject discardConfirmationPanel;
+    [SerializeField] private TextMeshProUGUI discardConfirmationItemNameText;
 
     [Header("Grid Configuration")]
     [SerializeField] private int gridWidth = 10;
@@ -219,32 +220,6 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
 
             item.GetComponent<ItemDragDrop>().Setup(this);
 
-            if (!mainInventory)
-            {
-                SortedDictionary<int, Item> sortedInventoryItemsDictionary = new SortedDictionary<int, Item>();
-
-                foreach (Transform child in GetItemContainer())
-                {
-                    Item currentItem = child.GetComponent<Item>();
-                    int sortingOrder = 10000 - (200 * placedObjectOrigin.y) - placedObjectOrigin.x;
-
-                    while (sortedInventoryItemsDictionary.ContainsKey(sortingOrder))
-                        sortingOrder++;
-
-                    sortedInventoryItemsDictionary.Add(sortingOrder, currentItem);
-                }
-
-                List<Item> sortedItemList = sortedInventoryItemsDictionary.Values.ToList();
-
-                for (int itemIndex = 0; itemIndex < sortedItemList.Count; itemIndex++)
-                    sortedItemList[itemIndex].transform.SetSiblingIndex(itemIndex);
-            }
-            else
-            {
-                item.GetComponent<Canvas>().overrideSorting = true;
-                item.GetComponent<Canvas>().sortingOrder = 1000 - (20 * placedObjectOrigin.y) - placedObjectOrigin.x;
-            }
-
             foreach (Vector2Int gridPosition in gridPositionList)
                 grid.GetGridObject(gridPosition.x, gridPosition.y).SetItem(item);
 
@@ -312,8 +287,7 @@ public class Inventory : MonoBehaviour, IPointerDownHandler
 
     public void OpenDiscardConfirmationPanel()
     {
-        TextMeshProUGUI TMPRO = discardConfirmationPanel.GetComponentInChildren<TextMeshProUGUI>();
-        TMPRO.text = TMPRO.text.Split(":")[0] + ": " + DiscardCandidate.GetItemSO().ItemName;
+        discardConfirmationItemNameText.text = " \n" + DiscardCandidate.GetItemSO().ItemName;
 
         discardConfirmationPanel.SetActive(true);
     }

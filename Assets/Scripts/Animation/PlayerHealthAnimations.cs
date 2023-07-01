@@ -1,6 +1,4 @@
 using Cinemachine;
-using DG.Tweening;
-using GLTF.Schema;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -72,14 +70,23 @@ public class PlayerHealthAnimations : MonoBehaviour
         if (playerHealthManager.IsAlive && playerThirdPersonShooterController.CanTriggerHurtAnimation())
             PlayRandomHurtAnimation();
 
+        if (!GameManager.instance.GetPlayerHealthUI().CriticalHealthGlobalVolume.IsEnabled)
+        {
+            GameManager.instance.GetPlayerHealthUI().HurtGlobalVolume.Enable();
+
+            StartCoroutine(WaitToDisableHurtGlobalVolume());
+        }
+
         float currentHitPoints = playerHealthManager.CurrentHitPoints;
         float maxHitPoints = playerHealthManager.MaxHitPoints;
         float hitPointsPercentage = currentHitPoints / maxHitPoints;
 
         if (hitPointsPercentage < criticalHealthThreshold && !GameManager.instance.GetPlayerHealthUI().CriticalHealthGlobalVolume.IsEnabled)
         {
+            // TO DO: USE THIS IF WE FIND BETTER HURT ANIMATIONS FOR LOCOMOTION
             //animator.SetBool("IsHurt", true);
             GameManager.instance.GetPlayerHealthUI().CriticalHealthGlobalVolume.Enable();
+            GameManager.instance.GetSFXManager().PlaySound(Config.HEARTBEAT_SFX);
         }
             
     }
@@ -92,8 +99,10 @@ public class PlayerHealthAnimations : MonoBehaviour
 
         if (hitPointsPercentage > criticalHealthThreshold && GameManager.instance.GetPlayerHealthUI().CriticalHealthGlobalVolume.IsEnabled)
         {
+            // TO DO: USE THIS IF WE FIND BETTER HURT ANIMATIONS FOR LOCOMOTION
             //animator.SetBool("IsHurt", false);
             GameManager.instance.GetPlayerHealthUI().CriticalHealthGlobalVolume.Disable();
+            GameManager.instance.GetSFXManager().StopSFX();
         }
             
     }
@@ -102,6 +111,7 @@ public class PlayerHealthAnimations : MonoBehaviour
     {
         ActivateHurtColliders();
         PlayRandomDeathAnimation();
+        GameManager.instance.GetSFXManager().DyingHeartbeat();
     }
 
     private void Revival()
@@ -124,18 +134,14 @@ public class PlayerHealthAnimations : MonoBehaviour
 
         isOnHurtAnimation = true;
         StartCoroutine(PlayClip(Animator.StringToHash(hurtAnimationToPlay.name), 0f));
-
-        if (!GameManager.instance.GetPlayerHealthUI().CriticalHealthGlobalVolume.IsEnabled)
-        {
-            GameManager.instance.GetPlayerHealthUI().HurtGlobalVolume.Enable();
-
-            StartCoroutine(WaitToDisableHurtGlobalVolume());
-        }
     }
 
     private IEnumerator WaitToDisableHurtGlobalVolume()
     {
-        while (IsOnHurtAnimation) yield return null;
+        if (IsOnHurtAnimation)
+            while (IsOnHurtAnimation) yield return null;
+        else
+            yield return new WaitForSeconds(1.5f);  
 
         GameManager.instance.GetPlayerHealthUI().HurtGlobalVolume.Disable();
     }

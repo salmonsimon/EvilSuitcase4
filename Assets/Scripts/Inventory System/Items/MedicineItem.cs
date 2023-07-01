@@ -31,29 +31,25 @@ public class MedicineItem : Item
         switch (direction)
         {
             case Item.Direction.Down:
-                
-                currentButtonPanel.anchoredPosition = new Vector2((width * cellSize) + 20, (height * cellSize) - 20);
+                currentButtonPanel.anchoredPosition = new Vector2(20, 0);
                 currentButtonPanel.rotation = Quaternion.Euler(0, 0, 0);
 
                 break;
 
             case Item.Direction.Left:
-
-                currentButtonPanel.anchoredPosition = new Vector2(20, (height * cellSize) + 20);
+                currentButtonPanel.anchoredPosition = new Vector2(-width * cellSize, 30);
                 currentButtonPanel.rotation = Quaternion.Euler(0, 0, 0);
 
                 break;
 
             case Item.Direction.Up:
-
-                currentButtonPanel.anchoredPosition = new Vector2(-20, 20);
+                currentButtonPanel.anchoredPosition = new Vector2(-(width * cellSize + 30), -height * cellSize);
                 currentButtonPanel.rotation = Quaternion.Euler(0, 0, 0);
 
                 break;
 
             case Item.Direction.Right:
-
-                currentButtonPanel.anchoredPosition = new Vector2((width * cellSize) - 20, -20);
+                currentButtonPanel.anchoredPosition = new Vector2(0, -(height * cellSize + 20));
                 currentButtonPanel.rotation = Quaternion.Euler(0, 0, 0);
 
                 break;

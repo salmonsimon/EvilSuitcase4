@@ -292,6 +292,7 @@ public class RebindActionUI : MonoBehaviour
                         m_RebindOverlay?.SetActive(true);
                         if (m_RebindText != null)
                         {
+                            GameManager.instance.GetSFXManager().PlaySound(Config.WRONG_SFX);
                             var text = "Cannot bind duplicated keys...";
                             m_RebindText.text = text;
                         }

@@ -47,6 +47,27 @@ public class EnemyBoxDamageDealer : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.TryGetComponent(out Damageable damageable))
+        {
+            damageable.ReceiveDamage(GetDamage(), Vector3.zero);
+
+            boxCollider.enabled = false;
+
+            if (damageable.TryGetComponent(out HumanoidHurtGeometry humanoidHurtGeometry))
+            {
+                Vector3 enemyPosition = transform.root.position;
+                Vector3 closestPosition = collision.collider.ClosestPoint(enemyPosition);
+
+                Vector3 forceDirection = (closestPosition - enemyPosition).normalized;
+
+                GameManager.instance.GetBloodManager().SpawnBloodOnHit(damageable.transform, closestPosition, -forceDirection);
+                zombieSFX.PlayRandomHitImpactAudioClip();
+            }
+        }
+    }
+
     private int GetDamage()
     {
         return Random.Range(damageDealerConfig.MinMaxDamage.x, damageDealerConfig.MinMaxDamage.y);
