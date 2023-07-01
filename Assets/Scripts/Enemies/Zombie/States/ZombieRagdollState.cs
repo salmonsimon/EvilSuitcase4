@@ -9,6 +9,8 @@ public class ZombieRagdollState : ZombieBaseState
 
     [SerializeField] private bool readyToResetBones;
 
+    private float timeToCheckSetup = 2f;
+
     public ZombieRagdollState(ZombieStateMachine zombieStateMachine, ZombieStateFactory zombieStateFactory) : base(zombieStateMachine, zombieStateFactory) { }
 
     public override void CheckSwitchStates()
@@ -21,16 +23,7 @@ public class ZombieRagdollState : ZombieBaseState
 
     public override void EnterState()
     {
-        context.Agent.enabled = false;
-
-        context.RagdollSystem.MapCollider.isTrigger = true;
-        context.RagdollSystem.MapCollider.enabled = false;
-
-        context.RagdollSystem.RagdollMode = true;
-        context.RagdollSystem.SetRagdoll(false, true);
-        readyToResetBones = false;
-
-        context.DisableHitboxes();
+        StateSetup();
 
         timeUntilStanding = Random.Range(3f, maxTimeUntilStanding);
     }
@@ -42,6 +35,14 @@ public class ZombieRagdollState : ZombieBaseState
 
     public override void UpdateState()
     {
+        if (timeToCheckSetup > 0)
+            timeToCheckSetup -= Time.deltaTime;
+        else
+        {
+            CheckStateSetup();
+            timeToCheckSetup = 2f;
+        }
+
         if (context.FellCheck.IsColliding)
             timeUntilStanding -= Time.deltaTime;
 
@@ -51,5 +52,37 @@ public class ZombieRagdollState : ZombieBaseState
         }
 
         CheckSwitchStates();
+    }
+
+    private void StateSetup()
+    {
+        context.Agent.enabled = false;
+
+        context.RagdollSystem.MapCollider.isTrigger = true;
+        context.RagdollSystem.MapCollider.enabled = false;
+
+        context.RagdollSystem.RagdollMode = true;
+        context.RagdollSystem.SetRagdoll(false, true);
+        readyToResetBones = false;
+
+        context.DisableHitboxes();
+    }
+
+    private void CheckStateSetup()
+    {
+        if (context.Agent.enabled)
+            context.Agent.enabled = false;
+
+        if (context.Animator.enabled)
+        {
+            context.RagdollSystem.RagdollMode = true;
+            context.RagdollSystem.SetRagdoll(false, true);
+        }
+
+        if (!context.RagdollSystem.MapCollider.isTrigger)
+            context.RagdollSystem.MapCollider.isTrigger = true;
+
+        if (context.RagdollSystem.MapCollider.enabled)
+            context.RagdollSystem.MapCollider.enabled = false;
     }
 }

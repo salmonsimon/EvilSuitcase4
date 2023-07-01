@@ -89,6 +89,7 @@ public class CrawlingZombieStateMachine : StateMachine
         currentState.ExitState();
 
         currentState = newState;
+
         currentState.EnterState();
     }
 

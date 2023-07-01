@@ -380,23 +380,6 @@ public class InventoryManager : MonoBehaviour
 
         if (couldFillFirstTry)
         {
-            if (inventory.MainInventory)
-            {
-                List<Item> newSavedItemList = new List<Item>();
-                List<Item> newBlockedItemList = new List<Item>();
-
-                foreach (Item item in sortedItems)
-                {
-                    if (item.IsBlocked)
-                        newBlockedItemList.Add(item);
-                    else
-                        newSavedItemList.Add(item);
-                }
-
-                savedItems = newSavedItemList;
-                blockedItems = newBlockedItemList;
-            }
-
             if (!maintainHeight && finalHeight > inventoryHeight)
             {
                 inventory.InventorySetup(inventoryWidth, finalHeight);
@@ -428,18 +411,6 @@ public class InventoryManager : MonoBehaviour
         {
             foreach (Item item in unplacedItems)
             {
-                if (item.TryGetComponent(out AmmoItem ammoItem))
-                {
-                    ammoItem.FillCurrentStockedAmmoWithNewAmmoItem();
-
-                    if (ammoItem.CurrentAmmo < 0)
-                    {
-                        sortedItems.Remove(item);
-                        Destroy(item.gameObject);
-                        continue;
-                    }
-                }
-
                 if (!TryAddingItemManually(grid, item))
                 {
                     couldFillManually = false; 
@@ -454,23 +425,6 @@ public class InventoryManager : MonoBehaviour
             }
             else
             {
-                if (inventory.MainInventory)
-                {
-                    List<Item> newSavedItemList = new List<Item>();
-                    List<Item> newBlockedItemList = new List<Item>();
-
-                    foreach (Item item in sortedItems)
-                    {
-                        if (item.IsBlocked)
-                            newBlockedItemList.Add(item);
-                        else
-                            newSavedItemList.Add(item);
-                    }
-
-                    savedItems = newSavedItemList;
-                    blockedItems = newBlockedItemList;
-                }
-
                 foreach (Item item in sortedItems)
                 {
                     Vector2Int origin = item.GetGridPosition();
@@ -492,7 +446,7 @@ public class InventoryManager : MonoBehaviour
         {
             ammoItem.FillCurrentStockedAmmoWithNewAmmoItem();
 
-            if (ammoItem.CurrentAmmo < 0)
+            if (ammoItem.CurrentAmmo <= 0)
             {
                 Destroy(item.gameObject);
 
@@ -521,7 +475,20 @@ public class InventoryManager : MonoBehaviour
                 inventory.gameObject.SetActive(true);
             }
             else
-                couldAddItem = false;
+            {
+                AutoSortMainInventory(inventory);
+
+                if (TryAddingItemManually(inventory.GetGrid(), item))
+                {
+                    inventory.gameObject.SetActive(false);
+
+                    inventory.TryPlaceItem(item, item.GetGridPosition(), item.GetDirection());
+
+                    inventory.gameObject.SetActive(true);
+                }
+                else
+                    couldAddItem = false;
+            }
         }
 
         return couldAddItem;
@@ -530,6 +497,8 @@ public class InventoryManager : MonoBehaviour
     public bool TryAddingItemManually(Grid<GridObject> grid, Item item)
     {
         bool couldAddItem = true;
+
+        item.SetDirection(Item.Direction.Down);
 
         if (!TryAddingItemHorizontally(grid, item))
         {
@@ -560,7 +529,8 @@ public class InventoryManager : MonoBehaviour
 
         while (!finishedSearching)
         {
-            item.SetDirection(Item.Direction.Left);
+            // TO DO: DELETE THIS
+            //item.SetDirection(Item.Direction.Left);
 
             if (y + item.GetCurrentVerticalDimension() > gridHeight)
             {

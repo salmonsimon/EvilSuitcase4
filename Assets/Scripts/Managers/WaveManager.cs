@@ -396,7 +396,6 @@ public class WaveManager : MonoBehaviour
         {
             yield return new WaitForSeconds(transitionTime);
 
-            // TO DO: CHECK IF CHANGING THIS ONE TO REALLY PAUSING THE GAME WORKS?
             GameManager.instance.GetPauseMenuUI().OpenPauseInventory();
 
             transitionTime = GameManager.instance.GetTransitionManager().RunTransition("PaintSplash");

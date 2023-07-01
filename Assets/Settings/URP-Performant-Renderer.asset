@@ -21,7 +21,8 @@ MonoBehaviour:
   - {fileID: 5543530163734566045}
   - {fileID: 4560801475447571023}
   - {fileID: 5277743349852779497}
-  m_RendererFeatureMap: 2e2ae2ccc9e2e91d38b1702622a5c5249dd40f235093ee4c4f42211bc7384b3fe9b3a72f9d4f3e49
+  - {fileID: 2662206443041663729}
+  m_RendererFeatureMap: 2e2ae2ccc9e2e91d38b1702622a5c5249dd40f235093ee4c4f42211bc7384b3fe9b3a72f9d4f3e49f12a41aca70ef224
   m_UseNativeRenderPass: 0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
@@ -43,7 +44,7 @@ MonoBehaviour:
   m_AssetVersion: 2
   m_OpaqueLayerMask:
     serializedVersion: 2
-    m_Bits: 655359
+    m_Bits: 1703935
   m_TransparentLayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -140,6 +141,45 @@ MonoBehaviour:
       restoreCamera: 1
       offset: {x: 0, y: 0, z: 0, w: 0}
       cameraFieldOfView: 60
+--- !u!114 &2662206443041663729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
+  m_Name: Static Props
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    passTag: Static Props
+    Event: 450
+    filterSettings:
+      RenderQueueType: 0
+      LayerMask:
+        serializedVersion: 2
+        m_Bits: 0
+      PassNames: []
+    overrideMaterial: {fileID: 0}
+    overrideMaterialPassIndex: 0
+    overrideDepthState: 0
+    depthCompareFunction: 4
+    enableWrite: 1
+    stencilSettings:
+      overrideStencilState: 0
+      stencilReference: 0
+      stencilCompareFunction: 8
+      passOperation: 0
+      failOperation: 0
+      zFailOperation: 0
+    cameraSettings:
+      overrideCamera: 0
+      restoreCamera: 1
+      offset: {x: 0, y: 0, z: 0, w: 0}
+      cameraFieldOfView: 60
 --- !u!114 &4560801475447571023
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -194,7 +234,7 @@ MonoBehaviour:
   m_Active: 1
   settings:
     passTag: Movable Props
-    Event: 300
+    Event: 450
     filterSettings:
       RenderQueueType: 0
       LayerMask:

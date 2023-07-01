@@ -272,7 +272,10 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IP
 
     public virtual void AddToMainInventory()
     {
-        GameManager.instance.GetInventoryManager().SavedItems.Add(this);
+        if (IsBlocked)
+            GameManager.instance.GetInventoryManager().BlockedItems.Add(this);
+        else
+            GameManager.instance.GetInventoryManager().SavedItems.Add(this);
     }
 
     public virtual void RemoveFromMainInventory()

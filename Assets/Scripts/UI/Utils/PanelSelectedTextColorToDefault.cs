@@ -26,8 +26,18 @@ public class PanelSelectedTextColorToDefault : MonoBehaviour
         selectedTexts.Add(text);
     }
 
+    public void RemoveFromSelectedTexts(Text text)
+    {
+        selectedTexts.Remove(text);
+    }
+
     public void AddToSelectedTMPTexts(TextMeshProUGUI text)
     {
         selectedTMPTexts.Add(text);
+    }
+
+    public void RemoveFromSelectedTMPText(TextMeshProUGUI text)
+    {
+        selectedTMPTexts.Remove(text);
     }
 }

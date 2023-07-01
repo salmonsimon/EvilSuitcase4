@@ -91,6 +91,7 @@ public class ZombieStateMachine : StateMachine
         currentState.ExitState();
 
         currentState = newState;
+
         currentState.EnterState();
     }
 
