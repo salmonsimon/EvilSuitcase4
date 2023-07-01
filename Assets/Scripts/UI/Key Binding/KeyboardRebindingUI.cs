@@ -53,5 +53,7 @@ public class KeyboardRebindingUI : MonoBehaviour
     {
         foreach (InputActionMap actionMap in inputActions.actionMaps)
             actionMap.RemoveAllBindingOverrides();
+
+        PlayerPrefs.DeleteKey("rebinds");
     }
 }

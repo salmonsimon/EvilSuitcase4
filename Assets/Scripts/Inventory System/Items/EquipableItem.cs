@@ -18,6 +18,18 @@ public class EquipableItem : Item
         reloadingMainInventoryButtonPanel.SetActive(false);
     }
 
+    public override void RemoveFromMainInventory()
+    {
+        base.RemoveFromMainInventory();
+
+        DiscardCurrentWeaponShortcut();
+
+        EquipableItem currentEquipedItem = GameManager.instance.GetInventoryManager().EquippedItem;
+
+        if (currentEquipedItem && currentEquipedItem.Equals(this))
+            Unequip();
+    }
+
     public override void Discard()
     {
         DiscardCurrentWeaponShortcut();
@@ -55,9 +67,6 @@ public class EquipableItem : Item
     {
         if (GameManager.instance.GetPlayer().GetComponent<ThirdPersonShooterController>().EquippedWeapon)
             GameManager.instance.GetPlayer().GetComponent<ThirdPersonShooterController>().UnequipWeapon();
-
-        GameManager.instance.GetInventoryManager().EquippedItem = null;
-        GameManager.instance.GetInventoryManager().CurrentEquippedWeaponShortcutIndex = -1;
     }
 
     public void OpenFastSwapConfigPanel()

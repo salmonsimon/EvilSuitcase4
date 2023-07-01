@@ -64,7 +64,7 @@ public class MeleeItem : EquipableItem
                 durabilityTextPanel.anchoredPosition = new Vector2(((width - 1) * cellSize) - 30, 0);
                 durabilityTextPanel.rotation = Quaternion.Euler(0, 0, 0);
 
-                currentButtonPanel.anchoredPosition = new Vector2((width * cellSize) + 20, (height * cellSize) - 20);
+                currentButtonPanel.anchoredPosition = new Vector2(20, 0);
                 currentButtonPanel.rotation = Quaternion.Euler(0, 0, 0);
 
                 break;
@@ -73,7 +73,7 @@ public class MeleeItem : EquipableItem
                 durabilityTextPanel.anchoredPosition = new Vector2(((width - 1) * cellSize), ((height - 1) * cellSize) + 20);
                 durabilityTextPanel.rotation = Quaternion.Euler(0, 0, 0);
 
-                currentButtonPanel.anchoredPosition = new Vector2(20, (height * cellSize) + 20);
+                currentButtonPanel.anchoredPosition = new Vector2(-width * cellSize, 30);
                 currentButtonPanel.rotation = Quaternion.Euler(0, 0, 0);
 
                 break;
@@ -82,7 +82,7 @@ public class MeleeItem : EquipableItem
                 durabilityTextPanel.anchoredPosition = new Vector2(-20, ((height - 1) * cellSize) + 50);
                 durabilityTextPanel.rotation = Quaternion.Euler(0, 0, 0);
 
-                currentButtonPanel.anchoredPosition = new Vector2(-20, 20);
+                currentButtonPanel.anchoredPosition = new Vector2(-(width * cellSize + 30), -height * cellSize);
                 currentButtonPanel.rotation = Quaternion.Euler(0, 0, 0);
 
                 break;
@@ -91,7 +91,7 @@ public class MeleeItem : EquipableItem
                 durabilityTextPanel.anchoredPosition = new Vector2(-50, 30);
                 durabilityTextPanel.rotation = Quaternion.Euler(0, 0, 0);
 
-                currentButtonPanel.anchoredPosition = new Vector2((width * cellSize) - 20, -20);
+                currentButtonPanel.anchoredPosition = new Vector2(0, -(height * cellSize + 20));
                 currentButtonPanel.rotation = Quaternion.Euler(0, 0, 0);
 
                 break;

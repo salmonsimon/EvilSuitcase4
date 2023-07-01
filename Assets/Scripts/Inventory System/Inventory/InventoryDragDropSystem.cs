@@ -17,7 +17,10 @@ public class InventoryDragDropSystem : MonoBehaviour
     #region Variables
 
     private Inventory draggingInventory;
+
     private Item draggingItem;
+    public Item DraggingItem { get { return draggingItem; } }
+
     private Vector2Int mouseDragGridPositionOffset;
     private Vector2 mouseDragAnchoredPositionOffset;
     private Item.Direction direction;
@@ -90,9 +93,6 @@ public class InventoryDragDropSystem : MonoBehaviour
 
         fromInventory.RemoveItemAt(item.GetGridPosition());
 
-        if (fromInventory.MainInventory)
-            item.RemoveFromMainInventory();
-
         Inventory toInventory = null;
 
         List<Inventory> inventoriesToCheck = GameManager.instance.IsOnRewardsUI ? rewardsInventoryList : pauseInventoryList;
@@ -115,17 +115,35 @@ public class InventoryDragDropSystem : MonoBehaviour
 
         if (toInventory != null)
         {
+            bool isSameInventories =  fromInventory.Equals(toInventory);
+
+            if (fromInventory.MainInventory && !isSameInventories)
+                item.RemoveFromMainInventory();
+
             Vector3 screenPoint = input.point;
             RectTransformUtility.ScreenPointToLocalPointInRectangle(toInventory.GetItemContainer(), screenPoint, null, out Vector2 anchoredPosition);
             Vector2Int itemOrigin = toInventory.GetGridPosition(anchoredPosition);
             itemOrigin = itemOrigin - mouseDragGridPositionOffset;
 
-            bool tryPlaceItem = toInventory.TryPlaceItem(item, itemOrigin, direction);
+            bool tryPlaceItem;
 
-            if (!tryPlaceItem)
+            if (fromInventory.MainInventory && isSameInventories)
+                tryPlaceItem = toInventory.TryPlaceItem(item, itemOrigin, direction, true);
+            else
+                tryPlaceItem = toInventory.TryPlaceItem(item, itemOrigin, direction);
+
+            if (!tryPlaceItem && fromInventory.MainInventory && isSameInventories)
+                fromInventory.TryPlaceItem(item, item.GetGridPosition(), item.GetDirection(), true);
+            else if (!tryPlaceItem)
                 fromInventory.TryPlaceItem(item, item.GetGridPosition(), item.GetDirection());
         }
         else
-            fromInventory.TryPlaceItem(item, item.GetGridPosition(), item.GetDirection());
+        {
+            if (fromInventory.MainInventory)
+                fromInventory.TryPlaceItem(item, item.GetGridPosition(), item.GetDirection(), true);
+            else
+                fromInventory.TryPlaceItem(item, item.GetGridPosition(), item.GetDirection());
+        }
+            
     }
 }

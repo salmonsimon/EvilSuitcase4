@@ -1,13 +1,9 @@
 using EasyTransition;
 using StarterAssets;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using UnityEngine.SocialPlatforms.Impl;
-using UnityEngine.VFX;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,7 +11,14 @@ public class GameManager : MonoBehaviour
 
     #region GameObjects
 
+    #region Player
+
     [SerializeField] private GameObject player;
+    private HealthManager playerHealthManager;
+    private PlayerHealthAnimations playerHealthAnimations;
+
+    #endregion
+
     [SerializeField] private SurfaceManager surfaceManager;
     [SerializeField] private LevelLoader levelLoader;
     [SerializeField] private CinemachineShake cinemachineShake;
@@ -70,9 +73,6 @@ public class GameManager : MonoBehaviour
 
     private bool isTeleporting;
 
-    private bool isOnTransition = false;
-    public bool IsOnTransition { get { return isOnTransition; } set { isOnTransition = value; } }
-
     #endregion
 
     #region Input
@@ -121,6 +121,13 @@ public class GameManager : MonoBehaviour
 
             player.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
             inputGameplay.SetCursorLockState(false);
+
+            playerHealthManager = player.GetComponent<HealthManager>();
+            playerHealthAnimations = player.GetComponent<PlayerHealthAnimations>();
+
+            Application.targetFrameRate = Screen.currentResolution.refreshRate;
+
+            Settings.Load();
         }
     }
 
@@ -135,14 +142,18 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (!pauseMenuUI.IsGamePaused && IsAbleToPause() && inputGameplay.pause)
+        if (inputGameplay.pause && !pauseMenuUI.IsGamePaused && IsAbleToPause())
         {
+            waveManager.EnableKillsRemainingPanel(false);
+
             inputGameplay.pause = false;
             inputUI.pause = false;
             pauseMenuUI.PauseGame();
         }
-        else if (pauseMenuUI.IsGamePaused && IsAbleToPause() && inputUI.pause)
+        else if (inputUI.pause && pauseMenuUI.IsGamePaused && IsAbleToPause())
         {
+            waveManager.EnableKillsRemainingPanel(true);
+
             inputGameplay.pause = false;
             inputUI.pause = false;
             pauseMenuUI.ResumeGame();
@@ -157,8 +168,9 @@ public class GameManager : MonoBehaviour
                 !pauseMenuUI.IsOnFastSwapConfiguration &&
                 !transitionManager.RunningTransition &&
                 !isTeleporting &&
-                !player.GetComponent<PlayerHealthAnimations>().IsOnHurtAnimation &&
-                player.GetComponent<HealthManager>().IsAlive;
+                !playerHealthAnimations.IsOnHurtAnimation &&
+                waveManager.ChallengingWave &&
+                playerHealthManager.IsAlive;
     }
 
     public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -216,10 +228,10 @@ public class GameManager : MonoBehaviour
 
                 bloodManager.gameObject.SetActive(true);
 
-                player.GetComponent<HealthManager>().Resurrect();
+                playerHealthManager.Resurrect();
 
                 player.GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
-                player.GetComponent<StarterAssetsInputs>().SetCursorLockState(true);
+                inputGameplay.SetCursorLockState(true);
 
                 player.GetComponent<ThirdPersonController>().enabled = true;
 
@@ -230,8 +242,8 @@ public class GameManager : MonoBehaviour
                 break;
         }
 
-        player.GetComponent<StarterAssetsInputs>().ResetInputs();
-        player.GetComponent<InputsUI>().ResetInputs();
+        inputGameplay.ResetInputs();
+        inputUI.ResetInputs();
 
         levelLoader.FinishTransition();
     }

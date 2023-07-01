@@ -5,6 +5,7 @@ using System.Threading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class RewardsUI : MonoBehaviour
 {
@@ -18,23 +19,30 @@ public class RewardsUI : MonoBehaviour
     [SerializeField] private Inventory gunsRewardsInventory;
 
     [SerializeField] private TextMeshProUGUI rewardsCountdownText;
+    [SerializeField] private TextMeshProUGUI waveCounterVariableText;
+
+    [SerializeField] private ScrollRect mainScrollRect; 
 
     private GameObject player;
     private InputsUI input;
 
     private float timer = 0;
 
+    private bool initialized = false;
+
     private void Start()
     {
         player = GameManager.instance.GetPlayer();
         input = player.GetComponent<InputsUI>();
+
+        initialized = true;
     }
 
     private void Update()
     {
-        if (GameManager.instance.IsOnRewardsUI && input.autoSort)
+        if (input.autoSort && GameManager.instance.IsOnRewardsUI)
         {
-            GameManager.instance.GetInventoryManager().AutoSortMainInventory(mainInventory, GameManager.instance.GetInventoryManager().SavedItems);
+            GameManager.instance.GetInventoryManager().AutoSortMainInventory(mainInventory);
             GameManager.instance.GetSFXManager().PlaySound(Config.AUTO_SORT_SFX);
             input.autoSort = false;
         }
@@ -42,7 +50,7 @@ public class RewardsUI : MonoBehaviour
         if (GameManager.instance.IsOnRewardsUI)
             timer -= Time.deltaTime;
 
-        if (GameManager.instance.IsOnRewardsUI && timer < 0)
+        if (timer < 0 && GameManager.instance.IsOnRewardsUI)
             GameManager.instance.GetWaveManager().FinishWave();
 
         string countdownString = Utils.FloatToTimeSecondsFormat(timer);
@@ -69,6 +77,7 @@ public class RewardsUI : MonoBehaviour
         rewardsPanel.SetActive(true);
 
         timer = rewardsCountdown;
+        waveCounterVariableText.text = (GameManager.instance.GetWaveManager().CurrentWave + 1).ToString();
     }
 
     private void SetupRewardInventories(List<Item> rewardItems)
@@ -81,8 +90,8 @@ public class RewardsUI : MonoBehaviour
         {
             if (Utils.IsSubclassOfRawGeneric(item.GetType(), typeof(GunItem)))
                 gunItems.Add(item);
-            //else if (Utils.IsSubclassOfRawGeneric(item.GetType(), typeof(MeleeItem)))
-            //    meleeItems.Add(item);
+            else if (Utils.IsSubclassOfRawGeneric(item.GetType(), typeof(MeleeItem)))
+                meleeItems.Add(item);
             else
                 consumableItems.Add(item);
         }
@@ -101,10 +110,10 @@ public class RewardsUI : MonoBehaviour
 
     public void CloseRewardsUI()
     {
-        player.GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
-        player.GetComponent<StarterAssetsInputs>().SetCursorLockState(true);
-
+        GameManager.instance.IsOnRewardsUI = false;
         rewardsPanel.SetActive(false);
+
+        mainScrollRect.verticalNormalizedPosition = 1;
     }
 
     public void NextWaveButton()

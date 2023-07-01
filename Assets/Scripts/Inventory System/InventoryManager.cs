@@ -3,10 +3,7 @@ using UnityEngine;
 using AYellowpaper.SerializedCollections;
 using StarterAssets;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using static Inventory;
-using Mono.Cecil;
-using static UnityEditor.Progress;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -90,6 +87,8 @@ public class InventoryManager : MonoBehaviour
 
     public void ResetProgress()
     {
+        SuitcaseItem.DiscardCurrentWeaponShortcut();
+
         for (int i = BlockedItems.Count - 1; i >= 0; i--)
             BlockedItems[i].Discard();
 
@@ -116,10 +115,7 @@ public class InventoryManager : MonoBehaviour
             playerThirdPersonShooterController.IsAttacking)
             return;
 
-        if (!GameManager.instance.GetPauseMenuUI().IsGamePaused && 
-            !GameManager.instance.IsOnRewardsUI &&
-            HasFastSwapWeapons() && 
-            playerInput.weaponShortcut > -1)
+        if (playerInput.weaponShortcut > -1 && AbleToFastSwap())
         {
             EquipableItem equipableItem = FastSwapWeaponArray[playerInput.weaponShortcut];
 
@@ -132,10 +128,7 @@ public class InventoryManager : MonoBehaviour
 
             playerInput.weaponShortcut = -1;
         }
-        else if (!GameManager.instance.GetPauseMenuUI().IsGamePaused &&
-                 HasFastSwapWeapons() &&
-                 fastSwapIndexes.Count > 1 &&
-                 playerInput.scrollWheel != Vector2.zero)
+        else if (playerInput.scrollWheel != Vector2.zero && AbleToFastSwap())
         {
             if (playerInput.scrollWheel.y > 0)
             {
@@ -161,6 +154,15 @@ public class InventoryManager : MonoBehaviour
 
             playerInput.scrollWheel = Vector2.zero;
         }
+    }
+
+    private bool AbleToFastSwap()
+    {
+        return   !GameManager.instance.GetPauseMenuUI().IsGamePaused &&
+                 !GameManager.instance.IsOnRewardsUI &&
+                 !GameManager.instance.GetTransitionManager().RunningTransition &&
+                 GameManager.instance.GetWaveManager().ChallengingWave &&
+                 HasFastSwapWeapons();
     }
 
     #region Fast Swap Methods
@@ -262,11 +264,11 @@ public class InventoryManager : MonoBehaviour
 
     #region Inventory Filling Methods
 
-    public void AutoSortMainInventory(Inventory inventory, List<Item> items)
+    public void AutoSortMainInventory(Inventory inventory)
     {
         inventory.gameObject.SetActive(false);
 
-        FillInventory(inventory, items);
+        FillInventory(inventory, GetMainInventoryItems());
 
         inventory.gameObject.SetActive(true);
     }
@@ -378,9 +380,6 @@ public class InventoryManager : MonoBehaviour
 
         if (couldFillFirstTry)
         {
-            if (inventory.MainInventory)
-                GameManager.instance.GetInventoryManager().SavedItems = sortedItems;
-
             if (!maintainHeight && finalHeight > inventoryHeight)
             {
                 inventory.InventorySetup(inventoryWidth, finalHeight);
@@ -412,18 +411,6 @@ public class InventoryManager : MonoBehaviour
         {
             foreach (Item item in unplacedItems)
             {
-                if (item.TryGetComponent(out AmmoItem ammoItem))
-                {
-                    ammoItem.FillCurrentStockedAmmoWithNewAmmoItem();
-
-                    if (ammoItem.CurrentAmmo < 0)
-                    {
-                        sortedItems.Remove(item);
-                        Destroy(item.gameObject);
-                        continue;
-                    }
-                }
-
                 if (!TryAddingItemManually(grid, item))
                 {
                     couldFillManually = false; 
@@ -432,12 +419,12 @@ public class InventoryManager : MonoBehaviour
             }
 
             if (!couldFillManually)
+            {
                 Debug.LogError("Couldn't fill all items in inventory");
+                GameManager.instance.GetSFXManager().PlaySound(Config.WRONG_SFX);
+            }
             else
             {
-                if (inventory.MainInventory)
-                    GameManager.instance.GetInventoryManager().SavedItems = sortedItems;
-
                 foreach (Item item in sortedItems)
                 {
                     Vector2Int origin = item.GetGridPosition();
@@ -459,7 +446,7 @@ public class InventoryManager : MonoBehaviour
         {
             ammoItem.FillCurrentStockedAmmoWithNewAmmoItem();
 
-            if (ammoItem.CurrentAmmo < 0)
+            if (ammoItem.CurrentAmmo <= 0)
             {
                 Destroy(item.gameObject);
 
@@ -477,7 +464,7 @@ public class InventoryManager : MonoBehaviour
         }
         else
         {
-            AutoSortMainInventory(inventory, GameManager.instance.GetInventoryManager().SavedItems);
+            AutoSortMainInventory(inventory);
 
             if (TryAddingItemManually(inventory.GetGrid(), item))
             {
@@ -488,7 +475,20 @@ public class InventoryManager : MonoBehaviour
                 inventory.gameObject.SetActive(true);
             }
             else
-                couldAddItem = false;
+            {
+                AutoSortMainInventory(inventory);
+
+                if (TryAddingItemManually(inventory.GetGrid(), item))
+                {
+                    inventory.gameObject.SetActive(false);
+
+                    inventory.TryPlaceItem(item, item.GetGridPosition(), item.GetDirection());
+
+                    inventory.gameObject.SetActive(true);
+                }
+                else
+                    couldAddItem = false;
+            }
         }
 
         return couldAddItem;
@@ -498,6 +498,8 @@ public class InventoryManager : MonoBehaviour
     {
         bool couldAddItem = true;
 
+        item.SetDirection(Item.Direction.Down);
+
         if (!TryAddingItemHorizontally(grid, item))
         {
             item.SetDirection(Item.Direction.Left);
@@ -505,7 +507,9 @@ public class InventoryManager : MonoBehaviour
             if (!TryAddingItemVertically(grid, item))
                 couldAddItem = false;
         }
-        
+
+        item.SetDirection(Item.Direction.Down);
+
         return couldAddItem;
     }
 
@@ -521,18 +525,19 @@ public class InventoryManager : MonoBehaviour
         int x = 0;
         int y = 0;
 
-        int minWidthInCurrentColumn = int.MaxValue;
+        int minWidthInCurrentColumn = gridWidth;
 
         while (!finishedSearching)
         {
-            item.SetDirection(Item.Direction.Left);
+            // TO DO: DELETE THIS
+            //item.SetDirection(Item.Direction.Left);
 
             if (y + item.GetCurrentVerticalDimension() > gridHeight)
             {
                 x += minWidthInCurrentColumn;
 
                 y = 0;
-                minWidthInCurrentColumn = int.MaxValue;
+                minWidthInCurrentColumn = gridWidth;
             }
 
             if (x >= gridWidth)
@@ -607,7 +612,7 @@ public class InventoryManager : MonoBehaviour
         int x = 0;
         int y = 0;
 
-        int minHeightInCurrentRow = int.MaxValue;
+        int minHeightInCurrentRow = gridHeight;
 
         while (!finishedSearching)
         {
@@ -616,7 +621,7 @@ public class InventoryManager : MonoBehaviour
                 y += minHeightInCurrentRow;
 
                 x = 0;
-                minHeightInCurrentRow = int.MaxValue;
+                minHeightInCurrentRow = gridHeight;
             }
 
             if (y >= gridHeight)
@@ -684,7 +689,16 @@ public class InventoryManager : MonoBehaviour
         orderedList.Reverse();
 
         return orderedList;
-    } 
+    }
+
+    public List<Item> GetMainInventoryItems()
+    {
+        List<Item> mainInventoryItems = new List<Item>();
+        mainInventoryItems.AddRange(SavedItems);
+        mainInventoryItems.AddRange(BlockedItems);
+
+        return mainInventoryItems;
+    }
 
     #endregion
 }

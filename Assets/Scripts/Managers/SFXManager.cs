@@ -13,6 +13,7 @@ public class SFXManager : MonoBehaviour
     [SerializeField] private AudioClip clickSFX;
     [SerializeField] private AudioClip backSFX;
     [SerializeField] private AudioClip hoverSFX;
+    [SerializeField] private AudioClip wrongSFX;
     [SerializeField] private AudioClip menuChangeSFX;
     [SerializeField] private AudioClip welcomeScreenSFX;
     [SerializeField] private AudioClip evilLaughSFX;
@@ -35,10 +36,8 @@ public class SFXManager : MonoBehaviour
     [SerializeField] private AudioClip transitionStartSFX;
     [SerializeField] private AudioClip transitionEndSFX;
     [SerializeField] private AudioClip bloodSplatterSFX;
-    [SerializeField] private AudioClip heartbeatSFX;
+    [SerializeField] private AudioClip heartbeatSingleSFX;
     [SerializeField] private AudioClip potionSFX;
-
-    [SerializeField] private List<AudioClip> zombieBulletImpactSFX;
 
     private void Awake()
     {
@@ -73,6 +72,10 @@ public class SFXManager : MonoBehaviour
                 audioSource.PlayOneShot(hoverSFX);
                 break;
 
+            case Config.WRONG_SFX:
+                audioSource.PlayOneShot(wrongSFX);
+                break;
+
             case Config.MENU_CHANGE_SFX:
                 audioSource.PlayOneShot(menuChangeSFX);
                 break;
@@ -82,6 +85,9 @@ public class SFXManager : MonoBehaviour
                 break;
 
             case Config.EVIL_LAUGH_SFX:
+                StopAllCoroutines();
+                StopSFX();
+
                 audioSource.PlayOneShot(evilLaughSFX);
                 break;
 
@@ -126,6 +132,9 @@ public class SFXManager : MonoBehaviour
                 break;
 
             case Config.GAME_OVER_SFX:
+                StopAllCoroutines();
+                StopSFX();
+
                 audioSource.PlayOneShot(gameOverSFX);
                 break;
 
@@ -142,7 +151,7 @@ public class SFXManager : MonoBehaviour
                 break;
 
             case Config.HEARTBEAT_SFX:
-                audioSource.PlayOneShot(heartbeatSFX);
+                Heartbeat();
                 break;
 
             case Config.POTION_SFX:
@@ -168,15 +177,72 @@ public class SFXManager : MonoBehaviour
         PlaySound(audioClips[randomClip]);
     }
 
-    public void PlayRandomZombieBulletImpactSound(Vector3 hitPosition)
-    {
-        int randomClipIndex = UnityEngine.Random.Range(0, zombieBulletImpactSFX.Count);
-
-        AudioSource.PlayClipAtPoint(zombieBulletImpactSFX[randomClipIndex], hitPosition, GameManager.instance.GetSFXManager().GetSFXVolume());
-    }
-
     public float GetSFXVolume()
     {
         return sfxVolume;
+    }
+
+    public void StopSFX()
+    {
+        audioSource.Stop();
+
+        audioSource.loop = false;
+        audioSource.clip = null;
+        audioSource.pitch = 1;
+    }
+
+    public void Heartbeat()
+    {
+        StopAllCoroutines();
+        StartCoroutine(HeartbeatCoroutine());
+    }
+
+    private IEnumerator HeartbeatCoroutine() 
+    {
+        StopSFX();
+
+        audioSource.clip = heartbeatSingleSFX;
+
+        while (true)
+        {
+            audioSource.Play();
+
+            while (audioSource.isPlaying)
+                yield return null;
+
+            yield return new WaitForSecondsRealtime(.8f);
+        }
+    }
+
+
+    public void DyingHeartbeat()
+    {
+        StopAllCoroutines();
+        StartCoroutine(DyingHeartbeatCoroutine());
+    }
+
+    private IEnumerator DyingHeartbeatCoroutine()
+    {
+        while (audioSource.isPlaying)
+            yield return null;
+
+        StopSFX();
+        audioSource.clip = heartbeatSingleSFX;
+
+        yield return new WaitForSecondsRealtime(.8f);
+
+        while (audioSource.pitch > .5)
+        {
+            audioSource.Play();
+
+            while (audioSource.isPlaying)
+                yield return null;
+
+            audioSource.pitch -= .1f;
+
+            yield return new WaitForSecondsRealtime(1f);
+        }
+
+        StopSFX();
     }
 }

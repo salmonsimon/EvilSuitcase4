@@ -210,7 +210,7 @@ namespace EasyTransition
             if (managerCount > 1)
                 Debug.LogWarning($"There are {managerCount.ToString()} Transition Managers in your scene. Please ensure there is only one Transition Manager in your scene or overlapping transitions may occur.");
 
-            StartCoroutine("Start");
+            //StartCoroutine("Start");
         }
     }
 

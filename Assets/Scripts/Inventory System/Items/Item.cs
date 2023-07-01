@@ -2,11 +2,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using static UnityEditor.Progress;
 using static Utils;
 
 [RequireComponent(typeof(GraphicRaycaster), typeof(Canvas))]
-public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
+public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler
 {
     public enum Direction
     {
@@ -273,7 +272,10 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
 
     public virtual void AddToMainInventory()
     {
-        GameManager.instance.GetInventoryManager().SavedItems.Add(this);
+        if (IsBlocked)
+            GameManager.instance.GetInventoryManager().BlockedItems.Add(this);
+        else
+            GameManager.instance.GetInventoryManager().SavedItems.Add(this);
     }
 
     public virtual void RemoveFromMainInventory()
@@ -305,33 +307,29 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
         if (IsBlocked)
             return;
 
-        isBlocked = true;
-
         blockedPanel.SetActive(true);
 
-        if (IsSubclassOfRawGeneric(GetType(), typeof(EquipableItem)))
+        if (TryGetComponent(out EquipableItem equipableItem))
         {
-            EquipableItem equipableItem = GetComponent<EquipableItem>();
             equipableItem.DiscardCurrentWeaponShortcut(true);
 
             EquipableItem currentEquipedItem = GameManager.instance.GetInventoryManager().EquippedItem;
 
             if (currentEquipedItem && currentEquipedItem.Equals(equipableItem))
                 equipableItem.Unequip();
+
+            GameManager.instance.GetInventoryManager().SavedItems.Remove(this);
         }
-        else if (IsSubclassOfRawGeneric(GetType(), typeof(AmmoItem)))
-        {
-            AmmoItem ammoItem = GetComponent<AmmoItem>();
-            ammoItem.RemoveFromMainInventory();
-        }
+        else
+            RemoveFromMainInventory();
+
+        isBlocked = true;
     }
 
     public virtual void UnblockItem()
     {
         if (!IsBlocked)
             return;
-
-        isBlocked = false;
 
         blockedPanel.SetActive(false);
 
@@ -345,20 +343,20 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
                 GameManager.instance.GetPauseMenuUI().SetFastSwapCandidate(equipableItem);
                 GameManager.instance.GetPauseMenuUI().SetFastSwapWeapon(weaponShortcut);
             }
-            
         }
-        else if (IsSubclassOfRawGeneric(GetType(), typeof(AmmoItem)))
-        {
-            AmmoItem ammoItem = GetComponent<AmmoItem>();
-            ammoItem.AddToMainInventory();
-        }
+
+        isBlocked = false;
+        AddToMainInventory();
     }
 
     public void AddButton()
     {
         if (!GameManager.instance.GetInventoryManager().AddItemManuallyToMainInventory
             (GameManager.instance.GetRewardsUI().MainInventory, this))
+        {
+            GameManager.instance.GetSFXManager().PlaySound(Config.WRONG_SFX);
             Debug.LogError("Couldn't add item to main inventory");
+        }
         else
             GameManager.instance.GetSFXManager().PlaySound(Config.DROP_SFX);
     }
@@ -387,6 +385,28 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
         if (openButtonPanel != currentButtonPanel.gameObject)
         {
             HoldingInventory.SetNewOpenButton(null);
+        }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (HoldingInventory.MainInventory && GameManager.instance.GetPauseMenuUI().IsGamePaused)
+        {
+            if (holdingInventory.TryGetComponent(out MainInventoryItemInfoUI mainInventoryItemInfoUI))
+            {
+                mainInventoryItemInfoUI.UpdateItemInfoText(itemSO.ItemDescription);
+            }
+        }
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (HoldingInventory.MainInventory && GameManager.instance.GetPauseMenuUI().IsGamePaused)
+        {
+            if (holdingInventory.TryGetComponent(out MainInventoryItemInfoUI mainInventoryItemInfoUI))
+            {
+                mainInventoryItemInfoUI.UpdateItemInfoText("");
+            }
         }
     }
 

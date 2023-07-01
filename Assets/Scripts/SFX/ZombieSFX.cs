@@ -11,6 +11,7 @@ public class ZombieSFX : SFX
     [SerializeField] private List<AudioClip> hurtAudioClips;
     [SerializeField] private List<AudioClip> deathAudioClips;
     [SerializeField] private List<AudioClip> stepAudioClips;
+    [SerializeField] private List<AudioClip> crawlingAudioClips;
     [SerializeField] private List<AudioClip> eatingAudioClips;
     [SerializeField] private List<AudioClip> hitImpactAudioClip;
 
@@ -62,6 +63,14 @@ public class ZombieSFX : SFX
         AudioClip randomStepAudioClip = stepAudioClips[randomStepAudioClipIndex];
 
         AudioSource.PlayClipAtPoint(randomStepAudioClip, transform.position, GameManager.instance.GetSFXManager().GetSFXVolume());
+    }
+
+    public void PlayRandomCrawlingAudioClip()
+    {
+        int randomCrawlingAudioClipIndex = UnityEngine.Random.Range(0, stepAudioClips.Count);
+        AudioClip randomCrawlingAudioClip = crawlingAudioClips[randomCrawlingAudioClipIndex];
+
+        AudioSource.PlayClipAtPoint(randomCrawlingAudioClip, transform.position, GameManager.instance.GetSFXManager().GetSFXVolume());
     }
 
     public void PlayRandomEatingAudioClip()

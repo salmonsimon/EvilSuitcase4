@@ -14,15 +14,16 @@ public class TextColorSetter : MonoBehaviour
 
     public void SetDefaultColor()
     {
-        text.color = Color.white;
+        Color defaultColor;
+        ColorUtility.TryParseHtmlString("#878787", out defaultColor);
+
+        if (text)
+            text.color = defaultColor;
     }
 
     public void SetSelectedColor()
     {
-        Color selectedColor;
-        ColorUtility.TryParseHtmlString("#878787", out selectedColor);
-
         if (text)
-            text.color = selectedColor;
+            text.color = Color.white;
     }
 }

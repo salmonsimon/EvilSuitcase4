@@ -84,30 +84,38 @@ public class MusicManager : MonoBehaviour
 
     public void StopMusic()
     {
+        if (!audioSource.isPlaying)
+            return;
+
         StopAllCoroutines();
 
-        WaitAndStop(fadeDuration + Config.SMALL_DELAY);
+        StartCoroutine(WaitAndStop(fadeDuration + Config.SMALL_DELAY));
     }
 
     private IEnumerator PlayGameplayMusic()
     {
-        gameplayMusic.Shuffle();
+        yield return new WaitForSeconds(fadeDuration + Config.LARGE_DELAY);
 
         float nextSongRandomDelay = playDelay;
 
-        foreach (AudioClip song in gameplayMusic)
+        while (true)
         {
-            audioSource.clip = song;
+            gameplayMusic.Shuffle();
 
-            StartCoroutine(WaitAndPlayRealtime(nextSongRandomDelay));
+            foreach (AudioClip song in gameplayMusic)
+            {
+                audioSource.clip = song;
 
-            yield return new WaitForSecondsRealtime(song.length - 1);
+                StartCoroutine(WaitAndPlayRealtime(nextSongRandomDelay));
 
-            StartCoroutine(FadeOut());
+                yield return new WaitForSecondsRealtime(song.length - 1);
 
-            yield return new WaitForSecondsRealtime(1 + nextSongRandomDelay);
+                StartCoroutine(FadeOut());
 
-            nextSongRandomDelay = Random.Range(playDelay, playDelay * 4);
+                yield return new WaitForSecondsRealtime(1 + nextSongRandomDelay);
+
+                nextSongRandomDelay = Random.Range(playDelay, playDelay * 4);
+            }
         }
     }
 
