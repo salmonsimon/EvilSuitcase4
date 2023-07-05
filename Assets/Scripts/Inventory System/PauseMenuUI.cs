@@ -108,8 +108,12 @@ public class PauseMenuUI : MonoBehaviour
             }
             else if (input.autoSort)
             {
-                GameManager.instance.GetInventoryManager().AutoSortMainInventory(inventoryPanel.GetComponent<Inventory>());
-                GameManager.instance.GetSFXManager().PlaySound(Config.AUTO_SORT_SFX);
+                if (inventoryPanel.activeSelf)
+                {
+                    GameManager.instance.GetInventoryManager().AutoSortMainInventory(inventoryPanel.GetComponent<Inventory>());
+                    GameManager.instance.GetSFXManager().PlaySound(Config.AUTO_SORT_SFX);
+                }
+                
                 input.autoSort = false;
             }
             else if (isOnFastSwapConfiguration && input.pause)
@@ -366,6 +370,31 @@ public class PauseMenuUI : MonoBehaviour
                 blockedPanel.SetActive(true);
             }
         }
+    }
+
+    public void RemoveBlockedPanelFromDiscardedItem(int discardedWeaponIndex)
+    {
+        Item[] fastSwapItems = GameManager.instance.GetInventoryManager().FastSwapWeaponArray;
+        Item fastSwapItem = fastSwapItems[discardedWeaponIndex];
+
+        Transform itemPanel = fastSwapGameplayPanel.transform.GetChild(discardedWeaponIndex);
+
+        Transform weaponSpriteContainer = itemPanel.Find("Weapon Sprite");
+
+        foreach (Transform child in weaponSpriteContainer)
+            Destroy(child.gameObject);
+
+        TextMeshProUGUI TMPRO = itemPanel.GetComponentInChildren<TextMeshProUGUI>(true);
+        TMPRO.gameObject.SetActive(false);
+
+        Image panel = itemPanel.GetComponentInChildren<Image>();
+        Color equippedWeaponColor = Color.white;
+        equippedWeaponColor.a = .8f;
+
+        panel.color = equippedWeaponColor;
+
+        GameObject blockedPanel = itemPanel.Find("Blocked Panel").gameObject;
+        blockedPanel.SetActive(false);
     }
 
     #region UI Animations

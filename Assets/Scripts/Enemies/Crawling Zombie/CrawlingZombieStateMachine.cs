@@ -97,12 +97,20 @@ public class CrawlingZombieStateMachine : StateMachine
     {
         base.OnDeath();
 
+        followAttackCollider.ResetCollider();
+        reachAttackCollider.ResetCollider();
+        closeAttackCollider.ResetCollider();
+
         ChangeState(stateFactory.Dead());
     }
 
     protected override void OnRevival()
     {
         base.OnRevival();
+
+        followAttackCollider.ResetCollider();
+        reachAttackCollider.ResetCollider();
+        closeAttackCollider.ResetCollider();
 
         ChangeState(stateFactory.Chase());
     }

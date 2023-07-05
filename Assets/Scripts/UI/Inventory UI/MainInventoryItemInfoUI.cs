@@ -11,4 +11,14 @@ public class MainInventoryItemInfoUI : MonoBehaviour
     {
         itemInfoText.text = itemInfo;
     }
+
+    private void OnEnable()
+    {
+        itemInfoText.text = string.Empty;
+    }
+
+    private void OnDisable()
+    {
+        itemInfoText.text = string.Empty;
+    }
 }

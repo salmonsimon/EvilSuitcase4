@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Linq;
 using UnityEngine;
 
@@ -71,6 +72,15 @@ public class ZombieStateMachine : StateMachine
         }
     }
 
+    private IEnumerator WaitAndResetAttackColliders()
+    {
+        yield return new WaitForSeconds(Config.LARGE_DELAY);
+
+        followAttackCollider.ResetCollider();
+        reachAttackCollider.ResetCollider();
+        closeAttackCollider.ResetCollider();
+    }
+
     private void OnAnimatorMove()
     {
         Vector3 rootPosition = animator.rootPosition;
@@ -100,11 +110,19 @@ public class ZombieStateMachine : StateMachine
         base.OnDeath();
 
         ChangeState(stateFactory.Dead());
+
+        followAttackCollider.ResetCollider();
+        reachAttackCollider.ResetCollider();
+        closeAttackCollider.ResetCollider();
     }
 
     protected override void OnRevival()
     {
         base.OnRevival();
+
+        followAttackCollider.ResetCollider();
+        reachAttackCollider.ResetCollider();
+        closeAttackCollider.ResetCollider();
 
         ChangeState(stateFactory.Chase());
     }

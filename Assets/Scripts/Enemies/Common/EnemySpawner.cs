@@ -14,7 +14,7 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private List<GameObject> enemyPrefabs;
     [SerializeField] private int defaultSpawnCount = 100;
 
-    private void Awake()
+    private void Start()
     {
         SpawnZombiesOnAwake();
     }

@@ -9,7 +9,7 @@ public class Grid<TGridObject>
     private int height;
     private float cellSize;
     private Vector3 originPosition;
-    private TGridObject[,] gridArray;
+    [SerializeField] private TGridObject[,] gridArray;
 
     #endregion
 

@@ -1,21 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 
 [RequireComponent(typeof(AudioSource))]
 public class SFX : MonoBehaviour
 {
-    private AudioSource audioSource;
+    protected AudioSource audioSource;
 
     [SerializeField] private bool isUI = true;
 
     bool initialized = false;
 
-    private void Start()
+    protected virtual void Start()
     {
         audioSource = GetComponent<AudioSource>();
 
-        audioSource.volume = GameManager.instance.GetSFXManager().GetSFXVolume();
+        SFXManager sfxManager = GameManager.instance.GetSFXManager();
+
+        audioSource.volume = sfxManager.GetSFXVolume();
         audioSource.playOnAwake = false;
 
         if (!isUI)
@@ -28,6 +31,8 @@ public class SFX : MonoBehaviour
         GameManager.instance.GetPauseMenuUI().OnPause += OnPause;
         GameManager.instance.GetPauseMenuUI().OnResume += OnResume;
 
+        sfxManager.OnVolumeChange += OnVolumeChange;
+
         initialized = true;
     }
 
@@ -37,6 +42,8 @@ public class SFX : MonoBehaviour
         {
             GameManager.instance.GetPauseMenuUI().OnPause += OnPause;
             GameManager.instance.GetPauseMenuUI().OnResume += OnResume;
+
+            GameManager.instance.GetSFXManager().OnVolumeChange += OnVolumeChange;
         }
     }
 
@@ -46,7 +53,15 @@ public class SFX : MonoBehaviour
         {
             GameManager.instance.GetPauseMenuUI().OnPause -= OnPause;
             GameManager.instance.GetPauseMenuUI().OnResume -= OnResume;
+
+            GameManager.instance.GetSFXManager().OnVolumeChange -= OnVolumeChange;
         }   
+    }
+
+    protected virtual void OnVolumeChange()
+    {
+        if (audioSource.isPlaying)
+            audioSource.volume = Settings.Instance.SFXVolume;
     }
 
     protected virtual void OnPause()

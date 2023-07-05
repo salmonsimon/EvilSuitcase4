@@ -116,6 +116,8 @@ public class GameManager : MonoBehaviour
         {
             instance = this;
 
+            Settings.Load();
+
             inputGameplay = player.GetComponent<StarterAssetsInputs>();
             inputUI = player.GetComponent<InputsUI>();
 
@@ -126,8 +128,6 @@ public class GameManager : MonoBehaviour
             playerHealthAnimations = player.GetComponent<PlayerHealthAnimations>();
 
             Application.targetFrameRate = Screen.currentResolution.refreshRate;
-
-            Settings.Load();
         }
     }
 
@@ -262,6 +262,9 @@ public class GameManager : MonoBehaviour
 
         pauseMenuUI.ResumeGame();
         pauseMenuUI.ResetMenu();
+
+        GameManager.instance.GetWaveManager().CorpseCleanup();
+        GameManager.instance.GetBloodManager().BloodCleanup();
 
         SetIsOnMainMenu(true);
 
