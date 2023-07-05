@@ -58,8 +58,8 @@ public class WeaponDisplayUI : MonoBehaviour
 
         this.weaponText.fontSize = 70;
 
-        int fastSwapIndex = GameManager.instance.GetInventoryManager().FastSwapIndex;
-        GameManager.instance.GetPauseMenuUI().LoadFastSwapGameplayPanel(fastSwapIndex);
+        int currentEquippedWeaponShortcutIndex = GameManager.instance.GetInventoryManager().CurrentEquippedWeaponShortcutIndex;
+        GameManager.instance.GetPauseMenuUI().LoadFastSwapGameplayPanel(currentEquippedWeaponShortcutIndex);
     }
 
     public void UpdateCounters(float currentDurability)
@@ -76,8 +76,8 @@ public class WeaponDisplayUI : MonoBehaviour
 
         this.weaponText.fontSize = 55;
 
-        int fastSwapIndex = GameManager.instance.GetInventoryManager().FastSwapIndex;
-        GameManager.instance.GetPauseMenuUI().LoadFastSwapGameplayPanel(fastSwapIndex);
+        int currentEquippedWeaponShortcutIndex = GameManager.instance.GetInventoryManager().CurrentEquippedWeaponShortcutIndex;
+        GameManager.instance.GetPauseMenuUI().LoadFastSwapGameplayPanel(currentEquippedWeaponShortcutIndex);
     }
 
     public void UpdateStockedAmmoCounter()
@@ -92,8 +92,8 @@ public class WeaponDisplayUI : MonoBehaviour
         string ammoText = this.weaponText.text.Split("/")[0] + '/' + currentStockedAmmoText;
         this.weaponText.SetText(ammoText);
 
-        int fastSwapIndex = GameManager.instance.GetInventoryManager().FastSwapIndex;
-        GameManager.instance.GetPauseMenuUI().LoadFastSwapGameplayPanel(fastSwapIndex);
+        int CurrentEquippedWeaponShortcutIndex = GameManager.instance.GetInventoryManager().CurrentEquippedWeaponShortcutIndex;
+        GameManager.instance.GetPauseMenuUI().LoadFastSwapGameplayPanel(CurrentEquippedWeaponShortcutIndex);
     }
 
     public void UnequipWeapon()

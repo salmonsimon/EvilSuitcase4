@@ -38,6 +38,7 @@ public class StateMachine : MonoBehaviour
     {
         healthManager.OnDeath += OnDeath;
         healthManager.OnRevival += OnRevival;
+        healthManager.OnResurrect += OnResurrect;
 
         player.GetComponent<HealthManager>().OnDeath += OnPlayerDeath;
     }
@@ -56,6 +57,11 @@ public class StateMachine : MonoBehaviour
     {
         Animator.enabled = false;
         Animator.enabled = true;
+    }
+
+    protected virtual void OnResurrect()
+    {
+        OnRevival();
     }
 
     protected virtual void OnPlayerDeath()

@@ -165,9 +165,6 @@ public class WaveManager : MonoBehaviour
 
         showWaveProgress = false;
         challengingWave = false;
-
-        waveClearedPanel.SetActive(false);
-        nextWaveCountdownPanel.SetActive(false);
     }
 
     private void OnEnable()
@@ -209,6 +206,7 @@ public class WaveManager : MonoBehaviour
 
     private void Death()
     {
+        HitsReceived++;
         gameObject.SetActive(false);
     }
 
@@ -225,7 +223,11 @@ public class WaveManager : MonoBehaviour
 
     private IEnumerator NextWaveCoroutine()
     {
-        nextWaveCountdownPanel.SetActive(true);
+        if (currentWave > 0)
+            yield return new WaitForSeconds(Config.END_TRANSITION_DURATION + Config.SMALL_DELAY);
+
+        nextWaveCountdownPanel.GetComponent<Animator>().SetTrigger(Config.CROSSFADE_START_TRIGGER);
+
         challengingWave = true;
 
         TextMeshProUGUI countdownText = nextWaveCountdownPanel.transform.GetComponentInChildren<TextMeshProUGUI>();
@@ -246,7 +248,9 @@ public class WaveManager : MonoBehaviour
             yield return new WaitForSeconds(1f);
         }
 
-        nextWaveCountdownPanel.SetActive(false);
+        nextWaveCountdownPanel.GetComponent<Animator>().SetTrigger(Config.CROSSFADE_END_TRIGGER);
+
+        yield return new WaitForSeconds(Config.END_TRANSITION_DURATION - Config.LARGE_DELAY);
 
         StartWave();
     }
@@ -321,13 +325,18 @@ public class WaveManager : MonoBehaviour
 
     private void WaveCleared()
     {
-        StartCoroutine(WaveClearedCoroutine());
+        if (GameManager.instance.GetPlayer().GetComponent<HealthManager>().IsAlive)
+            StartCoroutine(WaveClearedCoroutine());
+
         ShowKillsRemainingPanel(false);
     }
 
     private IEnumerator WaveClearedCoroutine()
     {
-        waveClearedPanel.SetActive(true);
+        yield return new WaitForSeconds(Config.END_TRANSITION_DURATION + Config.SMALL_DELAY);
+
+        waveClearedPanel.GetComponent<Animator>().SetTrigger(Config.CROSSFADE_START_TRIGGER);
+
         TextMeshProUGUI countdownText = waveClearedPanel.transform.GetComponentInChildren<TextMeshProUGUI>();
 
         for (int i = 5; i > 0; i--)
@@ -341,6 +350,8 @@ public class WaveManager : MonoBehaviour
 
         challengingWave = false;
 
+        waveClearedPanel.GetComponent<Animator>().SetTrigger(Config.CROSSFADE_END_TRIGGER);
+
         GameManager.instance.GetSFXManager().PlaySound(Config.TRANSITION_START_SFX);
 
         float transitionTime = GameManager.instance.GetTransitionManager().RunTransition("DoubleWipe");
@@ -348,8 +359,6 @@ public class WaveManager : MonoBehaviour
         yield return new WaitForSeconds(transitionTime + Config.MEDIUM_DELAY);
 
         List<Item> rewardItems = DrawRewardItems();
-
-        waveClearedPanel.SetActive(false);
 
         float rewardCountdown = currentWave < waves.Count ? rewardsCountdown[currentWave] : 15f;
 
@@ -382,7 +391,7 @@ public class WaveManager : MonoBehaviour
 
         GameManager.instance.GetInventoryManager().UnblockBlockedItems();
 
-        if (currentCorpses > 10)
+        if (currentCorpses > 10 || IsOnDifficultWave())
             CorpseCleanup();
 
         GameManager.instance.GetSFXManager().PlaySound(Config.TRANSITION_END_SFX);
@@ -435,7 +444,10 @@ public class WaveManager : MonoBehaviour
     {
         List<Item> rewardItems = new List<Item>();
 
-        foreach (RewardItem rewardItem in rewards[currentWave].RewardItems)
+        List <RewardItem> itemsToInstantiate = currentWave < waves.Count ? rewards[currentWave].RewardItems : 
+                                                                           rewards[waves.Count - 1].RewardItems;
+
+        foreach (RewardItem rewardItem in itemsToInstantiate)
         {
             for (int itemAmount = 0; itemAmount < rewardItem.Amount; itemAmount++)
             {
@@ -461,11 +473,11 @@ public class WaveManager : MonoBehaviour
         {
             ObjectPool<GameObject> pool = corpse.GetComponent<PoolableObject>().ObjectPool;
 
-            if (corpse.TryGetComponent(out HealthManager healthManager) && !healthManager.IsAlive)
-                healthManager.Resurrect();
-
             if (corpse.gameObject.activeSelf)
             {
+                if (corpse.TryGetComponent(out HealthManager healthManager))
+                    healthManager.Resurrect();
+
                 List<DartProjectile> arrows = corpse.GetComponentsInChildren<DartProjectile>(true).ToList();
                 arrows.AddRange(corpse.GetComponents<DartProjectile>().ToList());
                 
@@ -478,5 +490,10 @@ public class WaveManager : MonoBehaviour
                 pool.Release(corpse.gameObject);
             }
         }
+    }
+
+    private bool IsOnDifficultWave()
+    {
+        return (currentWave + 1) % 5 == 0;
     }
 }

@@ -24,7 +24,7 @@ public class MusicManager : MonoBehaviour
 
     [SerializeField] private List<AudioClip> gameplayMusic;
 
-    private void Awake()
+    private void Start()
     {
         audioSource = GetComponent<AudioSource>();
 

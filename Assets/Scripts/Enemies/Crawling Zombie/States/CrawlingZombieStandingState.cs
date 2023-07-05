@@ -6,7 +6,6 @@ public class CrawlingZombieStandingState : CrawlingZombieBaseState
 {
     private bool finishedStanding = false;
 
-    private bool isFacingDown = false;
     private string animationToUse = string.Empty;
 
     public CrawlingZombieStandingState(CrawlingZombieStateMachine crawlingZombieStateMachine, CrawlingZombieStateFactory crawlingZombieStateFactory) : base(crawlingZombieStateMachine, crawlingZombieStateFactory) { }

@@ -11,13 +11,9 @@ public class ResolutionSettingsUI : MonoBehaviour
 
     private Resolution[] resolutions;
 
-    private bool initialized = false;
-
     private void Start()
     {
         AddResolutionOptionsToDropdown();
-
-        initialized = true;
     }
 
     private void OnEnable()

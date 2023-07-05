@@ -39,7 +39,7 @@ public class HealthManager : MonoBehaviour
         int damageTaken = Mathf.Clamp(damage, 0, CurrentHitPoints);
         CurrentHitPoints -= damageTaken;
 
-        if (OnDamaged != null)
+        if (OnDamaged != null && currentHitPoints > 0)
             OnDamaged();
     }
 
@@ -87,6 +87,9 @@ public class HealthManager : MonoBehaviour
 
     public delegate void OnDeathDelegate();
     public event OnDeathDelegate OnDeath;
+
+    public delegate void OnResurrectDelegate();
+    public event OnResurrectDelegate OnResurrect;
 
     #endregion
 
@@ -147,6 +150,10 @@ public class HealthManager : MonoBehaviour
     public virtual void Resurrect()
     {
         currentHitPoints = maxHitPoints;
+
         IsAlive = true;
+
+        if (OnResurrect != null)
+            OnResurrect();
     }
 }

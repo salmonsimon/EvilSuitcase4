@@ -9,8 +9,6 @@ public class ZombieRagdollState : ZombieBaseState
 
     [SerializeField] private bool readyToResetBones;
 
-    private float timeToCheckSetup = 2f;
-
     public ZombieRagdollState(ZombieStateMachine zombieStateMachine, ZombieStateFactory zombieStateFactory) : base(zombieStateMachine, zombieStateFactory) { }
 
     public override void CheckSwitchStates()
@@ -35,14 +33,6 @@ public class ZombieRagdollState : ZombieBaseState
 
     public override void UpdateState()
     {
-        if (timeToCheckSetup > 0)
-            timeToCheckSetup -= Time.deltaTime;
-        else
-        {
-            CheckStateSetup();
-            timeToCheckSetup = 2f;
-        }
-
         if (context.FellCheck.IsColliding)
             timeUntilStanding -= Time.deltaTime;
 
@@ -56,6 +46,8 @@ public class ZombieRagdollState : ZombieBaseState
 
     private void StateSetup()
     {
+        context.RagdollSystem.ResetRagdoll();
+
         context.Agent.enabled = false;
 
         context.RagdollSystem.MapCollider.isTrigger = true;
@@ -66,23 +58,5 @@ public class ZombieRagdollState : ZombieBaseState
         readyToResetBones = false;
 
         context.DisableHitboxes();
-    }
-
-    private void CheckStateSetup()
-    {
-        if (context.Agent.enabled)
-            context.Agent.enabled = false;
-
-        if (context.Animator.enabled)
-        {
-            context.RagdollSystem.RagdollMode = true;
-            context.RagdollSystem.SetRagdoll(false, true);
-        }
-
-        if (!context.RagdollSystem.MapCollider.isTrigger)
-            context.RagdollSystem.MapCollider.isTrigger = true;
-
-        if (context.RagdollSystem.MapCollider.enabled)
-            context.RagdollSystem.MapCollider.enabled = false;
     }
 }
