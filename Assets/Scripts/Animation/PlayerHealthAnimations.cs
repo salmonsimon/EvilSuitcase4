@@ -29,7 +29,7 @@ public class PlayerHealthAnimations : MonoBehaviour
     [SerializeField] private float deadCameraRotationSpeed = 5f;
 
     [Header("Other Configurations")]
-    [SerializeField] private float criticalHealthThreshold = .35f;
+    [SerializeField] private float criticalHealthThreshold = .4f;
 
     private float deadCameraCurrentDistanceTraveled = 0f;
 
@@ -37,6 +37,7 @@ public class PlayerHealthAnimations : MonoBehaviour
     private ThirdPersonShooterController playerThirdPersonShooterController;
     private HealthManager playerHealthManager;
     private SFX sfx;
+    private PlayerHealthUI playerHealthUI;
 
     private List<Collider> hurtColliders = new List<Collider>();
 
@@ -49,6 +50,7 @@ public class PlayerHealthAnimations : MonoBehaviour
         playerThirdPersonShooterController = GetComponent<ThirdPersonShooterController>();
         playerHealthManager = GetComponent<HealthManager>();
         sfx = GetComponent<SFX>();
+        playerHealthUI = GameManager.instance.GetPlayerHealthUI();
 
         playerHealthManager.OnDamaged += Damaged;
         playerHealthManager.OnRecover += Recover;
@@ -70,25 +72,30 @@ public class PlayerHealthAnimations : MonoBehaviour
         if (playerHealthManager.IsAlive && playerThirdPersonShooterController.CanTriggerHurtAnimation())
             PlayRandomHurtAnimation();
 
-        if (!GameManager.instance.GetPlayerHealthUI().CriticalHealthGlobalVolume.IsEnabled)
+        float currentHitPoints = playerHealthManager.CurrentHitPoints;
+        float maxHitPoints = playerHealthManager.MaxHitPoints;
+        float hitPointsPercentage = currentHitPoints / maxHitPoints;
+
+        if (hitPointsPercentage < criticalHealthThreshold)
+        {
+            // TO DO: USE THIS IF WE FIND BETTER HURT ANIMATIONS FOR LOCOMOTION
+            //animator.SetBool("IsHurt", true);
+
+            if (!GameManager.instance.GetPlayerHealthUI().CriticalHealthGlobalVolume.IsEnabled)
+            {
+                playerHealthUI.HeartbeatSFX.Heartbeat();
+                playerHealthUI.CriticalHealthGlobalVolume.Enable();
+            }
+            else
+                playerHealthUI.HeartbeatSFX.OnDamaged();
+        }
+
+        if (!playerHealthUI.CriticalHealthGlobalVolume.IsEnabled)
         {
             GameManager.instance.GetPlayerHealthUI().HurtGlobalVolume.Enable();
 
             StartCoroutine(WaitToDisableHurtGlobalVolume());
         }
-
-        float currentHitPoints = playerHealthManager.CurrentHitPoints;
-        float maxHitPoints = playerHealthManager.MaxHitPoints;
-        float hitPointsPercentage = currentHitPoints / maxHitPoints;
-
-        if (hitPointsPercentage < criticalHealthThreshold && !GameManager.instance.GetPlayerHealthUI().CriticalHealthGlobalVolume.IsEnabled)
-        {
-            // TO DO: USE THIS IF WE FIND BETTER HURT ANIMATIONS FOR LOCOMOTION
-            //animator.SetBool("IsHurt", true);
-            GameManager.instance.GetPlayerHealthUI().CriticalHealthGlobalVolume.Enable();
-            GameManager.instance.GetSFXManager().PlaySound(Config.HEARTBEAT_SFX);
-        }
-            
     }
 
     private void Recover()
@@ -101,17 +108,17 @@ public class PlayerHealthAnimations : MonoBehaviour
         {
             // TO DO: USE THIS IF WE FIND BETTER HURT ANIMATIONS FOR LOCOMOTION
             //animator.SetBool("IsHurt", false);
-            GameManager.instance.GetPlayerHealthUI().CriticalHealthGlobalVolume.Disable();
-            GameManager.instance.GetSFXManager().StopSFX();
+
+            playerHealthUI.CriticalHealthGlobalVolume.Disable();
+            playerHealthUI.HeartbeatSFX.StopSFX();
         }
-            
     }
 
     private void Death()
     {
         ActivateHurtColliders();
         PlayRandomDeathAnimation();
-        GameManager.instance.GetSFXManager().DyingHeartbeat();
+        playerHealthUI.HeartbeatSFX.DyingHeartbeat();
     }
 
     private void Revival()
@@ -139,7 +146,11 @@ public class PlayerHealthAnimations : MonoBehaviour
     private IEnumerator WaitToDisableHurtGlobalVolume()
     {
         if (IsOnHurtAnimation)
+        {
             while (IsOnHurtAnimation) yield return null;
+
+            yield return new WaitForSeconds(1.5f);
+        }
         else
             yield return new WaitForSeconds(1.5f);  
 
@@ -156,11 +167,16 @@ public class PlayerHealthAnimations : MonoBehaviour
     {
         StopAllCoroutines();
 
+        PlayerHealthUI playerHealthUI = GameManager.instance.GetPlayerHealthUI();
+
         if (isOnHurtAnimation)
         {
             isOnHurtAnimation = false;
-            GameManager.instance.GetPlayerHealthUI().HurtGlobalVolume.Disable();
+            playerHealthUI.HurtGlobalVolume.Disable();
         }
+
+        if (!playerHealthUI.CriticalHealthGlobalVolume.IsEnabled)
+            playerHealthUI.CriticalHealthGlobalVolume.Enable();
 
         int deathAnimationIndex = Random.Range(0, deathAnimations.Count);
         AnimationClip deathAnimationToPlay = deathAnimations[deathAnimationIndex];

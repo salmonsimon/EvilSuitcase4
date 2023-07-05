@@ -50,10 +50,13 @@ public class EquipableItem : Item
             EquipableItem[] newArray = GameManager.instance.GetInventoryManager().FastSwapWeaponArray;
             newArray[weaponShortcut] = null;
             GameManager.instance.GetInventoryManager().FastSwapWeaponArray = newArray;
-        }
 
-        if (!saveWeaponShortcut)
-            weaponShortcut = -1;
+            if (!saveWeaponShortcut)
+            {
+                GameManager.instance.GetPauseMenuUI().RemoveBlockedPanelFromDiscardedItem(weaponShortcut);
+                weaponShortcut = -1;
+            }
+        }
     }
 
     public void Equip()

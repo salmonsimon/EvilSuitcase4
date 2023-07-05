@@ -43,9 +43,9 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IP
 
     #region Variables
 
-    protected Direction direction;
+    [SerializeField] protected Direction direction;
 
-    protected Vector2Int origin;
+    [SerializeField] protected Vector2Int origin;
 
     protected Inventory holdingInventory;
     public Inventory HoldingInventory { get { return holdingInventory; } set { holdingInventory = value; } }
@@ -54,6 +54,9 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IP
     public bool IsBlocked { get { return isBlocked; } set { isBlocked = value; } }
 
     #endregion
+
+    [SerializeField] private List<Vector2Int> gridPositionList = new List<Vector2Int>();
+    public List<Vector2Int> GridPositionList { get { return gridPositionList; } set { gridPositionList = value; } }
 
 
     protected virtual void Awake()
@@ -99,6 +102,8 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IP
         float newScale = inventoryCellSize / CellSize;
 
         transform.localScale = new Vector3(newScale, newScale, newScale);
+
+        gridPositionList = GetGridPositionList();
     }
 
     public GameObject CreateVisualBackgroundGrid(Transform visualParentTransform, ItemScriptableObject itemTetrisSO)

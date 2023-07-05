@@ -35,7 +35,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 30}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &476681097
@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'kills remaining:'
+  m_text: remaining
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 02f8dbe54a3b0794e9c24ec3ed45660f, type: 2}
   m_sharedMaterial: {fileID: -6082116029947509719, guid: 02f8dbe54a3b0794e9c24ec3ed45660f,
@@ -204,8 +204,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 46
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ea4638d901f510245a789326d77f39e7, type: 2}
-  m_sharedMaterial: {fileID: 5088401558323539269, guid: ea4638d901f510245a789326d77f39e7,
+  m_fontAsset: {fileID: 11400000, guid: 41cdce92eecbaf1478cb37403b8483c8, type: 2}
+  m_sharedMaterial: {fileID: 269915773662550294, guid: 41cdce92eecbaf1478cb37403b8483c8,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -230,8 +230,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 80
-  m_fontSizeBase: 80
+  m_fontSize: 180
+  m_fontSizeBase: 180
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -246,7 +246,7 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_enableWordWrapping: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
@@ -308,8 +308,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 250, y: 0}
-  m_SizeDelta: {x: -500, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1432874055
 CanvasRenderer:
@@ -388,7 +388,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -126}
+  m_AnchoredPosition: {x: 0, y: -100}
   m_SizeDelta: {x: 800, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1839660829
@@ -497,8 +497,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -150, y: 0}
-  m_SizeDelta: {x: -300, y: 0}
+  m_AnchoredPosition: {x: 0, y: -137}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1881432855
 CanvasRenderer:
@@ -573,7 +573,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -250}
+  m_AnchoredPosition: {x: 0, y: -190}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5435146854625387235
@@ -685,13 +685,15 @@ GameObject:
   - component: {fileID: 5435146855809049370}
   - component: {fileID: 5435146855809049368}
   - component: {fileID: 5435146855809049371}
+  - component: {fileID: 1260790604}
+  - component: {fileID: 1260790605}
   m_Layer: 0
   m_Name: Wave Cleared Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &5435146855809049370
 RectTransform:
   m_ObjectHideFlags: 0
@@ -711,7 +713,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -400}
+  m_AnchoredPosition: {x: 0, y: -185}
   m_SizeDelta: {x: 1000, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5435146855809049368
@@ -752,6 +754,38 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &1260790604
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5435146855809049373}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!95 &1260790605
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5435146855809049373}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9452497e141c2074d93a47ce08232a87, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!1 &5435146855973434741
 GameObject:
   m_ObjectHideFlags: 0
@@ -763,13 +797,15 @@ GameObject:
   - component: {fileID: 5435146855973434738}
   - component: {fileID: 5435146855973434736}
   - component: {fileID: 5435146855973434739}
+  - component: {fileID: 410330889}
+  - component: {fileID: 410330890}
   m_Layer: 0
   m_Name: Next Wave Countdown Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &5435146855973434738
 RectTransform:
   m_ObjectHideFlags: 0
@@ -788,7 +824,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -400}
+  m_AnchoredPosition: {x: 0, y: -350}
   m_SizeDelta: {x: 1000, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5435146855973434736
@@ -829,6 +865,38 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &410330889
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5435146855973434741}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!95 &410330890
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5435146855973434741}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9452497e141c2074d93a47ce08232a87, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!1 &5435146856181983116
 GameObject:
   m_ObjectHideFlags: 0
@@ -1087,51 +1155,66 @@ MonoBehaviour:
       SpawnProbability: 0.3
     - Prefab: {fileID: 2415460792606355714, guid: ee5ba275300b3ba4ba22a791ab1f89e3,
         type: 3}
-      SpawnProbability: 0.3
+      SpawnProbability: 0.15
+    - Prefab: {fileID: 2415460792606355714, guid: 7ba15058fa8a9854690ed84631ac01c9,
+        type: 3}
+      SpawnProbability: 0.15
   - EnemiesToSpawn: 11
     SpawnObjects:
     - Prefab: {fileID: 7285027768795059239, guid: d7c660db2d8156848a4d1a03bccb5521,
         type: 3}
       SpawnProbability: 0.4
+    - Prefab: {fileID: 2415460792606355714, guid: 7ba15058fa8a9854690ed84631ac01c9,
+        type: 3}
+      SpawnProbability: 0.15
     - Prefab: {fileID: 2415460792606355714, guid: 6e6fde8ab6a950c479672bb59a81c2ae,
         type: 3}
       SpawnProbability: 0.3
     - Prefab: {fileID: 2415460792606355714, guid: ee5ba275300b3ba4ba22a791ab1f89e3,
         type: 3}
-      SpawnProbability: 0.3
+      SpawnProbability: 0.15
   - EnemiesToSpawn: 12
     SpawnObjects:
     - Prefab: {fileID: 7285027768795059239, guid: d7c660db2d8156848a4d1a03bccb5521,
         type: 3}
       SpawnProbability: 0.4
+    - Prefab: {fileID: 2415460792606355714, guid: 7ba15058fa8a9854690ed84631ac01c9,
+        type: 3}
+      SpawnProbability: 0.15
     - Prefab: {fileID: 2415460792606355714, guid: 6e6fde8ab6a950c479672bb59a81c2ae,
         type: 3}
       SpawnProbability: 0.3
     - Prefab: {fileID: 2415460792606355714, guid: ee5ba275300b3ba4ba22a791ab1f89e3,
         type: 3}
-      SpawnProbability: 0.3
+      SpawnProbability: 0.15
   - EnemiesToSpawn: 13
     SpawnObjects:
     - Prefab: {fileID: 7285027768795059239, guid: d7c660db2d8156848a4d1a03bccb5521,
         type: 3}
       SpawnProbability: 0.4
+    - Prefab: {fileID: 2415460792606355714, guid: 7ba15058fa8a9854690ed84631ac01c9,
+        type: 3}
+      SpawnProbability: 0.15
     - Prefab: {fileID: 2415460792606355714, guid: 6e6fde8ab6a950c479672bb59a81c2ae,
         type: 3}
       SpawnProbability: 0.3
     - Prefab: {fileID: 2415460792606355714, guid: ee5ba275300b3ba4ba22a791ab1f89e3,
         type: 3}
-      SpawnProbability: 0.3
+      SpawnProbability: 0.15
   - EnemiesToSpawn: 14
     SpawnObjects:
     - Prefab: {fileID: 7285027768795059239, guid: d7c660db2d8156848a4d1a03bccb5521,
         type: 3}
       SpawnProbability: 0.4
+    - Prefab: {fileID: 2415460792606355714, guid: 7ba15058fa8a9854690ed84631ac01c9,
+        type: 3}
+      SpawnProbability: 0.15
     - Prefab: {fileID: 2415460792606355714, guid: 6e6fde8ab6a950c479672bb59a81c2ae,
         type: 3}
       SpawnProbability: 0.3
     - Prefab: {fileID: 2415460792606355714, guid: ee5ba275300b3ba4ba22a791ab1f89e3,
         type: 3}
-      SpawnProbability: 0.3
+      SpawnProbability: 0.15
   - EnemiesToSpawn: 20
     SpawnObjects:
     - Prefab: {fileID: 2415460792606355714, guid: 7ba15058fa8a9854690ed84631ac01c9,
@@ -1337,7 +1420,7 @@ MonoBehaviour:
       Probability: 0.1
       Amount: 1
       AmmoMinMax: {x: 10, y: 20}
-      LoadedAmmoMinMax: {x: 1, y: 1}
+      LoadedAmmoMinMax: {x: 15, y: 25}
       DurabilityMinMax: {x: 20, y: 50}
   - RewardItems:
     - Item: {fileID: 6530900219213045720, guid: 8eb2817ad118cc94bbcf51a36bdfb36b,
@@ -1410,7 +1493,7 @@ MonoBehaviour:
       Probability: 0.1
       Amount: 1
       AmmoMinMax: {x: 10, y: 20}
-      LoadedAmmoMinMax: {x: 1, y: 1}
+      LoadedAmmoMinMax: {x: 15, y: 25}
       DurabilityMinMax: {x: 20, y: 50}
   - RewardItems:
     - Item: {fileID: 6530900219213045720, guid: 8eb2817ad118cc94bbcf51a36bdfb36b,
@@ -1483,7 +1566,7 @@ MonoBehaviour:
       Probability: 0.1
       Amount: 1
       AmmoMinMax: {x: 10, y: 20}
-      LoadedAmmoMinMax: {x: 1, y: 1}
+      LoadedAmmoMinMax: {x: 15, y: 25}
       DurabilityMinMax: {x: 20, y: 50}
   - RewardItems:
     - Item: {fileID: 6530900219213045720, guid: 8eb2817ad118cc94bbcf51a36bdfb36b,
@@ -1653,7 +1736,7 @@ MonoBehaviour:
       Probability: 0.1
       Amount: 1
       AmmoMinMax: {x: 10, y: 20}
-      LoadedAmmoMinMax: {x: 15, y: 25}
+      LoadedAmmoMinMax: {x: 2, y: 6}
       DurabilityMinMax: {x: 20, y: 50}
   - RewardItems:
     - Item: {fileID: 6530900219213045720, guid: 8eb2817ad118cc94bbcf51a36bdfb36b,
@@ -1750,7 +1833,7 @@ MonoBehaviour:
       Probability: 0.1
       Amount: 1
       AmmoMinMax: {x: 10, y: 20}
-      LoadedAmmoMinMax: {x: 15, y: 25}
+      LoadedAmmoMinMax: {x: 2, y: 6}
       DurabilityMinMax: {x: 20, y: 50}
   - RewardItems:
     - Item: {fileID: 6530900219213045720, guid: 8eb2817ad118cc94bbcf51a36bdfb36b,
@@ -1847,7 +1930,7 @@ MonoBehaviour:
       Probability: 0.1
       Amount: 1
       AmmoMinMax: {x: 10, y: 20}
-      LoadedAmmoMinMax: {x: 15, y: 25}
+      LoadedAmmoMinMax: {x: 2, y: 6}
       DurabilityMinMax: {x: 20, y: 50}
   - RewardItems:
     - Item: {fileID: 6530900219213045720, guid: 8eb2817ad118cc94bbcf51a36bdfb36b,
@@ -1944,14 +2027,14 @@ MonoBehaviour:
       Probability: 0.1
       Amount: 1
       AmmoMinMax: {x: 10, y: 20}
-      LoadedAmmoMinMax: {x: 15, y: 25}
+      LoadedAmmoMinMax: {x: 2, y: 6}
       DurabilityMinMax: {x: 20, y: 50}
   - RewardItems:
     - Item: {fileID: 6530900219213045720, guid: 8eb2817ad118cc94bbcf51a36bdfb36b,
         type: 3}
       ItemType: 0
       Probability: 0.2
-      Amount: 5
+      Amount: 10
       AmmoMinMax: {x: 5, y: 15}
       LoadedAmmoMinMax: {x: 0, y: 0}
       DurabilityMinMax: {x: 0, y: 0}
@@ -1959,7 +2042,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 0
       Probability: 0.2
-      Amount: 5
+      Amount: 10
       AmmoMinMax: {x: 10, y: 20}
       LoadedAmmoMinMax: {x: 0, y: 0}
       DurabilityMinMax: {x: 0, y: 0}
@@ -1967,7 +2050,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 0
       Probability: 0.3
-      Amount: 5
+      Amount: 10
       AmmoMinMax: {x: 10, y: 20}
       LoadedAmmoMinMax: {x: 0, y: 0}
       DurabilityMinMax: {x: 0, y: 0}
@@ -1975,7 +2058,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 0
       Probability: 0.2
-      Amount: 5
+      Amount: 10
       AmmoMinMax: {x: 8, y: 16}
       LoadedAmmoMinMax: {x: 1, y: 1}
       DurabilityMinMax: {x: 20, y: 50}
@@ -1983,7 +2066,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 3
       Probability: 0.3
-      Amount: 2
+      Amount: 5
       AmmoMinMax: {x: 10, y: 20}
       LoadedAmmoMinMax: {x: 1, y: 1}
       DurabilityMinMax: {x: 20, y: 50}
@@ -1991,7 +2074,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 3
       Probability: 0.2
-      Amount: 1
+      Amount: 5
       AmmoMinMax: {x: 10, y: 20}
       LoadedAmmoMinMax: {x: 0, y: 0}
       DurabilityMinMax: {x: 0, y: 0}
@@ -2048,7 +2131,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 0
       Probability: 0.2
-      Amount: 5
+      Amount: 7
       AmmoMinMax: {x: 5, y: 15}
       LoadedAmmoMinMax: {x: 0, y: 0}
       DurabilityMinMax: {x: 0, y: 0}
@@ -2056,7 +2139,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 0
       Probability: 0.2
-      Amount: 5
+      Amount: 7
       AmmoMinMax: {x: 10, y: 20}
       LoadedAmmoMinMax: {x: 0, y: 0}
       DurabilityMinMax: {x: 0, y: 0}
@@ -2064,7 +2147,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 0
       Probability: 0.3
-      Amount: 5
+      Amount: 7
       AmmoMinMax: {x: 10, y: 20}
       LoadedAmmoMinMax: {x: 0, y: 0}
       DurabilityMinMax: {x: 0, y: 0}
@@ -2072,7 +2155,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 0
       Probability: 0.2
-      Amount: 5
+      Amount: 7
       AmmoMinMax: {x: 8, y: 16}
       LoadedAmmoMinMax: {x: 1, y: 1}
       DurabilityMinMax: {x: 20, y: 50}
@@ -2080,7 +2163,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 3
       Probability: 0.3
-      Amount: 2
+      Amount: 4
       AmmoMinMax: {x: 10, y: 20}
       LoadedAmmoMinMax: {x: 1, y: 1}
       DurabilityMinMax: {x: 20, y: 50}
@@ -2088,7 +2171,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 3
       Probability: 0.2
-      Amount: 1
+      Amount: 2
       AmmoMinMax: {x: 10, y: 20}
       LoadedAmmoMinMax: {x: 0, y: 0}
       DurabilityMinMax: {x: 0, y: 0}
@@ -2145,7 +2228,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 0
       Probability: 0.2
-      Amount: 5
+      Amount: 7
       AmmoMinMax: {x: 5, y: 15}
       LoadedAmmoMinMax: {x: 0, y: 0}
       DurabilityMinMax: {x: 0, y: 0}
@@ -2153,7 +2236,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 0
       Probability: 0.2
-      Amount: 5
+      Amount: 7
       AmmoMinMax: {x: 10, y: 20}
       LoadedAmmoMinMax: {x: 0, y: 0}
       DurabilityMinMax: {x: 0, y: 0}
@@ -2161,7 +2244,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 0
       Probability: 0.3
-      Amount: 5
+      Amount: 7
       AmmoMinMax: {x: 10, y: 20}
       LoadedAmmoMinMax: {x: 0, y: 0}
       DurabilityMinMax: {x: 0, y: 0}
@@ -2169,7 +2252,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 0
       Probability: 0.2
-      Amount: 5
+      Amount: 7
       AmmoMinMax: {x: 8, y: 16}
       LoadedAmmoMinMax: {x: 1, y: 1}
       DurabilityMinMax: {x: 20, y: 50}
@@ -2177,7 +2260,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 3
       Probability: 0.3
-      Amount: 2
+      Amount: 5
       AmmoMinMax: {x: 10, y: 20}
       LoadedAmmoMinMax: {x: 1, y: 1}
       DurabilityMinMax: {x: 20, y: 50}
@@ -2185,7 +2268,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 3
       Probability: 0.2
-      Amount: 1
+      Amount: 2
       AmmoMinMax: {x: 10, y: 20}
       LoadedAmmoMinMax: {x: 0, y: 0}
       DurabilityMinMax: {x: 0, y: 0}
@@ -2242,7 +2325,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 0
       Probability: 0.2
-      Amount: 5
+      Amount: 7
       AmmoMinMax: {x: 5, y: 15}
       LoadedAmmoMinMax: {x: 0, y: 0}
       DurabilityMinMax: {x: 0, y: 0}
@@ -2250,7 +2333,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 0
       Probability: 0.2
-      Amount: 5
+      Amount: 7
       AmmoMinMax: {x: 10, y: 20}
       LoadedAmmoMinMax: {x: 0, y: 0}
       DurabilityMinMax: {x: 0, y: 0}
@@ -2258,7 +2341,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 0
       Probability: 0.3
-      Amount: 5
+      Amount: 7
       AmmoMinMax: {x: 10, y: 20}
       LoadedAmmoMinMax: {x: 0, y: 0}
       DurabilityMinMax: {x: 0, y: 0}
@@ -2266,7 +2349,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 0
       Probability: 0.2
-      Amount: 5
+      Amount: 7
       AmmoMinMax: {x: 8, y: 16}
       LoadedAmmoMinMax: {x: 1, y: 1}
       DurabilityMinMax: {x: 20, y: 50}
@@ -2274,104 +2357,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 3
       Probability: 0.3
-      Amount: 2
-      AmmoMinMax: {x: 10, y: 20}
-      LoadedAmmoMinMax: {x: 1, y: 1}
-      DurabilityMinMax: {x: 20, y: 50}
-    - Item: {fileID: 2782552909317919612, guid: ac10adb9aaac579458aabf14ba863852,
-        type: 3}
-      ItemType: 3
-      Probability: 0.2
-      Amount: 1
-      AmmoMinMax: {x: 10, y: 20}
-      LoadedAmmoMinMax: {x: 0, y: 0}
-      DurabilityMinMax: {x: 0, y: 0}
-    - Item: {fileID: 1355713261186686658, guid: cab47e7647f0cb243bfc706479cbf078,
-        type: 3}
-      ItemType: 1
-      Probability: 0.3
-      Amount: 1
-      AmmoMinMax: {x: 10, y: 20}
-      LoadedAmmoMinMax: {x: 1, y: 1}
-      DurabilityMinMax: {x: 20, y: 50}
-    - Item: {fileID: 3306029836675963489, guid: ede31eafd4e3ef44e9881e14fbc0d18b,
-        type: 3}
-      ItemType: 2
-      Probability: 0.5
-      Amount: 1
-      AmmoMinMax: {x: 10, y: 20}
-      LoadedAmmoMinMax: {x: 0, y: 0}
-      DurabilityMinMax: {x: 0.6, y: 1}
-    - Item: {fileID: 4220394600422452821, guid: 8c4ed81e33b10c6428bdff342e8c47a9,
-        type: 3}
-      ItemType: 1
-      Probability: 0.2
-      Amount: 1
-      AmmoMinMax: {x: 10, y: 20}
-      LoadedAmmoMinMax: {x: 5, y: 10}
-      DurabilityMinMax: {x: 20, y: 50}
-    - Item: {fileID: 2532789989797554644, guid: 23a5fd7e88d46c84fa4b8b0e3b875310,
-        type: 3}
-      ItemType: 1
-      Probability: 0.2
-      Amount: 1
-      AmmoMinMax: {x: 10, y: 20}
-      LoadedAmmoMinMax: {x: 10, y: 20}
-      DurabilityMinMax: {x: 20, y: 50}
-    - Item: {fileID: 7703535562999486616, guid: 72dedf120e62b094ab40ddaa5192ac11,
-        type: 3}
-      ItemType: 1
-      Probability: 0.2
-      Amount: 1
-      AmmoMinMax: {x: 10, y: 20}
-      LoadedAmmoMinMax: {x: 20, y: 30}
-      DurabilityMinMax: {x: 20, y: 50}
-    - Item: {fileID: 1679215543761796996, guid: fe0272614fe257b4b8010e246f9e17b0,
-        type: 3}
-      ItemType: 1
-      Probability: 0.2
-      Amount: 1
-      AmmoMinMax: {x: 10, y: 20}
-      LoadedAmmoMinMax: {x: 2, y: 6}
-      DurabilityMinMax: {x: 20, y: 50}
-  - RewardItems:
-    - Item: {fileID: 6530900219213045720, guid: 8eb2817ad118cc94bbcf51a36bdfb36b,
-        type: 3}
-      ItemType: 0
-      Probability: 0.2
-      Amount: 5
-      AmmoMinMax: {x: 5, y: 15}
-      LoadedAmmoMinMax: {x: 0, y: 0}
-      DurabilityMinMax: {x: 0, y: 0}
-    - Item: {fileID: 6530900219213045720, guid: 379cda0942c91e34da108f2c5649e6bd,
-        type: 3}
-      ItemType: 0
-      Probability: 0.2
-      Amount: 5
-      AmmoMinMax: {x: 10, y: 20}
-      LoadedAmmoMinMax: {x: 0, y: 0}
-      DurabilityMinMax: {x: 0, y: 0}
-    - Item: {fileID: 6530900219213045720, guid: 2423d6686a2ffc04495fbb31d951f6c5,
-        type: 3}
-      ItemType: 0
-      Probability: 0.3
-      Amount: 5
-      AmmoMinMax: {x: 10, y: 20}
-      LoadedAmmoMinMax: {x: 0, y: 0}
-      DurabilityMinMax: {x: 0, y: 0}
-    - Item: {fileID: 6530900219213045720, guid: 71f2a908dd0f2cb48a76405bbef6bb54,
-        type: 3}
-      ItemType: 0
-      Probability: 0.2
-      Amount: 5
-      AmmoMinMax: {x: 8, y: 16}
-      LoadedAmmoMinMax: {x: 1, y: 1}
-      DurabilityMinMax: {x: 20, y: 50}
-    - Item: {fileID: 2782552909317919612, guid: 854342e09f3a90a4e91d280354e87ff7,
-        type: 3}
-      ItemType: 3
-      Probability: 0.3
-      Amount: 2
+      Amount: 4
       AmmoMinMax: {x: 10, y: 20}
       LoadedAmmoMinMax: {x: 1, y: 1}
       DurabilityMinMax: {x: 20, y: 50}
@@ -2436,7 +2422,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 0
       Probability: 0.2
-      Amount: 5
+      Amount: 7
       AmmoMinMax: {x: 5, y: 15}
       LoadedAmmoMinMax: {x: 0, y: 0}
       DurabilityMinMax: {x: 0, y: 0}
@@ -2444,7 +2430,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 0
       Probability: 0.2
-      Amount: 5
+      Amount: 7
       AmmoMinMax: {x: 10, y: 20}
       LoadedAmmoMinMax: {x: 0, y: 0}
       DurabilityMinMax: {x: 0, y: 0}
@@ -2452,7 +2438,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 0
       Probability: 0.3
-      Amount: 5
+      Amount: 7
       AmmoMinMax: {x: 10, y: 20}
       LoadedAmmoMinMax: {x: 0, y: 0}
       DurabilityMinMax: {x: 0, y: 0}
@@ -2460,7 +2446,104 @@ MonoBehaviour:
         type: 3}
       ItemType: 0
       Probability: 0.2
-      Amount: 5
+      Amount: 7
+      AmmoMinMax: {x: 8, y: 16}
+      LoadedAmmoMinMax: {x: 1, y: 1}
+      DurabilityMinMax: {x: 20, y: 50}
+    - Item: {fileID: 2782552909317919612, guid: 854342e09f3a90a4e91d280354e87ff7,
+        type: 3}
+      ItemType: 3
+      Probability: 0.3
+      Amount: 4
+      AmmoMinMax: {x: 10, y: 20}
+      LoadedAmmoMinMax: {x: 1, y: 1}
+      DurabilityMinMax: {x: 20, y: 50}
+    - Item: {fileID: 2782552909317919612, guid: ac10adb9aaac579458aabf14ba863852,
+        type: 3}
+      ItemType: 3
+      Probability: 0.2
+      Amount: 2
+      AmmoMinMax: {x: 10, y: 20}
+      LoadedAmmoMinMax: {x: 0, y: 0}
+      DurabilityMinMax: {x: 0, y: 0}
+    - Item: {fileID: 1355713261186686658, guid: cab47e7647f0cb243bfc706479cbf078,
+        type: 3}
+      ItemType: 1
+      Probability: 0.3
+      Amount: 1
+      AmmoMinMax: {x: 10, y: 20}
+      LoadedAmmoMinMax: {x: 1, y: 1}
+      DurabilityMinMax: {x: 20, y: 50}
+    - Item: {fileID: 3306029836675963489, guid: ede31eafd4e3ef44e9881e14fbc0d18b,
+        type: 3}
+      ItemType: 2
+      Probability: 0.5
+      Amount: 1
+      AmmoMinMax: {x: 10, y: 20}
+      LoadedAmmoMinMax: {x: 0, y: 0}
+      DurabilityMinMax: {x: 0.6, y: 1}
+    - Item: {fileID: 4220394600422452821, guid: 8c4ed81e33b10c6428bdff342e8c47a9,
+        type: 3}
+      ItemType: 1
+      Probability: 0.2
+      Amount: 1
+      AmmoMinMax: {x: 10, y: 20}
+      LoadedAmmoMinMax: {x: 5, y: 10}
+      DurabilityMinMax: {x: 20, y: 50}
+    - Item: {fileID: 2532789989797554644, guid: 23a5fd7e88d46c84fa4b8b0e3b875310,
+        type: 3}
+      ItemType: 1
+      Probability: 0.2
+      Amount: 1
+      AmmoMinMax: {x: 10, y: 20}
+      LoadedAmmoMinMax: {x: 10, y: 20}
+      DurabilityMinMax: {x: 20, y: 50}
+    - Item: {fileID: 7703535562999486616, guid: 72dedf120e62b094ab40ddaa5192ac11,
+        type: 3}
+      ItemType: 1
+      Probability: 0.2
+      Amount: 1
+      AmmoMinMax: {x: 10, y: 20}
+      LoadedAmmoMinMax: {x: 20, y: 30}
+      DurabilityMinMax: {x: 20, y: 50}
+    - Item: {fileID: 1679215543761796996, guid: fe0272614fe257b4b8010e246f9e17b0,
+        type: 3}
+      ItemType: 1
+      Probability: 0.2
+      Amount: 1
+      AmmoMinMax: {x: 10, y: 20}
+      LoadedAmmoMinMax: {x: 2, y: 6}
+      DurabilityMinMax: {x: 20, y: 50}
+  - RewardItems:
+    - Item: {fileID: 6530900219213045720, guid: 8eb2817ad118cc94bbcf51a36bdfb36b,
+        type: 3}
+      ItemType: 0
+      Probability: 0.2
+      Amount: 10
+      AmmoMinMax: {x: 5, y: 15}
+      LoadedAmmoMinMax: {x: 0, y: 0}
+      DurabilityMinMax: {x: 0, y: 0}
+    - Item: {fileID: 6530900219213045720, guid: 379cda0942c91e34da108f2c5649e6bd,
+        type: 3}
+      ItemType: 0
+      Probability: 0.2
+      Amount: 10
+      AmmoMinMax: {x: 10, y: 20}
+      LoadedAmmoMinMax: {x: 0, y: 0}
+      DurabilityMinMax: {x: 0, y: 0}
+    - Item: {fileID: 6530900219213045720, guid: 2423d6686a2ffc04495fbb31d951f6c5,
+        type: 3}
+      ItemType: 0
+      Probability: 0.3
+      Amount: 10
+      AmmoMinMax: {x: 10, y: 20}
+      LoadedAmmoMinMax: {x: 0, y: 0}
+      DurabilityMinMax: {x: 0, y: 0}
+    - Item: {fileID: 6530900219213045720, guid: 71f2a908dd0f2cb48a76405bbef6bb54,
+        type: 3}
+      ItemType: 0
+      Probability: 0.2
+      Amount: 10
       AmmoMinMax: {x: 8, y: 16}
       LoadedAmmoMinMax: {x: 1, y: 1}
       DurabilityMinMax: {x: 20, y: 50}
@@ -2468,7 +2551,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 0
       Probability: 0.2
-      Amount: 3
+      Amount: 5
       AmmoMinMax: {x: 1, y: 3}
       LoadedAmmoMinMax: {x: 20, y: 30}
       DurabilityMinMax: {x: 20, y: 50}
@@ -2476,7 +2559,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 3
       Probability: 0.3
-      Amount: 2
+      Amount: 5
       AmmoMinMax: {x: 10, y: 20}
       LoadedAmmoMinMax: {x: 1, y: 1}
       DurabilityMinMax: {x: 20, y: 50}
@@ -2484,7 +2567,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 3
       Probability: 0.2
-      Amount: 1
+      Amount: 4
       AmmoMinMax: {x: 10, y: 20}
       LoadedAmmoMinMax: {x: 0, y: 0}
       DurabilityMinMax: {x: 0, y: 0}
@@ -2492,7 +2575,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 3
       Probability: 0.1
-      Amount: 1
+      Amount: 3
       AmmoMinMax: {x: 10, y: 20}
       LoadedAmmoMinMax: {x: 20, y: 30}
       DurabilityMinMax: {x: 20, y: 50}
@@ -2556,7 +2639,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 0
       Probability: 0.3
-      Amount: 5
+      Amount: 7
       AmmoMinMax: {x: 5, y: 15}
       LoadedAmmoMinMax: {x: 0, y: 0}
       DurabilityMinMax: {x: 0, y: 0}
@@ -2564,7 +2647,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 0
       Probability: 0.3
-      Amount: 5
+      Amount: 7
       AmmoMinMax: {x: 10, y: 20}
       LoadedAmmoMinMax: {x: 0, y: 0}
       DurabilityMinMax: {x: 0, y: 0}
@@ -2572,7 +2655,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 0
       Probability: 0.5
-      Amount: 5
+      Amount: 7
       AmmoMinMax: {x: 10, y: 20}
       LoadedAmmoMinMax: {x: 0, y: 0}
       DurabilityMinMax: {x: 0, y: 0}
@@ -2580,7 +2663,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 0
       Probability: 0.3
-      Amount: 5
+      Amount: 7
       AmmoMinMax: {x: 8, y: 16}
       LoadedAmmoMinMax: {x: 1, y: 1}
       DurabilityMinMax: {x: 20, y: 50}
@@ -2596,7 +2679,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 3
       Probability: 0.3
-      Amount: 2
+      Amount: 4
       AmmoMinMax: {x: 10, y: 20}
       LoadedAmmoMinMax: {x: 1, y: 1}
       DurabilityMinMax: {x: 20, y: 50}
@@ -2604,127 +2687,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 3
       Probability: 0.2
-      Amount: 1
-      AmmoMinMax: {x: 10, y: 20}
-      LoadedAmmoMinMax: {x: 0, y: 0}
-      DurabilityMinMax: {x: 0, y: 0}
-    - Item: {fileID: 2782552909317919612, guid: 4c45729b77705ba4caf6f22c1c79b62a,
-        type: 3}
-      ItemType: 3
-      Probability: 0.1
-      Amount: 1
-      AmmoMinMax: {x: 10, y: 20}
-      LoadedAmmoMinMax: {x: 20, y: 30}
-      DurabilityMinMax: {x: 20, y: 50}
-    - Item: {fileID: 1355713261186686658, guid: cab47e7647f0cb243bfc706479cbf078,
-        type: 3}
-      ItemType: 1
-      Probability: 0.3
-      Amount: 1
-      AmmoMinMax: {x: 10, y: 20}
-      LoadedAmmoMinMax: {x: 1, y: 1}
-      DurabilityMinMax: {x: 20, y: 50}
-    - Item: {fileID: 3306029836675963489, guid: ede31eafd4e3ef44e9881e14fbc0d18b,
-        type: 3}
-      ItemType: 2
-      Probability: 0.5
-      Amount: 1
-      AmmoMinMax: {x: 10, y: 20}
-      LoadedAmmoMinMax: {x: 0, y: 0}
-      DurabilityMinMax: {x: 0.6, y: 1}
-    - Item: {fileID: 4220394600422452821, guid: 8c4ed81e33b10c6428bdff342e8c47a9,
-        type: 3}
-      ItemType: 1
-      Probability: 0.2
-      Amount: 1
-      AmmoMinMax: {x: 10, y: 20}
-      LoadedAmmoMinMax: {x: 5, y: 10}
-      DurabilityMinMax: {x: 20, y: 50}
-    - Item: {fileID: 2532789989797554644, guid: 23a5fd7e88d46c84fa4b8b0e3b875310,
-        type: 3}
-      ItemType: 1
-      Probability: 0.2
-      Amount: 1
-      AmmoMinMax: {x: 10, y: 20}
-      LoadedAmmoMinMax: {x: 10, y: 20}
-      DurabilityMinMax: {x: 20, y: 50}
-    - Item: {fileID: 7703535562999486616, guid: 72dedf120e62b094ab40ddaa5192ac11,
-        type: 3}
-      ItemType: 1
-      Probability: 0.2
-      Amount: 1
-      AmmoMinMax: {x: 10, y: 20}
-      LoadedAmmoMinMax: {x: 20, y: 30}
-      DurabilityMinMax: {x: 20, y: 50}
-    - Item: {fileID: 1679215543761796996, guid: fe0272614fe257b4b8010e246f9e17b0,
-        type: 3}
-      ItemType: 1
-      Probability: 0.2
-      Amount: 1
-      AmmoMinMax: {x: 10, y: 20}
-      LoadedAmmoMinMax: {x: 6, y: 6}
-      DurabilityMinMax: {x: 20, y: 50}
-    - Item: {fileID: 793850889170039199, guid: c49534b2b93fa9f43802456922451be0, type: 3}
-      ItemType: 1
-      Probability: 0.1
-      Amount: 1
-      AmmoMinMax: {x: 10, y: 20}
-      LoadedAmmoMinMax: {x: 1, y: 1}
-      DurabilityMinMax: {x: 20, y: 50}
-  - RewardItems:
-    - Item: {fileID: 6530900219213045720, guid: 8eb2817ad118cc94bbcf51a36bdfb36b,
-        type: 3}
-      ItemType: 0
-      Probability: 0.3
-      Amount: 5
-      AmmoMinMax: {x: 5, y: 15}
-      LoadedAmmoMinMax: {x: 0, y: 0}
-      DurabilityMinMax: {x: 0, y: 0}
-    - Item: {fileID: 6530900219213045720, guid: 379cda0942c91e34da108f2c5649e6bd,
-        type: 3}
-      ItemType: 0
-      Probability: 0.3
-      Amount: 5
-      AmmoMinMax: {x: 10, y: 20}
-      LoadedAmmoMinMax: {x: 0, y: 0}
-      DurabilityMinMax: {x: 0, y: 0}
-    - Item: {fileID: 6530900219213045720, guid: 2423d6686a2ffc04495fbb31d951f6c5,
-        type: 3}
-      ItemType: 0
-      Probability: 0.5
-      Amount: 5
-      AmmoMinMax: {x: 10, y: 20}
-      LoadedAmmoMinMax: {x: 0, y: 0}
-      DurabilityMinMax: {x: 0, y: 0}
-    - Item: {fileID: 6530900219213045720, guid: 71f2a908dd0f2cb48a76405bbef6bb54,
-        type: 3}
-      ItemType: 0
-      Probability: 0.3
-      Amount: 5
-      AmmoMinMax: {x: 8, y: 16}
-      LoadedAmmoMinMax: {x: 1, y: 1}
-      DurabilityMinMax: {x: 20, y: 50}
-    - Item: {fileID: 6530900219213045720, guid: 1d44d854fa0f2cc40b5a324171e7f6e9,
-        type: 3}
-      ItemType: 0
-      Probability: 0.2
-      Amount: 3
-      AmmoMinMax: {x: 1, y: 3}
-      LoadedAmmoMinMax: {x: 20, y: 30}
-      DurabilityMinMax: {x: 20, y: 50}
-    - Item: {fileID: 2782552909317919612, guid: 854342e09f3a90a4e91d280354e87ff7,
-        type: 3}
-      ItemType: 3
-      Probability: 0.3
       Amount: 2
-      AmmoMinMax: {x: 10, y: 20}
-      LoadedAmmoMinMax: {x: 1, y: 1}
-      DurabilityMinMax: {x: 20, y: 50}
-    - Item: {fileID: 2782552909317919612, guid: ac10adb9aaac579458aabf14ba863852,
-        type: 3}
-      ItemType: 3
-      Probability: 0.2
-      Amount: 1
       AmmoMinMax: {x: 10, y: 20}
       LoadedAmmoMinMax: {x: 0, y: 0}
       DurabilityMinMax: {x: 0, y: 0}
@@ -2796,7 +2759,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 0
       Probability: 0.3
-      Amount: 5
+      Amount: 7
       AmmoMinMax: {x: 5, y: 15}
       LoadedAmmoMinMax: {x: 0, y: 0}
       DurabilityMinMax: {x: 0, y: 0}
@@ -2804,7 +2767,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 0
       Probability: 0.3
-      Amount: 5
+      Amount: 7
       AmmoMinMax: {x: 10, y: 20}
       LoadedAmmoMinMax: {x: 0, y: 0}
       DurabilityMinMax: {x: 0, y: 0}
@@ -2812,7 +2775,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 0
       Probability: 0.5
-      Amount: 5
+      Amount: 7
       AmmoMinMax: {x: 10, y: 20}
       LoadedAmmoMinMax: {x: 0, y: 0}
       DurabilityMinMax: {x: 0, y: 0}
@@ -2820,7 +2783,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 0
       Probability: 0.3
-      Amount: 5
+      Amount: 7
       AmmoMinMax: {x: 8, y: 16}
       LoadedAmmoMinMax: {x: 1, y: 1}
       DurabilityMinMax: {x: 20, y: 50}
@@ -2836,7 +2799,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 3
       Probability: 0.3
-      Amount: 2
+      Amount: 4
       AmmoMinMax: {x: 10, y: 20}
       LoadedAmmoMinMax: {x: 1, y: 1}
       DurabilityMinMax: {x: 20, y: 50}
@@ -2844,7 +2807,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 3
       Probability: 0.2
-      Amount: 1
+      Amount: 2
       AmmoMinMax: {x: 10, y: 20}
       LoadedAmmoMinMax: {x: 0, y: 0}
       DurabilityMinMax: {x: 0, y: 0}
@@ -2916,7 +2879,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 0
       Probability: 0.3
-      Amount: 5
+      Amount: 7
       AmmoMinMax: {x: 5, y: 15}
       LoadedAmmoMinMax: {x: 0, y: 0}
       DurabilityMinMax: {x: 0, y: 0}
@@ -2924,7 +2887,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 0
       Probability: 0.3
-      Amount: 5
+      Amount: 7
       AmmoMinMax: {x: 10, y: 20}
       LoadedAmmoMinMax: {x: 0, y: 0}
       DurabilityMinMax: {x: 0, y: 0}
@@ -2932,7 +2895,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 0
       Probability: 0.5
-      Amount: 5
+      Amount: 7
       AmmoMinMax: {x: 10, y: 20}
       LoadedAmmoMinMax: {x: 0, y: 0}
       DurabilityMinMax: {x: 0, y: 0}
@@ -2940,7 +2903,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 0
       Probability: 0.3
-      Amount: 5
+      Amount: 7
       AmmoMinMax: {x: 8, y: 16}
       LoadedAmmoMinMax: {x: 1, y: 1}
       DurabilityMinMax: {x: 20, y: 50}
@@ -2956,7 +2919,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 3
       Probability: 0.3
-      Amount: 2
+      Amount: 4
       AmmoMinMax: {x: 10, y: 20}
       LoadedAmmoMinMax: {x: 1, y: 1}
       DurabilityMinMax: {x: 20, y: 50}
@@ -2964,7 +2927,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 3
       Probability: 0.2
-      Amount: 1
+      Amount: 2
       AmmoMinMax: {x: 10, y: 20}
       LoadedAmmoMinMax: {x: 0, y: 0}
       DurabilityMinMax: {x: 0, y: 0}
@@ -3036,7 +2999,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 0
       Probability: 0.3
-      Amount: 5
+      Amount: 7
       AmmoMinMax: {x: 5, y: 15}
       LoadedAmmoMinMax: {x: 0, y: 0}
       DurabilityMinMax: {x: 0, y: 0}
@@ -3044,7 +3007,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 0
       Probability: 0.3
-      Amount: 5
+      Amount: 7
       AmmoMinMax: {x: 10, y: 20}
       LoadedAmmoMinMax: {x: 0, y: 0}
       DurabilityMinMax: {x: 0, y: 0}
@@ -3052,7 +3015,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 0
       Probability: 0.5
-      Amount: 5
+      Amount: 7
       AmmoMinMax: {x: 10, y: 20}
       LoadedAmmoMinMax: {x: 0, y: 0}
       DurabilityMinMax: {x: 0, y: 0}
@@ -3060,7 +3023,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 0
       Probability: 0.3
-      Amount: 5
+      Amount: 7
       AmmoMinMax: {x: 8, y: 16}
       LoadedAmmoMinMax: {x: 1, y: 1}
       DurabilityMinMax: {x: 20, y: 50}
@@ -3076,7 +3039,7 @@ MonoBehaviour:
         type: 3}
       ItemType: 3
       Probability: 0.3
-      Amount: 2
+      Amount: 4
       AmmoMinMax: {x: 10, y: 20}
       LoadedAmmoMinMax: {x: 1, y: 1}
       DurabilityMinMax: {x: 20, y: 50}
@@ -3084,7 +3047,127 @@ MonoBehaviour:
         type: 3}
       ItemType: 3
       Probability: 0.2
+      Amount: 2
+      AmmoMinMax: {x: 10, y: 20}
+      LoadedAmmoMinMax: {x: 0, y: 0}
+      DurabilityMinMax: {x: 0, y: 0}
+    - Item: {fileID: 2782552909317919612, guid: 4c45729b77705ba4caf6f22c1c79b62a,
+        type: 3}
+      ItemType: 3
+      Probability: 0.1
       Amount: 1
+      AmmoMinMax: {x: 10, y: 20}
+      LoadedAmmoMinMax: {x: 20, y: 30}
+      DurabilityMinMax: {x: 20, y: 50}
+    - Item: {fileID: 1355713261186686658, guid: cab47e7647f0cb243bfc706479cbf078,
+        type: 3}
+      ItemType: 1
+      Probability: 0.3
+      Amount: 1
+      AmmoMinMax: {x: 10, y: 20}
+      LoadedAmmoMinMax: {x: 1, y: 1}
+      DurabilityMinMax: {x: 20, y: 50}
+    - Item: {fileID: 3306029836675963489, guid: ede31eafd4e3ef44e9881e14fbc0d18b,
+        type: 3}
+      ItemType: 2
+      Probability: 0.5
+      Amount: 1
+      AmmoMinMax: {x: 10, y: 20}
+      LoadedAmmoMinMax: {x: 0, y: 0}
+      DurabilityMinMax: {x: 0.6, y: 1}
+    - Item: {fileID: 4220394600422452821, guid: 8c4ed81e33b10c6428bdff342e8c47a9,
+        type: 3}
+      ItemType: 1
+      Probability: 0.2
+      Amount: 1
+      AmmoMinMax: {x: 10, y: 20}
+      LoadedAmmoMinMax: {x: 5, y: 10}
+      DurabilityMinMax: {x: 20, y: 50}
+    - Item: {fileID: 2532789989797554644, guid: 23a5fd7e88d46c84fa4b8b0e3b875310,
+        type: 3}
+      ItemType: 1
+      Probability: 0.2
+      Amount: 1
+      AmmoMinMax: {x: 10, y: 20}
+      LoadedAmmoMinMax: {x: 10, y: 20}
+      DurabilityMinMax: {x: 20, y: 50}
+    - Item: {fileID: 7703535562999486616, guid: 72dedf120e62b094ab40ddaa5192ac11,
+        type: 3}
+      ItemType: 1
+      Probability: 0.2
+      Amount: 1
+      AmmoMinMax: {x: 10, y: 20}
+      LoadedAmmoMinMax: {x: 20, y: 30}
+      DurabilityMinMax: {x: 20, y: 50}
+    - Item: {fileID: 1679215543761796996, guid: fe0272614fe257b4b8010e246f9e17b0,
+        type: 3}
+      ItemType: 1
+      Probability: 0.2
+      Amount: 1
+      AmmoMinMax: {x: 10, y: 20}
+      LoadedAmmoMinMax: {x: 6, y: 6}
+      DurabilityMinMax: {x: 20, y: 50}
+    - Item: {fileID: 793850889170039199, guid: c49534b2b93fa9f43802456922451be0, type: 3}
+      ItemType: 1
+      Probability: 0.1
+      Amount: 1
+      AmmoMinMax: {x: 10, y: 20}
+      LoadedAmmoMinMax: {x: 1, y: 1}
+      DurabilityMinMax: {x: 20, y: 50}
+  - RewardItems:
+    - Item: {fileID: 6530900219213045720, guid: 8eb2817ad118cc94bbcf51a36bdfb36b,
+        type: 3}
+      ItemType: 0
+      Probability: 0.3
+      Amount: 7
+      AmmoMinMax: {x: 5, y: 15}
+      LoadedAmmoMinMax: {x: 0, y: 0}
+      DurabilityMinMax: {x: 0, y: 0}
+    - Item: {fileID: 6530900219213045720, guid: 379cda0942c91e34da108f2c5649e6bd,
+        type: 3}
+      ItemType: 0
+      Probability: 0.3
+      Amount: 7
+      AmmoMinMax: {x: 10, y: 20}
+      LoadedAmmoMinMax: {x: 0, y: 0}
+      DurabilityMinMax: {x: 0, y: 0}
+    - Item: {fileID: 6530900219213045720, guid: 2423d6686a2ffc04495fbb31d951f6c5,
+        type: 3}
+      ItemType: 0
+      Probability: 0.5
+      Amount: 7
+      AmmoMinMax: {x: 10, y: 20}
+      LoadedAmmoMinMax: {x: 0, y: 0}
+      DurabilityMinMax: {x: 0, y: 0}
+    - Item: {fileID: 6530900219213045720, guid: 71f2a908dd0f2cb48a76405bbef6bb54,
+        type: 3}
+      ItemType: 0
+      Probability: 0.3
+      Amount: 7
+      AmmoMinMax: {x: 8, y: 16}
+      LoadedAmmoMinMax: {x: 1, y: 1}
+      DurabilityMinMax: {x: 20, y: 50}
+    - Item: {fileID: 6530900219213045720, guid: 1d44d854fa0f2cc40b5a324171e7f6e9,
+        type: 3}
+      ItemType: 0
+      Probability: 0.2
+      Amount: 3
+      AmmoMinMax: {x: 1, y: 3}
+      LoadedAmmoMinMax: {x: 20, y: 30}
+      DurabilityMinMax: {x: 20, y: 50}
+    - Item: {fileID: 2782552909317919612, guid: 854342e09f3a90a4e91d280354e87ff7,
+        type: 3}
+      ItemType: 3
+      Probability: 0.3
+      Amount: 4
+      AmmoMinMax: {x: 10, y: 20}
+      LoadedAmmoMinMax: {x: 1, y: 1}
+      DurabilityMinMax: {x: 20, y: 50}
+    - Item: {fileID: 2782552909317919612, guid: ac10adb9aaac579458aabf14ba863852,
+        type: 3}
+      ItemType: 3
+      Probability: 0.2
+      Amount: 2
       AmmoMinMax: {x: 10, y: 20}
       LoadedAmmoMinMax: {x: 0, y: 0}
       DurabilityMinMax: {x: 0, y: 0}

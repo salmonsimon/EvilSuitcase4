@@ -28,14 +28,10 @@ public class RewardsUI : MonoBehaviour
 
     private float timer = 0;
 
-    private bool initialized = false;
-
     private void Start()
     {
         player = GameManager.instance.GetPlayer();
         input = player.GetComponent<InputsUI>();
-
-        initialized = true;
     }
 
     private void Update()

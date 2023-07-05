@@ -7,7 +7,12 @@ using UnityEngine;
 public class SFXManager : MonoBehaviour
 {
     private AudioSource audioSource;
+    public AudioSource AudioSource { get { return audioSource; } }
+
     private float sfxVolume = 1f;
+
+    public delegate void OnVolumeChangeDelegate();
+    public event OnVolumeChangeDelegate OnVolumeChange;
 
     [Header("UI Sounds")]
     [SerializeField] private AudioClip clickSFX;
@@ -36,10 +41,9 @@ public class SFXManager : MonoBehaviour
     [SerializeField] private AudioClip transitionStartSFX;
     [SerializeField] private AudioClip transitionEndSFX;
     [SerializeField] private AudioClip bloodSplatterSFX;
-    [SerializeField] private AudioClip heartbeatSingleSFX;
     [SerializeField] private AudioClip potionSFX;
 
-    private void Awake()
+    private void Start()
     {
         audioSource = GetComponent<AudioSource>();
 
@@ -54,6 +58,9 @@ public class SFXManager : MonoBehaviour
         Settings.Instance.SFXVolume = sfxVolume;
 
         Settings.Save();
+
+        if (OnVolumeChange != null)
+            OnVolumeChange();
     }
 
     public void PlaySound(string str)
@@ -150,10 +157,6 @@ public class SFXManager : MonoBehaviour
                 audioSource.PlayOneShot(bloodSplatterSFX);
                 break;
 
-            case Config.HEARTBEAT_SFX:
-                Heartbeat();
-                break;
-
             case Config.POTION_SFX:
                 audioSource.PlayOneShot(potionSFX);
                 break;
@@ -189,60 +192,5 @@ public class SFXManager : MonoBehaviour
         audioSource.loop = false;
         audioSource.clip = null;
         audioSource.pitch = 1;
-    }
-
-    public void Heartbeat()
-    {
-        StopAllCoroutines();
-        StartCoroutine(HeartbeatCoroutine());
-    }
-
-    private IEnumerator HeartbeatCoroutine() 
-    {
-        StopSFX();
-
-        audioSource.clip = heartbeatSingleSFX;
-
-        while (true)
-        {
-            audioSource.Play();
-
-            while (audioSource.isPlaying)
-                yield return null;
-
-            yield return new WaitForSecondsRealtime(.8f);
-        }
-    }
-
-
-    public void DyingHeartbeat()
-    {
-        StopAllCoroutines();
-        StartCoroutine(DyingHeartbeatCoroutine());
-    }
-
-    private IEnumerator DyingHeartbeatCoroutine()
-    {
-        while (audioSource.isPlaying)
-            yield return null;
-
-        StopSFX();
-        audioSource.clip = heartbeatSingleSFX;
-
-        yield return new WaitForSecondsRealtime(.8f);
-
-        while (audioSource.pitch > .5)
-        {
-            audioSource.Play();
-
-            while (audioSource.isPlaying)
-                yield return null;
-
-            audioSource.pitch -= .1f;
-
-            yield return new WaitForSecondsRealtime(1f);
-        }
-
-        StopSFX();
     }
 }

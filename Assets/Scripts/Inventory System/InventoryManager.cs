@@ -183,7 +183,7 @@ public class InventoryManager : MonoBehaviour
             {
                 EquipableItem fastSwapWeapon = FastSwapWeaponArray[weaponIndex];
 
-                if (fastSwapWeapon && fastSwapWeapon.Equals(GameManager.instance.GetInventoryManager().EquippedItem))
+                if (fastSwapWeapon && fastSwapWeapon.Equals(GameManager.instance.GetInventoryManager().EquippedItem)) 
                     fastSwapIndex = i;
                 else if (fastSwapWeapon)
                     i++;
@@ -233,17 +233,18 @@ public class InventoryManager : MonoBehaviour
             itemsToBlock = SavedItems.Count;
 
         int i = 0;
-
         while (itemsToBlock > 0 && i < SavedItems.Count)
         {
             Item itemToBlock = SavedItems[randomIndexList[i]];
 
-            itemToBlock.BlockItem();
             blockedItems.Add(itemToBlock);
 
             itemsToBlock--;
             i++;
         }
+
+        foreach (Item itemToBlock in blockedItems)
+            itemToBlock.BlockItem();
 
         GameManager.instance.GetPauseMenuUI().LoadFastSwapGameplayPanel(currentEquippedWeaponShortcutIndex);
 
@@ -388,7 +389,7 @@ public class InventoryManager : MonoBehaviour
                 {
                     Vector2Int origin = item.GetGridPosition();
 
-                    int correctedY = finalHeight - origin.y - item.Height;
+                    int correctedY = finalHeight - origin.y - item.GetCurrentVerticalDimension();
                     Vector2Int newOrigin = new Vector2Int(origin.x, correctedY);
 
                     item.SetOrigin(newOrigin);
@@ -400,7 +401,7 @@ public class InventoryManager : MonoBehaviour
                 {
                     Vector2Int origin = item.GetGridPosition();
 
-                    int correctedY = inventoryHeight - origin.y - item.Height;
+                    int correctedY = inventoryHeight - origin.y - item.GetCurrentVerticalDimension();
                     Vector2Int newOrigin = new Vector2Int(origin.x, correctedY);
 
                     item.SetOrigin(newOrigin);
@@ -427,9 +428,9 @@ public class InventoryManager : MonoBehaviour
             {
                 foreach (Item item in sortedItems)
                 {
-                    Vector2Int origin = item.GetGridPosition();
+                     Vector2Int origin = item.GetGridPosition();
 
-                    int correctedY = inventoryHeight - origin.y - item.Height;
+                    int correctedY = inventoryHeight - origin.y - item.GetCurrentVerticalDimension();
                     Vector2Int newOrigin = new Vector2Int(origin.x, correctedY);
 
                     item.SetOrigin(newOrigin);
@@ -505,10 +506,11 @@ public class InventoryManager : MonoBehaviour
             item.SetDirection(Item.Direction.Left);
 
             if (!TryAddingItemVertically(grid, item))
+            {
                 couldAddItem = false;
+                item.SetDirection(Item.Direction.Down);
+            }
         }
-
-        item.SetDirection(Item.Direction.Down);
 
         return couldAddItem;
     }
@@ -529,9 +531,6 @@ public class InventoryManager : MonoBehaviour
 
         while (!finishedSearching)
         {
-            // TO DO: DELETE THIS
-            //item.SetDirection(Item.Direction.Left);
-
             if (y + item.GetCurrentVerticalDimension() > gridHeight)
             {
                 x += minWidthInCurrentColumn;

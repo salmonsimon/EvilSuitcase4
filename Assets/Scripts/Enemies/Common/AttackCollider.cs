@@ -23,5 +23,8 @@ public class AttackCollider : MonoBehaviour
         }
     }
 
-
+    public void ResetCollider()
+    {
+        isColliding = false;
+    }
 }

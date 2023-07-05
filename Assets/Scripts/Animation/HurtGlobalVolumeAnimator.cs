@@ -14,6 +14,9 @@ public class HurtGlobalVolumeAnimator : MonoBehaviour
     private bool isEnabled = false;
     public bool IsEnabled { get { return isEnabled; } }
 
+    private bool isEnabling = false;
+    public bool IsEnabling { get { return isEnabling; } }
+
     private void Awake()
     {
         volume = GetComponent<Volume>();
@@ -33,6 +36,8 @@ public class HurtGlobalVolumeAnimator : MonoBehaviour
 
     private IEnumerator EnableCoroutine()
     {
+        isEnabling = true;
+
         float elapsedTime = 0f;
 
         Keyframe saturation = colorCurves.hueVsSat.value[0];
@@ -64,11 +69,12 @@ public class HurtGlobalVolumeAnimator : MonoBehaviour
         volume.weight = 1;
 
         isEnabled = true;
+        isEnabling = false;
     }
 
     public void Disable()
     {
-        if (GameManager.instance.GetPlayerHealthUI().CriticalHealthGlobalVolume.IsEnabled && this.IsEnabled)
+        if (GameManager.instance.GetPlayerHealthUI().CriticalHealthGlobalVolume.IsEnabled) // && this.IsEnabled)
         {
             volume.weight = 0;
 
@@ -79,16 +85,17 @@ public class HurtGlobalVolumeAnimator : MonoBehaviour
 
             isEnabled = false;
         }
-        else if (isEnabled)
+        else if (isEnabled || IsEnabling)
         {
-            StopAllCoroutines();
-
             StartCoroutine(DisableCoroutine());
         }
     }
 
     private IEnumerator DisableCoroutine()
     {
+        while (IsEnabling)
+            yield return null;
+
         float elapsedTime = 0f;
 
         Keyframe saturation = colorCurves.hueVsSat.value[0];

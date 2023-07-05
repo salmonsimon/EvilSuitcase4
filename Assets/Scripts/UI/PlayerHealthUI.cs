@@ -23,6 +23,9 @@ public class PlayerHealthUI : MonoBehaviour
     [SerializeField] private HurtGlobalVolumeAnimator hurtGlobalVolume;
     public HurtGlobalVolumeAnimator HurtGlobalVolume { get { return hurtGlobalVolume; } }
 
+    [SerializeField] private HeartbeatSFX heartbeatSFX;
+    public HeartbeatSFX HeartbeatSFX { get { return heartbeatSFX; } }
+
     private HealthManager playerHealthManager;
 
     private bool isOpeningMainMenu = false;
@@ -99,9 +102,6 @@ public class PlayerHealthUI : MonoBehaviour
         GameManager.instance.ToMainMenu();
 
         yield return new WaitForSeconds(Config.LARGE_DELAY);
-
-        GameManager.instance.GetWaveManager().CorpseCleanup();
-        GameManager.instance.GetBloodManager().BloodCleanup();
     }
 
     public void PlayGame()
