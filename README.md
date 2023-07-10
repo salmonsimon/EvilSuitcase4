@@ -1,4 +1,4 @@
-# EvilSuitcase4 (WIP)
+# EvilSuitcase4
 3D third person shooter zombie wave control. Made in Unity.
 
 The objective in this game is to survive as long as you can while defeating waves of zombies. After clearing each wave, you'll receive random rewards that will help you survive next waves, but the fun part is that also certain items will be blocked randomly each wave, thus aiming for high replayability.
