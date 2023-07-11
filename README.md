@@ -1,91 +1,10 @@
-# EvilSuitcase4 (WIP)
+# EvilSuitcase4
 3D third person shooter zombie wave control. Made in Unity.
 
 The objective in this game is to survive as long as you can while defeating waves of zombies. After clearing each wave, you'll receive random rewards that will help you survive next waves, but the fun part is that also certain items will be blocked randomly each wave, thus aiming for high replayability.
 
-## Roadmap
-
-The roadmap will be split into what has already been done and what is to be developed. A lot of code from previous projects was used (with minor tweaks) to be able to have a fast prototype.
-
-### Done
-
-```mermaid 
-  journey
-    title Done
-    
-    section Reusable Code
-      Music/SFX Managers: 7: Done
-      Level Loader: 7: Done
-      Camera Shake: 7: Done
-      Game Manager: 7: Done
-      Progress Saving: 7: Done, WIP
-      Main/Pause Menu: 4: Done, WIP
-      
-    section Third Person Shooter Controller
-      Starter Assets Third Person Controller: 7: Done
-      Prototype Third Person Shooter Controller: 7: Done
-      
-    section Damage System
-        Damageable Class: 7: Done
-    
-    section Impact System / Surface Manager
-        Implementation: 7: Done
-        Create Scriptable Objects: 5: Done, WIP
-        
-    section Weapon System
-        Implementation: 7: Done
-        Create Scriptable Objects: 7: Done
-        Weapon Hold and Aim Rigging: 6: Done
-        CrossHair: 7: Done
-        Hitscan Guns: 7: Done
-        Projectile Guns: 7: Done
-        Melee Weapons: 1: Pending
-        
-    section First Zombies
-      Download Models: 7: Done
-      Import Animations: 7: Done
-      Chasing AI: 7: Done
-      Finite State Machine: 7: Done
-      Ragdoll System: 7: Done
-    
-    section Zombie Spawner
-        One Point Spawner: 7: Done
-        Multiple Point Spawner: 7: Done
-        Testing: 7: Done
-        
-    section Tetris Inventory
-        RE4 Tetris Inventory Visuals: 7: Done
-        InventoryManager: 7: Done
-        Items Functionalities: 7: Done
-        Weapon Fast Swap Configuration: 7: Done
-        Weapon Fast Swap Gameplay: 7: Done
-        
-    section Wave Manager
-        Wave Cleared Rewards: 7: Done
-        Random Item Blocker: 7: Done
-        Polish UI: 7: Done
-        
-    section Melee Weapons
-        Katana: 7: Done
-        
-    section First Map
-        Map: 7: Done
-        Lighting: 7: Done
-        Fog: 7: Done
-        Navmesh: 7: Done
-```
-
-### To Do
-
-```mermaid 
-  journey
-    title To Do
-    section Game UI
-        TBD: 1: Pending
-        
-    section Demo Polish
-        TBD: 1: Pending
-```
+### [For better documentation refer to my portfolio - Salmon Simon](https://simonbahamonde.wixsite.com/salmonsimon)
+### [Consider playing it in itch.io - Evil Suitcase 4](https://salmonsimon.itch.io/evil-suitcase-4)
 
 ## Third Person Shooter Controller
 
