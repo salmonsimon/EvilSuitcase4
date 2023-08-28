@@ -144,6 +144,11 @@ public class InventoryDragDropSystem : MonoBehaviour
             else
                 fromInventory.TryPlaceItem(item, item.GetGridPosition(), item.GetDirection());
         }
-            
+    }
+
+    public void ForceStopDragging()
+    {
+        if (DraggingItem)
+            draggingItem.GetComponent<ItemDragDrop>().EndDrag();
     }
 }

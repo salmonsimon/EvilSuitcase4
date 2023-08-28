@@ -709,5 +709,10 @@ public class PauseMenuUI : MonoBehaviour
         GameManager.instance.SetFullscreen(isFullscreen);
     }
 
+    public void SetSensitivity(float newSensitivity)
+    {
+        GameManager.instance.GetPlayer().GetComponent<ThirdPersonShooterController>().SetSensitivity(newSensitivity);
+    }
+
     #endregion
 }

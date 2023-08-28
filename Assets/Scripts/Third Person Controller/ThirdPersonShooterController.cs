@@ -590,4 +590,10 @@ public class ThirdPersonShooterController : MonoBehaviour
     {
         return !IsAttacking && !IsReloading; // && IsAbleToReload;
     }
+
+    public void SetSensitivity(float normalSensitivity)
+    {
+        normalLookSensitivity = normalSensitivity;
+        aimSensitivity = normalLookSensitivity / 2f;
+    }
 }

@@ -47,7 +47,10 @@ public class RewardsUI : MonoBehaviour
             timer -= Time.deltaTime;
 
         if (timer < 0 && GameManager.instance.IsOnRewardsUI)
+        {
+            GameManager.instance.GetInventoryDragDropSystem().ForceStopDragging();
             GameManager.instance.GetWaveManager().FinishWave();
+        }
 
         string countdownString = Utils.FloatToTimeSecondsFormat(timer);
 

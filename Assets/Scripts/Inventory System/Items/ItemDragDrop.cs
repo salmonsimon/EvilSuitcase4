@@ -40,16 +40,7 @@ public class ItemDragDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandle
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        canvasGroup.alpha = 1f;
-        canvasGroup.blocksRaycasts = true;
-
-        GetComponent<Canvas>().overrideSorting = false;
-
-        GameManager.instance.GetInventoryDragDropSystem().StoppedDragging(inventory, placedObject);
-        GameManager.instance.GetSFXManager().PlaySound(Config.DROP_SFX);
-
-        if (gridVisual)
-            gridVisual.SetActive(false);
+        EndDrag();
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -60,5 +51,19 @@ public class ItemDragDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandle
     public void OnPointerDown(PointerEventData eventData)
     {
         GameManager.instance.GetSFXManager().PlaySound(Config.PICKUP_SFX);
+    }
+
+    public void EndDrag()
+    {
+        canvasGroup.alpha = 1f;
+        canvasGroup.blocksRaycasts = true;
+
+        GetComponent<Canvas>().overrideSorting = false;
+
+        GameManager.instance.GetInventoryDragDropSystem().StoppedDragging(inventory, placedObject);
+        GameManager.instance.GetSFXManager().PlaySound(Config.DROP_SFX);
+
+        if (gridVisual)
+            gridVisual.SetActive(false);
     }
 }
