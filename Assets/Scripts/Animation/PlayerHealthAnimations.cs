@@ -56,6 +56,7 @@ public class PlayerHealthAnimations : MonoBehaviour
         playerHealthManager.OnRecover += Recover;
         playerHealthManager.OnDeath += Death;
         playerHealthManager.OnRevival += Revival;
+        playerHealthManager.OnResurrect += Revival;
 
         playerDeadCamera.gameObject.SetActive(false);
 
