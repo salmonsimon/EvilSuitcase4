@@ -66,8 +66,7 @@ namespace StarterAssets
 
         public void OnShoot(InputValue value)
         {
-			if (aim)
-				ShootInput(value.isPressed);
+			ShootInput(value.isPressed);
         }
 
         public void OnSprint(InputValue value)
