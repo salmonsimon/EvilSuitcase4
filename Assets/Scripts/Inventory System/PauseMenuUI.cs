@@ -591,8 +591,7 @@ public class PauseMenuUI : MonoBehaviour
 
         activePanelIndex = 0;
 
-        if (iconCircularScrillList.isActiveAndEnabled)
-            iconCircularScrillList.SelectContentID(activePanelIndex);
+        iconCircularScrillList.SelectContentID(activePanelIndex);
     }
 
     private void NextMenu()
