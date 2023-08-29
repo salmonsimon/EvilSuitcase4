@@ -117,6 +117,42 @@ MonoBehaviour:
       restoreCamera: 1
       offset: {x: 0, y: 0, z: 0, w: 0}
       cameraFieldOfView: 60
+--- !u!114 &-6167385703705031758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3ee03da20a6c4b448b574620b2d0edb, type: 3}
+  m_Name: ScreenSpaceOutlines
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  renderPassEvent: 300
+  outlinesLayerMask:
+    serializedVersion: 2
+    m_Bits: 4194304
+  outlinesOccluderLayerMask:
+    serializedVersion: 2
+    m_Bits: 3738875
+  outlineSettings:
+    outlineColor: {r: 0.6117647, g: 0.16470589, b: 0.16470589, a: 0.5882353}
+    outlineScale: 1
+    depthThreshold: 100
+    robertsCrossMultiplier: 100
+    normalThreshold: 0.5
+    steepAngleThreshold: 0.2
+    steepAngleMultiplier: 25
+  viewSpaceNormalsTextureSettings:
+    colorFormat: 0
+    depthBufferBits: 16
+    filterMode: 0
+    backgroundColor: {r: 0, g: 0, b: 0, a: 0}
+    perObjectData: 0
+    enableDynamicBatching: 0
+    enableInstancing: 0
 --- !u!114 &-1940005121439539879
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -202,7 +238,8 @@ MonoBehaviour:
   - {fileID: -6609037681317612208}
   - {fileID: -6548943075131718781}
   - {fileID: -1940005121439539879}
-  m_RendererFeatureMap: adc0de57c6d2eee598dac8632071d0a214cd735a374cea5a7a77a4861a9a31185075e4b93efb47a483038590f87a1da5595d28e29eb713e5
+  - {fileID: -6167385703705031758}
+  m_RendererFeatureMap: adc0de57c6d2eee598dac8632071d0a214cd735a374cea5a7a77a4861a9a31185075e4b93efb47a483038590f87a1da5595d28e29eb713e5b2cbd6f1600b69aa
   m_UseNativeRenderPass: 0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
@@ -224,7 +261,7 @@ MonoBehaviour:
   m_AssetVersion: 2
   m_OpaqueLayerMask:
     serializedVersion: 2
-    m_Bits: 1703935
+    m_Bits: 14286847
   m_TransparentLayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -237,7 +274,7 @@ MonoBehaviour:
     zFailOperation: 0
   m_ShadowTransparentReceive: 1
   m_RenderingMode: 0
-  m_DepthPrimingMode: 0
+  m_DepthPrimingMode: 1
   m_CopyDepthMode: 0
   m_AccurateGbufferNormals: 0
   m_ClusteredRendering: 0
