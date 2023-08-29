@@ -14,9 +14,7 @@ public class RewardsUI : MonoBehaviour
     [SerializeField] private Inventory mainInventory;
     public Inventory MainInventory { get { return mainInventory; } }
 
-    [SerializeField] private Inventory consumableRewardsInventory;
-    [SerializeField] private Inventory meleeWeaponRewardsInventory;
-    [SerializeField] private Inventory gunsRewardsInventory;
+    [SerializeField] private Inventory rewardsInventory;
 
     [SerializeField] private TextMeshProUGUI rewardsCountdownText;
     [SerializeField] private TextMeshProUGUI waveCounterVariableText;
@@ -71,7 +69,7 @@ public class RewardsUI : MonoBehaviour
 
         mainInventory.InventorySetup(mainInventoryWidth, mainInventoryHeight);
 
-        SetupRewardInventories(rewardItems);
+        SetupRewardInventory(rewardItems);
 
         rewardsPanel.SetActive(true);
 
@@ -79,32 +77,12 @@ public class RewardsUI : MonoBehaviour
         waveCounterVariableText.text = (GameManager.instance.GetWaveManager().CurrentWave + 1).ToString();
     }
 
-    private void SetupRewardInventories(List<Item> rewardItems)
+    private void SetupRewardInventory(List<Item> rewardItems)
     {
-        List<Item> consumableItems = new List<Item>();
-        List<Item> meleeItems = new List<Item>();
-        List<Item> gunItems = new List<Item>();
-
-        foreach (Item item in rewardItems)
-        {
-            if (Utils.IsSubclassOfRawGeneric(item.GetType(), typeof(GunItem)))
-                gunItems.Add(item);
-            else if (Utils.IsSubclassOfRawGeneric(item.GetType(), typeof(MeleeItem)))
-                meleeItems.Add(item);
-            else
-                consumableItems.Add(item);
-        }
-
         InventoryManager inventoryManager = GameManager.instance.GetInventoryManager();
 
-        consumableRewardsInventory.InventorySetup(consumableRewardsInventory.GridWidth, consumableRewardsInventory.GridHeight);
-        inventoryManager.FillRewardsInventory(consumableRewardsInventory, consumableItems);
-
-        meleeWeaponRewardsInventory.InventorySetup(meleeWeaponRewardsInventory.GridWidth, meleeWeaponRewardsInventory.GridHeight);
-        inventoryManager.FillRewardsInventory(meleeWeaponRewardsInventory, meleeItems);
-
-        gunsRewardsInventory.InventorySetup(gunsRewardsInventory.GridWidth, gunsRewardsInventory.GridHeight);
-        inventoryManager.FillRewardsInventory(gunsRewardsInventory, gunItems);
+        rewardsInventory.InventorySetup(rewardsInventory.GridWidth, rewardsInventory.GridHeight);
+        inventoryManager.FillRewardsInventory(rewardsInventory, rewardItems);
     }
 
     public void CloseRewardsUI()

@@ -1,5 +1,7 @@
+using Newtonsoft.Json.Bson;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
@@ -13,6 +15,7 @@ public class InputsUI : MonoBehaviour
     public bool rightClick;
     public bool rotate;
     public bool pause;
+    public bool inventory;
     public bool autoSort;
     public bool next;
     public bool previous;
@@ -27,6 +30,7 @@ public class InputsUI : MonoBehaviour
         rightClick = false;
         rotate = false;
         pause = false;
+        inventory = false;
         autoSort = false;
         next = false;
         previous = false;
@@ -58,6 +62,12 @@ public class InputsUI : MonoBehaviour
     {
         PauseInput(value.isPressed);
     }
+
+    public void OnInventory(InputValue value)
+    {
+        InventoryInput(value.isPressed);
+    }
+
 
     public void OnAutoSort(InputValue value)
     {
@@ -105,6 +115,11 @@ public class InputsUI : MonoBehaviour
     public void PauseInput(bool newPauseState)
     {
         pause = newPauseState;
+    }
+
+    public void InventoryInput(bool newInventoryState)
+    {
+        inventory = newInventoryState;
     }
 
     public void AutoSortInput(bool newAutoSortState)

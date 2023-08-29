@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8369227014353471541}
   - component: {fileID: 4364960769287212013}
   - component: {fileID: 4236882665513019782}
-  m_Layer: 0
+  m_Layer: 20
   m_Name: Smoke
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4823,7 +4823,7 @@ GameObject:
   - component: {fileID: 7476042835604393252}
   - component: {fileID: 5769989265354039648}
   - component: {fileID: 7753133380282546269}
-  m_Layer: 0
+  m_Layer: 20
   m_Name: Fire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8631,7 +8631,7 @@ ParticleSystem:
     light: {fileID: 2566085176554441966}
     randomDistribution: 1
     color: 1
-    range: 1
+    range: 0
     intensity: 1
     rangeCurve:
       serializedVersion: 2
@@ -8689,7 +8689,7 @@ ParticleSystem:
     intensityCurve:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.2
+      scalar: 0.4
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -9637,7 +9637,7 @@ GameObject:
   - component: {fileID: 9173778957483277840}
   - component: {fileID: 2566085176554441966}
   - component: {fileID: 2566085176554441953}
-  m_Layer: 0
+  m_Layer: 20
   m_Name: Fire_light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9652,7 +9652,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7699158728322366074}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.042, z: 0}
+  m_LocalPosition: {x: 0, y: 0.448, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9671,7 +9671,7 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 1, g: 0.45797837, b: 0, a: 1}
-  m_Intensity: 1
+  m_Intensity: 0.5
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -9716,7 +9716,7 @@ Light:
   m_BounceIntensity: 0
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 9.372e-42, y: 1.8e-44, z: 9.749e-42, w: 2e-44}
+  m_BoundingSphereOverride: {x: -1, y: 10, z: 9, w: -12}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
@@ -9751,7 +9751,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7898156488714198677}
   - component: {fileID: 7898156488714198682}
-  m_Layer: 0
+  m_Layer: 20
   m_Name: glow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9840,7 +9840,7 @@ GameObject:
   - component: {fileID: 8342459484973563786}
   - component: {fileID: 8324269715877996271}
   - component: {fileID: 479427223745086435}
-  m_Layer: 0
+  m_Layer: 20
   m_Name: Barrel_Fire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
