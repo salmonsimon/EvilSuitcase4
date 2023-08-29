@@ -24,6 +24,7 @@ public class Explosive : MonoBehaviour
 
     #region Parameters
 
+    private float explosionDisableTime = Config.EXPLOSION_DISABLE_TIME;
     private float disableTime = Config.EXPLOSIVE_DISABLE_TIME;
 
     #endregion
@@ -98,16 +99,16 @@ public class Explosive : MonoBehaviour
 
         explosionObject.gameObject.SetActive(true);
 
-        StartCoroutine(WaitToDisable(disableTime));
+        StartCoroutine(WaitToDisable(explosionDisableTime, disableTime));
     }
 
-    private IEnumerator WaitToDisable(float delay)
+    private IEnumerator WaitToDisable(float explosionDelay, float delay)
     {
+        yield return new WaitForSeconds(explosionDelay);
+
+        explosionObject.DisableCollider();
+
         yield return new WaitForSeconds(delay);
-
-        explosionObject.gameObject.SetActive(false);
-
-        yield return new WaitForSeconds(delay * 2);
 
         Destroy(gameObject);
     }

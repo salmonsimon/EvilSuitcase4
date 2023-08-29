@@ -31,7 +31,8 @@ public static class Config
     public const string GUN_CONTAINER_NAME = "Gun Container";
     public const string MELEE_WEAPON_CONTAINER_NAME = "MeleeWeapon Container";
 
-    public const float EXPLOSIVE_DISABLE_TIME = 1f;
+    public const float EXPLOSION_DISABLE_TIME = .6f;
+    public const float EXPLOSIVE_DISABLE_TIME = 2f;
     public const float ROCKET_CONSTANT_SPEED = 25f;
 
     #endregion
