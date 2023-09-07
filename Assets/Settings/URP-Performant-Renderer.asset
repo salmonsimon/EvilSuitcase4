@@ -1,5 +1,41 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-6745008757032920459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3ee03da20a6c4b448b574620b2d0edb, type: 3}
+  m_Name: ScreenSpaceOutlines
+  m_EditorClassIdentifier: 
+  m_Active: 0
+  renderPassEvent: 300
+  outlinesLayerMask:
+    serializedVersion: 2
+    m_Bits: 4194304
+  outlinesOccluderLayerMask:
+    serializedVersion: 2
+    m_Bits: 3738875
+  outlineSettings:
+    outlineColor: {r: 0.6117647, g: 0.16470589, b: 0.16470589, a: 0.5882353}
+    outlineScale: 1
+    depthThreshold: 100
+    robertsCrossMultiplier: 100
+    normalThreshold: 0.5
+    steepAngleThreshold: 0.2
+    steepAngleMultiplier: 25
+  viewSpaceNormalsTextureSettings:
+    colorFormat: 0
+    depthBufferBits: 16
+    filterMode: 0
+    backgroundColor: {r: 0, g: 0, b: 0, a: 0}
+    perObjectData: 0
+    enableDynamicBatching: 0
+    enableInstancing: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22,7 +58,8 @@ MonoBehaviour:
   - {fileID: 4560801475447571023}
   - {fileID: 5277743349852779497}
   - {fileID: 2662206443041663729}
-  m_RendererFeatureMap: 2e2ae2ccc9e2e91d38b1702622a5c5249dd40f235093ee4c4f42211bc7384b3fe9b3a72f9d4f3e49f12a41aca70ef224
+  - {fileID: -6745008757032920459}
+  m_RendererFeatureMap: 2e2ae2ccc9e2e91d38b1702622a5c5249dd40f235093ee4c4f42211bc7384b3fe9b3a72f9d4f3e49f12a41aca70ef224755a27a645ea64a2
   m_UseNativeRenderPass: 0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
@@ -44,7 +81,7 @@ MonoBehaviour:
   m_AssetVersion: 2
   m_OpaqueLayerMask:
     serializedVersion: 2
-    m_Bits: 1703935
+    m_Bits: 14286847
   m_TransparentLayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -57,7 +94,7 @@ MonoBehaviour:
     zFailOperation: 0
   m_ShadowTransparentReceive: 1
   m_RenderingMode: 0
-  m_DepthPrimingMode: 0
+  m_DepthPrimingMode: 1
   m_CopyDepthMode: 0
   m_AccurateGbufferNormals: 0
   m_ClusteredRendering: 0

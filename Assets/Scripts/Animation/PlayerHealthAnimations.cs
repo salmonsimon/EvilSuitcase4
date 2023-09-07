@@ -56,6 +56,7 @@ public class PlayerHealthAnimations : MonoBehaviour
         playerHealthManager.OnRecover += Recover;
         playerHealthManager.OnDeath += Death;
         playerHealthManager.OnRevival += Revival;
+        playerHealthManager.OnResurrect += Revival;
 
         playerDeadCamera.gameObject.SetActive(false);
 
@@ -149,7 +150,7 @@ public class PlayerHealthAnimations : MonoBehaviour
         {
             while (IsOnHurtAnimation) yield return null;
 
-            yield return new WaitForSeconds(1.5f);
+            yield return new WaitForSeconds(1f);
         }
         else
             yield return new WaitForSeconds(1.5f);  

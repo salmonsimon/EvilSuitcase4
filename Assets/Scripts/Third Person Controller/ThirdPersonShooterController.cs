@@ -249,7 +249,8 @@ public class ThirdPersonShooterController : MonoBehaviour
             aiming = false;
             crosshair.ShowCrossHairUI(false);
 
-            starterAssetsInputs.shoot = false;
+            if(equippedWeapon != null && equippedWeapon.TryGetComponent(out Gun gunWeapon))
+                starterAssetsInputs.shoot = false;
 
             aimVirtualCamera.gameObject.SetActive(false);
             thirdPersonController.SetSensitivity(normalLookSensitivity);
@@ -589,5 +590,11 @@ public class ThirdPersonShooterController : MonoBehaviour
     public bool CanTriggerHurtAnimation()
     {
         return !IsAttacking && !IsReloading; // && IsAbleToReload;
+    }
+
+    public void SetSensitivity(float normalSensitivity)
+    {
+        normalLookSensitivity = normalSensitivity;
+        aimSensitivity = normalLookSensitivity / 2f;
     }
 }

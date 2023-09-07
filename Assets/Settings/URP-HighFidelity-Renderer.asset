@@ -202,7 +202,8 @@ MonoBehaviour:
   - {fileID: 8326397529084035911}
   - {fileID: 2784967495724159569}
   - {fileID: -2175467464702515165}
-  m_RendererFeatureMap: adc0de57c6d2eee54fa6765a84a343b6afaf8069916817dbfc5dfc6ac89fba834783be03704e8d7351d2a5952e31a62623a8fcf1dd2fcfe1
+  - {fileID: 8098762986061018826}
+  m_RendererFeatureMap: adc0de57c6d2eee54fa6765a84a343b6afaf8069916817dbfc5dfc6ac89fba834783be03704e8d7351d2a5952e31a62623a8fcf1dd2fcfe1cab63fd806966470
   m_UseNativeRenderPass: 0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
@@ -224,10 +225,10 @@ MonoBehaviour:
   m_AssetVersion: 2
   m_OpaqueLayerMask:
     serializedVersion: 2
-    m_Bits: 1703935
+    m_Bits: 14286847
   m_TransparentLayerMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 2147483647
   m_DefaultStencilState:
     overrideStencilState: 0
     stencilReference: 0
@@ -237,7 +238,7 @@ MonoBehaviour:
     zFailOperation: 0
   m_ShadowTransparentReceive: 1
   m_RenderingMode: 0
-  m_DepthPrimingMode: 0
+  m_DepthPrimingMode: 1
   m_CopyDepthMode: 0
   m_AccurateGbufferNormals: 0
   m_ClusteredRendering: 0
@@ -282,6 +283,42 @@ MonoBehaviour:
       restoreCamera: 1
       offset: {x: 0, y: 0, z: 0, w: 0}
       cameraFieldOfView: 60
+--- !u!114 &8098762986061018826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3ee03da20a6c4b448b574620b2d0edb, type: 3}
+  m_Name: ScreenSpaceOutlines
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  renderPassEvent: 300
+  outlinesLayerMask:
+    serializedVersion: 2
+    m_Bits: 4194304
+  outlinesOccluderLayerMask:
+    serializedVersion: 2
+    m_Bits: 3738875
+  outlineSettings:
+    outlineColor: {r: 0.6132076, g: 0.16487184, b: 0.16487184, a: 0.5882353}
+    outlineScale: 1
+    depthThreshold: 100
+    robertsCrossMultiplier: 100
+    normalThreshold: 0.5
+    steepAngleThreshold: 0.2
+    steepAngleMultiplier: 25
+  viewSpaceNormalsTextureSettings:
+    colorFormat: 0
+    depthBufferBits: 16
+    filterMode: 0
+    backgroundColor: {r: 0, g: 0, b: 0, a: 0}
+    perObjectData: 0
+    enableDynamicBatching: 0
+    enableInstancing: 0
 --- !u!114 &8326397529084035911
 MonoBehaviour:
   m_ObjectHideFlags: 0

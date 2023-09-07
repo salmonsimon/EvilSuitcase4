@@ -589,10 +589,12 @@ public class PauseMenuUI : MonoBehaviour
     {
         pauseMenuPanelList[activePanelIndex].SetActive(false);
 
-        activePanelIndex = 0;
+        if (activePanelIndex != 0)
+        {
+            activePanelIndex = 0;
 
-        if (iconCircularScrillList.isActiveAndEnabled)
             iconCircularScrillList.SelectContentID(activePanelIndex);
+        }
     }
 
     private void NextMenu()
@@ -707,6 +709,11 @@ public class PauseMenuUI : MonoBehaviour
     public void SetFullscreen(bool isFullscreen)
     {
         GameManager.instance.SetFullscreen(isFullscreen);
+    }
+
+    public void SetSensitivity(float newSensitivity)
+    {
+        GameManager.instance.GetPlayer().GetComponent<ThirdPersonShooterController>().SetSensitivity(newSensitivity);
     }
 
     #endregion

@@ -43,11 +43,11 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IP
 
     #region Variables
 
-    [SerializeField] protected Direction direction;
+    protected Direction direction;
 
-    [SerializeField] protected Vector2Int origin;
+    protected Vector2Int origin;
 
-    protected Inventory holdingInventory;
+    [SerializeField] protected Inventory holdingInventory;
     public Inventory HoldingInventory { get { return holdingInventory; } set { holdingInventory = value; } }
 
     protected bool isBlocked;
@@ -55,7 +55,7 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IP
 
     #endregion
 
-    [SerializeField] private List<Vector2Int> gridPositionList = new List<Vector2Int>();
+    private List<Vector2Int> gridPositionList = new List<Vector2Int>();
     public List<Vector2Int> GridPositionList { get { return gridPositionList; } set { gridPositionList = value; } }
 
 
@@ -374,7 +374,10 @@ public class Item : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IP
     {
         GameObject buttonPanelToOpen = GetCurrentButtonPanel();
 
-        if (eventData.button == PointerEventData.InputButton.Right && !IsBlocked)
+        if ((Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) &&
+            !IsBlocked && !HoldingInventory.MainInventory)
+            AddButton();
+        else if (eventData.button == PointerEventData.InputButton.Right && !IsBlocked)
         {
             HoldingInventory.SetNewOpenButton(buttonPanelToOpen.gameObject);
             buttonPanelToOpen.gameObject.SetActive(true);

@@ -27,8 +27,13 @@ public class Explosion : MonoBehaviour
 
     private void OnDisable()
     {
-        explosionCollider.enabled = false;
+        DisableCollider();
         explosionParticleSystem.gameObject.SetActive(false);
+    }
+
+    public void DisableCollider()
+    {
+        explosionCollider.enabled = false;
     }
 
     private void OnTriggerEnter(Collider other)

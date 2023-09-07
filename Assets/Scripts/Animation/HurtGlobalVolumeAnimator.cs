@@ -38,13 +38,32 @@ public class HurtGlobalVolumeAnimator : MonoBehaviour
     {
         isEnabling = true;
 
-        float elapsedTime = 0f;
-
         Keyframe saturation = colorCurves.hueVsSat.value[0];
         float initialSaturation = saturation.value;
 
         float initialWeight = volume.weight;
 
+        float lerpingTime = .5f;
+
+        StartCoroutine(AnimateHurtVolume(0f, lerpingTime,
+                                         initialSaturation, 0f,
+                                         initialWeight, 1f));
+
+        yield return new WaitForSeconds(lerpingTime);
+
+        StartCoroutine(AnimateHurtVolume(0f, lerpingTime,
+                                         0f, initialSaturation,
+                                         1f, initialWeight));
+
+        yield return new WaitForSeconds(lerpingTime);
+
+        StartCoroutine(AnimateHurtVolume(0f, lerpingTime,
+                                         initialSaturation, 0f,
+                                         initialWeight, 1f));
+
+        yield return new WaitForSeconds(lerpingTime);
+
+        /*
         while (elapsedTime < stabilizingTime)
         {
             elapsedTime += Time.deltaTime;
@@ -61,6 +80,7 @@ public class HurtGlobalVolumeAnimator : MonoBehaviour
 
             yield return null;
         }
+        */
 
         saturation.value = 0f;
 
@@ -70,6 +90,30 @@ public class HurtGlobalVolumeAnimator : MonoBehaviour
 
         isEnabled = true;
         isEnabling = false;
+    }
+
+    private IEnumerator AnimateHurtVolume(float elapsedTime, float stabilizingTime, 
+                                          float initialSaturation, float finalSaturation,
+                                          float initialWeight, float finalWeight)
+    {
+        Keyframe saturation = colorCurves.hueVsSat.value[0];
+
+        while (elapsedTime < stabilizingTime)
+        {
+            elapsedTime += Time.deltaTime;
+            float percentualElapsedTime = elapsedTime / stabilizingTime;
+
+            float newSaturationValue = Mathf.Lerp(initialSaturation, finalSaturation, percentualElapsedTime);
+            float newVolumeWeight = Mathf.Lerp(initialWeight, finalWeight, percentualElapsedTime);
+
+            saturation.value = newSaturationValue;
+
+            colorCurves.hueVsSat.value.MoveKey(0, saturation);
+
+            volume.weight = newVolumeWeight;
+
+            yield return null;
+        }
     }
 
     public void Disable()

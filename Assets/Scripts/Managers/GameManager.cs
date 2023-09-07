@@ -142,20 +142,40 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (inputGameplay.pause && !pauseMenuUI.IsGamePaused && IsAbleToPause())
+        if ((inputGameplay.pause || inputGameplay.inventory) && !pauseMenuUI.IsGamePaused && IsAbleToPause())
         {
             waveManager.EnableKillsRemainingPanel(false);
 
-            inputGameplay.pause = false;
-            inputUI.pause = false;
+            if (inputGameplay.inventory)
+            {
+                inputGameplay.inventory = false;
+                inputUI.inventory = false;
+
+                pauseMenuUI.ResetMenu();
+            }
+            else
+            {
+                inputGameplay.pause = false;
+                inputUI.pause = false;
+            }
+
             pauseMenuUI.PauseGame();
         }
-        else if (inputUI.pause && pauseMenuUI.IsGamePaused && IsAbleToPause())
+        else if ((inputGameplay.pause || inputGameplay.inventory) && pauseMenuUI.IsGamePaused && IsAbleToPause())
         {
             waveManager.EnableKillsRemainingPanel(true);
 
-            inputGameplay.pause = false;
-            inputUI.pause = false;
+            if (inputGameplay.inventory)
+            {
+                inputGameplay.inventory = false;
+                inputUI.inventory = false;
+            }
+            else
+            {
+                inputGameplay.pause = false;
+                inputUI.pause = false;
+            }
+            
             pauseMenuUI.ResumeGame();
         }
     }

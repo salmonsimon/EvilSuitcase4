@@ -149,7 +149,7 @@ public class HealthManager : MonoBehaviour
 
     public virtual void Resurrect()
     {
-        currentHitPoints = maxHitPoints;
+        CurrentHitPoints = maxHitPoints;
 
         IsAlive = true;
 

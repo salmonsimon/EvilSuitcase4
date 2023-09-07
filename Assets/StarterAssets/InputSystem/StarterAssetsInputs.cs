@@ -16,6 +16,7 @@ namespace StarterAssets
         public bool shoot;
 		public bool reload;
 		public bool pause;
+		public bool inventory;
 
         [Header("Movement Settings")]
 		public bool analogMovement;
@@ -40,6 +41,7 @@ namespace StarterAssets
 			shoot = false;
 			reload = false;
 			pause = false;
+			inventory = false;
 
 			weaponShortcut = -1;
 		}
@@ -64,8 +66,7 @@ namespace StarterAssets
 
         public void OnShoot(InputValue value)
         {
-			if (aim)
-				ShootInput(value.isPressed);
+			ShootInput(value.isPressed);
         }
 
         public void OnSprint(InputValue value)
@@ -87,6 +88,11 @@ namespace StarterAssets
         {
 			PauseInput(value.isPressed);
         }
+
+		public void OnInventory(InputValue value)
+		{
+			InventoryInput(value.isPressed);
+		}
 
 		public void OnShortcut1(InputValue value)
 		{
@@ -174,6 +180,11 @@ namespace StarterAssets
         {
             pause = newPauseState;
         }
+
+		public void InventoryInput(bool newInventoryState)
+		{
+			inventory = newInventoryState;
+		}
 
 		public void ShortcutInput(bool newShortcutInput, int shortcutIndex)
 		{
