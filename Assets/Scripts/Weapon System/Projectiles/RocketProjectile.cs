@@ -6,7 +6,9 @@ public class RocketProjectile : Projectile
     [SerializeField] private GameObject model;
     [SerializeField] private ParticleSystem rocketTrailParticleSystem;
     [SerializeField] private float constantSpeed = Config.ROCKET_CONSTANT_SPEED;
-    [SerializeField] private float disableTime = Config.EXPLOSIVE_DISABLE_TIME;
+
+    private float explosionDisableTime = Config.EXPLOSION_DISABLE_TIME;
+    private float disableTime = Config.EXPLOSIVE_DISABLE_TIME;
 
     private AudioSource audioSource;
     private Explosion explosionObject;
@@ -50,11 +52,15 @@ public class RocketProjectile : Projectile
         Explode();
     }
 
-    private IEnumerator WaitToDisable(float delay)
+    private IEnumerator WaitToDisable(float explosionDelay, float delay)
     {
+        yield return new WaitForSeconds(explosionDelay);
+
+        explosionObject.DisableCollider();
+
         yield return new WaitForSeconds(delay);
 
-        base.Disable();
+        Destroy(gameObject);
     }
 
     protected override void OnCollisionEnter(Collision collision)
@@ -84,6 +90,6 @@ public class RocketProjectile : Projectile
         audioSource.minDistance = 10f;
         sfx.PlayAudioClip(hitAudioClip);
 
-        StartCoroutine(WaitToDisable(disableTime));
+        StartCoroutine(WaitToDisable(explosionDisableTime, disableTime));
     }
 }

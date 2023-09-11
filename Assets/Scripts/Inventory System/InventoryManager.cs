@@ -4,6 +4,7 @@ using AYellowpaper.SerializedCollections;
 using StarterAssets;
 using System.Linq;
 using static Inventory;
+using static UnityEditor.Progress;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -11,10 +12,10 @@ public class InventoryManager : MonoBehaviour
 
     [Header("Inventory Configuration")]
     [SerializeField] private int inventoryWidth;
-    public int InventoryWidth { get { return inventoryWidth; }}
+    public int InventoryWidth { get { return inventoryWidth; } }
 
     [SerializeField] private int inventoryHeight;
-    public int InventoryHeight { get { return inventoryHeight;} }
+    public int InventoryHeight { get { return inventoryHeight; } }
 
     #endregion
 
@@ -36,7 +37,7 @@ public class InventoryManager : MonoBehaviour
     public EquipableItem[] FastSwapWeaponArray { get { return fastSwapWeaponArray; } set { fastSwapWeaponArray = value; OnFastSwapConfigurationChange(); } }
 
     [SerializeField] private EquipableItem equippedItem;
-    public EquipableItem EquippedItem { get { return equippedItem; } set { equippedItem = value; OnEquippedItemChange(); }  }
+    public EquipableItem EquippedItem { get { return equippedItem; } set { equippedItem = value; OnEquippedItemChange(); } }
 
     [SerializeField] private int fastSwapIndex = 0;
     public int FastSwapIndex { get { return fastSwapIndex; } }
@@ -70,7 +71,7 @@ public class InventoryManager : MonoBehaviour
 
     [SerializeField] private EquipableItem suitcaseItem;
     public EquipableItem SuitcaseItem { get { return suitcaseItem; } }
- 
+
     #endregion
 
     #region Events and Delegates
@@ -110,7 +111,7 @@ public class InventoryManager : MonoBehaviour
 
     private void Update()
     {
-        if (playerThirdPersonShooterController.IsReloading || 
+        if (playerThirdPersonShooterController.IsReloading ||
             !playerThirdPersonShooterController.IsAbleToReload ||
             playerThirdPersonShooterController.IsAttacking)
             return;
@@ -158,7 +159,7 @@ public class InventoryManager : MonoBehaviour
 
     private bool AbleToFastSwap()
     {
-        return   !GameManager.instance.GetPauseMenuUI().IsGamePaused &&
+        return !GameManager.instance.GetPauseMenuUI().IsGamePaused &&
                  !GameManager.instance.IsOnRewardsUI &&
                  !GameManager.instance.GetTransitionManager().RunningTransition &&
                  GameManager.instance.GetWaveManager().ChallengingWave &&
@@ -183,7 +184,7 @@ public class InventoryManager : MonoBehaviour
             {
                 EquipableItem fastSwapWeapon = FastSwapWeaponArray[weaponIndex];
 
-                if (fastSwapWeapon && fastSwapWeapon.Equals(GameManager.instance.GetInventoryManager().EquippedItem)) 
+                if (fastSwapWeapon && fastSwapWeapon.Equals(GameManager.instance.GetInventoryManager().EquippedItem))
                     fastSwapIndex = i;
                 else if (fastSwapWeapon)
                     i++;
@@ -206,10 +207,10 @@ public class InventoryManager : MonoBehaviour
             EquipableItem fastSwapWeapon = FastSwapWeaponArray[weaponIndex];
 
             if (fastSwapWeapon && fastSwapWeapon.Equals(GameManager.instance.GetInventoryManager().EquippedItem))
-                {
-                    fastSwapIndex = i;
-                    fastSwapIndexes.Add(weaponIndex);
-                }
+            {
+                fastSwapIndex = i;
+                fastSwapIndexes.Add(weaponIndex);
+            }
             else if (fastSwapWeapon)
             {
                 fastSwapIndexes.Add(weaponIndex);
@@ -298,7 +299,16 @@ public class InventoryManager : MonoBehaviour
         else
             grid = new Grid<GridObject>(inventoryWidth, 200, 50f, new Vector3(0, 0, 0), (Grid<GridObject> g, int x, int y) => new GridObject(g, x, y));
 
-        List <Item> sortedItems = SortItemsByHeight(items);
+        List<Vector2Int> originalPositions = new List<Vector2Int>();
+        List<Item.Direction> originalDirections = new List<Item.Direction>();
+
+        foreach (Item item in items)
+        {
+            originalPositions.Add(item.GetGridPosition());
+            originalDirections.Add(item.GetDirection());
+        }
+
+        List<Item> sortedItems = SortItemsByHeight(items);
         List<Item> unplacedItems = new List<Item>();
 
         bool couldFillFirstTry = true;
@@ -414,7 +424,7 @@ public class InventoryManager : MonoBehaviour
             {
                 if (!TryAddingItemManually(grid, item))
                 {
-                    couldFillManually = false; 
+                    couldFillManually = false;
                     break;
                 }
             }
@@ -423,12 +433,18 @@ public class InventoryManager : MonoBehaviour
             {
                 Debug.LogError("Couldn't fill all items in inventory");
                 GameManager.instance.GetSFXManager().PlaySound(Config.WRONG_SFX);
+
+                for (int i = 0; i < items.Count; i++)
+                {
+                    items[i].SetOrigin(originalPositions[i]);
+                    items[i].SetDirection(originalDirections[i]);
+                }
             }
             else
             {
                 foreach (Item item in sortedItems)
                 {
-                     Vector2Int origin = item.GetGridPosition();
+                    Vector2Int origin = item.GetGridPosition();
 
                     int correctedY = inventoryHeight - origin.y - item.GetCurrentVerticalDimension();
                     Vector2Int newOrigin = new Vector2Int(origin.x, correctedY);
@@ -627,7 +643,7 @@ public class InventoryManager : MonoBehaviour
             {
                 couldAdd = false;
                 finishedSearching = true;
-                
+
                 break;
             }
 
