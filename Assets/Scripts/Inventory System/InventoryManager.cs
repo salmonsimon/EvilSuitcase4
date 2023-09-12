@@ -4,7 +4,6 @@ using AYellowpaper.SerializedCollections;
 using StarterAssets;
 using System.Linq;
 using static Inventory;
-using static UnityEditor.Progress;
 
 public class InventoryManager : MonoBehaviour
 {
